@@ -15,4 +15,4 @@ Root: `schemaVersion:1`, `title`, `characters`, `facts`, `items`, `chapters`.
 
 Locations: `harbor`, `keeper_house`, `archive`, `lantern_room`, `tide_cave`.
 
-Exactly five chapters are required. IDs are nonempty and unique per entity kind. All references must resolve. Scenes must contain beats; text cannot be empty. The runtime validates content before play. Optional conversation never blocks advance; a mandatory activity does. Save files reference stable beat and activity IDs, not numeric positions. The final ending is fixed and authored.
+Exactly five chapters are required. The player character has reserved ID `ada`; prompts name Ada separately from the speaking character. IDs are nonempty and unique per entity kind. All references must resolve. Scenes must contain beats; text cannot be empty. The runtime validates content before play. Optional conversation never blocks advance; a mandatory activity does. Save files reference stable beat and activity IDs, not numeric positions. The final ending is fixed and authored.

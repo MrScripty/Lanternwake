@@ -30,6 +30,7 @@ public sealed record Story(int SchemaVersion, string Title, Character[] Characte
             return set;
         }
         var characters = Unique(Characters.Select(c => c.Id), "character");
+        if (!characters.Contains("ada")) throw new InvalidDataException("Lanternwake requires Ada (ada) as its player character.");
         var facts = Unique(Facts.Select(f => f.Id), "fact");
         var items = Unique(Items.Select(i => i.Id), "item");
         Unique(Chapters.Select(c => c.Id), "chapter");

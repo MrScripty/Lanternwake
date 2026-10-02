@@ -13,7 +13,7 @@ Status: development build, 2026-10-02. This is not a release declaration or a fi
 
 ## Automated evidence
 
-Final frozen-content run: **3,241 core assertions passed across 1,424 beats and five chapters**. Content has 34,937 main-path words, 41 scenes, 23 activities and 28 optional conversation points. SHA-256 of Content/story.json: `0fae051ce545f7e5c8cea248edac0e3fac89cb0a1ac8aa3f20a113f1ef99adce`. The `scripts/verify.sh` suite executes:
+Final frozen-content run: **3,243 core assertions passed across 1,424 beats and five chapters**. Content has 34,937 main-path words, 41 scenes, 23 activities and 28 optional conversation points. SHA-256 of Content/story.json: `0fae051ce545f7e5c8cea248edac0e3fac89cb0a1ac8aa3f20a113f1ef99adce`. The `scripts/verify.sh` suite executes:
 
 1. Production core tests: authored canonical order, every activity gate, ending, chat/state isolation, current-fact filtering, scene/character conversation-memory boundaries, serialized Unicode budget, save/provenance rejection, earlier-load reset, save replacement/size limits and pending-operation ownership.
 2. **11 direct C# Pumas-client contract scenarios passed** against a simulated loopback Pumas service. These use the actual production client, but no real model.
@@ -46,8 +46,8 @@ Actual in-engine screenshots were written under ignored `artifacts/captures/`. D
 
 ## Still unqualified / remaining work
 
-- **Live Pumas inference:** no inference-enabled Pumas binary, llama.cpp runtime or model was installed for this build. Real serving, character performance, latency and cancellation through the native provider remain unverified. See `PUMAS.md` and `QUALIFICATION-SETUP.md`.
-- **Real speech:** no whisper.cpp binary/model or actual microphone was qualified. The cloud GUI had no ALSA card and fell back to a dummy audio driver. Source lifecycle fixes and typed unavailable behavior do not prove audio capture/transcription quality.
+- **Production dialogue quality:** real Pumas/llama.cpp plumbing and native Godot display passed; the small smoke model confused speaker/player identity in one observed reply. Explicit identity context is regression-tested, but production characterization, spoiler resistance and model selection remain open. See `LIVE-QUALIFICATION.md`.
+- **Physical microphone:** actual whisper.cpp file transcription, 48 kHz conversion, cancellation/reaping and cleanup passed using the production adapter. The cloud GUI has no ALSA input card, so physical capture, permissions and device behavior remain unqualified.
 - **Duration:** five hours is a target. Use the authored-word counts and reading-speed estimates in `docs/bible/content_metrics.json`; no timed human full playthrough was completed, and optional chat is not counted as padding.
 - **Relationship mechanics:** no hidden trust score rewards suggestion use; explicit authored relationship/disclosure progression remains a production design task.
 - **Release quality:** no exported distribution package, platform matrix, localization, full screen-reader coverage, low-end performance benchmark or complete editorial/playtest pass is claimed.
@@ -55,3 +55,7 @@ Actual in-engine screenshots were written under ignored `artifacts/captures/`. D
 ## Reproduction
 
 Use the official .NET Godot build and SDK, set `GODOT_MONO` to the engine executable, restore/build the project, then run `scripts/verify.sh`. For visual review, run normally. Debug builds support `-- --stage-preview`, F10 to inspect the next authored location and F12 to save the current viewport image. Preview mode is diagnostic and does not automatically save merely for visiting a stage.
+
+## Hosted milestone evidence
+
+Authored-game commit `13d3722b7f854b2760b7d603e45a0eade1896e06` passed every hosted check in [run37074218895](https://github.com/MrScripty/Lanternwake/actions/runs/37074218895). Subsequent qualification changes need their own exact-head run; a prior green check does not qualify a later commit.

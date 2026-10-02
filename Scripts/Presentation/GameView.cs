@@ -41,7 +41,7 @@ public partial class GameView : Node
             _previewMode = OS.IsDebugBuild() && OS.GetCmdlineUserArgs().Contains("--stage-preview");
             if (_previewMode) ShowStagePreview();
             if (OS.GetCmdlineUserArgs().Contains("--smoke")) RunSmoke();
-            else if (OS.GetCmdlineUserArgs().Contains("--ui-smoke")) RunUiSmoke();
+            else if (OS.GetCmdlineUserArgs().Contains("--ui-smoke") || OS.GetCmdlineUserArgs().Contains("--live-ui-preview")) RunUiSmoke();
         }
         catch (Exception error)
         {
@@ -315,8 +315,26 @@ public partial class GameView : Node
             RenderBeat(); OpenConversation(); Check(_chatPanel.Visible, "conversation opens");
             var suggestion = _suggestions.GetChildren().OfType<Button>().First(); suggestion.EmitSignal(BaseButton.SignalName.Pressed);
             Check(_entry.Text == suggestion.Text && _entry.Editable, "suggestions are editable");
-            _entry.Text = "A headless test reply."; SendReply(); await _operations.DrainAsync();
-            Check(_session.History.Any(h => h.Text == "A headless test reply."), "reply reaches history");
+            var livePreview = OS.GetCmdlineUserArgs().Contains("--live-ui-preview");
+            var testInput = livePreview ? "What should I know about staying on the island?" : "A headless test reply.";
+            var conversationBeat = _session.Beat.Id;
+            _entry.Text = testInput; SendReply(); await _operations.DrainAsync();
+            Check(_session.History.Any(h => h.Text == testInput), "reply reaches history");
+            if (livePreview)
+            {
+                Check(_session.History.Last().Generated, "real Pumas reply required; authored fallback does not pass");
+                Check(_session.Beat.Id == conversationBeat, "live dialogue cannot advance canonical story");
+                CloseConversation();
+                GD.Print("LANTERNWAKE_LIVE_UI_OK " + _session.History.Last().Text);
+                await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+                await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+                if (DisplayServer.GetName() != "headless")
+                {
+                    var folder = ProjectSettings.GlobalizePath("res://artifacts/captures"); Directory.CreateDirectory(folder);
+                    GetViewport().GetTexture().GetImage().SavePng(Path.Combine(folder, "live-pumas.png"));
+                }
+                return;
+            }
             CloseConversation(); OpenConversation(); Check(_entry.Text == "" && _entry.Editable && !_busy, "reopening starts clean"); CloseConversation();
             Save(false); var savedBeat = _session.Beat.Id; _session.Advance(); Load(false);
             Check(_session.Beat.Id == savedBeat, "manual load restores position");

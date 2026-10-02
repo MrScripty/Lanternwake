@@ -1,6 +1,6 @@
 # Local voice-to-text
 
-The game implements Godot microphone capture followed by a local whisper.cpp command. It does not send audio to a hosted service. This path requires real-device qualification before a release claim.
+The game implements Godot microphone capture followed by the separately owned, tested LocalSpeechTranscriber whisper.cpp process boundary. It does not send audio to a hosted service. This path requires real-device qualification before a release claim.
 
 Install whisper.cpp from its official project and provision a compatible local speech model yourself or via an explicitly approved install. Configure these environment variables before starting Godot:
 
@@ -12,3 +12,7 @@ The installed model and executable are checked before offering capture. Choose *
 The resulting text appears in the ordinary input field. Review and edit it; only **Say this** submits a conversation. The operating system may separately ask for microphone permission. Empty audio, failed recognizer, missing model and timeout produce visible errors, not fabricated transcripts.
 
 No recognizer binary/model is bundled. Until a real microphone test passes, voice input is implemented but unqualified. Typed dialogue and editable suggestions are available without it.
+
+## Executed file-transcription evidence
+
+The production adapter passed actual whisper.cpp v1.9.4/tiny.en sample transcription, 48 kHz conversion, cancellation/reaping, cleanup and retry tests. See [LIVE-QUALIFICATION.md](LIVE-QUALIFICATION.md) for exact hashes and the resampling overflow repair. This does not qualify a physical microphone.

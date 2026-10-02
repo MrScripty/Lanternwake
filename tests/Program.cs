@@ -54,7 +54,7 @@ try
     Assert(SaveStore.Read(path).BeatId == initial.BeatId, "Oversize save preserves previous slot");
 }
 finally { File.Delete(path); }
-var firstPerson = story.Characters[0].Id; var secondPerson = story.Characters[1].Id;
+var firstPerson = story.Characters[1].Id; var secondPerson = story.Characters[2].Id;
 Conversation Chat(string who) => new(who, "A bounded test topic", ["Ask"], "An authored reply", []);
 var fixtureChapters = new List<Chapter>();
 for (var i = 0; i < 5; i++)
@@ -69,6 +69,8 @@ for (var i = 0; i < 5; i++)
 }
 var fixture = story with { Chapters = fixtureChapters.ToArray() };
 fixture.Validate(); var scoped = new StorySession(fixture);
+Assert(scoped.ConversationContext().Contains("Speaking character: " + story.Characters[1].Name), "Speaking character identity is explicit");
+Assert(scoped.ConversationContext().Contains("Player character: " + story.Characters.Single(c => c.Id == "ada").Name), "Player identity is explicit and separate");
 scoped.RecordConversation("private-first-character", "private-first-answer", true);
 var early = scoped.Snapshot(); scoped.Advance();
 Assert(!scoped.ConversationContext().Contains("private-first-character"), "Same-scene other character memory is excluded");

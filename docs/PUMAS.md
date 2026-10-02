@@ -22,9 +22,7 @@ Evidence at implementation time:
   Pumas service and prove only the modeled HTTP contract and rejection paths.
 - A package-free .NET direct-client contract harness is supplied. Its execution
   depends on a .NET 8 SDK; see the project's verification record for latest run.
-- **Live Pumas + llama.cpp + GGUF inference remains unverified.** No model output
-  is fabricated when inference is unavailable. The game can continue using its
-  separately authored dialogue; the live-chat result remains a failed result.
+- **Real local Pumas + llama.cpp + pinned GGUF inference passed**, through the production C# client and native Godot UI. Exact release artifacts, hashes, latency and limitations are in [LIVE-QUALIFICATION.md](LIVE-QUALIFICATION.md). The tiny model failed a characterization sample; this is plumbing evidence, not production model-quality approval. Authored fallback remains visibly labeled when inference is unavailable.
 
 ## Actual upstream API, not an assumed service shape
 
@@ -60,7 +58,7 @@ JSON properties are rejected. No output is parsed as a game instruction.
 
 ## Required runtime and setup
 
-1. Supply an **inference-enabled** `pumas-rpc` built from the qualified source.
+1. Supply an **inference-enabled** `pumas-rpc`. The full official v0.7.0 Linux package sidecar was exercised successfully; see `LIVE-QUALIFICATION.md` for its exact artifact/hash. Building the qualified source is another route when sufficient memory is available.
    The audited upstream headless release archive is explicitly built with
    `--no-default-features` and cannot generate dialogue. A GUI-less process
    and an inference-disabled build are different choices.
@@ -204,7 +202,7 @@ budget**, not a total generation deadline. Caller disconnection does not
 immediately cancel upstream work; the adapter neither retries nor claims
 provider cleanup. It retains no dialogue logs or state.
 
-Real acceptance procedure, still required: record exact Pumas commit/binary
+Broader production acceptance procedure, still required: record exact Pumas commit/binary
 hash, llama.cpp version, model revision/hash, OS/CPU, and model profile; observe
 loaded status; send a real game conversation; observe its displayed reply;
 close during generation and verify no late UI/state update; disconnect Pumas

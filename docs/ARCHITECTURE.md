@@ -7,7 +7,7 @@
 - `StageDirector` owns disposable original procedural 3D sets, actors and environmental motion. It does not consume conversation output or own story state.
 - `GameView` owns the Godot presentation, modal lifecycle, textbox, history/catalogue, editable suggestions, submit/cancel and stale-response rejection.
 - `PumasClient` owns the local HTTP boundary and provider verification. See PUMAS.md for exact upstream contract and qualification.
-- `SpeechRecorder` owns consent-triggered microphone capture, temporary PCM and local whisper.cpp process lifetime. Transcription fills the editable input, never submits it.
+- `SpeechRecorder` owns consent-triggered microphone capture and transfers an operation-local PCM buffer to `LocalSpeechTranscriber`, which owns the whisper.cpp process and temporary files. Transcription fills the editable input, never submits it.
 - `SaveStore` owns same-directory flushed staging and replacement. Only schema 1 is supported. Corrupt/unsupported saves are rejected; there is no silent recovery by overwriting player data.
 
 ## Conversation invariants

@@ -8,6 +8,8 @@ This is an in-development game, not a shipped five-hour product. Five hours is t
 
 Implemented source: ordered authored story, five procedural 3D sets, stylized adult characters, dialogue reveal/advance, mandatory evidence questions, unlocked evidence catalogue, history, manual/autosave/load, keyboard controls, editable suggestions and free text, bounded/cancellable local Pumas calls, optional local microphone-to-whisper.cpp transcription with review before send.
 
+Real local Pumas/llama.cpp and whisper.cpp file-transcription smoke tests passed; see `docs/LIVE-QUALIFICATION.md` for exact artifacts and the observed tiny-model identity failure. Physical microphone input remains unqualified.
+
 Not yet a release promise: five-hour timed playthrough, production-qualified model responses, real-device speech, relationship/disclosure progression, full accessibility/performance/platform qualification.
 
 ## Run
