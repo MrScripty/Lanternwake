@@ -1,4 +1,5 @@
 using Lanternwake.Conversation;
+using System.Diagnostics;
 
 if (args.Length != 4) { Console.Error.WriteLine("Usage: speech-smoke whisper-cli model.bin sample.wav temporary-directory"); return 2; }
 var (executable, model, input, temporary) = (args[0], args[1], args[2], args[3]);
@@ -31,11 +32,41 @@ var highRateSamples = samples.SelectMany(sample => new[] { sample, sample, sampl
 var resampled = await transcriber.TranscribeAsync(highRateSamples, sampleRate * 3, CancellationToken.None);
 if (!resampled.Contains("country", StringComparison.OrdinalIgnoreCase)) throw new Exception("48 kHz conversion failed.");
 Console.WriteLine("PASS 48 kHz input resampling without integer overflow");
-var longSamples = Enumerable.Range(0, sampleRate * 30).Select(i => samples[i % samples.Count]).ToArray();
-using (var cancel = new CancellationTokenSource(TimeSpan.FromMilliseconds(150)))
+// Observe a task-owned process before cancelling: a timer alone can expire during WAV preparation.
+if (!OperatingSystem.IsLinux()) throw new PlatformNotSupportedException("The process cancellation fixture requires Linux.");
+var fixtureDirectory = Path.Combine(Path.GetDirectoryName(Path.GetFullPath(temporary))!, "speech-cancel-" + Guid.NewGuid().ToString("N"));
+Directory.CreateDirectory(fixtureDirectory);
+var fixture = Path.Combine(fixtureDirectory, "running-engine");
+var pidFile = Path.Combine(fixtureDirectory, "engine.pid");
+var quotedPidFile = "'" + pidFile.Replace("'", "'\"'\"'") + "'";
+await File.WriteAllTextAsync(fixture, "#!/bin/sh\nprintf '%s\\n' \"$$\" > " + quotedPidFile + "\nexec /bin/sleep 60\n");
+File.SetUnixFileMode(fixture, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute);
+using (var cancel = new CancellationTokenSource())
 {
-    try { await transcriber.TranscribeAsync(longSamples, sampleRate, cancel.Token); throw new Exception("Expected cancellation."); }
-    catch (OperationCanceledException) { Console.WriteLine("PASS active transcription cancellation and process reaping"); }
+    var operation = new LocalSpeechTranscriber(fixture, model, temporary).TranscribeAsync(samples, sampleRate, cancel.Token);
+    try
+    {
+        using var deadline = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+        int pid;
+        while (!File.Exists(pidFile) || !int.TryParse(await File.ReadAllTextAsync(pidFile), out pid))
+        {
+            if (operation.IsCompleted) throw new Exception("Fixture exited before publishing its PID.");
+            await Task.Delay(10, deadline.Token);
+        }
+        using var observed = Process.GetProcessById(pid);
+        if (observed.HasExited || operation.IsCompleted) throw new Exception("Cancellation fixture was not running.");
+        cancel.Cancel();
+        try { await operation.WaitAsync(deadline.Token); throw new Exception("Expected cancellation."); }
+        catch (OperationCanceledException) when (operation.IsCanceled) { }
+        if (!observed.HasExited) throw new Exception("Adapter returned before its subprocess exited.");
+        Console.WriteLine($"PASS observed subprocess PID {pid}: alive before cancellation, exited before adapter completion");
+    }
+    finally
+    {
+        cancel.Cancel();
+        try { await operation; } catch (OperationCanceledException) { }
+        Directory.Delete(fixtureDirectory, true);
+    }
 }
 if (Directory.EnumerateFileSystemEntries(temporary).Any()) throw new Exception("Cancellation leaked temporary files.");
 var retry = await transcriber.TranscribeAsync(samples, sampleRate, CancellationToken.None);

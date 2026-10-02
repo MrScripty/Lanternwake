@@ -15,4 +15,4 @@ No recognizer binary/model is bundled. Until a real microphone test passes, voic
 
 ## Executed file-transcription evidence
 
-The production adapter passed actual whisper.cpp v1.9.4/tiny.en sample transcription, 48 kHz conversion, cancellation/reaping, cleanup and retry tests. See [LIVE-QUALIFICATION.md](LIVE-QUALIFICATION.md) for exact hashes and the resampling overflow repair. This does not qualify a physical microphone.
+The production adapter passed actual whisper.cpp v1.9.4/tiny.en sample transcription, 48 kHz conversion, cleanup and retry tests. A separate task-owned executable fixture proves subprocess cancellation: its PID is observed alive before cancellation and exited before the adapter returns. See [LIVE-QUALIFICATION.md](LIVE-QUALIFICATION.md) for exact hashes, cancellation evidence and the resampling overflow repair. This does not qualify a physical microphone.

@@ -33,7 +33,9 @@ The compiled native Godot game ran against the same real Pumas profile. Its ordi
 - `whisper-cli` SHA-256: `b7ffc161b9ecb8bad27a418d0e517961eafab059cf16d379164f5056fd47a099`
 - Official-script `tiny.en` model SHA-256: `921e4cf8686fdd993dcd081a5da5b6c365bfde1162e72b08d75ac75289920b1f`
 
-The actual production `LocalSpeechTranscriber` was run against the bundled known speech sample. It passed recognition and temporary-file cleanup, 48kHz input conversion, active cancellation/process reaping, and a successful independent retry after cancellation. The test exposed and fixed integer multiplication overflow during resampling; conversion now promotes the rate calculation before multiplying.
+The actual production `LocalSpeechTranscriber` was run against the bundled known speech sample. It passed recognition and temporary-file cleanup, 48kHz input conversion, and a successful independent retry after cancellation. The test exposed and fixed integer multiplication overflow during resampling; conversion now promotes the rate calculation before multiplying.
+
+Subprocess cancellation is checked separately through the same production adapter with a task-owned Linux executable fixture. The fixture publishes its PID and remains running. The test observes that PID alive before requesting cancellation, then asserts it has exited when the adapter completes cancellation and checks temporary-file cleanup. This replaces the earlier timer-only assertion, which could cancel during WAV preparation without starting a subprocess. The strengthened test passed alongside actual whisper.cpp recognition and retry; it qualifies the adapter's process ownership, not recognizer-specific cancellation behavior or physical microphone capture.
 
 Reproduce after provisioning the official executable/model:
 
