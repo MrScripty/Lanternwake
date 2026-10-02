@@ -1,0 +1,95 @@
+# ch5
+## ch5_s3a | The Last Room to Close | keeper_house | night | ada,nessa,tomas,sera
+narrator: On the way to the hall, you stop in the keeper's house for the final building check. The structure stands above the flood line, but a leaking window can still ruin a room without becoming part of an emergency. Nessa logs the pause with the deputy. Sera confirms the bypass remains stable by radio. Tomas finds the torch you left beside the catalogue and gives it back without comment.
+ada: I thought I would remember every useful thing tonight.
+tomas: You remembered the people. The torch had excellent survival prospects on the table.
+narrator: The kitchen is dark except for your lamps. Without the chronograph's distant ticking through the wall, the refrigerator sounds startlingly loud. Ordinary appliances have recovered the right to be the strangest noise in the house.
+nessa: South window first. Then the garden door. We leave the power on for the dehumidifier and turn off the cooker at its isolator. Nothing improvised beyond the checklist.
+narrator: You check the cooker. Tomas closes the cupboard beneath the sink so the draft will not push it open. Sera places a clean towel along the south sill, where wind-driven rain has begun to collect. Nessa secures the garden door and checks its bolt twice, then notices herself doing it and marks the first check rather than inventing a new requirement.
+ada: Does checking twice help?
+nessa: Sometimes. Repeating because I can't bear to stop is different. Tonight we use the list and an independent glance. Your turn.
+narrator: You inspect the bolt. It is seated. You say so. She nods and moves on. The exchange is almost invisible beside the bell's descent, but you understand it as part of the same event: people handing certainty to each other in pieces small enough to verify.
+narrator: Tomas notices the loan ledger on the desk. You tell him about the green tray, the note saying he needs it more, and your decision to ask rather than reclaim it. He stands very still while you open the page.
+tomas: I have that tray. He lent it after a roof leak in the archive. I kept meaning to return it.
+ada: He wrote that you could keep it. I can record it as a gift if that fits what you want.
+tomas: Yes. It's useful.
+narrator: The answer is simple. You are relieved he does not have to decide whether accepting a tray means accepting anything else your uncle did. You record the disposition, date it, and ask Tomas to initial receipt. He does, then rests the pencil beside the ledger.
+tomas: He could be kind to me in ways that made the silence harder to understand.
+ada: I know.
+tomas: I don't want the new account to make those moments into tricks. Some may have been guilt. Some may have been kindness. I don't know. The tray still caught the water.
+narrator: You look at the repaired remote, the wedge, the seeds, the book. An object's use can survive a complicated giver. A person's kindness can be real and insufficient. The room does not offer a way to turn those truths into a clean verdict, and you stop asking it to.
+sera: We can leave the book repair until daylight.
+ada: I wasn't going to start.
+sera: You were looking at the tools with professional intent.
+ada: Professional intent is not always an operational plan.
+nessa: We should print that somewhere.
+narrator: The laughter is tired and rough around its edges. Then the lights flicker. All four of you go quiet. The power returns immediately, and the radio reports a mainland supply interruption with the hall generator ready. You do not turn the flicker into a new mystery. Nessa confirms the hall is lit. Sera confirms the pressure monitor stayed on battery. Tomas checks the local recording saved correctly.
+ada: Is this what happens afterward? Everything ordinary still needs doing?
+nessa: Usually more of it. Emergencies are very inconsiderate about washing up.
+narrator: You fill the sink with enough water to rinse four mugs and immediately feel the absurdity of it. The group needs to return. The mugs can wait. You turn the tap off and leave them where they are. Not every unfinished task is a moral failure. Some are merely good candidates for tomorrow.
+narrator: On the table lies the green square from Ivo's letter. The lens cover is already secured in the tower. You fold the cloth and put it with its associated document. For years, your uncle sent things in place of explanations: a tool, a book, a postcard with a correction. Tonight you have more of the explanation than he ever chose to give you. It does not arrive with instructions for what to feel.
+ada: I am angry that he died before we could have this conversation.
+tomas: That's allowed.
+ada: And I miss the version of him I thought would eventually answer properly.
+nessa: That is allowed too.
+ada: I don't want to spend the rest of my life preparing the perfect question for someone who can't hear it.
+narrator: Nobody offers a slogan about letting go. Sera sits on the edge of a chair for a moment and lets you finish the thought. Nessa waits beside the door. Tomas turns his torch downward so its light does not shine in your eyes.
+ada: I can finish the inventory. I can help put the evidence where it belongs. After that, the questions can stay questions without becoming my entire address.
+sera: That sounds like a plan with room to revise it.
+narrator: You close the catalogue. It makes a soft sound, paper against paper, wholly unlike the bell. Outside, rain crosses the beam of Nessa's torch in slanting white lines. The inland road is visible between the hedges. The hall is a steady amber square farther along it.
+nessa: Ready?
+ada: Yes.
+narrator: At the door, you turn back once. Not because you think Ivo will appear, not because a message may have arrived while your attention was elsewhere. You check that the cooker isolator is off and the lamp by the window is unplugged. Then you lock the door and go with the others.
+narrator: The walk to the hall is wet and uneventful. Sera slips slightly on a patch of leaves, catches the rail, and announces that gravity remains the most reproducible phenomenon of the evening. Tomas laughs too loudly. Nessa tells him to save his breath for the last hill. You can see the hall door opening as you approach, and a person waiting to tick four names off a list.
+narrator: For the first time since arriving, being expected somewhere feels entirely like a kindness.
+## ch5_s4a | A Record That Can Be Corrected | archive | late morning | ada,tomas,nessa,sera
+narrator: The archive smells of damp coats rather than damaged paper. Its roof patch held. Tomas checks the shelf nearest the old leak before he checks his messages, then allows himself to sit. The kettle is still marked CURRENT. Somebody has added HEROIC beneath it in pencil.
+tomas: We should remove that. It encourages overconfidence in appliances.
+ada: Let it enjoy the morning.
+narrator: The independent archive has sent a deposit checklist. It asks for the originals, source descriptions, condition notes, permissions, known edits, and the chain of custody. After the extraordinary events of the night, the list feels almost luxurious. There are boxes you can actually complete.
+sera: They also want the raw instrument data. I am sending a separate research packet with the limitations prominent. They should not have to accept our physical interpretation to preserve the historical evidence.
+nessa: Good. The council's response this morning asks whether the strange instrument undermines the reliability of the testimony. It doesn't. A cassette doesn't stop being a cassette because the building contains an unusual pipe.
+tomas: I may steal that sentence for the covering letter.
+ada: Keep unusual. It's doing excellent diplomatic work.
+narrator: You review the public correction notice. The old summary remains accessible as a historical document, but its catalog entry now points prominently to the original log, complete deposition, and identified contradictions. Nobody has quietly replaced the PDF and hoped the previous version disappears. The false account remains visible as something that was published and subsequently challenged by evidence.
+ada: That matters. Otherwise a reader can't understand what the families spent years arguing against.
+tomas: Or why a correction was necessary at all.
+narrator: Nessa has brought the current safety procedure for review alongside the old one. The purpose is not to congratulate the present. Last night's operations log contains two minor communication problems: one radio acknowledgment arrived late, and the hall's first headcount combined staff with residents before the categories were clarified. Both were resolved without harm. Both deserve correction before they become habits.
+nessa: No injury doesn't mean no lesson. Also, not every lesson requires somebody to become the villain of a report.
+sera: We can record the mismatch, the recovery, and the change. The same standard for ourselves that we asked of the old account.
+ada: Will the whole debrief be public?
+nessa: The operational findings, yes. Personal contact details and private support needs, no. Transparency isn't scattering everyone's information on a table.
+narrator: You help create a public version with sensitive personal details removed and the reason for each removal noted. The unredacted operational file remains in the appropriate controlled archive. The difference between justified privacy and convenient concealment is not always obvious from a black rectangle, so the description must say what category is protected and why.
+tomas: That will stop people accusing us of hiding something?
+nessa: No. It will let a responsible reviewer check whether we did it properly. We can't design a record that prevents every bad-faith reading.
+narrator: Sera receives a reply from a colleague who wants to bring a team to inspect the resonant inclusion immediately. She reads the message, smiles at one enthusiastic phrase, then writes back that the site is isolated pending structural assessment. The visit will require a safety plan and permission from the relevant owners and operators. Curiosity has joined the queue.
+ada: You look as though that hurt.
+sera: It did. I would like the world to reward having learned something by letting me do the exciting part immediately. The world remains distressingly committed to load-bearing surfaces.
+tomas: And paperwork.
+sera: Paperwork is sometimes how we remember that other people also live on those surfaces.
+narrator: Tomas opens the choir recording he mentioned at the harbor. He plays ten seconds to check that the file is the right one, then stops. A roomful of adult voices, slightly uneven, singing a familiar tune with great determination. One singer enters early. You hear the mistake and the way the others make room around it.
+ada: That's lovely.
+tomas: It's rough.
+ada: Those observations can coexist, according to several people I've met recently.
+narrator: He grins. The birthday recipient replied overnight. She still wants the recording, whenever he can finish it properly. He has given a realistic date and blocked the time on his calendar. The archive will not collapse because one afternoon belongs to a song.
+narrator: A message arrives from one of the West Quay families thanking the team for the source list and asking a specific question about a timestamp. Tomas answers the question with a link to the scan rather than a summary of his feelings. Another message expresses anger that the evidence existed for so long. He does not argue with it. He acknowledges the delay and says what has now been preserved.
+ada: Is that hard to receive after all your work?
+tomas: Yes. It isn't unfair for them to be angry. I can know I helped and still hear that the help came late. Both again. This island needs a larger conjunction budget.
+narrator: Nessa brings out a draft agenda for next week's review meeting. The first item is an independent chair. The second is scope. The third is access to source materials before discussion. The agenda does not promise a conclusion on the day. It promises that the people asked to discuss the evidence can actually read it first.
+ada: Could there be a session for the families before the public meeting, with someone who can answer questions without cameras?
+nessa: Yes. I'll propose it as an option, not an obligation. Some will want that. Some may want the public room from the beginning.
+tomas: And some won't come. That doesn't mean they approve of whatever happens.
+narrator: You add the distinction. Silence is not being promoted to agreement in this version.
+narrator: For the eventual exhibit, you sketch a simple structure: the working harbor before the flood; the six crew members as people; the documented response sequence; the published account and its omissions; the later recovery of sources; the changes still under review. The chronograph belongs in the story, but it does not get the first room merely because it is strange.
+sera: I support this, despite being professionally drawn to the strange room.
+ada: You can have a very good appendix.
+sera: A devastating demotion.
+narrator: Tomas studies the sketch. He suggests leaving a visible space for corrections and new evidence. Not a gimmick where visitors write opinions about who deserves blame, but a clear route for supplying a source, noting an error, or asking a question. A record can be durable without pretending it is finished.
+nessa: We should budget for maintenance of the exhibit. Not just building it. Someone needs responsibility for checking links and updating the source list.
+ada: Named responsibility. Review dates. A way to hand it over.
+tomas: You're all becoming unbearable. I feel supported.
+narrator: The jokes come more easily now, not because the evidence has become less serious but because nobody is required to carry its seriousness as a permanent expression. The archive has room for work, irritation, a song, and a kettle that may one day need replacing.
+narrator: Before you leave, you sign the deposit register and read the summary of what your signature means. The estate materials are loaned for conservation and public research under specified conditions; ownership and personal correspondence exclusions are recorded. You do not sign away an entire family archive because one part deserves public access.
+ada: That's the right boundary.
+tomas: Yes. We can preserve the truth without taking everything around it.
+narrator: You close the register. Outside, someone is repairing the archive's loose sign. The drill stops, starts, then stops again while the workers disagree cheerfully about whether it is level. You cannot see them from the table, only hear the conversation. It sounds like a place continuing.

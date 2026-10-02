@@ -1,0 +1,100 @@
+# ch1
+## ch1_s1a | The Long Way Up | harbor | afternoon | ada,nessa
+narrator: Nessa takes the cart along the lower road instead of climbing directly toward the tower. You assume she is avoiding the steepest slope until she stops beside the fish shed and knocks twice on the open door. A woman in a blue apron emerges carrying a portable radio and half a sandwich. Nessa introduces you by your name, not by your relationship to Ivo. You notice that, and notice yourself noticing.
+nessa: Mara Ellis. She keeps the community records when the council isn't remembering to. Ada is doing the estate inventory.
+narrator: Mara waves the sandwich in apology for not offering a hand. She tells you there are spare archive sleeves in the hall cupboard and that the cupboard's key is kept beside the cupboard, since locking empty cardboard away had eventually struck everyone as excessive. Then she goes back to a conversation on the radio about somebody's missing ladder.
+ada: I expected people to know whose niece I was before they knew my name.
+nessa: They will. No need to make it the only available description.
+ada: Did you do that deliberately?
+nessa: It cost nothing.
+narrator: The lower road passes a boat repair shop, a narrow garden full of wind-bent rosemary, and a public tap with a handwritten warning about its loose handle. Saltmere does not look self-sufficient. It looks like a place where dependence has become too visible to romanticize. Fuel arrives on one boat, groceries on another, specialists when their calendars and the weather agree. The work of living here is distributed across schedules drawn somewhere else.
+ada: Ivo made it sound as though the island did everything for itself.
+nessa: Ivo liked ordering things through the post. Sometimes twice, if he forgot he'd already ordered them. His independence had a very active delivery route.
+ada: He'd have hated you saying that.
+nessa: He heard it often enough to develop a defense. Something about strategic reserves of screws.
+narrator: At the corner, a pair of workers is rolling a cable into a figure eight. One calls out that the north hall heater is behaving. Nessa asks whether behaving means tested or merely silent. The worker says tested and gives the time. She thanks him. The exchange takes eight seconds. You can feel the years of correction that made it possible.
+ada: Does everybody here repeat things back to you?
+nessa: For jobs where misunderstanding can hurt someone. For opinions, they generally manage to make themselves clear the first time.
+narrator: A small gallery occupies what used to be a net store. Through its window you can see watercolors of the lighthouse, all painted from the same flattering angle. One has a sun setting behind the wrong headland. You point at it. Nessa follows your finger and closes her eyes for one long second.
+nessa: Don't tell him.
+ada: I think we've missed our chance.
+nessa: Good. Then the painter is finally safe.
+narrator: You laugh, then feel guilty for the ease of it. The guilt seems so automatic that it irritates you. You have not promised to make every sentence about your uncle heavy. You have not promised anything yet beyond producing a catalogue.
+ada: Is it awful that I'm relieved this place isn't how he described it?
+nessa: Which description?
+ada: Tough. Solitary. People getting on with things without fuss.
+nessa: We fuss constantly. The ferry schedule, damp sheets, council invoices, who borrowed the decent wheelbarrow. People who call a place stoic usually haven't attended its committee meetings.
+narrator: She stops at a gate leading into a walled yard. Inside, half a dozen sturdy chairs face a narrow strip of sea. An older man reads with a blanket over his knees. He raises two fingers to Nessa, who raises two in return. Neither requires the other to turn the greeting into a conversation.
+nessa: Quiet garden. Public, even though the sign fell off. If you need somewhere people are meant to leave you alone, this is it.
+ada: You have a place for that?
+nessa: We have a place for people who have nowhere private enough at home. It comes to the same thing.
+narrator: From the garden gate, the lighthouse appears between two roofs. Its paint is more worn than in the postcards. A rust streak marks the seam beneath the lantern balcony. The tower has the peculiar dignity of a useful object that has continued past the point at which anybody would design it the same way.
+ada: Was it still guiding ships when he died?
+nessa: The modern beacon does that. Different equipment, separately maintained. Ivo looked after the old tower and the lower station. Sometimes visitors confuse the two and think one keeper held the whole shipping lane together by force of personality.
+ada: He probably didn't discourage them.
+nessa: He could be charming when there was an audience small enough to correct.
+narrator: You pass the building that used to be a school before the island's last classroom moved to the mainland service. Its hall still hosts adult classes, winter meals, and emergency shelter. Today a notice advertises a Thursday repair workshop. Beneath it, another asks borrowers to return the folding tables before the weather worsens. Community life, you think, is a collection of nouns with return dates.
+ada: What happens if the ferry stops and the mainland power goes?
+nessa: Generator, heating loop, battery radios, stock cupboard. We review the plan each autumn. People grumble because reviewing a plan feels pointless when nothing happens. Then, when something happens, they grumble about having to follow it. I like the second sort of grumbling better.
+ada: My work is mostly things that have already happened.
+nessa: Is it? You label a box so someone can find it later. Sounds like future work to me.
+narrator: The observation lands more gently than it should. You have spent years defending cataloguing against the idea that it is tidying. You have not often heard someone connect its value to a person who has not arrived yet.
+ada: I once spent six weeks tracing the ownership of a damaged violin nobody wanted to display.
+nessa: Did you find it?
+ada: Most of it. Enough to stop the museum selling it as unprovenanced surplus. The granddaughter of the original owner came to see it. She didn't play. She just wanted to hold the case.
+nessa: There you are.
+ada: We still didn't know whether it was valuable.
+nessa: You knew one kind.
+narrator: At a crossroad, Nessa shows you three routes without turning it into a test. The steep path reaches the keeper's house quickly. The inland road takes longer but stays above the storm surge. The cliff steps are for maintenance access and remain locked to visitors. She points out where each route begins, then asks which you would use in bad weather.
+ada: Inland road. Unless you tell me conditions have changed.
+nessa: Good. Local knowledge is useful until it becomes a reason to stop checking.
+narrator: You take out your phone to photograph the junction. Nessa waits while you include the sign and enough surrounding buildings to recognize it later. The picture is unremarkable. You suspect it will be more useful than the several photographs you took of waves on the crossing.
+ada: Does everyone get this tour?
+nessa: Everyone who will be working up the hill. Some pay more attention than others.
+ada: So this wasn't the scenic route.
+nessa: It can do two jobs.
+narrator: At the grocer's window you choose bread, apples, and a jar of instant coffee. Nessa advises against the largest milk carton because the house refrigerator sometimes runs too warm. You buy the smaller one. The shopkeeper puts a paper bag around the apples so they do not bruise against the jar, and asks whether you want the receipt in the bag or in your hand. It is an absurdly ordinary decision to find difficult after a morning of travel and a lifetime of postponement.
+ada: In my hand, please.
+narrator: The receipt lists the items, the time, and the name of a shop that has existed longer than you have been alive. It is a record with no mystery in it. You fold it carefully and put it in your pocket.
+?nessa|Ask what it means to arrive as a temporary part of the island.|How can I be useful without getting in people's way?~I'd like people to know me separately from Ivo.~What should I do if the weather changes while I'm up the hill?|Use the inland route, keep the radio instructions simple, and ask when you don't know. You don't have to prove you belong before you can be considerate.|f_inventory
+narrator: Nessa starts the cart again. The house is visible now, tucked against the tower as if sheltering from an argument. You feel a sudden wish to delay. Ask another question. Buy something unnecessary. Learn the name of every boat in the harbor before opening a door that has been waiting six weeks for you.
+ada: Do people usually feel ready for this part?
+nessa: Inventories?
+ada: Houses belonging to someone who won't come back.
+nessa: I don't know about usually. When my mother died, I spent an hour choosing which bag to bring. As if the right bag would make her kitchen easier.
+ada: Did it?
+nessa: It had good handles. That was all it could do.
+narrator: She does not tell you to be brave. She does not tell you that Ivo would have wanted you here. She checks that your shopping bag is balanced on the cart and walks beside you for the last turn of the road.
+## ch1_s2a | Condition, Provenance, Use | keeper_house | late afternoon | ada
+narrator: For half an hour, the house lets you do ordinary work. You open the blank catalogue template, enter the building address, and create separate columns for condition, provenance, and proposed disposition. Disposition is the cold word museums use for what happens next. You have always liked that it can remain undecided.
+narrator: The first drawer contains measuring tools: a folding rule, two calipers, a spirit level, and a tiny wooden wedge polished by use. The rule is marked in inches on one side and centimeters on the other. Ivo has crossed out neither scale, which seems unusually tolerant of him. The wedge has no label. You turn it over and find a pencil mark indicating which edge should face down.
+ada: Object four. Wooden adjustment wedge. Purpose not yet established.
+narrator: Saying the description aloud makes the room feel occupied without asking a recording to do the work. You photograph the object in place, then against a plain background. The second photograph is clearer. The first will tell you where it belonged. You need both.
+narrator: In the next drawer lies a packet of seeds, expired thirteen years ago, beside a newspaper clipping about salt-resistant plants. A corner of the clipping has been folded around a note in another hand: These will not grow through stubbornness alone. Your mother wrote that. You know the downward sweep of the final e. For a moment, two absent conversations intersect in a drawer, and you are the only available witness.
+ada: Unplanted seeds. Associated correspondence retained with packet.
+narrator: You almost add family joke, then stop. It may have been a joke. It may have been an argument wearing a joke's coat. Your mother and Ivo could make affection sound like a correction and corrections sound like weather. You had learned to listen for the pause after a sentence. Outsiders usually missed the point; sometimes you did too.
+narrator: A book on coastal birds contains no marginal corrections at all until page eighty-three. There, Ivo has written not here, not in winter beside a distribution map. Beneath it, in younger handwriting, someone has added maybe the bird hasn't read this. Yours, at twelve. You remember the afternoon: a table, rain, the great importance of being funny enough to earn an adult's unguarded laugh.
+ada: I got you once.
+narrator: You sit down with the book. The memory is not of the lighthouse. It is your grandmother's flat on the mainland, where Ivo stayed for a week after an operation. He made tea too strongly, repaired a cabinet door nobody had asked him to repair, and told you that tools with smooth handles had often outlived their first owners. You had imagined objects passing from hand to hand like messages. It may be the first reason you chose your work.
+narrator: The association is uncomfortable now. You would prefer your vocation to have originated independently, untouched by any debt to a difficult man. But influence is not an invoice. You can keep what became useful without agreeing that its source was wise in every other room.
+ada: Book remains with personal library. Annotation by Ada Vale, approximately age twelve. Identification certain. Meaning private.
+narrator: The last two words make you smile. A catalogue is allowed not to consume everything it encounters. You delete them from the formal entry and put the memory in your own notebook instead.
+narrator: In the sitting room, three chairs surround a low table, but only one chair faces the television directly. The others face each other. On the mantel is a photograph of your grandmother holding a cake with an uneven top. Ivo stands at one side, laughing at someone beyond the frame. You cannot remember having seen this particular laugh. He looks less guarded than he did in any photograph he sent.
+narrator: Behind the frame is a note identifying the people and the year. Someone knew that faces lose their names when no one writes them down. You copy the note before replacing it. For several minutes, the practical work and the grief cooperate rather than interrupt each other.
+narrator: The television remote has been repaired with tape. The tape has then been labeled so its raised edge does not obscure the volume button. An unopened replacement remote sits in a drawer beneath it. You can imagine Ivo ordering the new one, discovering it did not feel right, and making a principle out of keeping the old. You can also imagine being wrong. Your work is full of plausible little stories with no witness left to contradict them.
+ada: Two remote controls. One in active use, inferred from wear and placement. One boxed. Reason for retaining both unknown.
+narrator: Unknown begins to feel less like a failure of the catalogue than a way of keeping it honest. You could write uncertainty on almost everything in the room. Instead, you distinguish it: what you do not know yet, what somebody else may know, and what no available source is likely to answer.
+narrator: On the desk, a ledger records small household loans. Extension cable to M. Ellis. Wheelbarrow to harbor. Green tray to T. Rook. Each entry has a date out and, usually, a date back. Beside the tray, Ivo has written KEEP, NEEDS IT MORE. There is no indication that he told Tomas the loan had become a gift.
+ada: You made generosity unnecessarily difficult too.
+narrator: You mark the tray as not physically present and flag its ownership for confirmation. It would be easy to reclaim it in the name of thoroughness. It would also be easy to give it away on the basis of a note no one else has seen. The responsible next step is smaller: ask.
+narrator: The desk's bottom drawer sticks. You resist pulling harder. A swollen runner, an obstruction, or a hidden latch could all explain the resistance. You photograph the drawer front and set it aside for a later inspection. A mystery is sometimes only a place where patience costs less than repair.
+narrator: In the desk's central drawer is a bundle of letters held with cloth tape. Most are about equipment orders, maintenance budgets, and technical questions sent to people at universities. You skim the headings without reading private material beyond the catalogue's purpose. One envelope bears your handwriting. Your last letter, the one about the museum store. It is opened. A pencil tick sits beside a sentence in which you said you were tired but happy.
+narrator: The evidence is cruelly limited. He read it. He marked it. He did not answer. You cannot know whether the tick meant reply to this, good, or remember. You let yourself wish for a particular meaning without promoting the wish into the record.
+ada: Personal correspondence from Ada Vale. Received and opened. No associated reply located at present.
+narrator: At present gives the sentence a little room without making a promise. You put the letter back where you found it. If another answer exists, it can wait until you find it by a method more reliable than hope.
+narrator: The kitchen clock runs three minutes slow. You check it against your phone, record the discrepancy, and do not correct it yet. A clock's wrongness may matter to other notes in the house. Later, when the context is understood, you can make it useful again. Preservation is not keeping every defect forever. It is knowing what you are changing before you change it.
+ada: Kitchen clock, three minutes slow at inspection. Correction deferred pending record comparison.
+narrator: You look at the line and feel faintly absurd. Nobody is paying you to turn a domestic kitchen into a laboratory. Then you remember how often, in other collections, the thing somebody thought too obvious to record has become the exact thing everybody needed.
+narrator: A small wooden box beside the telephone contains buttons, fuses, a foreign coin, and a smooth stone with a hole through it. The stone is not supernatural. It is a stone whose history you do not know. You hold it against the window and look through the hole at the strip of sea beyond the garden. The view is no better than the view without it. The action is pleasant anyway.
+narrator: You return it to the box. Object after object, the house stops being a single overwhelming absence and becomes a set of particular things. Some are useful, some intimate, some merely accumulated. None can be asked to stand for a whole life without being made less true.
+narrator: When you finish the room's first pass, the catalogue contains thirty-two provisional entries and seven questions for other people. You have solved nothing. You have made the next work possible. Outside, the light shifts toward evening, and somewhere inside the tower a mechanism gives one small, dry click.

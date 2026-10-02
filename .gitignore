@@ -1,0 +1,9 @@
+.godot/
+**/bin/
+**/obj/
+.toolchain/
+artifacts/
+*.user
+*.log
+integration/pumas/.venv/
+__pycache__/
