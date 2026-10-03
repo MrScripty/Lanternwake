@@ -1,33 +1,59 @@
 [gd_scene format=3]
 
-[node name="Story Text" type="VBoxContainer"]
-custom_minimum_size = Vector2(290, 450)
+[node name="Story Text" type="ScrollContainer"]
+custom_minimum_size = Vector2(290, 200)
+horizontal_scroll_mode = 0
 
-[node name="Title" type="Label" parent="."]
+[node name="Content" type="VBoxContainer" parent="."]
+size_flags_horizontal = 3
+
+[node name="Title" type="Label" parent="Content"]
 text = "LANTERNWAKE · AUTHORED TEXT"
+autowrap_mode = 3
 
-[node name="Scenes" type="OptionButton" parent="."]
+[node name="Search" type="LineEdit" parent="Content"]
+placeholder_text = "Search story text, IDs, speaker or gates…"
+clear_button_enabled = true
+
+[node name="SearchStatus" type="Label" parent="Content"]
+visible = false
+
+[node name="Matches" type="ItemList" parent="Content"]
+visible = false
+custom_minimum_size = Vector2(0, 110)
+
+[node name="Scenes" type="OptionButton" parent="Content"]
 size_flags_horizontal = 3
 clip_text = true
 
-[node name="Beats" type="ItemList" parent="."]
+[node name="Beats" type="ItemList" parent="Content"]
 custom_minimum_size = Vector2(0, 140)
 size_flags_vertical = 3
 
-[node name="Speakers" type="OptionButton" parent="."]
+[node name="Speakers" type="OptionButton" parent="Content"]
 
-[node name="BeatText" type="TextEdit" parent="."]
+[node name="BeatText" type="TextEdit" parent="Content"]
 custom_minimum_size = Vector2(0, 180)
 size_flags_vertical = 3
 wrap_mode = 1
 
-[node name="Actions" type="HBoxContainer" parent="."]
+[node name="ContextTitle" type="Label" parent="Content"]
+text = "AUTHOR CONTEXT · SPOILERS
+Read only"
+autowrap_mode = 3
 
-[node name="Save" type="Button" parent="Actions"]
+[node name="Context" type="TextEdit" parent="Content"]
+custom_minimum_size = Vector2(0, 110)
+editable = false
+wrap_mode = 1
+
+[node name="Actions" type="HBoxContainer" parent="Content"]
+
+[node name="Save" type="Button" parent="Content/Actions"]
 text = "Save beat"
 
-[node name="Reload" type="Button" parent="Actions"]
+[node name="Reload" type="Button" parent="Content/Actions"]
 text = "Reload / discard"
 
-[node name="Status" type="Label" parent="."]
+[node name="Status" type="Label" parent="Content"]
 autowrap_mode = 3
