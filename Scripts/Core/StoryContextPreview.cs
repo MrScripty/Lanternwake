@@ -5,6 +5,12 @@ public static class StoryContextPreview
 {
     public static string? AtBeat(Story story, string beatId)
     {
+        var preview = CreateSessionAtBeat(story, beatId);
+        return preview.Beat.Conversation is null ? null : preview.ConversationContext();
+    }
+
+    public static StorySession CreateSessionAtBeat(Story story, string beatId)
+    {
         if (!story.Chapters.SelectMany(c => c.Scenes).SelectMany(s => s.Beats).Any(b => b.Id == beatId))
             throw new InvalidDataException("Unknown preview beat.");
         var preview = new StorySession(story);
@@ -13,6 +19,6 @@ public static class StoryContextPreview
             if (preview.Beat.Activity is { } activity) preview.AnswerActivity(activity.CorrectIndex);
             if (!preview.Advance()) throw new InvalidOperationException("Could not reach authored preview beat.");
         }
-        return preview.Beat.Conversation is null ? null : preview.ConversationContext();
+        return preview;
     }
 }

@@ -10,6 +10,7 @@ public sealed class SessionStorage : IDisposable
     private readonly string? _directory;
     private readonly bool _ownsDirectory;
     private bool _disposed;
+    internal string? OwnedTestDirectory => _ownsDirectory ? _directory : null;
 
     public SessionStorage(SessionMode mode, string playerDirectory)
     {

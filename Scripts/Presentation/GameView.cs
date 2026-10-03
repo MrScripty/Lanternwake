@@ -35,7 +35,7 @@ public partial class GameView : Node
     private readonly SpeechRecorder _speech = new();
     private CancellationTokenSource? _request, _speechRequest;
     private readonly OwnedOperations _operations = new();
-    private bool _closing, _previewMode;
+    private bool _closing, _previewMode, _stagePreview;
     private int _previewIndex;
     private bool _busy, _started, _instant;
     private double _characters, _recordSeconds;
@@ -52,17 +52,16 @@ public partial class GameView : Node
             _session = new(_story);
             _stage = Stage ?? throw new InvalidOperationException("Assign the Stage scene in the Inspector.");
             _instant = StartWithInstantText;
-            var arguments = OS.GetCmdlineUserArgs();
-            if (!OS.IsDebugBuild() && arguments.Any(a => a is "--stage-preview" or "--save-isolation-smoke"))
-                throw new InvalidOperationException("Author preview is only available in debug builds.");
-            _previewMode = OS.IsDebugBuild() && (arguments.Contains("--stage-preview") || arguments.Contains("--save-isolation-smoke"));
-            var automated = arguments.Any(a => a is "--smoke" or "--ui-smoke" or "--live-ui-preview");
-            if (_previewMode && automated) throw new InvalidOperationException("Choose one preview or test mode per launch.");
-            _storage = new SessionStorage(_previewMode ? SessionMode.AuthorPreview : automated ? SessionMode.AutomatedTest : SessionMode.Normal,
-                ProjectSettings.GlobalizePath("user://"));
+            var launch = SessionLaunch.Parse(OS.GetCmdlineUserArgs(), OS.IsDebugBuild());
+            _previewMode = launch.Mode == SessionMode.AuthorPreview;
+            _stagePreview = launch.StagePreview;
+            _storage = new SessionStorage(launch.Mode, ProjectSettings.GlobalizePath("user://"));
+            if (launch.BeatId is { } beatId) _session = StoryContextPreview.CreateSessionAtBeat(_story, beatId);
             BindInterface(); ShowTitle();
-            if (_previewMode) ShowStagePreview();
-            if (OS.GetCmdlineUserArgs().Contains("--save-isolation-smoke")) RunSaveIsolationSmoke();
+            if (_stagePreview) ShowStagePreview();
+            else if (launch.BeatId is not null) { _started = true; RenderBeat(); }
+            if (launch.Check == "--author-preview-smoke") RunAuthorPreviewSmoke(launch.BeatId!);
+            else if (OS.GetCmdlineUserArgs().Contains("--save-isolation-smoke")) RunSaveIsolationSmoke();
             else if (OS.GetCmdlineUserArgs().Contains("--smoke")) RunSmoke();
             else if (OS.GetCmdlineUserArgs().Contains("--ui-smoke") || OS.GetCmdlineUserArgs().Contains("--live-ui-preview")) RunUiSmoke();
         }
@@ -70,7 +69,7 @@ public partial class GameView : Node
         {
             GD.PushError(error.ToString());
             var label = new Label { Text = "Lanternwake could not start.\n" + error.Message, Position = new(48, 48) }; AddChild(label);
-            if ((OS.GetCmdlineUserArgs().Contains("--smoke") || OS.GetCmdlineUserArgs().Contains("--ui-smoke") || OS.GetCmdlineUserArgs().Contains("--save-isolation-smoke"))) GetTree().Quit(1);
+            if ((OS.GetCmdlineUserArgs().Contains("--smoke") || OS.GetCmdlineUserArgs().Contains("--ui-smoke") || OS.GetCmdlineUserArgs().Contains("--save-isolation-smoke") || OS.GetCmdlineUserArgs().Contains("--author-preview-smoke"))) GetTree().Quit(1);
         }
     }
     // Layout and appearance are authored in Scenes/UI; unique scene names are the
@@ -153,7 +152,7 @@ public partial class GameView : Node
     {
         if (Engine.IsEditorHint()) return;
         if (@event is not InputEventKey { Pressed: true, Echo: false } key) return;
-        if (_previewMode && key.Keycode == Key.F10) { _previewIndex++; ShowStagePreview(); return; }
+        if (_stagePreview && key.Keycode == Key.F10) { _previewIndex++; ShowStagePreview(); return; }
         if (OS.IsDebugBuild() && key.Keycode == Key.F12)
         {
             var folder = ProjectSettings.GlobalizePath("res://artifacts/captures"); Directory.CreateDirectory(folder);

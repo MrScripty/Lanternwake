@@ -104,3 +104,10 @@ text = "Save selected dossier field"
 
 [node name="Reload" type="Button" parent="Content/Profiles"]
 text = "Reload / discard all drafts"
+
+[node name="Playtest" type="Button" parent="Content"]
+text = "Play saved beat · separate window"
+
+[node name="PlaytestNotice" type="Label" parent="Content"]
+text = "DEBUG AUTHOR PREVIEW\nPlayer save/load disabled. Opens saved content in a separate game window; close that window normally when finished. Closing the editor does not force-close the preview."
+autowrap_mode = 3

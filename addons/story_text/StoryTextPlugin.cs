@@ -45,6 +45,7 @@ public partial class StoryTextPlugin : EditorPlugin
         _dock.GetNode<Button>("Actions/Save").Pressed += Save;
         _dock.GetNode<Button>("Actions/Reload").Pressed += Reload;
         InitializeProfiles();
+        _dock.GetNode<Button>("Playtest").Pressed += () => PlaySavedBeat();
         _editorDock = new EditorDock { Title = "Story Text", DefaultSlot = EditorDock.DockSlot.RightUl };
         _editorDock.AddChild(scroll);
         AddDock(_editorDock);
@@ -55,6 +56,7 @@ public partial class StoryTextPlugin : EditorPlugin
                 try
                 {
                     await RunDockSmoke();
+                    await RunPlaytestSmoke();
                     AddChild(GD.Load<GDScript>("res://integration/editor/roundtrip.gd").New().As<Node>());
                 }
                 catch (Exception error) { GD.PushError(error.ToString()); GetTree().Quit(1); }
@@ -63,6 +65,7 @@ public partial class StoryTextPlugin : EditorPlugin
 
     public override void _ExitTree()
     {
+        _playtestProcess?.Dispose(); _playtestProcess = null;
         RemoveDock(_editorDock);
         // Plugin shutdown may end the editor before another deferred-delete frame.
         _editorDock.Free();
