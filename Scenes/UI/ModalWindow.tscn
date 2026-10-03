@@ -1,0 +1,41 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Theme" path="res://Scenes/UI/LanternwakeTheme.tres" id="1_theme"]
+
+[node name="ModalWindow" type="Window"]
+title = "Lanternwake"
+size = Vector2i(940, 600)
+visible = false
+transient = true
+exclusive = true
+theme = ExtResource("1_theme")
+
+[node name="Margin" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="Stack" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+
+[node name="ModalText" type="RichTextLabel" parent="Margin/Stack"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = false
+text = "History, catalogue entries, settings or the current evidence prompt appear here."
+
+[node name="ModalActions" type="VBoxContainer" parent="Margin/Stack"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ModalCloseButton" type="Button" parent="Margin/Stack"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Close"

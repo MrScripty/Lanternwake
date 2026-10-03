@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://gldcaipl2r6m"]
+
+[ext_resource type="Script" uid="uid://cymeuljxeolap" path="res://Scripts/Presentation/StageDirector.cs" id="1_director"]
+[ext_resource type="PackedScene" uid="uid://qq6tfy6r8g7e" path="res://Scenes/Stages/Harbor.tscn" id="2_harbor"]
+[ext_resource type="PackedScene" path="res://Scenes/Stages/KeeperHouse.tscn" id="3_house"]
+[ext_resource type="PackedScene" path="res://Scenes/Stages/Archive.tscn" id="4_archive"]
+[ext_resource type="PackedScene" path="res://Scenes/Stages/LanternRoom.tscn" id="5_lantern"]
+[ext_resource type="PackedScene" path="res://Scenes/Stages/TideCave.tscn" id="6_cave"]
+[ext_resource type="PackedScene" path="res://Scenes/Characters/Ada.tscn" id="7_ada"]
+[ext_resource type="PackedScene" uid="uid://c8abs0re3etyp" path="res://Scenes/Characters/Nessa.tscn" id="8_nessa"]
+[ext_resource type="PackedScene" path="res://Scenes/Characters/Tomas.tscn" id="9_tomas"]
+[ext_resource type="PackedScene" path="res://Scenes/Characters/Sera.tscn" id="10_sera"]
+
+[node name="StageDirector" type="Node3D" unique_id=278341094]
+script = ExtResource("1_director")
+Harbor = ExtResource("2_harbor")
+KeeperHouse = ExtResource("3_house")
+Archive = ExtResource("4_archive")
+LanternRoom = ExtResource("5_lantern")
+TideCave = ExtResource("6_cave")
+Ada = ExtResource("7_ada")
+Nessa = ExtResource("8_nessa")
+Tomas = ExtResource("9_tomas")
+Sera = ExtResource("10_sera")

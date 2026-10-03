@@ -29,10 +29,10 @@ jobs:
           echo "GODOT_MONO=$root/Godot_v4.6.3-stable_mono_linux.x86_64" >> "$GITHUB_ENV"
           printf '<configuration><packageSources><clear/><add key="official-godot" value="%s/GodotSharp/Tools/nupkgs"/></packageSources></configuration>\n' "$root" > "$RUNNER_TEMP/Godot.NuGet.Config"
           dotnet restore Lanternwake.csproj --configfile "$RUNNER_TEMP/Godot.NuGet.Config"
-      - name: Verify authored content regeneration
+      - name: Verify canonical story metrics
         run: |
-          python3 docs/bible/drafts/build_story.py
-          git diff --exit-code -- Content/story.json docs/bible/content_metrics.json
+          python3 scripts/story_metrics.py
+          git diff --exit-code -- docs/bible/content_metrics.json
       - name: Core, protocol, native build and Godot workflow tests
         run: bash scripts/verify.sh
       - name: Optional adapter protocol tests

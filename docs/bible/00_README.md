@@ -1,6 +1,6 @@
 # Lanternwake: narrative production set
 
-**Full spoilers throughout this directory.** The playable text is `Content/story.json`. The editable source is `drafts/chapter1.txt` through `chapter5.txt`, plus `drafts/expand_*.txt`. Run `python3 docs/bible/drafts/build_story.py` from any working directory to regenerate the JSON and measured content statistics. Do not hand-edit generated JSON without also updating its source.
+**Full spoilers throughout this directory.** `Content/story.json` is the single authoritative editable story. Use the Godot **Story Text** dock for beat text/speakers, or a text editor for structural story changes; see [the authoring guide](../AUTHORING.md). The manuscripts under `drafts/` are historical references from the initial writing pass, not a second editable source. The retired compiler refuses to overwrite the story. Run `python3 scripts/story_metrics.py` after edits to refresh derived statistics, then run the core tests.
 
 This is an original adult-cast mystery, not an adaptation. The story has a complete fixed ending. Player conversation changes local expression, interpretation, rapport, and the amount of already-permitted detail requested; it cannot rewrite the authored past, kill a character, create an unplanned romance, or create an alternate ending. Suggested lines are editable invitations, not hidden plot branches.
 

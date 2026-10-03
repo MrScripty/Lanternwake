@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[node name="ChoiceButton" type="Button"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+focus_mode = 2
+autowrap_mode = 3
+text = "An authored suggestion or evidence choice"

@@ -5,8 +5,21 @@ using System.Text.Json;
 
 namespace Lanternwake.Presentation;
 
+[Tool]
 public partial class GameView : Node
 {
+    [ExportGroup("Scene dependencies")]
+    [Export] public StageDirector Stage { get; set; } = null!;
+    [Export] public Control InterfaceRoot { get; set; } = null!;
+    [Export] public PackedScene ModalScene { get; set; } = null!;
+    [Export] public PackedScene MicrophoneConsentScene { get; set; } = null!;
+    [Export] public PackedScene ChoiceButtonScene { get; set; } = null!;
+    [Export(PropertyHint.File, "*.json")] public string StoryPath { get; set; } = "res://Content/story.json";
+
+    [ExportGroup("Reading defaults")]
+    [Export(PropertyHint.Range, "1,200,1")] public float CharactersPerSecond { get; set; } = 55;
+    [Export] public bool StartWithInstantText { get; set; }
+
     private Story _story = null!;
     private StorySession _session = null!;
     private StageDirector _stage = null!;
@@ -27,17 +40,18 @@ public partial class GameView : Node
     private double _characters, _recordSeconds;
     private string _lastScene = "";
     private int _generation;
-    private readonly Color _ink = new("e8e4d8"), _gold = new("deb77d"), _muted = new("9ab0b3");
 
     public override void _Ready()
     {
+        if (Engine.IsEditorHint()) return;
         try
         {
             GetTree().AutoAcceptQuit = false;
-            _story = Story.Parse(Godot.FileAccess.GetFileAsString("res://Content/story.json"));
+            _story = Story.Parse(Godot.FileAccess.GetFileAsString(StoryPath));
             _session = new(_story);
-            _stage = new StageDirector(); AddChild(_stage);
-            BuildInterface(); ShowTitle();
+            _stage = Stage ?? throw new InvalidOperationException("Assign the Stage scene in the Inspector.");
+            _instant = StartWithInstantText;
+            BindInterface(); ShowTitle();
             _previewMode = OS.IsDebugBuild() && OS.GetCmdlineUserArgs().Contains("--stage-preview");
             if (_previewMode) ShowStagePreview();
             if (OS.GetCmdlineUserArgs().Contains("--smoke")) RunSmoke();
@@ -50,71 +64,48 @@ public partial class GameView : Node
             if ((OS.GetCmdlineUserArgs().Contains("--smoke") || OS.GetCmdlineUserArgs().Contains("--ui-smoke"))) GetTree().Quit(1);
         }
     }
-    private void BuildInterface()
+    // Layout and appearance are authored in Scenes/UI; unique scene names are the
+    // binding contract, so containers can move without changing these callbacks.
+    private void BindInterface()
     {
-        var layer = new CanvasLayer(); AddChild(layer);
-        var root = new Control(); root.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect); layer.AddChild(root);
-        root.Theme = CreateTheme();
-        var top = new MarginContainer { OffsetLeft = 38, OffsetTop = 26, OffsetRight = -38, OffsetBottom = 86 };
-        top.SetAnchorsPreset(Control.LayoutPreset.TopWide); root.AddChild(top);
-        var topRow = new HBoxContainer(); top.AddChild(topRow);
-        var titles = new VBoxContainer { SizeFlagsHorizontal = Control.SizeFlags.ExpandFill }; topRow.AddChild(titles);
-        _chapter = new Label { Text = "L A N T E R N W A K E" }; _chapter.AddThemeColorOverride("font_color", _gold); titles.AddChild(_chapter);
-        _place = new Label(); _place.AddThemeFontSizeOverride("font_size", 15); _place.AddThemeColorOverride("font_color", _muted); titles.AddChild(_place);
-        topRow.AddChild(Button("Evidence", ShowEvidence)); topRow.AddChild(Button("History", ShowHistory));
-        topRow.AddChild(Button("Save", () => Save(false))); topRow.AddChild(Button("Load", ShowLoad));
-        topRow.AddChild(Button("Settings", ShowSettings));
-        var bottom = new PanelContainer { OffsetLeft = 38, OffsetRight = -38, OffsetTop = -290, OffsetBottom = -28 };
-        bottom.SetAnchorsPreset(Control.LayoutPreset.BottomWide); root.AddChild(bottom);
-        var margin = new MarginContainer(); margin.AddThemeConstantOverride("margin_left", 28); margin.AddThemeConstantOverride("margin_right", 28); margin.AddThemeConstantOverride("margin_top", 18); margin.AddThemeConstantOverride("margin_bottom", 16); bottom.AddChild(margin);
-        var stack = new VBoxContainer(); margin.AddChild(stack);
-        _speaker = new Label(); _speaker.AddThemeColorOverride("font_color", _gold); stack.AddChild(_speaker);
-        _dialogue = new RichTextLabel { BbcodeEnabled = false, FitContent = false, SizeFlagsVertical = Control.SizeFlags.ExpandFill, CustomMinimumSize = new(0, 125), ScrollActive = true }; stack.AddChild(_dialogue);
-        var controls = new HBoxContainer(); stack.AddChild(controls);
-        _status = new Label { SizeFlagsHorizontal = Control.SizeFlags.ExpandFill, AutowrapMode = TextServer.AutowrapMode.WordSmart }; _status.AddThemeFontSizeOverride("font_size", 14); _status.AddThemeColorOverride("font_color", _muted); controls.AddChild(_status);
-        _talk = Button("Stay and talk", OpenConversation); controls.AddChild(_talk);
-        _advance = Button("Continue  ›", Advance); controls.AddChild(_advance);
-        _chatPanel = new PanelContainer { OffsetLeft = 210, OffsetRight = -210, OffsetTop = 150, OffsetBottom = -320, Visible = false };
-        _chatPanel.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect); _chatPanel.OffsetLeft = 210; _chatPanel.OffsetRight = -210; _chatPanel.OffsetTop = 150; _chatPanel.OffsetBottom = -320; root.AddChild(_chatPanel);
-        var chatMargin = new MarginContainer(); foreach (var side in new[] { "left", "right", "top", "bottom" }) chatMargin.AddThemeConstantOverride("margin_" + side, 24); _chatPanel.AddChild(chatMargin);
-        var chatStack = new VBoxContainer(); chatMargin.AddChild(chatStack);
-        var title = new Label { Text = "A MOMENT BETWEEN THE LINES" }; title.AddThemeColorOverride("font_color", _gold); chatStack.AddChild(title);
-        var note = new Label { Text = "Choose a starting thought, then edit it or write your own. Optional talk never changes the main mystery.", AutowrapMode = TextServer.AutowrapMode.WordSmart }; note.AddThemeFontSizeOverride("font_size", 15); chatStack.AddChild(note);
-        _suggestions = new VBoxContainer { SizeFlagsVertical = Control.SizeFlags.ExpandFill }; chatStack.AddChild(_suggestions);
-        _entry = new LineEdit { PlaceholderText = "What do you want to say?", MaxLength = 1000, CustomMinimumSize = new(0, 48) }; _entry.TextSubmitted += _ => SendReply(); chatStack.AddChild(_entry);
-        var chatButtons = new HBoxContainer(); chatStack.AddChild(chatButtons);
-        _mic = Button("Use voice", ToggleMicrophone); chatButtons.AddChild(_mic);
-        _send = Button("Say this", SendReply); chatButtons.AddChild(_send);
-        chatButtons.AddChild(Button("Return to story", CloseConversation));
+        if (InterfaceRoot is null || ModalScene is null || MicrophoneConsentScene is null || ChoiceButtonScene is null)
+            throw new InvalidOperationException("Assign interface and dialog scenes in the Inspector.");
+        _chapter = InterfaceRoot.GetNode<Label>("%ChapterLabel");
+        _place = InterfaceRoot.GetNode<Label>("%PlaceLabel");
+        _speaker = InterfaceRoot.GetNode<Label>("%SpeakerLabel");
+        _dialogue = InterfaceRoot.GetNode<RichTextLabel>("%DialogueText");
+        _status = InterfaceRoot.GetNode<Label>("%StatusLabel");
+        _talk = InterfaceRoot.GetNode<Button>("%TalkButton");
+        _advance = InterfaceRoot.GetNode<Button>("%AdvanceButton");
+        _chatPanel = InterfaceRoot.GetNode<PanelContainer>("%ChatPanel");
+        _suggestions = InterfaceRoot.GetNode<VBoxContainer>("%Suggestions");
+        _entry = InterfaceRoot.GetNode<LineEdit>("%PlayerEntry");
+        _mic = InterfaceRoot.GetNode<Button>("%MicrophoneButton");
+        _send = InterfaceRoot.GetNode<Button>("%SendButton");
+        InterfaceRoot.GetNode<Button>("%EvidenceButton").Pressed += ShowEvidence;
+        InterfaceRoot.GetNode<Button>("%HistoryButton").Pressed += ShowHistory;
+        InterfaceRoot.GetNode<Button>("%SaveButton").Pressed += () => Save(false);
+        InterfaceRoot.GetNode<Button>("%LoadButton").Pressed += ShowLoad;
+        InterfaceRoot.GetNode<Button>("%SettingsButton").Pressed += ShowSettings;
+        _talk.Pressed += OpenConversation;
+        _advance.Pressed += Advance;
+        _entry.TextSubmitted += _ => SendReply();
+        _mic.Pressed += ToggleMicrophone;
+        _send.Pressed += SendReply;
+        InterfaceRoot.GetNode<Button>("%ReturnButton").Pressed += CloseConversation;
     }
-    private Theme CreateTheme()
+    // Only the number, text and callbacks of these rows are determined at runtime.
+    private Button ChoiceButton(string text, Action action)
     {
-        var theme = new Theme { DefaultFontSize = 21 };
-        var panel = new StyleBoxFlat { BgColor = new Color(.025f,.055f,.067f,.96f), BorderColor = new Color(.42f,.49f,.47f,.6f), BorderWidthTop = 1, BorderWidthBottom = 1, BorderWidthLeft = 1, BorderWidthRight = 1, CornerRadiusTopLeft = 5, CornerRadiusBottomRight = 5 };
-        theme.SetStylebox("panel", "PanelContainer", panel);
-        theme.SetColor("font_color", "Label", _ink); theme.SetColor("default_color", "RichTextLabel", _ink);
-        foreach (var state in new[] { "normal", "hover", "pressed", "focus" })
-        {
-            var box = new StyleBoxFlat { BgColor = state == "normal" ? new Color(.08f,.14f,.16f,1) : new Color(.2f,.28f,.28f,1), CornerRadiusTopLeft = 4, CornerRadiusTopRight = 4, CornerRadiusBottomLeft = 4, CornerRadiusBottomRight = 4, ContentMarginLeft = 15, ContentMarginRight = 15, ContentMarginTop = 10, ContentMarginBottom = 10 };
-            if (state == "focus") { box.BorderColor = _gold; box.BorderWidthBottom = 2; }
-            theme.SetStylebox(state, "Button", box);
-        }
-        theme.SetFontSize("font_size", "Button", 16);
-        return theme;
-    }
-    private static Button Button(string text, Action action) { var button = new Button { Text = text, FocusMode = Control.FocusModeEnum.All }; button.Pressed += action; return button; }
-    private static Button WrappedButton(string text, Action action)
-    {
-        var button = Button(text, action); button.AutowrapMode = TextServer.AutowrapMode.WordSmart;
-        button.CustomMinimumSize = new(0, 48); return button;
+        var button = ChoiceButtonScene.Instantiate<Button>();
+        button.Text = text;
+        button.Pressed += action;
+        return button;
     }
     private void ShowTitle()
     {
+        // The title copy and initial HUD state belong to GameInterface.tscn.
         _stage.ShowLocation("harbor", "night", []);
-        _speaker.Text = "A MYSTERY IN FIVE CHAPTERS";
-        _dialogue.Text = "You came to catalogue a dead man's possessions.\nThe first thing you find is tomorrow's weather.\nThe second is your name.";
-        _dialogue.VisibleCharacters = -1; _talk.Visible = false; _advance.Text = "Arrive on the island  ›";
-        _status.Text = "Original procedural 3D art · authored story · optional local conversation";
     }
     private void Advance()
     {
@@ -142,12 +133,14 @@ public partial class GameView : Node
     private string DisplayName(string id) => id == "narrator" ? "" : id == "you" ? "You" : _story.Characters.FirstOrDefault(c => c.Id == id)?.Name ?? id;
     public override void _Process(double delta)
     {
+        if (Engine.IsEditorHint()) return;
         _operations.ObserveCompleted(error => GD.PushWarning(error.Message));
-        if (_started && _dialogue.VisibleCharacters >= 0) { _characters += delta * 55; _dialogue.VisibleCharacters = Math.Min((int)_characters, _dialogue.GetTotalCharacterCount()); }
+        if (_started && _dialogue.VisibleCharacters >= 0) { _characters += delta * CharactersPerSecond; _dialogue.VisibleCharacters = Math.Min((int)_characters, _dialogue.GetTotalCharacterCount()); }
         if (_speech.Recording) { _speech.Poll(); _recordSeconds += delta; _mic.Text = $"Stop ({_recordSeconds:0}s)"; if (_recordSeconds >= 30) ToggleMicrophone(); }
     }
     public override void _UnhandledKeyInput(InputEvent @event)
     {
+        if (Engine.IsEditorHint()) return;
         if (@event is not InputEventKey { Pressed: true, Echo: false } key) return;
         if (_previewMode && key.Keycode == Key.F10) { _previewIndex++; ShowStagePreview(); return; }
         if (OS.IsDebugBuild() && key.Keycode == Key.F12)
@@ -169,7 +162,7 @@ public partial class GameView : Node
         foreach (var suggestion in chat.Suggestions)
         {
             var captured = suggestion;
-            _suggestions.AddChild(WrappedButton(captured, () => { _entry.Text = captured; _entry.GrabFocus(); _entry.CaretColumn = _entry.Text.Length; }));
+            _suggestions.AddChild(ChoiceButton(captured, () => { _entry.Text = captured; _entry.GrabFocus(); _entry.CaretColumn = _entry.Text.Length; }));
         }
         _chatPanel.Visible = true; _entry.Text = ""; _entry.GrabFocus();
         _status.Text = "Talk is optional. Authored fallback is used if local Pumas is unavailable.";
@@ -216,10 +209,10 @@ public partial class GameView : Node
         if (!_speech.Recording)
         {
             if (!_speech.Available) { ShowWindow("Local speech setup", "Voice-to-text is not available yet. Install and configure local whisper.cpp and a speech model as described in docs/SPEECH.md. Typed and editable suggested replies remain available.\n\nNo audio has been recorded."); return; }
-            var consent = new ConfirmationDialog { Title = "Use your microphone?", DialogText = "Record up to 30 seconds on this device and transcribe locally with whisper.cpp. Audio is deleted after transcription. You can edit the transcript before choosing Say this. Nothing is sent automatically.", OkButtonText = "Start recording" };
+            var consent = MicrophoneConsentScene.Instantiate<ConfirmationDialog>();
             _mic.Disabled = true; AddChild(consent);
             consent.Confirmed += () => { try { _speech.Start(this); _recordSeconds = 0; _send.Disabled = true; _entry.Editable = false; } catch (Exception e) { _status.Text = e.Message; } _mic.Disabled = false; consent.QueueFree(); };
-            consent.Canceled += () => { _mic.Disabled = false; consent.QueueFree(); }; consent.PopupCentered(new(620, 230)); return;
+            consent.Canceled += () => { _mic.Disabled = false; consent.QueueFree(); }; consent.PopupCentered(); return;
         }
         _busy = true; _mic.Disabled = true; _status.Text = "Transcribing locally…";
         _speechRequest?.Dispose(); _speechRequest = new CancellationTokenSource(TimeSpan.FromSeconds(90));
@@ -260,13 +253,18 @@ public partial class GameView : Node
     {
         if (_busy) return;
         CloseModal();
-        _modal = new Window { Title = title, Size = new(940, 600), Transient = true, Exclusive = true, Theme = CreateTheme() }; AddChild(_modal); _modal.CloseRequested += CloseModal;
+        _modal = ModalScene.Instantiate<Window>();
+        _modal.Title = title;
+        AddChild(_modal);
+        _modal.CloseRequested += CloseModal;
         _modal.WindowInput += input => { if (input is InputEventKey { Pressed: true, Keycode: Key.Escape }) CloseModal(); };
-        var margin = new MarginContainer(); margin.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect); foreach (var side in new[] { "left", "right", "top", "bottom" }) margin.AddThemeConstantOverride("margin_" + side, 24); _modal.AddChild(margin);
-        var stack = new VBoxContainer(); margin.AddChild(stack);
-        stack.AddChild(new RichTextLabel { Text = text, BbcodeEnabled = false, SizeFlagsVertical = Control.SizeFlags.ExpandFill });
-        if (actions is not null) foreach (var action in actions) stack.AddChild(WrappedButton(action.Text, action.Action));
-        stack.AddChild(Button("Close", CloseModal)); _modal.PopupCentered();
+        _modal.GetNode<RichTextLabel>("%ModalText").Text = text;
+        var actionRows = _modal.GetNode<VBoxContainer>("%ModalActions");
+        actionRows.Visible = actions is { Length: > 0 };
+        if (actions is not null)
+            foreach (var action in actions) actionRows.AddChild(ChoiceButton(action.Text, action.Action));
+        _modal.GetNode<Button>("%ModalCloseButton").Pressed += CloseModal;
+        _modal.PopupCentered();
     }
     private void CloseModal() { if (_modal is not null) { _modal.Hide(); _modal.Exclusive = false; _modal.QueueFree(); _modal = null; _advance.GrabFocus(); } }
     private void ShowStagePreview()
@@ -293,6 +291,7 @@ public partial class GameView : Node
         SaveStore.Write(path, _session.Snapshot()); var restored = new StorySession(_story); restored.Restore(SaveStore.Read(path));
         if (!restored.IsEnding) throw new InvalidOperationException("Smoke restore failed.");
         foreach (var location in new[] { "harbor", "keeper_house", "archive", "lantern_room", "tide_cave" }) _stage.ShowLocation(location, "night", _story.Characters.Select(c => c.Id).Take(2).ToArray());
+        AuthoringSmoke.Run(this, _stage, InterfaceRoot);
         GD.Print($"LANTERNWAKE_SMOKE_OK beats={count} final={restored.Beat.Id}"); GetTree().Quit();
     }
     private async void RunUiSmoke()
@@ -349,11 +348,12 @@ public partial class GameView : Node
 
     public override async void _Notification(int what)
     {
+        if (Engine.IsEditorHint()) return;
         if (what != NotificationWMCloseRequest || _closing) return;
         _closing = true; _generation++; _request?.Cancel(); _speechRequest?.Cancel(); _speech.Dispose();
         try { await _operations.DrainAsync(); }
         catch (Exception error) { GD.PushWarning("Shutdown operation: " + error.Message); }
         finally { _pumas?.Dispose(); _pumas = null; GetTree().Quit(); }
     }
-    public override void _ExitTree() { _generation++; _request?.Cancel(); _request?.Dispose(); _speechRequest?.Cancel(); _speech.Dispose(); }
+    public override void _ExitTree() { if (Engine.IsEditorHint()) return; _generation++; _request?.Cancel(); _request?.Dispose(); _speechRequest?.Cancel(); _speech.Dispose(); }
 }

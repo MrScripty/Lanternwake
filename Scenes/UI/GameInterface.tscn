@@ -1,0 +1,191 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Theme" path="res://Scenes/UI/LanternwakeTheme.tres" id="1_theme"]
+
+[node name="GameInterface" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_theme")
+
+[node name="TopBar" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 38.0
+offset_top = 26.0
+offset_right = -38.0
+offset_bottom = 86.0
+grow_horizontal = 2
+
+[node name="TopRow" type="HBoxContainer" parent="TopBar"]
+layout_mode = 2
+
+[node name="Titles" type="VBoxContainer" parent="TopBar/TopRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ChapterLabel" type="Label" parent="TopBar/TopRow/Titles"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.870588, 0.717647, 0.490196, 1)
+text = "L A N T E R N W A K E"
+
+[node name="PlaceLabel" type="Label" parent="TopBar/TopRow/Titles"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.603922, 0.690196, 0.701961, 1)
+theme_override_font_sizes/font_size = 15
+
+[node name="EvidenceButton" type="Button" parent="TopBar/TopRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Evidence"
+
+[node name="HistoryButton" type="Button" parent="TopBar/TopRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "History"
+
+[node name="SaveButton" type="Button" parent="TopBar/TopRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Save"
+
+[node name="LoadButton" type="Button" parent="TopBar/TopRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Load"
+
+[node name="SettingsButton" type="Button" parent="TopBar/TopRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Settings"
+
+[node name="DialoguePanel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 38.0
+offset_top = -290.0
+offset_right = -38.0
+offset_bottom = -28.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Margin" type="MarginContainer" parent="DialoguePanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 16
+
+[node name="Stack" type="VBoxContainer" parent="DialoguePanel/Margin"]
+layout_mode = 2
+
+[node name="SpeakerLabel" type="Label" parent="DialoguePanel/Margin/Stack"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.870588, 0.717647, 0.490196, 1)
+text = "A MYSTERY IN FIVE CHAPTERS"
+
+[node name="DialogueText" type="RichTextLabel" parent="DialoguePanel/Margin/Stack"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 125)
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = false
+text = "You came to catalogue a dead man's possessions.\nThe first thing you find is tomorrow's weather.\nThe second is your name."
+
+[node name="Controls" type="HBoxContainer" parent="DialoguePanel/Margin/Stack"]
+layout_mode = 2
+
+[node name="StatusLabel" type="Label" parent="DialoguePanel/Margin/Stack/Controls"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.603922, 0.690196, 0.701961, 1)
+theme_override_font_sizes/font_size = 14
+text = "Original procedural 3D art · authored story · optional local conversation"
+autowrap_mode = 3
+
+[node name="TalkButton" type="Button" parent="DialoguePanel/Margin/Stack/Controls"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "Stay and talk"
+
+[node name="AdvanceButton" type="Button" parent="DialoguePanel/Margin/Stack/Controls"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Arrive on the island  ›"
+
+[node name="ChatPanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 210.0
+offset_top = 150.0
+offset_right = -210.0
+offset_bottom = -320.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Margin" type="MarginContainer" parent="ChatPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="Stack" type="VBoxContainer" parent="ChatPanel/Margin"]
+layout_mode = 2
+
+[node name="Heading" type="Label" parent="ChatPanel/Margin/Stack"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.870588, 0.717647, 0.490196, 1)
+text = "A MOMENT BETWEEN THE LINES"
+
+[node name="Note" type="Label" parent="ChatPanel/Margin/Stack"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "Choose a starting thought, then edit it or write your own. Optional talk never changes the main mystery."
+autowrap_mode = 3
+
+[node name="Suggestions" type="VBoxContainer" parent="ChatPanel/Margin/Stack"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PlayerEntry" type="LineEdit" parent="ChatPanel/Margin/Stack"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+placeholder_text = "What do you want to say?"
+max_length = 1000
+
+[node name="Buttons" type="HBoxContainer" parent="ChatPanel/Margin/Stack"]
+layout_mode = 2
+
+[node name="MicrophoneButton" type="Button" parent="ChatPanel/Margin/Stack/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Use voice"
+
+[node name="SendButton" type="Button" parent="ChatPanel/Margin/Stack/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Say this"
+
+[node name="ReturnButton" type="Button" parent="ChatPanel/Margin/Stack/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Return to story"

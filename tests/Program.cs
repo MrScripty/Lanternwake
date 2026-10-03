@@ -9,6 +9,25 @@ void Reject(Action action, string claim) { try { action(); } catch (InvalidDataE
 var session = new StorySession(story);
 var initial = session.Snapshot();
 var ordered = story.Chapters.SelectMany(c => c.Scenes).SelectMany(s => s.Beats).ToArray();
+var originalJson = File.ReadAllText(storyPath);
+var editedJson = StoryTextEdit.Apply(originalJson, originalJson, ordered[0].Id, "narrator", "An editor-authored line. 語");
+var editedStory = Story.Parse(editedJson);
+Assert(editedStory.Chapters[0].Scenes[0].Beats[0].Text == "An editor-authored line. 語", "Authoring edit reaches runtime parser");
+Assert(editedStory.Chapters.SelectMany(c => c.Scenes).SelectMany(s => s.Beats).Select(b => b.Id).SequenceEqual(ordered.Select(b => b.Id)), "Authoring edit preserves all beat IDs");
+Assert(editedStory.Chapters.SelectMany(c => c.Scenes).SelectMany(s => s.Beats).Select(b => JsonSerializer.Serialize(b.Activity)).SequenceEqual(ordered.Select(b => JsonSerializer.Serialize(b.Activity))), "Authoring edit preserves required evidence gates");
+var editedSession = new StorySession(editedStory); editedSession.Restore(initial);
+Assert(editedSession.Beat.Id == initial.BeatId, "Existing save restores after text edit");
+Reject(() => StoryTextEdit.Apply(originalJson, originalJson, ordered[0].Id, "missing", "Line"), "Invalid speaker cannot be published");
+Reject(() => StoryTextEdit.Apply(originalJson, originalJson, ordered[0].Id, "narrator", ""), "Empty text cannot be published");
+try { StoryTextEdit.Apply(originalJson, editedJson, ordered[0].Id, "narrator", "stale"); throw new Exception("Stale edit accepted"); }
+catch (InvalidOperationException) { count++; }
+var unknownDocument = System.Text.Json.Nodes.JsonNode.Parse(originalJson)!;
+unknownDocument["editorNote"] = "preserve me";
+var withUnknown = unknownDocument.ToJsonString();
+Assert(StoryTextEdit.Apply(withUnknown, withUnknown, ordered[0].Id, "narrator", "Changed").Contains("preserve me"), "Text editing preserves fields outside its ownership");
+var invalidKnowledge = System.Text.Json.Nodes.JsonNode.Parse(originalJson)!;
+invalidKnowledge["chapters"]![0]!["scenes"]![0]!["beats"]![0]!["conversation"] = System.Text.Json.Nodes.JsonNode.Parse("{\"characterId\":\"nessa\",\"prompt\":\"Future?\",\"suggestions\":[],\"fallback\":\"No\",\"allowedFacts\":[\"f_loop_completed\"]}");
+Reject(() => Story.Parse(invalidKnowledge.ToJsonString()), "Authoring rejects future conversation knowledge");
 var visited = new List<string>();
 string? priorMarker = null; string? priorScene = null;
 foreach (var beat in ordered)
@@ -36,6 +55,8 @@ foreach (var beat in ordered)
     if (!session.IsEnding) Assert(session.Advance(), "Advance succeeds");
 }
 Assert(session.IsEnding && !session.Advance(), "Ending is stable");
+editedSession.Restore(session.Snapshot());
+Assert(editedSession.IsEnding, "Completed save with solved gates and provenance restores after text edit");
 var path = Path.Combine(Path.GetTempPath(), "lanternwake-save-test-" + Guid.NewGuid() + ".json");
 try
 {

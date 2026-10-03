@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[node name="MicrophoneConsent" type="ConfirmationDialog"]
+title = "Use your microphone?"
+size = Vector2i(620, 230)
+visible = false
+dialog_text = "Record up to 30 seconds on this device and transcribe locally with whisper.cpp. Audio is deleted after transcription. You can edit the transcript before choosing Say this. Nothing is sent automatically."
+ok_button_text = "Start recording"

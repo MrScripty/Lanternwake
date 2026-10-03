@@ -1,0 +1,33 @@
+[gd_scene format=3]
+
+[node name="Story Text" type="VBoxContainer"]
+custom_minimum_size = Vector2(290, 450)
+
+[node name="Title" type="Label" parent="."]
+text = "LANTERNWAKE · AUTHORED TEXT"
+
+[node name="Scenes" type="OptionButton" parent="."]
+size_flags_horizontal = 3
+clip_text = true
+
+[node name="Beats" type="ItemList" parent="."]
+custom_minimum_size = Vector2(0, 140)
+size_flags_vertical = 3
+
+[node name="Speakers" type="OptionButton" parent="."]
+
+[node name="BeatText" type="TextEdit" parent="."]
+custom_minimum_size = Vector2(0, 180)
+size_flags_vertical = 3
+wrap_mode = 1
+
+[node name="Actions" type="HBoxContainer" parent="."]
+
+[node name="Save" type="Button" parent="Actions"]
+text = "Save beat"
+
+[node name="Reload" type="Button" parent="Actions"]
+text = "Reload / discard"
+
+[node name="Status" type="Label" parent="."]
+autowrap_mode = 3

@@ -39,6 +39,7 @@ public sealed record Story(int SchemaVersion, string Title, Character[] Characte
         foreach (var character in Characters)
             if ((character.Knowledge ?? []).Any(f => !facts.Contains(f))) throw new InvalidDataException("Unknown character fact.");
         if (Chapters.Any(c => c.Scenes is null || c.Scenes.Length == 0)) throw new InvalidDataException("Every chapter requires scenes.");
+        var unlocked = new HashSet<string>(StringComparer.Ordinal);
         foreach (var scene in Chapters.SelectMany(c => c.Scenes))
         {
             if (scene.Location is not ("harbor" or "keeper_house" or "archive" or "lantern_room" or "tide_cave")) throw new InvalidDataException($"Unknown location {scene.Location}.");
@@ -47,9 +48,12 @@ public sealed record Story(int SchemaVersion, string Title, Character[] Characte
             {
                 if (string.IsNullOrWhiteSpace(beat.Text) || (beat.Speaker != "narrator" && !characters.Contains(beat.Speaker))) throw new InvalidDataException($"Invalid beat {beat.Id}.");
                 if ((beat.UnlockFacts ?? []).Any(f => !facts.Contains(f)) || (beat.UnlockItems ?? []).Any(i => !items.Contains(i))) throw new InvalidDataException($"Unknown unlock at {beat.Id}.");
+                unlocked.UnionWith(beat.UnlockFacts ?? []);
                 if (beat.StageCue is not (null or "bell_lowered")) throw new InvalidDataException($"Unknown stage cue at {beat.Id}.");
                 if (beat.Activity is { } activity && (activity.Options.Length < 2 || activity.CorrectIndex < 0 || activity.CorrectIndex >= activity.Options.Length || string.IsNullOrWhiteSpace(activity.Explanation))) throw new InvalidDataException($"Invalid activity at {beat.Id}.");
                 if (beat.Conversation is { } chat && (!characters.Contains(chat.CharacterId) || chat.AllowedFacts.Any(f => !facts.Contains(f)) || string.IsNullOrWhiteSpace(chat.Fallback))) throw new InvalidDataException($"Invalid conversation at {beat.Id}.");
+                if (beat.Conversation is { } bounded && bounded.AllowedFacts.Any(f => !unlocked.Contains(f) || !Characters.Single(c => c.Id == bounded.CharacterId).Knowledge.Contains(f)))
+                    throw new InvalidDataException($"Conversation exceeds unlocked character knowledge at {beat.Id}.");
             }
         }
     }

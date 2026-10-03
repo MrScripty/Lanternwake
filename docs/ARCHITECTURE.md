@@ -4,7 +4,8 @@
 
 - `Content/story.json` is the authored story authority. Schema 1, five ordered chapters, scenes and beats. No generated dialogue can supply, reorder or unlock a canonical beat.
 - `StorySession` owns position, established facts, collected items, mandatory evidence activities and transcript. Facts are derived by replaying authored unlocks, including after a load.
-- `StageDirector` owns disposable original procedural 3D sets, actors and environmental motion. It does not consume conversation output or own story state.
+- Native scenes under `Scenes/Stages`, `Scenes/Characters` and `Scenes/UI`, plus their resources, own editable artwork, lighting, camera, character placement and interface styling. The initial procedural geometry was serialized once; runtime construction was removed.
+- `StageDirector` selects and instantiates authored scenes. `StageScene` binds location settings and story cues; `StageMotion` adds animation to authored base transforms. These components do not consume conversation output or own story state.
 - `GameView` owns the Godot presentation, modal lifecycle, textbox, history/catalogue, editable suggestions, submit/cancel and stale-response rejection.
 - `PumasClient` owns the local HTTP boundary and provider verification. See PUMAS.md for exact upstream contract and qualification.
 - `SpeechRecorder` owns consent-triggered microphone capture and transfers an operation-local PCM buffer to `LocalSpeechTranscriber`, which owns the whisper.cpp process and temporary files. Transcription fills the editable input, never submits it.
@@ -31,7 +32,13 @@ Manual and auto saves are separate local files under Godot `user://`. Manual sav
 5. GUI review: title, multiple locations/characters, text, evidence/activity flows, save/load and cancellation. Screenshots and actual observed results must be recorded.
 6. Pumas required-real: inference-enabled Pumas with loaded llama.cpp model; provider-qualified request yields response. Mock tests do not satisfy this.
 7. Speech required-real: permission, actual microphone, local recognizer/model, editable transcript, submit only on command, temp deletion/cancel. Compilation does not satisfy this.
-8. Runtime target: count authored words and estimate reading + actual mandatory activity time, then timed complete human playtests. Optional chat cannot pad the main-story target.
+8. Duration: five hours remains the design target. Human playtesters own duration qualification; assistant-run timed playthroughs are not an acceptance blocker. Optional chat cannot pad the main-story target.
+
+## Editor authority and compatibility
+
+`Content/story.json` is now directly editable through the lightweight Story Text dock or a text editor. Manuscripts are historical reference and the retired generator refuses to overwrite JSON. `scripts/story_metrics.py` reads this authority and updates only derived counts. Runtime schema and save format remain unchanged; the dock edits text/speaker without modifying IDs or story gates. The same domain validator runs before a dock save and at game startup, including conversation fact availability and character knowledge.
+
+The dock owns a loaded snapshot, unsaved text and one explicit save. It rejects observed external file changes, validates before publication and replaces through a same-directory staged file. One editor/writer at a time is the supported workflow; no multi-process transaction guarantee is claimed. Godot owns normal scene/resource persistence. See [AUTHORING.md](AUTHORING.md) for practical editing steps.
 
 ## Standards
 

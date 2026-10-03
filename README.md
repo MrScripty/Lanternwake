@@ -1,16 +1,16 @@
 # Lanternwake
 
-An original stormbound-island mystery built in **Godot 4.6.3 .NET / C#**. A fixed authored five-chapter story unfolds through staged procedural 3D locations and a visual-novel interface. Optional local character conversations run through **Pumas Library's real inference-enabled headless gateway**, restricted to llama.cpp provider capability, with a visibly authored fallback.
+An original stormbound-island mystery built in **Godot 4.6.3 .NET / C#**. A fixed authored five-chapter story unfolds through editable native 3D scenes and a visual-novel interface. Optional local character conversations run through **Pumas Library's real inference-enabled headless gateway**, restricted to llama.cpp provider capability, with a visibly authored fallback.
 
 ## Development status
 
 This is an in-development game, not a shipped five-hour product. Five hours is the main-story target, excluding unlimited optional chat. See `docs/bible` for actual authored content, pacing estimates, visual language and remaining playtest requirements. Build success, smoke success, real Pumas inference and real microphone qualification are separate checks; consult `docs/VERIFICATION.md` for the latest evidence and blockers.
 
-Implemented source: ordered authored story, five procedural 3D sets, stylized adult characters, dialogue reveal/advance, mandatory evidence questions, unlocked evidence catalogue, history, manual/autosave/load, keyboard controls, editable suggestions and free text, bounded/cancellable local Pumas calls, optional local microphone-to-whisper.cpp transcription with review before send.
+Implemented source: ordered authored story, five editable 3D sets, reusable stylized adult character scenes, dialogue reveal/advance, mandatory evidence questions, unlocked evidence catalogue, history, manual/autosave/load, keyboard controls, editable suggestions and free text, bounded/cancellable local Pumas calls, optional local microphone-to-whisper.cpp transcription with review before send.
 
 Real local Pumas/llama.cpp and whisper.cpp file-transcription smoke tests passed; see `docs/LIVE-QUALIFICATION.md` for exact artifacts and the observed tiny-model identity failure. Physical microphone input remains unqualified.
 
-Not yet a release promise: five-hour timed playthrough, production-qualified model responses, real-device speech, relationship/disclosure progression, full accessibility/performance/platform qualification.
+Not yet a release promise: production-qualified model responses, real-device speech, relationship/disclosure progression, full accessibility/performance/platform qualification. Human playtesters own five-hour duration qualification.
 
 ## Run
 
@@ -22,6 +22,8 @@ godot-mono --path . --editor
 ```
 
 Open `project.godot` with the .NET editor, then run. No LLM is required for the authored main story. Local Pumas setup is in `docs/PUMAS.md`; local speech setup is in `docs/SPEECH.md`.
+
+To adjust the game, see [the editor authoring guide](docs/AUTHORING.md). Locations, characters, camera, lighting and interface styling live in normal Godot scenes/resources. The Story Text dock edits the canonical story JSON without changing C#.
 
 ## Verify
 
