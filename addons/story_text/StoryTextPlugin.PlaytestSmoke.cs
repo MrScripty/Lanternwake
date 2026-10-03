@@ -24,14 +24,7 @@ public partial class StoryTextPlugin
             {
                 Check(PlaySavedBeat(true), "launch saved selected beat");
                 using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(30));
-                try { await _playtestProcess!.WaitForExitAsync(timeout.Token); }
-                catch
-                {
-                    // This child is a dedicated headless smoke, never an author's interactive preview.
-                    if (!_playtestProcess!.HasExited) _playtestProcess.Kill(true);
-                    await _playtestProcess.WaitForExitAsync();
-                    throw;
-                }
+                await _playtestProcess!.WaitForExitAsync(timeout.Token);
                 var output = await _playtestOutput!;
                 var errors = await _playtestErrors!;
                 Check(_playtestProcess.ExitCode == 0 && output.Contains("LANTERNWAKE_SELECTED_BEAT_OK " + target.Beat.Id) && !errors.Contains("ERROR:"),
@@ -42,7 +35,20 @@ public partial class StoryTextPlugin
             Check(System.IO.File.ReadAllText(ProjectSettings.GlobalizePath(_storyPath)) == source, "launch never edits canonical story");
             GD.Print("LANTERNWAKE_PLAYTEST_LAUNCH_OK dirty/conflict rejection; repeated native selected-beat launch/exit; settings and story unchanged");
         }
-        finally { _playtestProcess?.Dispose(); _playtestProcess = null; }
+        finally
+        {
+            // Covers timeouts AND any assertion/read/start failure after creation.
+            // An intentionally open interactive author window is never terminated here.
+            if (_playtestProcess is not null && _playtestIsSmoke)
+            {
+                try
+                {
+                    if (!_playtestProcess.HasExited) _playtestProcess.Kill(true);
+                    await _playtestProcess.WaitForExitAsync();
+                }
+                finally { _playtestProcess.Dispose(); _playtestProcess = null; }
+            }
+        }
     }
 }
 #endif

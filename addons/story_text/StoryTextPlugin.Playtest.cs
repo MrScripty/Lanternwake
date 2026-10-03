@@ -7,6 +7,7 @@ using File = System.IO.File;
 public partial class StoryTextPlugin
 {
     private Process? _playtestProcess;
+    private bool _playtestIsSmoke;
     private Task<string>? _playtestOutput, _playtestErrors;
 
     private bool PlaySavedBeat(bool smoke = false)
@@ -33,6 +34,7 @@ public partial class StoryTextPlugin
             if (smoke) start.ArgumentList.Add("--headless");
             start.ArgumentList.Add("--"); start.ArgumentList.Add("--author-preview-beat"); start.ArgumentList.Add(beatId);
             if (smoke) start.ArgumentList.Add("--author-preview-smoke");
+            _playtestIsSmoke = smoke;
             _playtestProcess = Process.Start(start) ?? throw new InvalidOperationException("Could not start the author preview.");
             if (smoke)
             {

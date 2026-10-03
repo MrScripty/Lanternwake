@@ -5,6 +5,11 @@ public sealed record SessionLaunch(SessionMode Mode, string? BeatId, bool StageP
 {
     public static SessionLaunch Parse(IReadOnlyList<string> arguments, bool debugBuild)
     {
+        string[] known = ["--stage-preview", "--author-preview-beat", "--smoke", "--ui-smoke", "--live-ui-preview", "--save-isolation-smoke", "--author-preview-smoke"];
+        string[] namespaces = ["--stage-preview", "--author-preview", "--smoke", "--ui-smoke", "--live-ui-preview", "--save-isolation"];
+        foreach (var argument in arguments)
+            if (namespaces.Any(prefix => argument.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)) && !known.Contains(argument))
+                throw new InvalidDataException("Unsupported preview/test option. Use exact flags and --author-preview-beat followed by a separate stable beat ID.");
         var stages = arguments.Count(a => a == "--stage-preview");
         var selected = arguments.Select((value, index) => (value, index)).Where(a => a.value == "--author-preview-beat").ToArray();
         var checks = arguments.Where(a => a is "--smoke" or "--ui-smoke" or "--live-ui-preview" or "--save-isolation-smoke" or "--author-preview-smoke").ToArray();

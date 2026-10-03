@@ -26,6 +26,9 @@ internal static class SessionLaunchTests
         Reject(["--author-preview-smoke"], true, "Selected-beat smoke requires selection");
         Reject(["--author-preview-beat", "a"], false, "Release preview rejected instead of silently using real saves");
         Reject(["--stage-preview"], false, "Release stage preview rejected");
+        foreach (var malformed in new[] { "--author-preview-beat=some-id", "--stage-preview=true", "--author-preview-unknown", "--ui-smoke=1", "--save-isolation-smoke=yes", "--live-ui-preview=true", "--smoke=1", "--AUTHOR-PREVIEW-BEAT", "--Stage-Preview" })
+            Reject([malformed], true, "Malformed preview/test option never selects normal saves: " + malformed);
+        Check(SessionLaunch.Parse(["--unrelated-option"], true).Mode == SessionMode.Normal, "Unrelated option policy remains scoped");
         var all = story.Chapters.SelectMany(c => c.Scenes).SelectMany(s => s.Beats).ToArray();
         foreach (var target in all.Where(b => b.Activity is not null))
         {

@@ -65,7 +65,14 @@ public partial class StoryTextPlugin : EditorPlugin
 
     public override void _ExitTree()
     {
-        _playtestProcess?.Dispose(); _playtestProcess = null;
+        if (_playtestProcess is { } process)
+        {
+            try
+            {
+                if (_playtestIsSmoke && !process.HasExited) { process.Kill(true); process.WaitForExit(); }
+            }
+            finally { process.Dispose(); _playtestProcess = null; }
+        }
         RemoveDock(_editorDock);
         // Plugin shutdown may end the editor before another deferred-delete frame.
         _editorDock.Free();
