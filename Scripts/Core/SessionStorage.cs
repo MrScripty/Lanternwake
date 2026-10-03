@@ -32,10 +32,7 @@ public sealed class SessionStorage : IDisposable
     }
 
     public void Write(bool automatic, SaveData save) => SaveRecovery.Write(Slot(automatic), Slot(automatic, true), _story, save);
-    public SaveData Read(bool automatic)
-    {
-        var save = SaveStore.Read(Slot(automatic)); SaveRecovery.Validate(_story, save); return save;
-    }
+    public SaveData Read(bool automatic) => SaveRecovery.ReadCompatible(Slot(automatic), _story);
     public SaveCandidate Inspect(bool automatic, bool previous) => SaveRecovery.Inspect(Slot(automatic, previous), _story, automatic, previous);
 
     private string Slot(bool automatic, bool previous = false)

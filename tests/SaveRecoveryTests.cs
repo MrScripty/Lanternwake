@@ -46,6 +46,40 @@ internal static class SaveRecoveryTests
             using (var large = new FileStream(current, FileMode.Create, FileAccess.Write)) large.SetLength(16 * 1024 * 1024 + 1);
             Check(SaveRecovery.Inspect(current, story, false, false).Availability == SaveAvailability.InvalidFormat, "Oversize slot is rejected before deserialization");
             Reset();
+            var openedTime = new DateTime(2020, 1, 2, 3, 4, 5, DateTimeKind.Utc);
+            File.SetLastWriteTimeUtc(current, openedTime);
+            var observedTime = File.GetLastWriteTimeUtc(current);
+            var replacement = Path.Combine(folder, "replacement.json");
+            File.WriteAllBytes(replacement, Bytes(third)); File.SetLastWriteTimeUtc(replacement, openedTime.AddYears(5));
+            var captured = SaveRecovery.ReadSnapshot(current, () => File.Move(replacement, current, true));
+            Check(captured.Bytes.SequenceEqual(Bytes(second)) && captured.FileTimeUtc == observedTime, "Bytes and displayed time come from the same open file despite path replacement");
+            Check(File.GetLastWriteTimeUtc(current) != captured.FileTimeUtc && SaveStore.Read(current).BeatId == third.BeatId, "Later path metadata cannot relabel the captured snapshot");
+            Reset();
+            try
+            {
+                SaveRecovery.ReadSnapshot(current, () =>
+                {
+                    using var growth = new FileStream(current, FileMode.Open, FileAccess.Write, FileShare.ReadWrite | FileShare.Delete);
+                    growth.SetLength(SaveRecovery.MaximumBytes + 128L);
+                });
+                throw new Exception("Growth after opening bypassed size bound");
+            }
+            catch (InvalidDataException) { count++; }
+            using (var unbounded = new GrowingSaveStream())
+            {
+                try { SaveRecovery.ReadBounded(unbounded); throw new Exception("Growing stream accepted"); } catch (InvalidDataException) { count++; }
+                Check(unbounded.BytesRead == SaveRecovery.MaximumBytes + 1L, "At most limit+1 bytes read regardless of stale length/growth");
+            }
+            Reset();
+            var directorySlot = Path.Combine(folder, "not-a-file"); Directory.CreateDirectory(directorySlot);
+            var stageObserved = false;
+            Check(SaveRecovery.Inspect(directorySlot, story, false, false).Availability == SaveAvailability.ReadError, "Existing inaccessible/non-file primary is an error, not absence");
+            try { SaveRecovery.Write(directorySlot, previous, story, third, _ => stageObserved = true); throw new Exception("Non-file primary treated as missing"); }
+            catch (UnauthorizedAccessException) { count++; }
+            catch (IOException) { count++; }
+            Check(!stageObserved && SaveStore.Read(previous).BeatId == first.BeatId, "Unexpected read error aborts before staging or backup replacement");
+            Directory.Delete(directorySlot);
+            Reset();
             foreach (var stage in Enum.GetValues<SavePublicationStage>())
             {
                 Reset();
@@ -93,4 +127,22 @@ internal static class SaveRecoveryTests
         finally { Directory.Delete(folder, true); }
         return count;
     }
+    private sealed class GrowingSaveStream : Stream
+    {
+        public long BytesRead { get; private set; }
+        public override bool CanRead => true;
+        public override bool CanSeek => false;
+        public override bool CanWrite => false;
+        public override long Length => 0; // stale length must not control admission/allocation
+        public override long Position { get => BytesRead; set => throw new NotSupportedException(); }
+        public override int Read(byte[] buffer, int offset, int count)
+        {
+            buffer.AsSpan(offset, count).Fill((byte)'x'); BytesRead += count; return count;
+        }
+        public override void Flush() { }
+        public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
+        public override void SetLength(long value) => throw new NotSupportedException();
+        public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+    }
+
 }

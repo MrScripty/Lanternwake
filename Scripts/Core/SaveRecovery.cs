@@ -9,7 +9,7 @@ internal enum SavePublicationStage { CurrentStaged, PreviousStaged, PreviousPubl
 /// <summary>Compatibility-aware recovery. Per-file replacement, not a multi-file durability transaction.</summary>
 public static class SaveRecovery
 {
-    private const int MaximumBytes = 16 * 1024 * 1024;
+    internal const int MaximumBytes = 16 * 1024 * 1024;
 
     internal static void Validate(Story story, SaveData save)
     {
@@ -17,12 +17,32 @@ public static class SaveRecovery
         probe.Restore(save);
     }
 
-    private static byte[] ReadBytes(string path)
+    internal static (byte[] Bytes, DateTime FileTimeUtc) ReadSnapshot(string path, Action? afterOpen = null)
     {
-        if (new FileInfo(path).Length > MaximumBytes) throw new InvalidDataException("Save is too large.");
-        var bytes = File.ReadAllBytes(path);
-        if (bytes.Length > MaximumBytes) throw new InvalidDataException("Save is too large.");
-        return bytes;
+        using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+        afterOpen?.Invoke(); // deterministic owned-fixture growth/replacement boundary
+        var bytes = ReadBounded(stream);
+        return (bytes, File.GetLastWriteTimeUtc(stream.SafeFileHandle));
+    }
+
+    internal static byte[] ReadBounded(Stream stream)
+    {
+        using var result = new MemoryStream();
+        var buffer = new byte[81920];
+        while (true)
+        {
+            var remaining = MaximumBytes + 1 - (int)result.Length;
+            var read = stream.Read(buffer, 0, Math.Min(buffer.Length, remaining));
+            if (read == 0) return result.ToArray();
+            // Never append the sentinel byte or trust a prior path/handle length for allocation.
+            if (result.Length + read > MaximumBytes) throw new InvalidDataException("Save is too large.");
+            result.Write(buffer, 0, read);
+        }
+    }
+
+    internal static SaveData ReadCompatible(string path, Story story)
+    {
+        var save = Decode(ReadSnapshot(path).Bytes); Validate(story, save); return save;
     }
 
     private static SaveData Decode(byte[] bytes)
@@ -40,14 +60,15 @@ public static class SaveRecovery
         SaveCandidate Unavailable(SaveAvailability status, string reason) => new(automatic, previous, status, label + ": " + reason, null);
         try
         {
-            var save = Decode(ReadBytes(path));
+            var file = ReadSnapshot(path);
+            var save = Decode(file.Bytes);
             if (save.Version != 1) return Unavailable(SaveAvailability.UnsupportedVersion, "unsupported save version " + save.Version);
             try { Validate(story, save); }
             catch (InvalidDataException error) { return Unavailable(SaveAvailability.Incompatible, "not valid for the current story: " + error.Message); }
             var position = story.Chapters.SelectMany(c => c.Scenes.SelectMany(s => s.Beats.Select(b => (Chapter: c, Scene: s, Beat: b))))
                 .Single(p => p.Beat.Id == save.BeatId);
             return new(automatic, previous, SaveAvailability.Available,
-                $"{label}: {position.Chapter.Title} / {position.Scene.Title}\nBeat {save.BeatId} · file time {File.GetLastWriteTimeUtc(path):yyyy-MM-dd HH:mm:ss} UTC", save);
+                $"{label}: {position.Chapter.Title} / {position.Scene.Title}\nBeat {save.BeatId} · file time {file.FileTimeUtc:yyyy-MM-dd HH:mm:ss} UTC", save);
         }
         catch (FileNotFoundException) { return Unavailable(SaveAvailability.Missing, "no snapshot"); }
         catch (DirectoryNotFoundException) { return Unavailable(SaveAvailability.Missing, "no snapshot"); }
@@ -64,18 +85,17 @@ public static class SaveRecovery
         var currentBytes = JsonSerializer.SerializeToUtf8Bytes(save, Story.Json);
         if (currentBytes.Length > MaximumBytes) throw new InvalidDataException("Save exceeds the supported 16 MiB limit; existing slots were preserved.");
         byte[]? previousBytes = null;
-        if (File.Exists(currentPath))
+        // Read first: File.Exists can hide access/I/O errors as false. Only actual absence is absent.
+        try
         {
-            // I/O errors abort. Only content known to be unusable may be skipped.
-            try
-            {
-                var candidate = ReadBytes(currentPath);
-                Validate(story, Decode(candidate));
-                previousBytes = candidate; // preserve exact old bytes, including unknown fields
-            }
-            catch (JsonException) { }
-            catch (InvalidDataException) { }
+            var candidate = ReadSnapshot(currentPath).Bytes;
+            Validate(story, Decode(candidate));
+            previousBytes = candidate; // preserve exact old bytes, including unknown fields
         }
+        catch (FileNotFoundException) { }
+        catch (DirectoryNotFoundException) { }
+        catch (JsonException) { }
+        catch (InvalidDataException) { }
         Directory.CreateDirectory(Path.GetDirectoryName(currentPath)!);
         var currentPending = currentPath + ".pending-" + Guid.NewGuid().ToString("N");
         var previousPending = previousPath + ".pending-" + Guid.NewGuid().ToString("N");
@@ -95,7 +115,7 @@ public static class SaveRecovery
         }
         finally
         {
-            foreach (var path in new[] { currentPending, previousPending }) if (File.Exists(path)) File.Delete(path);
+            foreach (var path in new[] { currentPending, previousPending }) File.Delete(path);
         }
     }
 
