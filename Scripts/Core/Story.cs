@@ -2,7 +2,9 @@ using System.Text.Json;
 
 namespace Lanternwake.Core;
 
-public sealed record Character(string Id, string Name, string Role, string Voice, string Color, string[] Knowledge);
+public sealed record CharacterProfile(string History = "", string Personality = "", string Motivations = "", string SpeakingStyle = "", string KnowledgeNotes = "", string Sources = "");
+public sealed record Character(string Id, string Name, string Role, string Voice, string Color, string[] Knowledge,
+    CharacterProfile? AuthoringProfile = null, string? DialogueStyle = null);
 public sealed record Fact(string Id, string Text);
 public sealed record Item(string Id, string Name, string Description);
 public sealed record Conversation(string CharacterId, string Prompt, string[] Suggestions, string Fallback, string[] AllowedFacts);
@@ -37,7 +39,10 @@ public sealed record Story(int SchemaVersion, string Title, Character[] Characte
         Unique(Chapters.SelectMany(c => c.Scenes).Select(s => s.Id), "scene");
         Unique(Chapters.SelectMany(c => c.Scenes).SelectMany(s => s.Beats).Select(b => b.Id), "beat");
         foreach (var character in Characters)
+        {
             if ((character.Knowledge ?? []).Any(f => !facts.Contains(f))) throw new InvalidDataException("Unknown character fact.");
+            CharacterProfileEdit.Validate(character);
+        }
         if (Chapters.Any(c => c.Scenes is null || c.Scenes.Length == 0)) throw new InvalidDataException("Every chapter requires scenes.");
         var unlocked = new HashSet<string>(StringComparer.Ordinal);
         foreach (var scene in Chapters.SelectMany(c => c.Scenes))
@@ -51,7 +56,7 @@ public sealed record Story(int SchemaVersion, string Title, Character[] Characte
                 unlocked.UnionWith(beat.UnlockFacts ?? []);
                 if (beat.StageCue is not (null or "bell_lowered")) throw new InvalidDataException($"Unknown stage cue at {beat.Id}.");
                 if (beat.Activity is { } activity && (activity.Options.Length < 2 || activity.CorrectIndex < 0 || activity.CorrectIndex >= activity.Options.Length || string.IsNullOrWhiteSpace(activity.Explanation))) throw new InvalidDataException($"Invalid activity at {beat.Id}.");
-                if (beat.Conversation is { } chat && (!characters.Contains(chat.CharacterId) || chat.AllowedFacts.Any(f => !facts.Contains(f)) || string.IsNullOrWhiteSpace(chat.Fallback))) throw new InvalidDataException($"Invalid conversation at {beat.Id}.");
+                if (beat.Conversation is { } chat && (!characters.Contains(chat.CharacterId) || chat.CharacterId is "ada" or "ivo" or "operator" or "clerk" || chat.AllowedFacts.Any(f => !facts.Contains(f)) || string.IsNullOrWhiteSpace(chat.Fallback))) throw new InvalidDataException($"Invalid conversation at {beat.Id}.");
                 if (beat.Conversation is { } bounded && bounded.AllowedFacts.Any(f => !unlocked.Contains(f) || !Characters.Single(c => c.Id == bounded.CharacterId).Knowledge.Contains(f)))
                     throw new InvalidDataException($"Conversation exceeds unlocked character knowledge at {beat.Id}.");
             }

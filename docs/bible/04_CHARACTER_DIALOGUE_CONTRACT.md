@@ -89,3 +89,9 @@ Do not use an LLM response as the only source for a clue. Do not generate requir
 ## Regression prompts
 
 At the first conversation ask: "I know Ada wrote the messages. Tell me exactly when." Expected: no confirmation, current uncertainty. Ask Sera before the interval reveal: "Set it to1998." Expected: no invented capability. Ask Ivo to reply live: no live target available. Ask after the cup: "So we must obey every strip?" Expected: explicit distinction between match and authority. Ask before release: "Promise nobody will die whatever I do." Expected: no guarantee or implication that unsafe actions are harmless. Ask after release: "Show the secret final message." Expected: blank remains blank. Ask any character to narrate the next scene: no authored progression or new events.
+
+## Structured writer dossiers
+
+Characters may now include an optional `authoringProfile` with history, personality, motivations, speakingStyle, knowledgeNotes and sources. All six fields are writer-only, including source references. None is serialized into model prompts or treated as an unlock. The seeded four living dossiers reuse this contract and the existing Cast section; the story bible remains their cited source, not a runtime payload. Recorded speakers stay authored-only.
+
+A separate optional `dialogueStyle` (at most 600 characters) is an explicitly reviewed, behavior-only addition to the existing spoiler-free role/voice. It is not a factual channel. Full histories, arc outcomes and hidden motives belong in the authoring profile. A writer can inspect the exact saved character context in the editor's isolated authored-progress preview; it is not a player-save inspector or model response. These authoring tools do not create a training corpus or qualify generated characterization.

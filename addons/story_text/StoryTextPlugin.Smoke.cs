@@ -47,6 +47,7 @@ public partial class StoryTextPlugin
             Check(_matches.ItemCount == 0, "empty result clears prior matches");
             _search.Text = ""; _search.EmitSignal(LineEdit.SignalName.TextChanged, _search.Text);
             Check(!_matches.Visible, "clearing search restores normal navigation");
+            RunProfileSmoke(path);
             await CheckNarrowDockLayout();
             GD.Print("LANTERNWAKE_STORY_DOCK_OK search context dirty-navigation save reload conflict recovery; canonical story untouched");
         }
@@ -67,19 +68,26 @@ public partial class StoryTextPlugin
             scroll.Size = new Vector2(320, 600);
             scroll.GetNode<ItemList>("Content/Matches").Show();
             scroll.GetNode<Label>("Content/SearchStatus").Show();
+            scroll.GetNode<Control>("Content/Profiles").Show();
+            scroll.GetNode<Control>("Content/Preview").Show();
+            scroll.GetNode<Label>("Content/Profiles/Notice").Text = "AUTHOR ONLY · never sent to model. Long writer guidance wraps inside the narrow dock without hiding the save controls.";
             scroll.GetNode<Label>("Content/Status").Text = "Saved and validated. Run the game to see your edit. Stable story/save IDs are unchanged.";
             await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
             await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
             var content = scroll.GetNode<Control>("Content");
             if (content.Size.X > scroll.Size.X || scroll.GetVScrollBar().MaxValue <= scroll.GetVScrollBar().Page)
                 throw new InvalidOperationException("Narrow dock must fit horizontally and allow vertical overflow to scroll.");
-            scroll.ScrollVertical = (int)scroll.GetVScrollBar().MaxValue;
-            await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
-            var actions = scroll.GetNode<Control>("Content/Actions").GetGlobalRect();
-            var viewport = scroll.GetGlobalRect();
-            if (actions.Position.Y < viewport.Position.Y || actions.End.Y > viewport.End.Y)
-                throw new InvalidOperationException("Narrow dock save/reload actions must be reachable by scrolling.");
-            GD.Print("LANTERNWAKE_STORY_DOCK_LAYOUT_OK 320x600; horizontal fit and scroll-to-actions");
+            foreach (var target in new[] { "Content/Actions", "Content/Profiles/Save", "Content/Profiles/Reload" })
+            {
+                var control = scroll.GetNode<Control>(target);
+                scroll.EnsureControlVisible(control);
+                await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+                var actions = control.GetGlobalRect();
+                var viewport = scroll.GetGlobalRect();
+                if (actions.Position.Y < viewport.Position.Y || actions.End.Y > viewport.End.Y)
+                    throw new InvalidOperationException("Narrow dock actions must be reachable by scrolling: " + target);
+            }
+            GD.Print("LANTERNWAKE_STORY_DOCK_LAYOUT_OK 320x600; expanded dossier/preview horizontal fit and scroll-to-actions");
         }
         finally { scroll.Free(); }
     }

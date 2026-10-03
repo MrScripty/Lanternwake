@@ -21,7 +21,7 @@ done
 log="$(mktemp)"
 trap 'rm -f "$log"' EXIT
 timeout 60 "$GODOT_MONO" --headless --editor --path . -- --editor-roundtrip 2>&1 | tee "$log"
-if grep -q '^ERROR:' "$log" || ! grep -q 'LANTERNWAKE_EDITOR_ROUNDTRIP_OK' "$log" || ! grep -q 'LANTERNWAKE_STORY_DOCK_OK' "$log" || ! grep -q 'LANTERNWAKE_STORY_DOCK_LAYOUT_OK' "$log"; then
+if grep -q '^ERROR:' "$log" || ! grep -q 'LANTERNWAKE_EDITOR_ROUNDTRIP_OK' "$log" || ! grep -q 'LANTERNWAKE_STORY_DOCK_OK' "$log" || ! grep -q 'LANTERNWAKE_STORY_DOCK_LAYOUT_OK' "$log" || ! grep -q 'LANTERNWAKE_CHARACTER_AUTHORING_OK' "$log"; then
   echo 'Godot Editor roundtrip did not pass cleanly.' >&2; exit 1
 fi
 rm -f "$log"

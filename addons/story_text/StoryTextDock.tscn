@@ -57,3 +57,50 @@ text = "Reload / discard"
 
 [node name="Status" type="Label" parent="Content"]
 autowrap_mode = 3
+
+[node name="PreviewToggle" type="CheckButton" parent="Content"]
+text = "Show runtime context preview"
+
+[node name="Preview" type="VBoxContainer" parent="Content"]
+visible = false
+
+[node name="Notice" type="Label" parent="Content/Preview"]
+text = "ISOLATED AUTHORED PROGRESS\nNot a player save. No optional chat history. Only the production character context is shown; the transport wrapper and player message are separate."
+autowrap_mode = 3
+
+[node name="Budget" type="Label" parent="Content/Preview"]
+autowrap_mode = 3
+
+[node name="Text" type="TextEdit" parent="Content/Preview"]
+custom_minimum_size = Vector2(0, 220)
+editable = false
+wrap_mode = 1
+
+[node name="ProfilesToggle" type="CheckButton" parent="Content"]
+text = "Show character dossiers"
+
+[node name="Profiles" type="VBoxContainer" parent="Content"]
+visible = false
+
+[node name="Title" type="Label" parent="Content/Profiles"]
+text = "CHARACTER DOSSIERS · AUTHOR SPOILERS"
+autowrap_mode = 3
+
+[node name="Characters" type="OptionButton" parent="Content/Profiles"]
+clip_text = true
+
+[node name="Fields" type="OptionButton" parent="Content/Profiles"]
+clip_text = true
+
+[node name="Notice" type="Label" parent="Content/Profiles"]
+autowrap_mode = 3
+
+[node name="Text" type="TextEdit" parent="Content/Profiles"]
+custom_minimum_size = Vector2(0, 200)
+wrap_mode = 1
+
+[node name="Save" type="Button" parent="Content/Profiles"]
+text = "Save selected dossier field"
+
+[node name="Reload" type="Button" parent="Content/Profiles"]
+text = "Reload / discard all drafts"

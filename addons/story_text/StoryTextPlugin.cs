@@ -40,10 +40,11 @@ public partial class StoryTextPlugin : EditorPlugin
         _searchStatus = _dock.GetNode<Label>("SearchStatus");
         _scenes.ItemSelected += SelectScene;
         _beats.ItemSelected += SelectBeat;
-        _text.TextChanged += () => { if (!_loading) _dirty = true; };
-        _speakers.ItemSelected += _ => { if (!_loading) _dirty = true; };
+        _text.TextChanged += () => { if (!_loading) { _dirty = true; UpdateEditLocks(); } };
+        _speakers.ItemSelected += _ => { if (!_loading) { _dirty = true; UpdateEditLocks(); } };
         _dock.GetNode<Button>("Actions/Save").Pressed += Save;
         _dock.GetNode<Button>("Actions/Reload").Pressed += Reload;
+        InitializeProfiles();
         _editorDock = new EditorDock { Title = "Story Text", DefaultSlot = EditorDock.DockSlot.RightUl };
         _editorDock.AddChild(scroll);
         AddDock(_editorDock);
@@ -90,7 +91,7 @@ public partial class StoryTextPlugin : EditorPlugin
             foreach (var character in _story.Characters) _speakers.AddItem(character.Id);
             _sceneIndex = Math.Min(_sceneIndex, _sceneData.Length - 1);
             _scenes.Select(_sceneIndex);
-            _dirty = false; PopulateBeats(); Search();
+            _dirty = false; _profileDirty = false; ReloadProfiles(); PopulateBeats(); Search(); UpdateEditLocks();
             _status.Text = "Loaded canonical story.json. Save writes only the selected beat's text/speaker. Reload discards unsaved edits.";
         }
         catch (Exception error) { _status.Text = error.Message; }
@@ -114,7 +115,7 @@ public partial class StoryTextPlugin : EditorPlugin
 
     private void SelectMatch(long index)
     {
-        if (_dirty)
+        if (HasDraft)
         {
             _matches.DeselectAll();
             _status.Text = "Save or Reload your current edit before opening a search result.";
@@ -128,7 +129,7 @@ public partial class StoryTextPlugin : EditorPlugin
 
     private void SelectScene(long index)
     {
-        if (_dirty) { _scenes.Select(_sceneIndex); _status.Text = "Save or Reload your current edit before changing scene."; return; }
+        if (HasDraft) { _scenes.Select(_sceneIndex); _status.Text = "Save or Reload your current edit before changing scene."; return; }
         _sceneIndex = (int)index; _beatIndex = 0; PopulateBeats();
     }
 
@@ -142,7 +143,7 @@ public partial class StoryTextPlugin : EditorPlugin
 
     private void SelectBeat(long index)
     {
-        if (_dirty) { _beats.Select(_beatIndex); _status.Text = "Save or Reload your current edit before selecting another beat."; return; }
+        if (HasDraft) { _beats.Select(_beatIndex); _status.Text = "Save or Reload your current edit before selecting another beat."; return; }
         _beatIndex = (int)index; DisplayBeat();
     }
 
@@ -152,19 +153,30 @@ public partial class StoryTextPlugin : EditorPlugin
         var beat = _sceneData[_sceneIndex].Beats[_beatIndex];
         _text.Text = beat.Text;
         _context.Text = _index!.Entries.Single(e => e.Beat.Id == beat.Id).Context;
+        DisplayPreview(beat);
         for (var i = 0; i < _speakers.ItemCount; i++) if (_speakers.GetItemText(i) == beat.Speaker) _speakers.Select(i);
         _loading = false;
     }
 
     private void Save()
     {
-        string? pending = null;
+        if (_profileDirty) { _status.Text = "Save or Reload your dossier draft before saving a beat."; return; }
         try
         {
             var path = ProjectSettings.GlobalizePath(_storyPath);
             var result = StoryTextEdit.Apply(_loaded, File.ReadAllText(path), _sceneData[_sceneIndex].Beats[_beatIndex].Id,
                 _speakers.GetItemText(_speakers.Selected), _text.Text);
-            pending = path + "." + Guid.NewGuid().ToString("N") + ".pending";
+            PublishEdit(result);
+        }
+        catch (Exception error) { _status.Text = error.Message; }
+    }
+
+    private void PublishEdit(string result)
+    {
+        var path = ProjectSettings.GlobalizePath(_storyPath);
+        var pending = path + "." + Guid.NewGuid().ToString("N") + ".pending";
+        try
+        {
             using (var stream = new FileStream(pending, FileMode.CreateNew, System.IO.FileAccess.Write, FileShare.None))
             {
                 var bytes = System.Text.Encoding.UTF8.GetBytes(result);
@@ -173,10 +185,9 @@ public partial class StoryTextPlugin : EditorPlugin
             if (File.ReadAllText(path) != _loaded) throw new InvalidOperationException("The story changed on disk. Reload before saving.");
             File.Move(pending, path, true);
             Reload();
-            _status.Text = "Saved and validated. Run the game to see your edit. Stable story/save IDs are unchanged.";
+            _status.Text = "Saved and validated. Stable story/save IDs are unchanged. Preview reflects saved content only.";
         }
-        catch (Exception error) { _status.Text = error.Message; }
-        finally { if (pending is not null && File.Exists(pending)) File.Delete(pending); }
+        finally { if (File.Exists(pending)) File.Delete(pending); }
     }
 }
 #endif
