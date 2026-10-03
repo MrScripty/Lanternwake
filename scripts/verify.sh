@@ -15,6 +15,9 @@ for mode in smoke ui-smoke save-isolation-smoke; do
   trap 'rm -f "$log"' EXIT
   LANTERNWAKE_PUMAS_MODEL='' "$GODOT_MONO" --headless --path . -- "--$mode" 2>&1 | tee "$log"
   if grep -q '^ERROR:' "$log"; then echo "Godot $mode emitted an error." >&2; exit 1; fi
+  if [[ "$mode" == "ui-smoke" ]] && ! grep -q 'LANTERNWAKE_RECOVERY_UI_OK' "$log"; then
+    echo 'Save recovery UI regression did not report success.' >&2; exit 1
+  fi
   if [[ "$mode" == "save-isolation-smoke" ]] && ! grep -q 'LANTERNWAKE_SAVE_ISOLATION_OK' "$log"; then
     echo 'Save isolation regression did not report success.' >&2; exit 1
   fi

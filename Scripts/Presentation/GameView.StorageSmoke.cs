@@ -16,7 +16,7 @@ public partial class GameView
             Check(_storage!.Mode == SessionMode.AuthorPreview && _previewMode, "debug preview launch chooses non-persisting policy");
             Check(InterfaceRoot.GetNode<Button>("%SaveButton").Disabled && InterfaceRoot.GetNode<Button>("%LoadButton").Disabled, "preview buttons disabled");
             File.WriteAllText(manual, "REAL_MANUAL_SENTINEL"); File.WriteAllText(automatic, "REAL_AUTO_SENTINEL");
-            _storage.Dispose(); _storage = new SessionStorage(SessionMode.AuthorPreview, root);
+            _storage.Dispose(); _storage = new SessionStorage(SessionMode.AuthorPreview, root, _story);
             _dialogue.VisibleCharacters = -1; Advance();
             Save(false); Save(true); var before = _session.Beat.Id;
             Load(false); Load(true); ShowLoad();
@@ -27,7 +27,7 @@ public partial class GameView
             _modal!.GetNode<VBoxContainer>("%ModalActions").GetChildren().OfType<Button>().ElementAt(correct).EmitSignal(Button.SignalName.Pressed);
             Check(_session.CanAdvance, "preview evidence can be solved locally");
             Check(File.ReadAllText(manual) == "REAL_MANUAL_SENTINEL" && File.ReadAllText(automatic) == "REAL_AUTO_SENTINEL", "advance, activity, manual save and load preserve player sentinels");
-            _storage.Dispose(); _storage = new SessionStorage(SessionMode.AutomatedTest, root);
+            _storage.Dispose(); _storage = new SessionStorage(SessionMode.AutomatedTest, root, _story);
             Save(false); Save(true); before = _session.Beat.Id;
             _session.Advance(); Load(false);
             Check(_session.Beat.Id == before, "test runtime save/load uses disposable slots");

@@ -42,7 +42,7 @@ Set GODOT_MONO to the official .NET executable and use scripts/verify.sh for the
 - Stay and talk: optional conversation panel
 - Suggestions populate editable input; Say this submits
 - H: history; E: catalogue; Escape: close panel
-- Manual Save/Load; separate automatic checkpoint
+- Manual Save/Load; separate automatic checkpoint; explicit previous-good recovery choices
 - Settings: instant text and reduced motion
 
 All assets currently come from original code and authored text. Source ownership and technical contracts are documented in `docs/ARCHITECTURE.md`.

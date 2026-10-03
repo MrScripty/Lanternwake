@@ -55,7 +55,7 @@ public partial class GameView : Node
             var launch = SessionLaunch.Parse(OS.GetCmdlineUserArgs(), OS.IsDebugBuild());
             _previewMode = launch.Mode == SessionMode.AuthorPreview;
             _stagePreview = launch.StagePreview;
-            _storage = new SessionStorage(launch.Mode, ProjectSettings.GlobalizePath("user://"));
+            _storage = new SessionStorage(launch.Mode, ProjectSettings.GlobalizePath("user://"), _story);
             if (launch.BeatId is { } beatId) _session = StoryContextPreview.CreateSessionAtBeat(_story, beatId);
             BindInterface(); ShowTitle();
             if (_stagePreview) ShowStagePreview();
@@ -241,13 +241,31 @@ public partial class GameView : Node
     private void ShowLoad()
     {
         if (!_storage!.CanUseSaves) { _status.Text = "AUTHOR PREVIEW · saving and loading player slots is disabled."; return; }
-        ShowWindow("Load a saved watch", "Loading replaces the current unsaved position.", [ ("Load manual save", () => Load(false)), ("Load autosave", () => Load(true)) ]);
+        var candidates = new[] { _storage.Inspect(false, false), _storage.Inspect(false, true), _storage.Inspect(true, false), _storage.Inspect(true, true) };
+        var actions = candidates.Where(c => c.Availability == SaveAvailability.Available).Select(candidate =>
+            ((candidate.Previous ? "Recover previous " : "Load current ") + (candidate.Automatic ? "autosave" : "manual save") + " · " + candidate.Snapshot!.BeatId,
+                (Action)(() => LoadCandidate(candidate)))).ToArray();
+        ShowWindow("Load or recover a watch", "Choose the exact snapshot to replace your current in-memory progress. Closing leaves progress unchanged. Recovery is never automatic. Loading does not rewrite save files; subsequent saves may update them.\n\n" +
+            string.Join("\n\n", candidates.Select(c => c.Description)), actions);
     }
     private void Load(bool auto)
     {
         try { var snapshot = _storage!.Read(auto); _session.Restore(snapshot); CloseConversation(); CloseModal(); _started = true; _lastScene = ""; RenderBeat(); }
         catch (Exception error) { _status.Text = "Could not load: " + error.Message; CloseModal(); }
     }
+    private void LoadCandidate(SaveCandidate candidate)
+    {
+        if (!_storage!.CanUseSaves) { _status.Text = "AUTHOR PREVIEW · saving and loading player slots is disabled."; return; }
+        try
+        {
+            // Capture the inspected snapshot, not a possibly changed file at click time.
+            var snapshot = candidate.Snapshot ?? throw new InvalidDataException("This snapshot is unavailable.");
+            _session.Restore(snapshot); CloseConversation(); CloseModal(); _started = true; _lastScene = ""; RenderBeat();
+            if (candidate.Previous) _status.Text = "Recovered the selected previous snapshot into this session. Save files were not rewritten.";
+        }
+        catch (Exception error) { _status.Text = "Could not load: " + error.Message; CloseModal(); }
+    }
+
     private void ShowActivity()
     {
         if (_session.Beat.Activity is not { } activity) return;
@@ -351,6 +369,21 @@ public partial class GameView : Node
             CloseConversation(); OpenConversation(); Check(_entry.Text == "" && _entry.Editable && !_busy, "reopening starts clean"); CloseConversation();
             Save(false); var savedBeat = _session.Beat.Id; _session.Advance(); Load(false);
             Check(_session.Beat.Id == savedBeat, "manual load restores position");
+            _session.Advance(); Save(false); var newer = _session.Snapshot();
+            ShowLoad();
+            Check(_modal!.GetNode<RichTextLabel>("%ModalText").Text.Contains(savedBeat), "recovery menu describes previous snapshot");
+            var recover = _modal.GetNode<VBoxContainer>("%ModalActions").GetChildren().OfType<Button>().Single(b => b.Text.StartsWith("Recover previous manual save"));
+            Check(recover.Text.Contains(savedBeat), "recovery action identifies the exact beat");
+            // Simulate an external replacement after inspection; choose exactly what was shown.
+            var previousPath = Path.Combine(_storage!.OwnedTestDirectory!, "save.previous.json");
+            SaveStore.Write(previousPath, newer);
+            var primaryBytes = System.IO.File.ReadAllBytes(Path.Combine(_storage.OwnedTestDirectory!, "save.json"));
+            var previousBytes = System.IO.File.ReadAllBytes(previousPath);
+            recover.EmitSignal(Button.SignalName.Pressed);
+            Check(_session.Beat.Id == savedBeat && _modal is null, "explicit recovery loads the displayed snapshot, not changed disk content");
+            Check(System.IO.File.ReadAllBytes(previousPath).SequenceEqual(previousBytes) && System.IO.File.ReadAllBytes(Path.Combine(_storage.OwnedTestDirectory!, "save.json")).SequenceEqual(primaryBytes), "recovery does not rewrite either save file");
+            ShowLoad(); CloseModal(); Check(_session.Beat.Id == savedBeat, "closing recovery chooser leaves progress unchanged");
+            GD.Print("LANTERNWAKE_RECOVERY_UI_OK explicit displayed snapshot; no slot rewrite; cancel preserves progress");
             while (_session.Beat.Activity is null && !_session.IsEnding) _session.Advance();
             RenderBeat(); var gated = _session.Beat.Id; _dialogue.VisibleCharacters = -1; Advance();
             Check(_session.Beat.Id == gated && _modal is not null, "activity opens instead of advancing"); CloseModal();

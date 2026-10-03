@@ -9,7 +9,7 @@
 - `GameView` owns the Godot presentation, modal lifecycle, textbox, history/catalogue, editable suggestions, submit/cancel and stale-response rejection.
 - `PumasClient` owns the local HTTP boundary and provider verification. See PUMAS.md for exact upstream contract and qualification.
 - `SpeechRecorder` owns consent-triggered microphone capture and transfers an operation-local PCM buffer to `PumasSpeechTranscriber`, which currently reports unsupported because Pumas has no transcription API. Capture is gated before touching audio devices. The intended local Cohere runtime and operation lifecycle belong to Pumas; the game has no direct recognizer process. Transcription fills the editable input, never submits it.
-- `SaveStore` owns same-directory flushed staging and replacement. Only schema 1 is supported. Corrupt/unsupported saves are rejected; there is no silent recovery by overwriting player data.
+- `SessionStorage` owns the normal/author-preview/test persistence policy and slot paths. `SaveRecovery` validates snapshots against the current story, publishes compatible previous bytes before replacing a primary, and supplies explicit inspected recovery candidates. `SaveStore` remains the low-level schema serializer/reader. Only schema 1 is supported; recovery never silently rewrites files. See `VERIFICATION.md` for failure ordering and durability limits.
 
 ## Conversation invariants
 
