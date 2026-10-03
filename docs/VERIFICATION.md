@@ -61,3 +61,9 @@ Use the official .NET Godot build and SDK, set `GODOT_MONO` to the engine execut
 The editor-first conversion passed 3,253 core assertions, 11 direct Pumas contract scenarios, a warning-free native build, native story/UI/resource roundtrip smokes and 19 optional adapter tests. Actual Editor save/reopen/play checks are recorded in [EDITOR-VERIFICATION.md](EDITOR-VERIFICATION.md). That editor-first milestone preserved the then-current inference boundaries. The subsequent speech cutover removes Whisper; see SPEECH.md for the current blocked Cohere/Pumas dependency.
 
 Authored-game commit `13d3722b7f854b2760b7d603e45a0eade1896e06` passed every hosted check in [run37074218895](https://github.com/MrScripty/Lanternwake/actions/runs/37074218895). Subsequent qualification changes need their own exact-head run; a prior green check does not qualify a later commit.
+
+## Save isolation
+
+Normal sessions retain `user://save.json` and `user://autosave.json`. Author preview uses a non-persisting policy: save/load controls are disabled, and the storage boundary rejects reads and writes even if called directly. Both stage advance and evidence completion can be exercised without touching player slots. Preview is visibly labeled in the chapter header and is rejected by release builds.
+
+Automated story/UI/live-dialogue checks use distinct temporary save directories owned by each session and removed on disposal. They never point at real player slots. Core sentinel tests cover preview denial, independent test directories, cleanup, and unchanged normal save/load. `--save-isolation-smoke` exercises the actual native advance/activity/manual-save/load paths against disposable player-slot sentinels and requires `LANTERNWAKE_SAVE_ISOLATION_OK`. The sentinels themselves are created only in a test-owned temporary directory, never in an existing player's directory.

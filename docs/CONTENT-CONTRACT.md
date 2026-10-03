@@ -5,6 +5,8 @@
 Root: `schemaVersion:1`, `title`, `characters`, `facts`, `items`, `chapters`.
 
 - Character: `id`, `name`, `role`, `voice`, `color` (hex), `knowledge` (fact IDs).
+- Optional Character `authoringProfile`: `history`, `personality`, `motivations`, `speakingStyle`, `knowledgeNotes`, `sources` (strings, at most 8,000 characters each). Writer-only; never sent to the model or treated as unlocks.
+- Optional Character `dialogueStyle`: spoiler-free behavior guidance, at most 600 characters; the only new profile text sent to runtime context. Blank/absent preserves the original role/voice card. Author review is required for semantic spoiler safety. No schema/save migration is needed. Viewpoint Ada and recorded Ivo/operator/clerk cannot be live conversation targets.
 - Fact: `id`, `text`.
 - Item: `id`, `name`, `description`.
 - Chapter: `id`, `title`, `scenes`.

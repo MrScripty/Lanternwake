@@ -11,6 +11,7 @@ var initial = session.Snapshot();
 var ordered = story.Chapters.SelectMany(c => c.Scenes).SelectMany(s => s.Beats).ToArray();
 var originalJson = File.ReadAllText(storyPath);
 count += CharacterAuthoringTests.Run(story, originalJson);
+count += SessionStorageTests.Run(story);
 var authoring = new StoryAuthoringIndex(story);
 Assert(authoring.Entries.Length == ordered.Length, "Author index includes every beat");
 Assert(authoring.Entries.Select(e => e.Beat.Id).SequenceEqual(ordered.Select(b => b.Id)), "Author index preserves canonical order");

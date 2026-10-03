@@ -22,6 +22,7 @@ public partial class GameView : Node
 
     private Story _story = null!;
     private StorySession _session = null!;
+    private SessionStorage? _storage;
     private StageDirector _stage = null!;
     private Label _chapter = null!, _speaker = null!, _status = null!, _place = null!;
     private RichTextLabel _dialogue = null!;
@@ -51,17 +52,25 @@ public partial class GameView : Node
             _session = new(_story);
             _stage = Stage ?? throw new InvalidOperationException("Assign the Stage scene in the Inspector.");
             _instant = StartWithInstantText;
+            var arguments = OS.GetCmdlineUserArgs();
+            if (!OS.IsDebugBuild() && arguments.Any(a => a is "--stage-preview" or "--save-isolation-smoke"))
+                throw new InvalidOperationException("Author preview is only available in debug builds.");
+            _previewMode = OS.IsDebugBuild() && (arguments.Contains("--stage-preview") || arguments.Contains("--save-isolation-smoke"));
+            var automated = arguments.Any(a => a is "--smoke" or "--ui-smoke" or "--live-ui-preview");
+            if (_previewMode && automated) throw new InvalidOperationException("Choose one preview or test mode per launch.");
+            _storage = new SessionStorage(_previewMode ? SessionMode.AuthorPreview : automated ? SessionMode.AutomatedTest : SessionMode.Normal,
+                ProjectSettings.GlobalizePath("user://"));
             BindInterface(); ShowTitle();
-            _previewMode = OS.IsDebugBuild() && OS.GetCmdlineUserArgs().Contains("--stage-preview");
             if (_previewMode) ShowStagePreview();
-            if (OS.GetCmdlineUserArgs().Contains("--smoke")) RunSmoke();
+            if (OS.GetCmdlineUserArgs().Contains("--save-isolation-smoke")) RunSaveIsolationSmoke();
+            else if (OS.GetCmdlineUserArgs().Contains("--smoke")) RunSmoke();
             else if (OS.GetCmdlineUserArgs().Contains("--ui-smoke") || OS.GetCmdlineUserArgs().Contains("--live-ui-preview")) RunUiSmoke();
         }
         catch (Exception error)
         {
             GD.PushError(error.ToString());
             var label = new Label { Text = "Lanternwake could not start.\n" + error.Message, Position = new(48, 48) }; AddChild(label);
-            if ((OS.GetCmdlineUserArgs().Contains("--smoke") || OS.GetCmdlineUserArgs().Contains("--ui-smoke"))) GetTree().Quit(1);
+            if ((OS.GetCmdlineUserArgs().Contains("--smoke") || OS.GetCmdlineUserArgs().Contains("--ui-smoke") || OS.GetCmdlineUserArgs().Contains("--save-isolation-smoke"))) GetTree().Quit(1);
         }
     }
     // Layout and appearance are authored in Scenes/UI; unique scene names are the
@@ -87,6 +96,8 @@ public partial class GameView : Node
         InterfaceRoot.GetNode<Button>("%SaveButton").Pressed += () => Save(false);
         InterfaceRoot.GetNode<Button>("%LoadButton").Pressed += ShowLoad;
         InterfaceRoot.GetNode<Button>("%SettingsButton").Pressed += ShowSettings;
+        InterfaceRoot.GetNode<Button>("%SaveButton").Disabled = !_storage!.CanUseSaves;
+        InterfaceRoot.GetNode<Button>("%LoadButton").Disabled = !_storage.CanUseSaves;
         _talk.Pressed += OpenConversation;
         _advance.Pressed += Advance;
         _entry.TextSubmitted += _ => SendReply();
@@ -122,13 +133,13 @@ public partial class GameView : Node
         var scene = _session.Scene;
         if (_lastScene != scene.Id) { _stage.ShowLocation(scene.Location, scene.TimeOfDay, scene.CharacterIds); _lastScene = scene.Id; }
         _stage.ApplyAuthoredCues(_session.ActiveStageCues);
-        _chapter.Text = _session.Chapter.Title.ToUpperInvariant();
+        _chapter.Text = (_previewMode ? "AUTHOR PREVIEW · " : "") + _session.Chapter.Title.ToUpperInvariant();
         _place.Text = scene.Title + "  ·  " + scene.TimeOfDay.Replace('_', ' ');
         _speaker.Text = DisplayName(_session.Beat.Speaker);
         _dialogue.Text = _session.Beat.Text; _characters = 0; _dialogue.VisibleCharacters = _instant ? -1 : 0;
         _talk.Visible = _session.Beat.Conversation is not null;
         _advance.Text = !_session.CanAdvance ? "Examine evidence  ›" : _session.IsEnding ? "Finish  ›" : "Continue  ›";
-        _status.Text = $"{_session.Progress:P0} · Space / Enter to continue · E evidence · H history";
+        _status.Text = (_previewMode ? "AUTHOR PREVIEW · player saves disabled · " : "") + $"{_session.Progress:P0} · Space / Enter to continue · E evidence · H history";
     }
     private string DisplayName(string id) => id == "narrator" ? "" : id == "you" ? "You" : _story.Characters.FirstOrDefault(c => c.Id == id)?.Name ?? id;
     public override void _Process(double delta)
@@ -221,20 +232,21 @@ public partial class GameView : Node
         catch (Exception error) { if (generation == _generation) _status.Text = error.Message; }
         finally { if (generation == _generation) { _busy = false; _mic.Disabled = false; _mic.Text = "Use voice"; _send.Disabled = false; _entry.Editable = true; } }
     }
-    private string SavePath(bool auto) => ProjectSettings.GlobalizePath(auto ? "user://autosave.json" : "user://save.json");
     private void Save(bool auto)
     {
         if (!_started) return;
-        try { SaveStore.Write(SavePath(auto), _session.Snapshot()); if (!auto) _status.Text = "Saved on this device."; }
+        if (!_storage!.CanUseSaves) { if (!auto) _status.Text = "AUTHOR PREVIEW · saving and loading player slots is disabled."; return; }
+        try { _storage.Write(auto, _session.Snapshot()); if (!auto) _status.Text = "Saved on this device."; }
         catch (Exception error) { _status.Text = "Could not save: " + error.Message; }
     }
     private void ShowLoad()
     {
+        if (!_storage!.CanUseSaves) { _status.Text = "AUTHOR PREVIEW · saving and loading player slots is disabled."; return; }
         ShowWindow("Load a saved watch", "Loading replaces the current unsaved position.", [ ("Load manual save", () => Load(false)), ("Load autosave", () => Load(true)) ]);
     }
     private void Load(bool auto)
     {
-        try { var snapshot = SaveStore.Read(SavePath(auto)); _session.Restore(snapshot); CloseConversation(); CloseModal(); _started = true; _lastScene = ""; RenderBeat(); }
+        try { var snapshot = _storage!.Read(auto); _session.Restore(snapshot); CloseConversation(); CloseModal(); _started = true; _lastScene = ""; RenderBeat(); }
         catch (Exception error) { _status.Text = "Could not load: " + error.Message; CloseModal(); }
     }
     private void ShowActivity()
@@ -278,7 +290,7 @@ public partial class GameView : Node
             _session.Advance();
         }
         _started = true; _lastScene = ""; RenderBeat(); _dialogue.VisibleCharacters = -1;
-        _status.Text = "DEVELOPMENT PREVIEW · F10 next stage · F12 screenshot · no automatic save";
+        _status.Text = "AUTHOR PREVIEW · F10 next stage · F12 screenshot · player save/load disabled";
     }
 
     private void RunSmoke()
@@ -287,8 +299,7 @@ public partial class GameView : Node
         while (!_session.IsEnding) { if (_session.Beat.Activity is { } activity) _session.AnswerActivity(activity.CorrectIndex); if (!_session.Advance()) throw new InvalidOperationException("Timeline blocked."); count++; }
         if (_session.Beat.Activity is { } finalActivity) _session.AnswerActivity(finalActivity.CorrectIndex);
         if (!_session.CanAdvance) throw new InvalidOperationException("Final activity is not solved.");
-        var path = ProjectSettings.GlobalizePath("user://smoke-save.json");
-        SaveStore.Write(path, _session.Snapshot()); var restored = new StorySession(_story); restored.Restore(SaveStore.Read(path));
+        _storage!.Write(false, _session.Snapshot()); var restored = new StorySession(_story); restored.Restore(_storage.Read(false));
         if (!restored.IsEnding) throw new InvalidOperationException("Smoke restore failed.");
         foreach (var location in new[] { "harbor", "keeper_house", "archive", "lantern_room", "tide_cave" }) _stage.ShowLocation(location, "night", _story.Characters.Select(c => c.Id).Take(2).ToArray());
         AuthoringSmoke.Run(this, _stage, InterfaceRoot);
@@ -359,5 +370,5 @@ public partial class GameView : Node
         catch (Exception error) { GD.PushWarning("Shutdown operation: " + error.Message); }
         finally { _pumas?.Dispose(); _pumas = null; GetTree().Quit(); }
     }
-    public override void _ExitTree() { if (Engine.IsEditorHint()) return; _generation++; _request?.Cancel(); _request?.Dispose(); _speechRequest?.Cancel(); _speech.Dispose(); }
+    public override void _ExitTree() { if (Engine.IsEditorHint()) return; _generation++; _request?.Cancel(); _request?.Dispose(); _speechRequest?.Cancel(); _speech.Dispose(); _storage?.Dispose(); }
 }
