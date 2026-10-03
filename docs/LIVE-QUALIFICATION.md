@@ -27,7 +27,9 @@ The compiled native Godot game ran against the same real Pumas profile. Its ordi
 
 **Quality finding:** the 0.5B model addressed the player using the speaking character's name. This is a failed characterization sample, not a polished dialogue demonstration. Context was repaired to name the speaking character and Ada, the player, separately, with regression assertions. That prompt repair is not evidence that the small model is now reliable. Larger-model selection, adversarial spoiler/identity tests and narrative evaluation remain open. No additional model budget was used.
 
-## Real local whisper.cpp adapter
+## Historical, removed whisper.cpp adapter
+
+This section records the previous implementation at `a53e4937e355074d5aaf1fbb70cbea41c0c4f3bd`. It is no longer the production path. The current Cohere/Pumas status is in [SPEECH.md](SPEECH.md); none of the following evidence qualifies Cohere.
 
 - Official [whisper.cpp v1.9.4](https://github.com/ggml-org/whisper.cpp/releases/tag/v1.9.4), CPU build with official CMake4.4.4
 - `whisper-cli` SHA-256: `b7ffc161b9ecb8bad27a418d0e517961eafab059cf16d379164f5056fd47a099`

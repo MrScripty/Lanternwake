@@ -6,9 +6,9 @@ An original stormbound-island mystery built in **Godot 4.6.3 .NET / C#**. A fixe
 
 This is an in-development game, not a shipped five-hour product. Five hours is the main-story target, excluding unlimited optional chat. See `docs/bible` for actual authored content, pacing estimates, visual language and remaining playtest requirements. Build success, smoke success, real Pumas inference and real microphone qualification are separate checks; consult `docs/VERIFICATION.md` for the latest evidence and blockers.
 
-Implemented source: ordered authored story, five editable 3D sets, reusable stylized adult character scenes, dialogue reveal/advance, mandatory evidence questions, unlocked evidence catalogue, history, manual/autosave/load, keyboard controls, editable suggestions and free text, bounded/cancellable local Pumas calls, optional local microphone-to-whisper.cpp transcription with review before send.
+Implemented source: ordered authored story, five editable 3D sets, reusable stylized adult character scenes, dialogue reveal/advance, mandatory evidence questions, unlocked evidence catalogue, history, manual/autosave/load, keyboard controls, editable suggestions and free text, bounded/cancellable local Pumas calls, microphone/review-before-send UI retained for the requested Pumas-owned Cohere Transcribe integration. Voice capture is temporarily unavailable until Pumas exposes that contract.
 
-Real local Pumas/llama.cpp and whisper.cpp file-transcription smoke tests passed; see `docs/LIVE-QUALIFICATION.md` for exact artifacts and the observed tiny-model identity failure. Physical microphone input remains unqualified.
+Real local Pumas/llama.cpp dialogue smoke tests passed; see `docs/LIVE-QUALIFICATION.md` for exact artifacts and the observed tiny-model identity failure. Cohere transcription is not yet implemented or qualified. Direct whisper.cpp support has been removed. Physical microphone input remains unqualified.
 
 Not yet a release promise: production-qualified model responses, real-device speech, relationship/disclosure progression, full accessibility/performance/platform qualification. Human playtesters own five-hour duration qualification.
 

@@ -1,18 +1,31 @@
-# Local voice-to-text
+# Cohere Transcribe through Pumas Library
 
-The game implements Godot microphone capture followed by the separately owned, tested LocalSpeechTranscriber whisper.cpp process boundary. It does not send audio to a hosted service. This path requires real-device qualification before a release claim.
+Voice input is temporarily **unsupported**. The requested backend is local Cohere Transcribe owned by Pumas Library. Direct whisper.cpp code, model settings and executable invocation have been removed. Typed replies and editable suggestions work normally.
 
-Install whisper.cpp from its official project and provision a compatible local speech model yourself or via an explicitly approved install. Configure these environment variables before starting Godot:
+`PumasSpeechTranscriber` owns this explicit unavailable boundary. The Use voice action explains the missing integration before recording or requesting microphone consent. It does not guess an endpoint, return a fabricated transcript, invoke a vendor CLI, or fall back to another recognizer. Old `LANTERNWAKE_WHISPER_*` settings have no effect.
 
-- `LANTERNWAKE_WHISPER_CLI`: absolute path to the executable `whisper-cli`
-- `LANTERNWAKE_WHISPER_MODEL`: absolute path to the compatible model file
+## Producer dependency and re-enable conditions
 
-The installed model and executable are checked before offering capture. Choose **Use voice**, accept the explicit microphone prompt, speak, then choose **Stop**. Recording stops at 30 seconds and capture memory is bounded to 30 seconds of stereo samples. Audio is converted to 16 kHz mono PCM WAV in a unique temporary path. The CLI runs without a shell using `-m model -f input.wav -otxt -of prefix -nt`. The process is reaped on cancellation. Temporary WAV/text files are deleted in a finally block after success or failure. An application/OS crash can leave temporary files; no crash-cleanup claim is made.
+Pumas currently supports text/image/embedding inference, but does not expose a transcription loader or audio transcription gateway. Its unsupported-route tests include audio. The Pumas implementation owner must supply the reusable capability and lifecycle contract before the Lanternwake consumer can be enabled. Coordinate against [Pumas-Library](https://github.com/MrScripty/Pumas-Library), then bind the implementation version in this document.
 
-The resulting text appears in the ordinary input field. Review and edit it; only **Say this** submits a conversation. The operating system may separately ask for microphone permission. Empty audio, failed recognizer, missing model and timeout produce visible errors, not fabricated transcripts.
+The bounded integration requires:
 
-No recognizer binary/model is bundled. Until a real microphone test passes, voice input is implemented but unqualified. Typed dialogue and editable suggestions are available without it.
+1. Pumas discovers a ready local Cohere Transcribe model and explicitly identifies its repository/revision or content digest, native cohere_asr architecture, managed runtime, supported language, input constraints and local execution capability. A generic loaded model is insufficient.
+2. Pumas owns bounded mono 16 kHz PCM admission (explicit encoding, sample count and language), decoding and inference through its managed runtime. The native Transformers loader must use local_files_only=True and trust_remote_code=False. Specify the actual request/response schema and route in the producer first; this game currently assumes none.
+3. Pumas owns operation cancellation and terminal cleanup. The game retains each request through completion and discards replies after scene advance, load, close or shutdown. Cancellation of a client HTTP request alone is not evidence that inference stopped.
+4. After consumer wiring, qualify success, cancellation after observed admission, timeout, malformed/oversized audio or responses, missing/wrong model, close/reopen, retry and shutdown. Use a synthetic fixture first, followed by approved local model execution. Verify temporary audio custody and removal on both sides.
+5. Re-enable capture only when the local capability has been verified. Keep the existing explicit microphone consent, 30-second capture limit, operation-local samples, editable transcript and separate Say this action. Physical microphone/device behavior needs its own evidence.
 
-## Executed file-transcription evidence
+The review trigger is publication of the Pumas transcription contract. Pumas owns inference; Lanternwake owns capture, editable input and stale-result rejection. This milestone is a cutover/removal with an explicit dependency, not completion of speech recognition.
 
-The production adapter passed actual whisper.cpp v1.9.4/tiny.en sample transcription, 48 kHz conversion, cleanup and retry tests. A separate task-owned executable fixture proves subprocess cancellation: its PID is observed alive before cancellation and exited before the adapter returns. See [LIVE-QUALIFICATION.md](LIVE-QUALIFICATION.md) for exact hashes, cancellation evidence and the resampling overflow repair. This does not qualify a physical microphone.
+## Official model and acquisition facts
+
+[Cohere Transcribe documentation](https://docs.cohere.com/docs/transcribe) identifies `cohere-transcribe-03-2026`, a 2B Conformer audio-to-text model supporting 14 languages. Language must be selected explicitly. [The official model card](https://huggingface.co/CohereLabs/cohere-transcribe-03-2026) documents local Transformers >=5.4.0 with `CohereAsrForConditionalGeneration` and separately vLLM serving. [The official file listing](https://huggingface.co/CohereLabs/cohere-transcribe-03-2026/tree/main) lists 4.13 GB of weights. License: [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+
+The same vendor also offers a hosted service. That is a separate data destination and is not configured by this game. No hosted credentials, paid API calls, model downloads or private audio uploads are part of this milestone. The Hugging Face page currently requires contact-sharing acceptance; exact fields and conditions are not visible while logged out. No gate was accepted and no official ungated distribution has been established.
+
+## Evidence
+
+`dotnet run --project integration/speech/SpeechSmoke.csproj` checks the production unavailable boundary, repeated calls, cancellation and rejection of legacy recognizer settings. The Godot UI smoke verifies Use voice shows the explanation without starting capture or disabling typed input. These are cutover checks, not Cohere inference qualification.
+
+Earlier Whisper recognition/process tests remain historical evidence only in Git history and [LIVE-QUALIFICATION.md](LIVE-QUALIFICATION.md). They do not qualify the new backend.

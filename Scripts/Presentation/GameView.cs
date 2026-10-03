@@ -208,13 +208,13 @@ public partial class GameView : Node
         if (_busy) return;
         if (!_speech.Recording)
         {
-            if (!_speech.Available) { ShowWindow("Local speech setup", "Voice-to-text is not available yet. Install and configure local whisper.cpp and a speech model as described in docs/SPEECH.md. Typed and editable suggested replies remain available.\n\nNo audio has been recorded."); return; }
+            if (!_speech.Available) { ShowWindow("Cohere Transcribe via Pumas", _speech.Capability.Message); return; }
             var consent = MicrophoneConsentScene.Instantiate<ConfirmationDialog>();
             _mic.Disabled = true; AddChild(consent);
             consent.Confirmed += () => { try { _speech.Start(this); _recordSeconds = 0; _send.Disabled = true; _entry.Editable = false; } catch (Exception e) { _status.Text = e.Message; } _mic.Disabled = false; consent.QueueFree(); };
             consent.Canceled += () => { _mic.Disabled = false; consent.QueueFree(); }; consent.PopupCentered(); return;
         }
-        _busy = true; _mic.Disabled = true; _status.Text = "Transcribing locally…";
+        _busy = true; _mic.Disabled = true; _status.Text = "Transcribing with Cohere through Pumas…";
         _speechRequest?.Dispose(); _speechRequest = new CancellationTokenSource(TimeSpan.FromSeconds(90));
         var generation = _generation;
         try { var text = await _speech.StopAndTranscribe(_speechRequest.Token); if (generation == _generation) { _entry.Text = text; _entry.GrabFocus(); _status.Text = "Review and edit your transcript, then choose Say this."; } }
@@ -312,6 +312,10 @@ public partial class GameView : Node
                 _session.Advance();
             }
             RenderBeat(); OpenConversation(); Check(_chatPanel.Visible, "conversation opens");
+            ToggleMicrophone(); await _operations.DrainAsync();
+            Check(_modal is not null && !_speech.Recording && !_busy && _entry.Editable,
+                "unsupported Pumas/Cohere voice explains setup without capture or blocking typing");
+            CloseModal();
             var suggestion = _suggestions.GetChildren().OfType<Button>().First(); suggestion.EmitSignal(BaseButton.SignalName.Pressed);
             Check(_entry.Text == suggestion.Text && _entry.Editable, "suggestions are editable");
             var livePreview = OS.GetCmdlineUserArgs().Contains("--live-ui-preview");

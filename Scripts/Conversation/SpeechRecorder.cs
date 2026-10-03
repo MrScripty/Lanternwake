@@ -9,10 +9,12 @@ public sealed class SpeechRecorder : IDisposable
     private int _bus = -1, _sampleRate;
     private List<StereoSample> _samples = [];
     public bool Recording => _player is not null;
-    public bool Available => File.Exists(System.Environment.GetEnvironmentVariable("LANTERNWAKE_WHISPER_CLI")) && File.Exists(System.Environment.GetEnvironmentVariable("LANTERNWAKE_WHISPER_MODEL"));
+    private readonly PumasSpeechTranscriber _transcriber = new();
+    public SpeechCapability Capability => _transcriber.Capability;
+    public bool Available => Capability.Status != SpeechAvailability.Unsupported;
     public void Start(Node owner)
     {
-        if (!Available) throw new InvalidOperationException("Local speech requires LANTERNWAKE_WHISPER_CLI and LANTERNWAKE_WHISPER_MODEL. Typed replies work without them.");
+        if (!Available) throw new NotSupportedException(Capability.Message);
         if (Recording) return;
         _samples.Clear(); _sampleRate = (int)AudioServer.GetMixRate();
         _bus = AudioServer.BusCount;
@@ -35,8 +37,7 @@ public sealed class SpeechRecorder : IDisposable
         var sampleRate = _sampleRate;
         try
         {
-            var transcriber = new LocalSpeechTranscriber(System.Environment.GetEnvironmentVariable("LANTERNWAKE_WHISPER_CLI") ?? "", System.Environment.GetEnvironmentVariable("LANTERNWAKE_WHISPER_MODEL") ?? "");
-            return await transcriber.TranscribeAsync(samples, sampleRate, cancellation);
+            return await _transcriber.TranscribeAsync(samples, sampleRate, cancellation);
         }
         finally { samples.Clear(); }
     }

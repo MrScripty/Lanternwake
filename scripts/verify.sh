@@ -8,6 +8,7 @@ if ! "$GODOT_MONO" --version | grep -q '\.mono\.'; then
 fi
 dotnet run --project tests/Lanternwake.Tests.csproj -- Content/story.json
 dotnet run --project integration/pumas/ClientTests/ClientTests.csproj
+dotnet run --project integration/speech/SpeechSmoke.csproj
 dotnet build Lanternwake.csproj --no-restore
 for mode in smoke ui-smoke; do
   log="$(mktemp)"

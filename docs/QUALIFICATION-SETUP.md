@@ -1,3 +1,5 @@
+> Historical setup record: the Whisper setup below was superseded by the requested Cohere Transcribe through Pumas integration. Do not use it to configure current voice input. See [SPEECH.md](SPEECH.md).
+
 # Proposed local inference and speech qualification bundle
 
 No model weights or additional inference/speech tools were installed during the initial build. This document is a bounded setup proposal, not execution evidence.
