@@ -7,6 +7,31 @@ without Godot, audio devices, network services or model dependencies:
 dotnet run --project integration/story-validation/StoryValidation.csproj -- Content/story.json
 ```
 
+The standard `scripts/verify.sh` aggregate invokes this harness after the core
+suite and before protocol/build/runtime checks. The authoring checklist includes
+the same command. Existing aggregate error and success-marker gates are retained.
+
+To exercise aggregate failure propagation without editing canonical content:
+
+```sh
+python3 integration/story-validation/verify_aggregate_failure.py
+```
+
+This isolated probe simulates only the earlier core gate, then runs the real .NET
+validation harness against a temporary story with a null chapter title. It checks
+the actual diagnostic, exact nonzero status propagation and absence of later
+dotnet invocations. It uses the real Godot version gate and removes its wrapper
+and fixture on completion. It is separate from the full successful aggregate run.
+
+Aggregate wiring qualification on `fix/aggregate-story-validation`, over
+`7cacd52ea173094a478c7c3936effc37a17f582a`: one full aggregate execution returned
+zero and reported all 63 validation checks, 4,107 core assertions, simulated
+protocol/speech checks, build and existing runtime/UI/save-isolation/Editor markers.
+The failure probe passed with status 134 from the invalid-story harness and no
+later dotnet checks. The .NET build reported zero warnings/errors; fresh-worktree
+Godot runs emitted known invalid-UID path-fallback warnings before Editor import.
+No engine error lines occurred. This remains headless qualification.
+
 The schema-1 content contract requires validation before play or authoring
 publication. Non-nullable C# record fields do not prevent JSON from supplying
 missing collections, null collections or null entries. The validator now checks
