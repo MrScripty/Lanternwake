@@ -35,3 +35,50 @@ appearance, a physical keyboard session, accessibility-tool coverage or human
 playtime. Core tests were not repeated because no core/story/save code changed;
 the exact base's prior qualification remains separate. No audio or speech code,
 story data, save format, playback settings or reviewed validation branches changed.
+
+## Cold-layout successor
+
+Successor base: `c4da1209da03f3940df0835c400e0865c29323fd`.
+Branch: `fix/authoring-cold-selection`.
+
+Independent graphical review reproduced a remaining cold-open defect twice in the
+official 4.6.3 .NET Editor: at the default approximately 290-pixel right dock,
+searching `ch5_s5_evidence` loaded the correct text but clipped the selected final
+row. A wheel adjustment revealed it; warm navigation worked; Reload Current
+Project reproduced the cold failure. The earlier headless checks did not establish
+that graphical path, and must not be treated as having cleared it.
+
+The successor coalesces selection visibility requests, waits two frame boundaries
+after the latest selection/layout change and then asks ItemList to reveal its current
+selected row. Resize, visibility and vertical range/page changes schedule another
+bounded request if layout changes. It does not poll until a condition becomes true,
+select a captured stale index or change keyboard focus. Only one frame subscription
+is retained; normal completion disconnects it. Plugin exit stops/disconnects before
+freeing the dock, including requests caused by disposal-time layout changes.
+
+A new headless regression uses the actual bound dock controls, Editor theme and a
+290 x 600 fixture. It searches the exact late evidence ID before settling layout,
+then models a 16-pixel viewport reduction after the first list draw and checks the
+entire selected row after final layout. On the old successor base this reproduced
+clipping: item y=558, height=22, scrollbar=432, page=124. With the fix it passes.
+This controlled late-layout reduction is a model of the reported cold path, not a
+claim that headless rendering exactly reproduces the graphical Editor's timing.
+
+The same native test alternates early/late selections 18 times without waiting,
+checks the latest selection and unchanged focus, then checks late selection again.
+A teardown fixture schedules a request, invokes the same stop path as plugin exit,
+frees the owned ItemList and verifies the subscription/countdown are cleared.
+Existing dirty-navigation, save/reload/conflict, dossier, keyboard-scroll and native
+selected-beat-launch tests still pass. `scripts/verify.sh` additionally requires
+`LANTERNWAKE_STORY_DOCK_COLD_SELECTION_OK`.
+
+Executed with .NET 8.0.425 / Godot 4.6.3 .NET: native build with zero warnings/errors,
+then normal headless Editor `--editor-roundtrip` with every required marker, including
+11 scenes, and no warning/error lines. Core/runtime suites were not repeated because
+this patch only changes the Editor plugin and its verification gate. Canonical
+narrative, core/session/save logic, reading-size and validation branches are unchanged.
+
+Genuine graphical successor retest is still required: fresh Editor/right dock,
+search/click `ch5_s5_evidence`, inspect the full selected row without wheel input,
+repeat after Project > Reload Current Project, rapid early/late selection, pending
+draft rejection and Editor teardown/reopen. No graphical success is claimed here.

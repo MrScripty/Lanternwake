@@ -25,11 +25,15 @@ public partial class StoryTextPlugin : EditorPlugin
 
     public override void _EnterTree()
     {
+        _visibilityStopped = false;
         var scroll = GD.Load<PackedScene>("res://addons/story_text/StoryTextDock.tscn").Instantiate<ScrollContainer>();
         _dock = scroll.GetNode<Control>("Content");
         _scenes = _dock.GetNode<OptionButton>("Scenes");
         _speakers = _dock.GetNode<OptionButton>("Speakers");
         _beats = _dock.GetNode<ItemList>("Beats");
+        _beats.Resized += QueueBeatVisibility;
+        _beats.VisibilityChanged += QueueBeatVisibility;
+        _beats.GetVScrollBar().Changed += QueueBeatVisibility;
         _text = _dock.GetNode<TextEdit>("BeatText");
         _context = _dock.GetNode<TextEdit>("Context");
         _search = _dock.GetNode<LineEdit>("Search");
@@ -65,6 +69,7 @@ public partial class StoryTextPlugin : EditorPlugin
 
     public override void _ExitTree()
     {
+        StopBeatVisibility();
         if (_playtestProcess is { } process)
         {
             try
@@ -148,13 +153,13 @@ public partial class StoryTextPlugin : EditorPlugin
         _beats.Clear();
         foreach (var beat in _sceneData[_sceneIndex].Beats) _beats.AddItem(beat.Id + " · " + beat.Text[..Math.Min(48, beat.Text.Length)]);
         _beatIndex = Math.Min(_beatIndex, _beats.ItemCount - 1);
-        _beats.Select(_beatIndex); _beats.EnsureCurrentIsVisible(); DisplayBeat();
+        _beats.Select(_beatIndex); DisplayBeat(); QueueBeatVisibility();
     }
 
     private void SelectBeat(long index)
     {
-        if (HasDraft) { _beats.Select(_beatIndex); _beats.EnsureCurrentIsVisible(); _status.Text = "Save or Reload your current edit before selecting another beat."; return; }
-        _beatIndex = (int)index; DisplayBeat();
+        if (HasDraft) { _beats.Select(_beatIndex); QueueBeatVisibility(); _status.Text = "Save or Reload your current edit before selecting another beat."; return; }
+        _beatIndex = (int)index; DisplayBeat(); QueueBeatVisibility();
     }
 
     private void DisplayBeat()

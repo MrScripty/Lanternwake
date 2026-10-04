@@ -17,6 +17,7 @@ public partial class StoryTextPlugin
         }
         try
         {
+            await RunColdSelectionSmoke();
             _editorDock.MakeVisible();
             await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
             await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
@@ -72,8 +73,9 @@ public partial class StoryTextPlugin
 
     private async Task CheckSelectedBeatVisibility()
     {
-        await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
-        await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+        // Bounded layout, two-frame coalesced request, then its draw completion.
+        for (var frame = 0; frame < 5; frame++)
+            await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
         var item = _beats.GetItemRect(_beatIndex);
         var scroll = _beats.GetVScrollBar();
         if (!_beats.IsVisibleInTree() || scroll.Page <= 0 || item.Size.Y <= 0)
