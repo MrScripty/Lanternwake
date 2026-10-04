@@ -128,7 +128,7 @@ public partial class GameView : Node
         if (_dialogue.VisibleCharacters >= 0 && _dialogue.VisibleCharacters < _dialogue.GetTotalCharacterCount()) { _dialogue.VisibleCharacters = -1; return; }
         if (!_session.CanAdvance) { ShowActivity(); return; }
         if (_session.Advance()) { RenderBeat(); Save(true); }
-        else ShowWindow("The light remains", "You have reached the end of Lanternwake. Your evidence and conversations remain in History.\n\nThank you for keeping watch.");
+        else ShowCompletion();
     }
     private void RenderBeat(bool playAudioCue = true)
     {
@@ -282,8 +282,10 @@ public partial class GameView : Node
             else { _status.Text = "That does not fit the evidence yet. Check your catalogue and try again."; CloseModal(); }
         }))).ToArray());
     }
-    private void ShowHistory() => ShowWindow("The record", string.Join("\n\n", _session.History.Select(h => (DisplayName(h.Speaker) is { Length: > 0 } name ? name + (h.Generated ? " [optional local dialogue]" : "") + ":\n" : "") + h.Text)));
-    private void ShowEvidence() => ShowWindow("Your catalogue", "OBJECTS\n\n" + string.Join("\n\n", _session.Inventory.Select(i => i.Name + "\n" + i.Description)) + "\n\nESTABLISHED FACTS\n\n" + string.Join("\n\n", _session.KnownFacts.Select(f => f.Text)));
+    private string HistoryText() => string.Join("\n\n", _session.History.Select(h => (DisplayName(h.Speaker) is { Length: > 0 } name ? name + (h.Generated ? " [optional local dialogue]" : "") + ":\n" : "") + h.Text));
+    private string EvidenceText() => "OBJECTS\n\n" + string.Join("\n\n", _session.Inventory.Select(i => i.Name + "\n" + i.Description)) + "\n\nESTABLISHED FACTS\n\n" + string.Join("\n\n", _session.KnownFacts.Select(f => f.Text));
+    private void ShowHistory() => ShowWindow("The record", HistoryText());
+    private void ShowEvidence() => ShowWindow("Your catalogue", EvidenceText());
     private void ShowWindow(string title, string text, (string Text, Action Action)[]? actions = null)
     {
         if (_busy) return;

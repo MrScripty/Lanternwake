@@ -44,6 +44,7 @@ Set GODOT_MONO to the official .NET executable and use scripts/verify.sh for the
 - Suggestions populate editable input; Say this submits
 - H: history; E: catalogue; Escape: close panel
 - Manual Save/Load; separate automatic checkpoint; explicit previous-good recovery choices
+- Finish: review the record/evidence, explicitly save the completed watch, or confirm starting a new watch. Starting again preserves manual saves and session reading/sound preferences; automatic checkpoints update as the new watch progresses.
 - Reading settings: smaller/larger reading text at 100%, 125% and 150%, reset to 100%, instant text and reduced motion. Reading text size lasts for the current game session; a fresh game starts at 100%. See [reading text size](docs/READING-TEXT-SIZE.md) for the scaled reading/choice surfaces and unchanged navigation/HUD sizes.
 - Sound settings: separate music/ambience/effects levels and master mute
 - Editable location audio loops and authored bell-release cue; see [audio authoring](docs/AUDIO.md)

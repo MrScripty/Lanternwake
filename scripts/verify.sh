@@ -37,6 +37,7 @@ for mode in smoke ui-smoke save-isolation-smoke audio-smoke; do
   rm -f "$log"
   trap - EXIT
 done
+python3 integration/qa/watch_completion.py
 log="$(mktemp)"
 trap 'rm -f "$log"' EXIT
 timeout 120 "$GODOT_MONO" --headless --editor --path . -- --editor-roundtrip 2>&1 | tee "$log"
