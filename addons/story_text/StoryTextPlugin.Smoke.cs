@@ -17,21 +17,29 @@ public partial class StoryTextPlugin
         }
         try
         {
+            _editorDock.MakeVisible();
+            await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+            await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
             File.WriteAllText(path, _loaded); _storyPath = temporary; Reload();
             var target = _index!.Entries.Last(e => e.Beat.Activity is not null);
             _search.Text = target.Beat.Id; _search.EmitSignal(LineEdit.SignalName.TextChanged, _search.Text);
             Check(_results.Length == 1 && _matches.ItemCount == 1, "stable-ID search locates one beat");
             _matches.EmitSignal(ItemList.SignalName.ItemSelected, 0L);
             Check(_text.Text == target.Beat.Text && _context.Text.Contains(target.Beat.Activity!.Prompt), "search navigates to beat and gate context");
+            await CheckSelectedBeatVisibility();
             _text.Text = "Dock smoke edited line. 語";
             _text.EmitSignal(TextEdit.SignalName.TextChanged);
             _search.Text = _index.Entries[0].Beat.Id; _search.EmitSignal(LineEdit.SignalName.TextChanged, _search.Text);
             _matches.EmitSignal(ItemList.SignalName.ItemSelected, 0L);
             _scenes.EmitSignal(OptionButton.SignalName.ItemSelected, 0L);
+            _beats.Select(0); _beats.EnsureCurrentIsVisible();
+            await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
             _beats.EmitSignal(ItemList.SignalName.ItemSelected, 0L);
             Check(_sceneIndex == target.SceneIndex && _beatIndex == target.BeatIndex && _dirty, "dirty navigation stays on current beat");
+            await CheckSelectedBeatVisibility();
             _dock.GetNode<Button>("Actions/Save").EmitSignal(Button.SignalName.Pressed);
             Check(!_dirty && _text.Text == "Dock smoke edited line. 語", "save reload retains selected stable ID");
+            await CheckSelectedBeatVisibility();
             var saved = File.ReadAllText(path);
             Check(Story.Parse(saved).Chapters.SelectMany(c => c.Scenes).SelectMany(s => s.Beats).Single(b => b.Id == target.Beat.Id).Text == _text.Text, "saved edit reaches runtime parser");
             _text.Text = "unsaved local line"; _text.EmitSignal(TextEdit.SignalName.TextChanged);
@@ -47,9 +55,12 @@ public partial class StoryTextPlugin
             Check(_matches.ItemCount == 0, "empty result clears prior matches");
             _search.Text = ""; _search.EmitSignal(LineEdit.SignalName.TextChanged, _search.Text);
             Check(!_matches.Visible, "clearing search restores normal navigation");
+            _scenes.EmitSignal(OptionButton.SignalName.ItemSelected, 0L);
+            Check(_beatIndex == 0, "scene navigation selects its first beat");
+            await CheckSelectedBeatVisibility();
             RunProfileSmoke(path);
             await CheckNarrowDockLayout();
-            GD.Print("LANTERNWAKE_STORY_DOCK_OK search context dirty-navigation save reload conflict recovery; canonical story untouched");
+            GD.Print("LANTERNWAKE_STORY_DOCK_OK search context visible selection dirty-navigation save reload conflict recovery; canonical story untouched");
         }
         finally
         {
@@ -57,6 +68,20 @@ public partial class StoryTextPlugin
             File.Delete(path);
             _search.Text = ""; _search.EmitSignal(LineEdit.SignalName.TextChanged, _search.Text); Reload();
         }
+    }
+
+    private async Task CheckSelectedBeatVisibility()
+    {
+        await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+        await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+        var item = _beats.GetItemRect(_beatIndex);
+        var scroll = _beats.GetVScrollBar();
+        if (!_beats.IsVisibleInTree() || scroll.Page <= 0 || item.Size.Y <= 0)
+            throw new InvalidOperationException("Selected-beat visibility requires a laid-out visible list.");
+        // Item rectangles include the panel's content margin; scrollbar values do not.
+        var top = scroll.Value + _beats.GetThemeStylebox("panel").GetContentMargin(Side.Top);
+        if (item.Position.Y < top || item.End.Y > top + scroll.Page)
+            throw new InvalidOperationException($"Selected beat {_beatIndex} must be visible in the list: item={item}, scroll={scroll.Value}, page={scroll.Page}");
     }
 
     private async Task CheckNarrowDockLayout()
@@ -87,7 +112,18 @@ public partial class StoryTextPlugin
                 if (actions.Position.Y < viewport.Position.Y || actions.End.Y > viewport.End.Y)
                     throw new InvalidOperationException("Narrow dock actions must be reachable by scrolling: " + target);
             }
-            GD.Print("LANTERNWAKE_STORY_DOCK_LAYOUT_OK 320x600; expanded dossier/preview horizontal fit and scroll-to-actions");
+            scroll.ScrollVertical = 0;
+            await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+            await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+            var save = scroll.GetNode<Button>("Content/Profiles/Save");
+            save.GrabFocus();
+            await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+            await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+            var focused = save.GetGlobalRect();
+            var visible = scroll.GetGlobalRect();
+            if (!save.HasFocus() || focused.Position.Y < visible.Position.Y || focused.End.Y > visible.End.Y)
+                throw new InvalidOperationException($"Keyboard focus must scroll the narrow dock to its dossier save action: focus={save.HasFocus()}, follow={scroll.FollowFocus}, control={focused}, viewport={visible}, scroll={scroll.ScrollVertical}");
+            GD.Print("LANTERNWAKE_STORY_DOCK_LAYOUT_OK 320x600; expanded dossier/preview horizontal fit, scroll-to-actions and visible keyboard focus");
         }
         finally { scroll.Free(); }
     }

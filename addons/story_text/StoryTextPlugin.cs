@@ -148,12 +148,12 @@ public partial class StoryTextPlugin : EditorPlugin
         _beats.Clear();
         foreach (var beat in _sceneData[_sceneIndex].Beats) _beats.AddItem(beat.Id + " · " + beat.Text[..Math.Min(48, beat.Text.Length)]);
         _beatIndex = Math.Min(_beatIndex, _beats.ItemCount - 1);
-        _beats.Select(_beatIndex); DisplayBeat();
+        _beats.Select(_beatIndex); _beats.EnsureCurrentIsVisible(); DisplayBeat();
     }
 
     private void SelectBeat(long index)
     {
-        if (HasDraft) { _beats.Select(_beatIndex); _status.Text = "Save or Reload your current edit before selecting another beat."; return; }
+        if (HasDraft) { _beats.Select(_beatIndex); _beats.EnsureCurrentIsVisible(); _status.Text = "Save or Reload your current edit before selecting another beat."; return; }
         _beatIndex = (int)index; DisplayBeat();
     }
 
