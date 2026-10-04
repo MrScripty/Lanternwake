@@ -165,7 +165,7 @@ public partial class GameView : Node
             var path = Path.Combine(folder, (_started ? _session.Scene.Id : "title") + ".png");
             GetViewport().GetTexture().GetImage().SavePng(path); _status.Text = "Development screenshot captured."; return;
         }
-        if (key.Keycode == Key.Escape) { if (_modal is not null) CloseModal(); else if (_chatPanel.Visible) CloseConversation(); return; }
+        if (key.Keycode == Key.Escape) { if (_modal is not null) _modal.EmitSignal(Window.SignalName.CloseRequested); else if (_chatPanel.Visible) CloseConversation(); return; }
         if (_chatPanel.Visible || _modal is not null) return;
         if (key.Keycode is Key.Space or Key.Enter) Advance();
         else if (key.Keycode == Key.H) ShowHistory();
@@ -273,28 +273,26 @@ public partial class GameView : Node
         catch (Exception error) { _status.Text = "Could not load: " + error.Message; CloseModal(); }
     }
 
-    private void ShowActivity()
-    {
-        if (_session.Beat.Activity is not { } activity) return;
-        ShowWindow("Compare the evidence", activity.Prompt, activity.Options.Select((option, index) => (option, (Action)(() =>
-        {
-            if (_session.AnswerActivity(index)) { CloseModal(); _status.Text = activity.Explanation; _advance.Text = _session.IsEnding ? "Finish  ›" : "Continue  ›"; Save(true); }
-            else { _status.Text = "That does not fit the evidence yet. Check your catalogue and try again."; CloseModal(); }
-        }))).ToArray());
-    }
     private string HistoryText() => string.Join("\n\n", _session.History.Select(h => (DisplayName(h.Speaker) is { Length: > 0 } name ? name + (h.Generated ? " [optional local dialogue]" : "") + ":\n" : "") + h.Text));
     private string EvidenceText() => "OBJECTS\n\n" + string.Join("\n\n", _session.Inventory.Select(i => i.Name + "\n" + i.Description)) + "\n\nESTABLISHED FACTS\n\n" + string.Join("\n\n", _session.KnownFacts.Select(f => f.Text));
     private void ShowHistory() => ShowWindow("The record", HistoryText());
     private void ShowEvidence() => ShowWindow("Your catalogue", EvidenceText());
-    private void ShowWindow(string title, string text, (string Text, Action Action)[]? actions = null)
+    private void ShowWindow(string title, string text, (string Text, Action Action)[]? actions = null, Action? dismiss = null)
     {
         if (_busy) return;
         CloseModal();
         _modal = ModalScene.Instantiate<Window>();
         _modal.Title = title;
         AddChild(_modal);
-        _modal.CloseRequested += CloseModal;
-        _modal.WindowInput += input => { if (input is InputEventKey { Pressed: true, Keycode: Key.Escape }) CloseModal(); };
+        var window = _modal;
+        void Dismiss()
+        {
+            // A queued close/input callback belongs only to the window that raised it.
+            if (_modal != window || _closing) return;
+            if (dismiss is null) CloseModal(); else dismiss();
+        }
+        _modal.CloseRequested += Dismiss;
+        _modal.WindowInput += input => { if (input is InputEventKey { Pressed: true, Keycode: Key.Escape }) Dismiss(); };
         _modal.GetNode<RichTextLabel>("%ModalText").Text = text;
         _readingText.Register(_modal.GetNode<RichTextLabel>("%ModalText"));
         var actionRows = _modal.GetNode<VBoxContainer>("%ModalActions");
@@ -305,12 +303,11 @@ public partial class GameView : Node
                 var choice = ChoiceButton(action.Text, action.Action);
                 actionRows.AddChild(choice); _readingText.Register(choice);
             }
-        var window = _modal;
         window.SizeChanged += () => FitModalActions(window);
         actionRows.MinimumSizeChanged += () => FitModalActions(window);
         FitModalActions(window);
         Callable.From(() => FitModalActions(window)).CallDeferred();
-        _modal.GetNode<Button>("%ModalCloseButton").Pressed += CloseModal;
+        _modal.GetNode<Button>("%ModalCloseButton").Pressed += Dismiss;
         _modal.PopupCentered();
     }
     private void CloseModal() { if (_modal is not null) { _modal.Hide(); _modal.Exclusive = false; _modal.QueueFree(); _modal = null; _advance.GrabFocus(); } }
