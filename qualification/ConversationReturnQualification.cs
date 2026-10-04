@@ -87,15 +87,7 @@ public partial class ConversationReturnQualification : Node
         Check(Modal!.GetNode<RichTextLabel>("%ModalText").Text.Contains(chat.Fallback), "optional reply remains readable in record after returning to plot");
         Modal.GetNode<Button>("%ModalCloseButton").EmitSignal(BaseButton.SignalName.Pressed); Preserved(state, files);
         await ClosedControls();
-
-        // Freeze automatic reveal for an exact partial-passage cancellation check; no story edits.
-        _game.SetProcess(false); Dialogue.VisibleCharacters = 7;
-        typeof(GameView).GetField("_characters", BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(_game, 7d);
-        Press("TalkButton"); Entry.Text = "Unsent partial-passage draft 語";
-        _game._UnhandledKeyInput(new InputEventKey { Pressed = true, Keycode = Key.Escape });
-        Authored(); Check(Dialogue.VisibleCharacters == 7 && Observe<double>("_characters") == 7, "Escape restores exact partial reveal and timer"); Preserved(state, files);
-        Press("AdvanceButton"); Check(Session.Beat.Id == beat.Id && Dialogue.VisibleCharacters == -1, "first Continue reveals restored passage without skipping it");
-        _game.SetProcess(true);
+        if (!preview) await InChatReadingSettings(false);
         Press("TalkButton");
         if (!preview)
         {
@@ -108,6 +100,57 @@ public partial class ConversationReturnQualification : Node
         Press("TalkButton"); Entry.Text = "Cancel immediately after Send"; Press("SendButton"); Press("ReturnButton");
         var cancelled = Snapshot(); var cancelledFiles = Files(); await Drain(); Authored(); Preserved(cancelled, cancelledFiles);
     }
+    private async Task InChatReadingSettings(bool preview)
+    {
+        if (Observe<bool>("_instant")) { Press("SettingsButton"); Action("Toggle instant text"); }
+        Check(!Observe<bool>("_instant"), "visible setting selects typewriter before partial passage probe");
+        async Task PausePartialPassage()
+        {
+            _game.SetProcess(true);
+            if (!preview) { Press("LoadButton"); Action("Load current autosave · " + Session.Beat.Id); }
+            var deadline = Time.GetTicksMsec() + 5000;
+            while (Dialogue.VisibleCharacters <= 0 && Time.GetTicksMsec() < deadline) await Frame();
+            Check(!Observe<bool>("_instant") && Dialogue.VisibleCharacters > 0 && Dialogue.VisibleCharacters < Dialogue.GetTotalCharacterCount(),
+                "actual typewriter frames partially reveal the authored passage");
+            _game.SetProcess(false);
+        }
+        await PausePartialPassage();
+        var pausedReveal = Dialogue.VisibleCharacters; var pausedTimer = Observe<double>("_characters");
+        var state = Snapshot(); var files = Files();
+        Press("TalkButton"); _game._UnhandledKeyInput(new InputEventKey { Pressed = true, Keycode = Key.Escape }); Authored();
+        Check(Dialogue.VisibleCharacters == pausedReveal && Observe<double>("_characters") == pausedTimer,
+            "unchanged typewriter setting preserves exact paused reveal and timer"); Preserved(state, files);
+        Press("TalkButton"); Press("SettingsButton"); Action("Reset reading text size · 150%");
+        Action("Larger reading text"); Action("Larger reading text");
+        Modal!.GetNode<Button>("%ModalCloseButton").EmitSignal(BaseButton.SignalName.Pressed);
+        Press("ReturnButton"); Authored();
+        Check(Dialogue.VisibleCharacters == pausedReveal && Observe<double>("_characters") == pausedTimer && Observe<ReadingTextStyle>("_readingText").Percent == 150,
+            "in-chat sizing alone preserves paused reveal and timer"); Preserved(state, files);
+        if (!preview)
+        {
+            var beatId = Session.Beat.Id; Press("AdvanceButton");
+            Check(Session.Beat.Id == beatId && Dialogue.VisibleCharacters == -1, "first Continue reveals the restored typewriter passage without skipping it");
+            await PausePartialPassage(); pausedReveal = Dialogue.VisibleCharacters; pausedTimer = Observe<double>("_characters");
+        }
+        Press("TalkButton"); Entry.Text = "Unsent settings draft 語";
+        Press("SettingsButton"); Action("Toggle instant text");
+        Check(Chat.Visible && Observe<bool>("_instant") && Dialogue.VisibleCharacters == -1 && Entry.Text == "Unsent settings draft 語",
+            "in-chat instant setting reveals current text and preserves open draft");
+        Press("ReturnButton"); Authored();
+        Check(Dialogue.VisibleCharacters == -1 && Observe<bool>("_instant") && Observe<double>("_characters") == pausedTimer,
+            "Return honors newly enabled instant text without restarting paused typewriter"); Preserved(state, files);
+        Check(_game.InterfaceRoot.GetNode<Label>("%StatusLabel").Text == "Instant text enabled", "returned status reflects the newly selected instant setting");
+        _game.SetProcess(true); await Frame();
+        Check(Dialogue.VisibleCharacters == -1, "returned instant passage remains fully revealed on next native frame");
+        _game.SetProcess(false);
+        Press("TalkButton"); Press("SettingsButton"); Action("Toggle instant text");
+        Press("SettingsButton"); Action("Toggle instant text");
+        Press("SettingsButton"); Action("Toggle instant text");
+        Press("ReturnButton"); Authored();
+        Check(!Observe<bool>("_instant") && Dialogue.VisibleCharacters == -1,
+            "enabling then disabling in chat retains explicit reveal rather than rewinding passage"); Preserved(state, files);
+        Press("SettingsButton"); Action("Toggle instant text"); _game.SetProcess(true);
+    }
     public override async void _Ready()
     {
         try
@@ -119,7 +162,14 @@ public partial class ConversationReturnQualification : Node
             var preview = Observe<SessionStorage>("_storage").Mode == SessionMode.AuthorPreview;
             var closedOnly = System.Environment.GetEnvironmentVariable("LANTERNWAKE_CONVERSATION_RETURN_MODE") == "closed";
             if (!preview) Press("AdvanceButton");
-            Press("SettingsButton"); Action("Larger reading text"); Action("Larger reading text"); Action("Toggle instant text"); _game.Audio.SetMuted(true);
+            Press("SettingsButton"); Action("Larger reading text"); Action("Larger reading text");
+            if (preview)
+            {
+                Modal!.GetNode<Button>("%ModalCloseButton").EmitSignal(BaseButton.SignalName.Pressed);
+                await InChatReadingSettings(true);
+            }
+            else Action("Toggle instant text");
+            _game.Audio.SetMuted(true);
             while (true)
             {
                 _beats++;
