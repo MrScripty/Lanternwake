@@ -18,6 +18,12 @@ for mode in smoke ui-smoke save-isolation-smoke; do
   if [[ "$mode" == "ui-smoke" ]] && ! grep -q 'LANTERNWAKE_RECOVERY_UI_OK' "$log"; then
     echo 'Save recovery UI regression did not report success.' >&2; exit 1
   fi
+  if [[ "$mode" == "ui-smoke" ]] && ! grep -q 'LANTERNWAKE_READING_SIZE_OK' "$log"; then
+    echo 'Reading text-size regression did not report success.' >&2; exit 1
+  fi
+  if [[ "$mode" == "ui-smoke" ]] && ! grep -q 'LANTERNWAKE_READING_CHAT_OK' "$log"; then
+    echo 'Reading chat-size regression did not report success.' >&2; exit 1
+  fi
   if [[ "$mode" == "save-isolation-smoke" ]] && ! grep -q 'LANTERNWAKE_SAVE_ISOLATION_OK' "$log"; then
     echo 'Save isolation regression did not report success.' >&2; exit 1
   fi
