@@ -25,6 +25,39 @@ public sealed record Story(int SchemaVersion, string Title, Character[] Characte
     {
         if (SchemaVersion != 1) throw new InvalidDataException("Unsupported story version.");
         if (Chapters is null || Chapters.Length != 5) throw new InvalidDataException("The story requires five chapters.");
+        // JSON can supply null despite the non-nullable record declarations. Check
+        // structure before reference validation or any nested LINQ traversal.
+        static void RequireCollection<T>(T[]? values, string label) where T : class
+        {
+            if (values is null || values.Any(value => value is null))
+                throw new InvalidDataException($"Missing {label} or null entry.");
+        }
+        RequireCollection(Characters, "characters");
+        RequireCollection(Facts, "facts");
+        RequireCollection(Items, "items");
+        RequireCollection(Chapters, "chapters");
+        foreach (var character in Characters)
+            RequireCollection(character.Knowledge, $"knowledge for character {character.Id}");
+        foreach (var chapter in Chapters)
+        {
+            RequireCollection(chapter.Scenes, $"scenes in chapter {chapter.Id}");
+            if (chapter.Scenes.Length == 0) throw new InvalidDataException("Every chapter requires scenes.");
+            foreach (var scene in chapter.Scenes)
+            {
+                RequireCollection(scene.Beats, $"beats in scene {scene.Id}");
+                RequireCollection(scene.CharacterIds, $"characters in scene {scene.Id}");
+                foreach (var beat in scene.Beats)
+                {
+                    if (beat.Activity is { } activity)
+                        RequireCollection(activity.Options, $"activity options at {beat.Id}");
+                    if (beat.Conversation is { } chat)
+                    {
+                        RequireCollection(chat.Suggestions, $"conversation suggestions at {beat.Id}");
+                        RequireCollection(chat.AllowedFacts, $"conversation facts at {beat.Id}");
+                    }
+                }
+            }
+        }
         static HashSet<string> Unique(IEnumerable<string> ids, string label)
         {
             var set = new HashSet<string>(StringComparer.Ordinal);
@@ -43,7 +76,6 @@ public sealed record Story(int SchemaVersion, string Title, Character[] Characte
             if ((character.Knowledge ?? []).Any(f => !facts.Contains(f))) throw new InvalidDataException("Unknown character fact.");
             CharacterProfileEdit.Validate(character);
         }
-        if (Chapters.Any(c => c.Scenes is null || c.Scenes.Length == 0)) throw new InvalidDataException("Every chapter requires scenes.");
         var unlocked = new HashSet<string>(StringComparer.Ordinal);
         foreach (var scene in Chapters.SelectMany(c => c.Scenes))
         {
