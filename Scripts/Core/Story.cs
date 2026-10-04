@@ -32,6 +32,11 @@ public sealed record Story(int SchemaVersion, string Title, Character[] Characte
             if (values is null || values.Any(value => value is null))
                 throw new InvalidDataException($"Missing {label} or null entry.");
         }
+        static void RequireText(string? value, string field, string owner)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                throw new InvalidDataException($"{owner}: {field} requires nonblank text.");
+        }
         RequireCollection(Characters, "characters");
         RequireCollection(Facts, "facts");
         RequireCollection(Items, "items");
@@ -40,16 +45,24 @@ public sealed record Story(int SchemaVersion, string Title, Character[] Characte
             RequireCollection(character.Knowledge, $"knowledge for character {character.Id}");
         foreach (var chapter in Chapters)
         {
+            RequireText(chapter.Title, "title", $"Chapter {chapter.Id}");
             RequireCollection(chapter.Scenes, $"scenes in chapter {chapter.Id}");
             if (chapter.Scenes.Length == 0) throw new InvalidDataException("Every chapter requires scenes.");
             foreach (var scene in chapter.Scenes)
             {
+                RequireText(scene.TimeOfDay, "timeOfDay", $"Scene {scene.Id}");
                 RequireCollection(scene.Beats, $"beats in scene {scene.Id}");
                 RequireCollection(scene.CharacterIds, $"characters in scene {scene.Id}");
                 foreach (var beat in scene.Beats)
                 {
                     if (beat.Activity is { } activity)
-                        RequireCollection(activity.Options, $"activity options at {beat.Id}");
+                    {
+                        RequireText(activity.Prompt, "activity.prompt", $"Beat {beat.Id}");
+                        if (activity.Options is null)
+                            throw new InvalidDataException($"Beat {beat.Id}: missing activity.options.");
+                        for (var index = 0; index < activity.Options.Length; index++)
+                            RequireText(activity.Options[index], $"activity.options[{index}]", $"Beat {beat.Id}");
+                    }
                     if (beat.Conversation is { } chat)
                     {
                         RequireCollection(chat.Suggestions, $"conversation suggestions at {beat.Id}");
