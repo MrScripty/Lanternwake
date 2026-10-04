@@ -1,5 +1,10 @@
 # Verification record
 
+The separate [offline long-session save/resume qualification](LONG-SESSION-VERIFICATION.md)
+records the later non-audio QA source, all-beat native button progression, six fresh
+processes and the remaining acceptance limits. Earlier evidence below retains its
+original source scope.
+
 Status: development build, 2026-10-02. This is not a release declaration or a five-hour playtest.
 
 ## Executed environment
