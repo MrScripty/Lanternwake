@@ -43,6 +43,7 @@ After story changes:
 ```
 python3 scripts/story_metrics.py
 dotnet run --project tests/Lanternwake.Tests.csproj -- Content/story.json
+dotnet run --project integration/story-validation/StoryValidation.csproj -- Content/story.json
 ```
 
 The old manuscripts are historical reference. Their former compiler now stops without changing files, so it cannot erase editor-authored changes. Derived metrics describe the current JSON. Five hours remains a design target; human playtesters exclusively assess duration.
