@@ -9,11 +9,16 @@ Root: `schemaVersion:1`, `title`, `characters`, `facts`, `items`, `chapters`.
 - Optional Character `dialogueStyle`: spoiler-free behavior guidance, at most 600 characters; the only new profile text sent to runtime context. Blank/absent preserves the original role/voice card. Author review is required for semantic spoiler safety. No schema/save migration is needed. Viewpoint Ada and recorded Ivo/operator/clerk cannot be live conversation targets.
 - Fact: `id`, `text`.
 - Item: `id`, `name`, `description`.
-- Chapter: `id`, `title`, `scenes`.
-- Scene: `id`, `title`, `location`, `timeOfDay`, `characterIds`, `beats`.
+- Chapter: `id`, `title` (nonblank text), `scenes`.
+- Scene: `id`, `title`, `location`, `timeOfDay` (nonblank text, not an enumerated vocabulary), `characterIds`, `beats`.
 - Beat: `id`, `speaker` (character ID or `narrator`), `text`, optional `unlockFacts`, `unlockItems`, `conversation`, `activity`, `stageCue`. Supported stage cue: `bell_lowered`; cumulative authored cues replay on load.
 - Conversation: `characterId`, `prompt`, `suggestions` (editable strings), `fallback` (authored response), `allowedFacts` (fact IDs). Available facts are further intersected with current unlocks and character knowledge before prompt assembly.
-- Activity: `prompt`, `options` (at least 2), `correctIndex` (zero-based), `explanation`. Correct selection unlocks advance; incorrect selection gives retry feedback without penalty.
+- Activity: `prompt` (nonblank text), `options` (at least 2, each nonblank text), `correctIndex` (zero-based), `explanation`. Correct selection unlocks advance; incorrect selection gives retry feedback without penalty.
+
+Required text is rejected when missing, null, empty or entirely whitespace. Valid
+text is retained exactly, including Unicode and surrounding whitespace; validation
+does not invent replacement labels or normalize authored prose. Diagnostics identify
+the chapter, scene or beat ID and the invalid field (including an option's zero-based index).
 
 Locations: `harbor`, `keeper_house`, `archive`, `lantern_room`, `tide_cave`.
 

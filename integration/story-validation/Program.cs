@@ -59,6 +59,59 @@ foreach (var (name, owner, field) in collections)
     }
 }
 
+var requiredText = new (string Field, Func<JsonNode, JsonNode> Owner, string Key, string Id)[]
+{
+    ("title", Chapter, "title", story.Chapters[0].Id),
+    ("timeOfDay", Scene, "timeOfDay", story.Chapters[0].Scenes[0].Id),
+    ("activity.prompt", WithActivity, "prompt", story.Chapters.SelectMany(c => c.Scenes).SelectMany(s => s.Beats).First(b => b.Activity is not null).Id),
+};
+void RejectText(JsonNode root, string field, string id)
+{
+    try { Story.Parse(root.ToJsonString()); Check(false, $"Invalid {field} was accepted"); }
+    catch (InvalidDataException error)
+    {
+        Check(error.Message.Contains(field, StringComparison.Ordinal) && error.Message.Contains(id, StringComparison.Ordinal),
+            $"Diagnostic must identify {field} and {id}: {error.Message}");
+    }
+    catch (Exception error) { Check(false, $"Invalid {field} threw {error.GetType().Name}"); }
+}
+foreach (var (field, owner, key, id) in requiredText)
+{
+    foreach (var value in new string?[] { null, "", " \t\r\n\u2003" })
+    {
+        var root = JsonNode.Parse(source)!;
+        owner(root)[key] = value;
+        RejectText(root, field, id);
+    }
+    var missing = JsonNode.Parse(source)!;
+    owner(missing).AsObject().Remove(key);
+    RejectText(missing, field, id);
+    var valid = JsonNode.Parse(source)!;
+    const string label = "  Authored label — 語  ";
+    owner(valid)[key] = label;
+    var reparsed = JsonNode.Parse(JsonSerializer.Serialize(Story.Parse(valid.ToJsonString()), Story.Json))!;
+    Check(owner(reparsed)[key]!.GetValue<string>() == label, $"{field} retains valid Unicode and surrounding whitespace");
+}
+var evidenceBeat = story.Chapters.SelectMany(c => c.Scenes).SelectMany(s => s.Beats).First(b => b.Activity is not null);
+for (var index = 0; index < evidenceBeat.Activity!.Options.Length; index++)
+{
+    foreach (var value in new string?[] { null, "", " \t\u2003" })
+    {
+        var root = JsonNode.Parse(source)!;
+        WithActivity(root)["options"]![index] = value;
+        RejectText(root, $"activity.options[{index}]", evidenceBeat.Id);
+    }
+}
+var blankChoices = JsonNode.Parse(source)!;
+var options = WithActivity(blankChoices)["options"]!.AsArray();
+for (var index = 0; index < options.Count; index++) options[index] = " ";
+RejectText(blankChoices, "activity.options[0]", evidenceBeat.Id);
+var validChoice = JsonNode.Parse(source)!;
+WithActivity(validChoice)["options"]![0] = "  Read the record — 語  ";
+var parsedChoice = Story.Parse(validChoice.ToJsonString()).Chapters.SelectMany(c => c.Scenes).SelectMany(s => s.Beats).First(b => b.Activity is not null).Activity!;
+Check(parsedChoice.Options[0] == "  Read the record — 語  " && parsedChoice.CorrectIndex == evidenceBeat.Activity.CorrectIndex,
+    "Valid choice text and answer index remain unchanged");
+
 // Empty collections are allowed where no minimum is part of the content contract.
 var empty = JsonNode.Parse(source)!;
 Scene(empty)["characterIds"] = new JsonArray();
