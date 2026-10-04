@@ -3,6 +3,7 @@
 [node name="Story Text" type="ScrollContainer"]
 custom_minimum_size = Vector2(290, 200)
 horizontal_scroll_mode = 0
+follow_focus = true
 
 [node name="Content" type="VBoxContainer" parent="."]
 size_flags_horizontal = 3
