@@ -1,5 +1,9 @@
 # Verification record
 
+The [playable coverage inventory](PLAYABLE-COVERAGE-INVENTORY.md) reconciles the
+accepted source, long save/resume, late recovery and optional authored-fallback
+qualification, with exact identities and remaining human/platform/audio gates.
+
 The separate [late-session damaged-primary qualification](LATE-RECOVERY-VERIFICATION.md)
 records actual Load/control recovery, owned faults, repeated cancellation and fresh
 processes on the later non-audio QA source.
