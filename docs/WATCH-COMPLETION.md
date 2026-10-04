@@ -50,9 +50,14 @@ their success markers alone did not establish the previously unchecked label.
 The focused runner is part of `scripts/verify.sh`. The final aggregate returned
 zero: 4,110 core assertions, 63 story-validation checks, 11 simulated Pumas
 contracts, unsupported speech, zero-warning/error build, native story/UI/save
-checks, 32 audio assertions with 24,576 mixer PCM frames (peak 0.024877), and
+checks, 32 audio assertions with 20,480 mixer PCM frames (peak 0.024877), and
 13-scene Editor roundtrip including authoring/selected-beat launch checks.
-No final warning/error lines were emitted. Earlier development runs caught
+The corrected run emitted no error lines. Its Editor import emitted three
+cached-UID recreation warnings for untracked `PumasSpeechTranscriber.cs`, Pumas
+LiveSmoke `Program.cs` and speech `Program.cs` UID files previously removed from
+this task's worktree. These files were recreated; they are not changes to the
+reviewed source. Build and native runtime checks were warning/error-free. The
+original feature aggregate had no warning/error lines. Earlier development runs caught
 fixture compilation errors and an incorrect assumption that final-beat author
 preview had already solved its activity; these were corrected before this result.
 
