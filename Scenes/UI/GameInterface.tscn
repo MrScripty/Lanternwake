@@ -160,10 +160,16 @@ theme_override_font_sizes/font_size = 15
 text = "Choose a starting thought, then edit it or write your own. Optional talk never changes the main mystery."
 autowrap_mode = 3
 
-[node name="Suggestions" type="VBoxContainer" parent="ChatPanel/Margin/Stack"]
-unique_name_in_owner = true
+[node name="SuggestionsScroll" type="ScrollContainer" parent="ChatPanel/Margin/Stack"]
 layout_mode = 2
 size_flags_vertical = 3
+horizontal_scroll_mode = 0
+follow_focus = true
+
+[node name="Suggestions" type="VBoxContainer" parent="ChatPanel/Margin/Stack/SuggestionsScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="PlayerEntry" type="LineEdit" parent="ChatPanel/Margin/Stack"]
 unique_name_in_owner = true

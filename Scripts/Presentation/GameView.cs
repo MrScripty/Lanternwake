@@ -90,6 +90,7 @@ public partial class GameView : Node
         _entry = InterfaceRoot.GetNode<LineEdit>("%PlayerEntry");
         _mic = InterfaceRoot.GetNode<Button>("%MicrophoneButton");
         _send = InterfaceRoot.GetNode<Button>("%SendButton");
+        _readingText.Register(_dialogue); _readingText.Register(_entry);
         InterfaceRoot.GetNode<Button>("%EvidenceButton").Pressed += ShowEvidence;
         InterfaceRoot.GetNode<Button>("%HistoryButton").Pressed += ShowHistory;
         InterfaceRoot.GetNode<Button>("%SaveButton").Pressed += () => Save(false);
@@ -172,7 +173,8 @@ public partial class GameView : Node
         foreach (var suggestion in chat.Suggestions)
         {
             var captured = suggestion;
-            _suggestions.AddChild(ChoiceButton(captured, () => { _entry.Text = captured; _entry.GrabFocus(); _entry.CaretColumn = _entry.Text.Length; }));
+            var choice = ChoiceButton(captured, () => { _entry.Text = captured; _entry.GrabFocus(); _entry.CaretColumn = _entry.Text.Length; });
+            _suggestions.AddChild(choice); _readingText.Register(choice);
         }
         _chatPanel.Visible = true; _entry.Text = ""; _entry.GrabFocus();
         _status.Text = "Talk is optional. Authored fallback is used if local Pumas is unavailable.";
@@ -277,7 +279,6 @@ public partial class GameView : Node
     }
     private void ShowHistory() => ShowWindow("The record", string.Join("\n\n", _session.History.Select(h => (DisplayName(h.Speaker) is { Length: > 0 } name ? name + (h.Generated ? " [optional local dialogue]" : "") + ":\n" : "") + h.Text)));
     private void ShowEvidence() => ShowWindow("Your catalogue", "OBJECTS\n\n" + string.Join("\n\n", _session.Inventory.Select(i => i.Name + "\n" + i.Description)) + "\n\nESTABLISHED FACTS\n\n" + string.Join("\n\n", _session.KnownFacts.Select(f => f.Text)));
-    private void ShowSettings() => ShowWindow("Reading settings", "All dialogue is text. Use mouse or keyboard. Voice input is optional and local.\n\nSpace / Enter: reveal or advance\nEscape: close panel\nH: history · E: evidence\n\nOptional local conversation may improvise; only the authored catalogue establishes facts.", [("Toggle instant text", () => { _instant = !_instant; if (_instant) _dialogue.VisibleCharacters = -1; _status.Text = _instant ? "Instant text enabled" : "Typewriter text enabled"; CloseModal(); }), ("Toggle reduced motion", () => { _stage.MotionEnabled = !_stage.MotionEnabled; _status.Text = _stage.MotionEnabled ? "Environmental motion enabled" : "Reduced motion enabled"; CloseModal(); }), ("Quit game", () => { CloseModal(); _Notification((int)NotificationWMCloseRequest); })]);
     private void ShowWindow(string title, string text, (string Text, Action Action)[]? actions = null)
     {
         if (_busy) return;
@@ -288,10 +289,20 @@ public partial class GameView : Node
         _modal.CloseRequested += CloseModal;
         _modal.WindowInput += input => { if (input is InputEventKey { Pressed: true, Keycode: Key.Escape }) CloseModal(); };
         _modal.GetNode<RichTextLabel>("%ModalText").Text = text;
+        _readingText.Register(_modal.GetNode<RichTextLabel>("%ModalText"));
         var actionRows = _modal.GetNode<VBoxContainer>("%ModalActions");
-        actionRows.Visible = actions is { Length: > 0 };
+        _modal.GetNode<ScrollContainer>("%ModalActionsScroll").Visible = actions is { Length: > 0 };
         if (actions is not null)
-            foreach (var action in actions) actionRows.AddChild(ChoiceButton(action.Text, action.Action));
+            foreach (var action in actions)
+            {
+                var choice = ChoiceButton(action.Text, action.Action);
+                actionRows.AddChild(choice); _readingText.Register(choice);
+            }
+        var window = _modal;
+        window.SizeChanged += () => FitModalActions(window);
+        actionRows.MinimumSizeChanged += () => FitModalActions(window);
+        FitModalActions(window);
+        Callable.From(() => FitModalActions(window)).CallDeferred();
         _modal.GetNode<Button>("%ModalCloseButton").Pressed += CloseModal;
         _modal.PopupCentered();
     }
@@ -334,12 +345,14 @@ public partial class GameView : Node
             ShowHistory(); Check(_modal is not null, "history opens"); CloseModal(); Check(_advance.HasFocus(), "modal close restores keyboard advance focus");
             ShowEvidence(); Check(_modal is not null, "catalogue opens"); CloseModal();
             ShowSettings(); Check(_modal is not null, "settings opens"); CloseModal();
+            await RunReadingSizeSmoke();
             while (_session.Beat.Conversation is null && !_session.IsEnding)
             {
                 if (_session.Beat.Activity is { } activity) _session.AnswerActivity(activity.CorrectIndex);
                 _session.Advance();
             }
             RenderBeat(); OpenConversation(); Check(_chatPanel.Visible, "conversation opens");
+            await CheckReadingChatSizing();
             ToggleMicrophone(); await _operations.DrainAsync();
             Check(_modal is not null && !_speech.Recording && !_busy && _entry.Editable,
                 "unsupported Pumas/Cohere voice explains setup without capture or blocking typing");
@@ -388,7 +401,8 @@ public partial class GameView : Node
             RenderBeat(); var gated = _session.Beat.Id; _dialogue.VisibleCharacters = -1; Advance();
             Check(_session.Beat.Id == gated && _modal is not null, "activity opens instead of advancing"); CloseModal();
             GD.Print("LANTERNWAKE_UI_SMOKE_OK title reveal history catalogue settings suggestion reply reopen save load activity");
-            GetTree().Quit();
+            ShowSettings();
+            _modal!.GetNode<VBoxContainer>("%ModalActions").GetChildren().OfType<Button>().Single(b => b.Text == "Quit game").EmitSignal(Button.SignalName.Pressed);
         }
         catch (Exception error) { GD.PushError(error.ToString()); GetTree().Quit(1); }
     }

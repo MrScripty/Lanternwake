@@ -31,9 +31,16 @@ size_flags_vertical = 3
 bbcode_enabled = false
 text = "History, catalogue entries, settings or the current evidence prompt appear here."
 
-[node name="ModalActions" type="VBoxContainer" parent="Margin/Stack"]
+[node name="ModalActionsScroll" type="ScrollContainer" parent="Margin/Stack"]
 unique_name_in_owner = true
 layout_mode = 2
+horizontal_scroll_mode = 0
+follow_focus = true
+
+[node name="ModalActions" type="VBoxContainer" parent="Margin/Stack/ModalActionsScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="ModalCloseButton" type="Button" parent="Margin/Stack"]
 unique_name_in_owner = true

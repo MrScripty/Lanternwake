@@ -26,6 +26,13 @@ Open `Scenes/UI/GameInterface.tscn` in the 2D editor for margins, containers, ty
 
 Select the Main scene root for exported scene references, story path and text-reveal settings. Keep referenced controls assigned when reorganizing the UI. Runtime code owns events and changing content; scenes own layout and appearance.
 
+Players can adjust reading text to 100%, 125% or 150% in Reading settings; reset
+uses the authored font sizes. This is a session-only preference implemented with
+per-control overrides, so it does not edit your shared Theme, scenes or saves.
+Reading text and choices scale; fixed navigation/HUD sizes remain authored. Keep
+the unique names of dialogue, entry, suggestion and modal controls intact, including
+their scrolling containers. See [text-size qualification and integration notes](READING-TEXT-SIZE.md).
+
 ## Story text
 
 `Content/story.json` is the **single authoritative story**. The enabled **Story Text** editor dock offers a scene selector, beat list, speaker selector and text field. Choose a beat, change the line, then **Save beat**. Saves validate the complete story and preserve stable IDs, unlocks, activity gates, conversation metadata and unknown fields. **Reload / discard** loads the file again and discards the unsaved edit. Save or reload before changing selection.
