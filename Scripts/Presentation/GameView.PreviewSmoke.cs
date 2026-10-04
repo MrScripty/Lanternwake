@@ -21,6 +21,6 @@ public partial class GameView
             GD.Print("LANTERNWAKE_SELECTED_BEAT_OK " + expectedBeat + " isolated progress; current activity unsolved; player saves disabled");
             _Notification((int)NotificationWMCloseRequest);
         }
-        catch (Exception error) { GD.PushError(error.ToString()); GetTree().Quit(1); }
+        catch (Exception error) { GD.PushError(error.ToString()); QuitAfterAudio(1); }
     }
 }

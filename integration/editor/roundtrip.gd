@@ -11,6 +11,12 @@ func snapshot(node: Node, origin: Node, result: Dictionary) -> void:
 	var values: Dictionary = {}
 	if node is Node3D:
 		values["transform"] = node.transform
+	if node is AudioStreamPlayer:
+		values["bus"] = node.bus
+		values["playing"] = node.playing
+		values["stream_path"] = node.stream.resource_path if node.stream != null else ""
+		if node.playing:
+			failures.append("Audio started in the Editor: " + str(origin.get_path_to(node)))
 	var script: Script = node.get_script()
 	if script != null:
 		var properties: Array[String] = []
@@ -21,6 +27,8 @@ func snapshot(node: Node, origin: Node, result: Dictionary) -> void:
 				properties = ["Kind", "Enabled", "Phase", "Amount", "Speed", "RainFirstFallDistance", "RainHeight", "RainSlant"]
 			"StageDirector.cs":
 				properties = ["MotionEnabled"]
+			"AudioDirector.cs":
+				properties = ["FadeSeconds"]
 			"GameView.cs":
 				properties = ["StoryPath", "CharactersPerSecond", "StartWithInstantText"]
 		for property in properties:
@@ -36,7 +44,7 @@ func _run() -> void:
 		push_error("This regression requires --editor.")
 		get_tree().quit(1)
 		return
-	var paths: Array[String] = ["res://Scenes/Main.tscn", "res://Scenes/Stages/StageDirector.tscn"]
+	var paths: Array[String] = ["res://Scenes/Main.tscn", "res://Scenes/Stages/StageDirector.tscn", "res://Scenes/Audio/AudioDirector.tscn", "res://Scenes/UI/AudioSettingsControls.tscn"]
 	for name in ["Harbor", "KeeperHouse", "Archive", "LanternRoom", "TideCave"]:
 		paths.append("res://Scenes/Stages/" + name + ".tscn")
 	for name in ["Ada", "Nessa", "Tomas", "Sera"]:
@@ -73,5 +81,5 @@ func _run() -> void:
 	for failure in failures:
 		push_error(failure)
 	if failures.is_empty():
-		print("LANTERNWAKE_EDITOR_ROUNDTRIP_OK scenes=11 defaults preserved; editor gameplay/motion inactive")
+		print("LANTERNWAKE_EDITOR_ROUNDTRIP_OK scenes=13 defaults preserved; editor gameplay/motion/audio inactive")
 	get_tree().quit(0 if failures.is_empty() else 1)

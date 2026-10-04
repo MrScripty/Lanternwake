@@ -1,5 +1,7 @@
 # Non-audio integration qualification
 
+For the later source-only audio composition and its own evidence, see [combined qualification](AUDIO-COMPOSITION-VERIFICATION.md). This report retains its original non-audio scope.
+
 Candidate branch: `qa/non-audio-playable-authoring`. Exact real PR7 base:
 `65548f97e1c203884864bf4dcc1d1849db4cbcd1`. Product composition commit:
 `e4b00c34859bbf1c405876c094a1a91b9fa33fe3`.

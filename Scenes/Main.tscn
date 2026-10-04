@@ -7,16 +7,24 @@
 [ext_resource type="PackedScene" path="res://Scenes/UI/MicrophoneConsent.tscn" id="5_consent"]
 [ext_resource type="PackedScene" path="res://Scenes/UI/ChoiceButton.tscn" id="6_choice"]
 
-[node name="Lanternwake" type="Node" unique_id=1068266348 node_paths=PackedStringArray("Stage", "InterfaceRoot")]
+[ext_resource type="PackedScene" path="res://Scenes/Audio/AudioDirector.tscn" id="7_audio"]
+
+[ext_resource type="PackedScene" path="res://Scenes/UI/AudioSettingsControls.tscn" id="8_audio_settings"]
+
+[node name="Lanternwake" type="Node" unique_id=1068266348 node_paths=PackedStringArray("Stage", "InterfaceRoot", "Audio")]
 script = ExtResource("1_game")
 Stage = NodePath("StageDirector")
+Audio = NodePath("AudioDirector")
 InterfaceRoot = NodePath("Interface/GameInterface")
 ModalScene = ExtResource("4_modal")
 MicrophoneConsentScene = ExtResource("5_consent")
 ChoiceButtonScene = ExtResource("6_choice")
+AudioSettingsControlsScene = ExtResource("8_audio_settings")
 
 [node name="StageDirector" parent="." unique_id=301876949 instance=ExtResource("2_stage")]
 
 [node name="Interface" type="CanvasLayer" parent="." unique_id=537423107]
 
 [node name="GameInterface" parent="Interface" unique_id=1887338804 instance=ExtResource("3_interface")]
+
+[node name="AudioDirector" parent="." instance=ExtResource("7_audio")]

@@ -33,9 +33,9 @@ public partial class GameView
             Check(_session.Beat.Id == before, "test runtime save/load uses disposable slots");
             Check(File.ReadAllText(manual) == "REAL_MANUAL_SENTINEL" && File.ReadAllText(automatic) == "REAL_AUTO_SENTINEL", "test runtime preserves player sentinels");
             GD.Print("LANTERNWAKE_SAVE_ISOLATION_OK preview advance activity manual/autosave load and test slots preserve real-slot sentinels");
-            GetTree().Quit();
+            QuitAfterAudio();
         }
-        catch (Exception error) { GD.PushError(error.ToString()); GetTree().Quit(1); }
+        catch (Exception error) { GD.PushError(error.ToString()); QuitAfterAudio(1); }
         finally { _storage?.Dispose(); _storage = null; Directory.Delete(root, true); }
     }
 }

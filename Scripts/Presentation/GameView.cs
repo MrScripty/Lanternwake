@@ -9,6 +9,7 @@ namespace Lanternwake.Presentation;
 public partial class GameView : Node
 {
     [ExportGroup("Scene dependencies")]
+    [Export] public AudioDirector Audio { get; set; } = null!;
     [Export] public StageDirector Stage { get; set; } = null!;
     [Export] public Control InterfaceRoot { get; set; } = null!;
     [Export] public PackedScene ModalScene { get; set; } = null!;
@@ -59,9 +60,10 @@ public partial class GameView : Node
             if (launch.BeatId is { } beatId) _session = StoryContextPreview.CreateSessionAtBeat(_story, beatId);
             BindInterface(); ShowTitle();
             if (_stagePreview) ShowStagePreview();
-            else if (launch.BeatId is not null) { _started = true; RenderBeat(); }
+            else if (launch.BeatId is not null) { _started = true; RenderBeat(false); }
             if (launch.Check == "--author-preview-smoke") RunAuthorPreviewSmoke(launch.BeatId!);
             else if (OS.GetCmdlineUserArgs().Contains("--save-isolation-smoke")) RunSaveIsolationSmoke();
+            else if (OS.GetCmdlineUserArgs().Contains("--audio-smoke")) RunAudioSmoke();
             else if (OS.GetCmdlineUserArgs().Contains("--smoke")) RunSmoke();
             else if (OS.GetCmdlineUserArgs().Contains("--ui-smoke") || OS.GetCmdlineUserArgs().Contains("--live-ui-preview")) RunUiSmoke();
         }
@@ -69,7 +71,7 @@ public partial class GameView : Node
         {
             GD.PushError(error.ToString());
             var label = new Label { Text = "Lanternwake could not start.\n" + error.Message, Position = new(48, 48) }; AddChild(label);
-            if ((OS.GetCmdlineUserArgs().Contains("--smoke") || OS.GetCmdlineUserArgs().Contains("--ui-smoke") || OS.GetCmdlineUserArgs().Contains("--save-isolation-smoke") || OS.GetCmdlineUserArgs().Contains("--author-preview-smoke"))) GetTree().Quit(1);
+            if ((OS.GetCmdlineUserArgs().Contains("--audio-smoke") || OS.GetCmdlineUserArgs().Contains("--smoke") || OS.GetCmdlineUserArgs().Contains("--ui-smoke") || OS.GetCmdlineUserArgs().Contains("--save-isolation-smoke") || OS.GetCmdlineUserArgs().Contains("--author-preview-smoke"))) QuitAfterAudio(1);
         }
     }
     // Layout and appearance are authored in Scenes/UI; unique scene names are the
@@ -117,6 +119,7 @@ public partial class GameView : Node
     {
         // The title copy and initial HUD state belong to GameInterface.tscn.
         _stage.ShowLocation("harbor", "night", []);
+        Audio.ShowLocation("harbor");
     }
     private void Advance()
     {
@@ -127,10 +130,12 @@ public partial class GameView : Node
         if (_session.Advance()) { RenderBeat(); Save(true); }
         else ShowWindow("The light remains", "You have reached the end of Lanternwake. Your evidence and conversations remain in History.\n\nThank you for keeping watch.");
     }
-    private void RenderBeat()
+    private void RenderBeat(bool playAudioCue = true)
     {
         _generation++;
         var scene = _session.Scene;
+        Audio.ShowLocation(scene.Location);
+        Audio.ApplyBeatCue(_session.Beat.Id, _session.Beat.StageCue, playAudioCue);
         if (_lastScene != scene.Id) { _stage.ShowLocation(scene.Location, scene.TimeOfDay, scene.CharacterIds); _lastScene = scene.Id; }
         _stage.ApplyAuthoredCues(_session.ActiveStageCues);
         _chapter.Text = (_previewMode ? "AUTHOR PREVIEW · " : "") + _session.Chapter.Title.ToUpperInvariant();
@@ -252,7 +257,7 @@ public partial class GameView : Node
     }
     private void Load(bool auto)
     {
-        try { var snapshot = _storage!.Read(auto); _session.Restore(snapshot); CloseConversation(); CloseModal(); _started = true; _lastScene = ""; RenderBeat(); }
+        try { var snapshot = _storage!.Read(auto); _session.Restore(snapshot); CloseConversation(); CloseModal(); _started = true; _lastScene = ""; RenderBeat(false); }
         catch (Exception error) { _status.Text = "Could not load: " + error.Message; CloseModal(); }
     }
     private void LoadCandidate(SaveCandidate candidate)
@@ -262,7 +267,7 @@ public partial class GameView : Node
         {
             // Capture the inspected snapshot, not a possibly changed file at click time.
             var snapshot = candidate.Snapshot ?? throw new InvalidDataException("This snapshot is unavailable.");
-            _session.Restore(snapshot); CloseConversation(); CloseModal(); _started = true; _lastScene = ""; RenderBeat();
+            _session.Restore(snapshot); CloseConversation(); CloseModal(); _started = true; _lastScene = ""; RenderBeat(false);
             if (candidate.Previous) _status.Text = "Recovered the selected previous snapshot into this session. Save files were not rewritten.";
         }
         catch (Exception error) { _status.Text = "Could not load: " + error.Message; CloseModal(); }
@@ -317,7 +322,7 @@ public partial class GameView : Node
             if (_session.Beat.Activity is { } activity) _session.AnswerActivity(activity.CorrectIndex);
             _session.Advance();
         }
-        _started = true; _lastScene = ""; RenderBeat(); _dialogue.VisibleCharacters = -1;
+        _started = true; _lastScene = ""; RenderBeat(false); _dialogue.VisibleCharacters = -1;
         _status.Text = "AUTHOR PREVIEW · F10 next stage · F12 screenshot · player save/load disabled";
     }
 
@@ -331,7 +336,7 @@ public partial class GameView : Node
         if (!restored.IsEnding) throw new InvalidOperationException("Smoke restore failed.");
         foreach (var location in new[] { "harbor", "keeper_house", "archive", "lantern_room", "tide_cave" }) _stage.ShowLocation(location, "night", _story.Characters.Select(c => c.Id).Take(2).ToArray());
         AuthoringSmoke.Run(this, _stage, InterfaceRoot);
-        GD.Print($"LANTERNWAKE_SMOKE_OK beats={count} final={restored.Beat.Id}"); GetTree().Quit();
+        GD.Print($"LANTERNWAKE_SMOKE_OK beats={count} final={restored.Beat.Id}"); QuitAfterAudio();
     }
     private async void RunUiSmoke()
     {
@@ -404,7 +409,7 @@ public partial class GameView : Node
             ShowSettings();
             _modal!.GetNode<VBoxContainer>("%ModalActions").GetChildren().OfType<Button>().Single(b => b.Text == "Quit game").EmitSignal(Button.SignalName.Pressed);
         }
-        catch (Exception error) { GD.PushError(error.ToString()); GetTree().Quit(1); }
+        catch (Exception error) { GD.PushError(error.ToString()); QuitAfterAudio(1); }
     }
 
     public override async void _Notification(int what)
@@ -414,7 +419,7 @@ public partial class GameView : Node
         _closing = true; _generation++; _request?.Cancel(); _speechRequest?.Cancel(); _speech.Dispose();
         try { await _operations.DrainAsync(); }
         catch (Exception error) { GD.PushWarning("Shutdown operation: " + error.Message); }
-        finally { _pumas?.Dispose(); _pumas = null; GetTree().Quit(); }
+        finally { _pumas?.Dispose(); _pumas = null; QuitAfterAudio(); }
     }
     public override void _ExitTree() { if (Engine.IsEditorHint()) return; _generation++; _request?.Cancel(); _request?.Dispose(); _speechRequest?.Cancel(); _speech.Dispose(); _storage?.Dispose(); }
 }

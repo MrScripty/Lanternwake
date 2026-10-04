@@ -16,6 +16,7 @@ public partial class GameView
              ("Reset reading text size", () => SetReadingSize(ReadingTextStyle.MinimumPercent)),
              ("Toggle instant text", () => { _instant = !_instant; if (_instant) _dialogue.VisibleCharacters = -1; _status.Text = _instant ? "Instant text enabled" : "Typewriter text enabled"; CloseModal(); }),
              ("Toggle reduced motion", () => { _stage.MotionEnabled = !_stage.MotionEnabled; _status.Text = _stage.MotionEnabled ? "Environmental motion enabled" : "Reduced motion enabled"; CloseModal(); }),
+             ("Sound settings", ShowAudioSettings),
              ("Quit game", () => { CloseModal(); _Notification((int)NotificationWMCloseRequest); })]);
         if (_modal is null) return;
         var actions = _modal.GetNode<VBoxContainer>("%ModalActions").GetChildren().OfType<Button>().ToArray();

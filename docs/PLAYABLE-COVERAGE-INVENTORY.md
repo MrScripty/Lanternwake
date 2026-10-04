@@ -1,5 +1,7 @@
 # Playable non-audio coverage inventory
 
+For the later source-only audio composition and its own evidence, see [combined qualification](AUDIO-COMPOSITION-VERIFICATION.md). This report retains its original non-audio scope.
+
 This inventory reconciles the exact accepted source and its subsequent qualification
 candidates. The final optional-conversation commit/tree and archive hash are recorded
 in its delivery manifest, avoiding a circular self-reference in repository content.

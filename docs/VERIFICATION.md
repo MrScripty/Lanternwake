@@ -90,3 +90,58 @@ The write sequence validates and bounds the new snapshot, inspects the old prima
 The Load chooser lists current and previous manual/autosave candidates with chapter, scene, stable beat and UTC file time. Missing, malformed, unsupported, incompatible and read-failed candidates have explicit reasons and no load action. Choosing **Recover previous …** replaces in-memory progress with the exact inspected snapshot. It does not silently recover, promote a backup or rewrite either slot. Closing changes nothing; later ordinary saves may update slots.
 
 Owned-path regressions inject failures after current staging, previous staging, previous publication and current publication; verify the resulting recoverable states; exercise a real exclusive-read failure and failed backup rename; reject oversized/invalid new snapshots before publication; preserve good backups behind unusable primaries; and ignore abandoned staging. Native UI coverage verifies explicit recovery, candidate identity despite later disk replacement, no slot rewrite, and cancellation. `scripts/verify.sh` requires `LANTERNWAKE_RECOVERY_UI_OK`. Preview cannot inspect or load these candidates; automated tests keep all slots/backups in their owned disposable directories.
+
+## Audio integration recovery, 2026-10-04
+
+Recovered all 136 blobs at PR #7 (`65548f97e1c203884864bf4dcc1d1849db4cbcd1`)
+with exact Git blob hashes; recovered tree
+`a8bbd2b1de62795a2188c5cf9fceea3e27521881` matches the published receipt.
+The prior sampler was preserved; unpublished mixer source was unavailable.
+The new mixer and procedural placeholder assets are documented in `AUDIO.md`.
+
+Local official Godot 4.6.3 .NET and .NET SDK 8.0.425:
+- C# build: zero warnings/errors.
+- Core: 4,110 assertions, 1,424 authored beats; story metrics unchanged.
+- Pumas protocol client suite and explicit unavailable speech contract: passed.
+- Scene, UI/recovery and save-isolation smoke: passed their success markers.
+- Audio: 29 focused assertions; latest actual Master capture 20,480 stereo frames,
+  observed peak 0.024877 after cancelling the old timeline effect, Dummy output driver. No physical listening claim.
+- Editor: character authoring, Story Text, 320×600 dock, selected-beat launch,
+  and 13-scene roundtrip markers passed in a separate complete invocation.
+- Python adapter: 19 tests passed.
+- Native GUI: controls visible, keyboard mute/volume, close/reopen retention.
+
+An early aggregate invocation was interrupted at the Editor stage; a later
+complete aggregate invocation passed. This is local evidence only; no hosted result or
+external review for these new changes is claimed. An initial shutdown regression retained two WAV playback handles on immediate
+scene-smoke exit (3/10 repeated runs; exact PR7 baseline clean). Fixed by
+retaining explicit playback handles and waiting until native references are
+released, with a two-second failure deadline. Fifteen subsequent real Godot
+exits (five each: scene, audio, save isolation) completed without errors,
+ObjectDB leaks or timeout warnings. This covers the tested Godot/platform;
+other output backends still require qualification. Model, microphone, five-hour duration and
+finished sound design qualification remain open.
+
+## Source-only generated audio setup, 2026-10-04
+
+Generated `Assets/Audio/*.wav` files are intentionally untracked and ignored;
+local copies of the prior audio candidate were preserved. The generator,
+committed hash/provenance manifest, import settings and native audio scenes
+remain source controlled. WAVs elsewhere are not hidden from Git.
+
+The normal setup command is `bash scripts/setup.sh` (or
+`python3 scripts/setup_audio.py`; Windows: `py -3 scripts/setup_audio.py`).
+Verification invokes setup before Godot and explicitly runs Editor import
+before runtime checks; CI has an explicit generation step before Godot setup.
+No synthesis is performed in gameplay. Missing Python produces a setup failure
+with actionable installation guidance and does not start Godot.
+
+A fresh copy containing only tracked source, with no WAVs and no `.godot`
+cache, generated all seven WAVs matching the unchanged committed manifest.
+A repeated setup changed no files. Five asset/setup tests cover missing-file
+repair, unchanged modification times, refusal to overwrite modified output,
+explicit regeneration, failed generation custody and hash rejection.
+The complete aggregate then exited 0: 4,110 core assertions, 29 native audio
+assertions, native scene/UI/storage checks and 13-scene Editor roundtrip.
+Native Master capture observed 20,480 frames with peak 0.024877 on Dummy;
+this remains mixer evidence, not physical listening qualification.

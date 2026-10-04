@@ -12,6 +12,9 @@ internal static class SessionLaunchTests
             throw new Exception(claim);
         }
         Check(SessionLaunch.Parse([], true).Mode == SessionMode.Normal, "Ordinary launch keeps normal persistence");
+        Check(SessionLaunch.Parse(["--audio-smoke"], true).Mode == SessionMode.AutomatedTest, "Audio smoke selects disposable persistence");
+        Reject(["--stage-preview", "--audio-smoke"], true, "Audio smoke cannot mix with preview");
+        Reject(["--audio-smoke=1"], true, "Malformed audio test cannot select real saves");
         Check(SessionLaunch.Parse(["--ui-smoke"], true).Mode == SessionMode.AutomatedTest, "UI smoke selects disposable persistence");
         Check(SessionLaunch.Parse(["--live-ui-preview"], true).Mode == SessionMode.AutomatedTest, "Live qualification isolates saves too");
         Check(SessionLaunch.Parse(["--stage-preview"], true).Mode == SessionMode.AuthorPreview, "Stage preview cannot select real slots");

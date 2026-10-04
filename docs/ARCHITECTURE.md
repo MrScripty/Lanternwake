@@ -1,6 +1,6 @@
 # Runtime architecture and qualification
 
-For current accepted non-audio evidence and remaining audio/model/platform/accessibility gates, see the [playable coverage inventory](PLAYABLE-COVERAGE-INVENTORY.md). Historical qualification reports retain their original source scope.
+For the source-only audio composition, see [combined qualification](AUDIO-COMPOSITION-VERIFICATION.md) and [audio ownership/setup](AUDIO.md). Earlier accepted non-audio evidence and remaining model/platform/accessibility gates are in the [playable coverage inventory](PLAYABLE-COVERAGE-INVENTORY.md). Historical qualification reports retain their original source scope.
 
 ## Ownership
 
