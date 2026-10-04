@@ -1,5 +1,9 @@
 # Verification record
 
+The separate [late-session damaged-primary qualification](LATE-RECOVERY-VERIFICATION.md)
+records actual Load/control recovery, owned faults, repeated cancellation and fresh
+processes on the later non-audio QA source.
+
 The separate [offline long-session save/resume qualification](LONG-SESSION-VERIFICATION.md)
 records the later non-audio QA source, all-beat native button progression, six fresh
 processes and the remaining acceptance limits. Earlier evidence below retains its
