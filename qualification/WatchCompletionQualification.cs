@@ -63,6 +63,8 @@ public partial class WatchCompletionQualification : Node
             if (Session.Beat.Activity is { } activity)
             {
                 Press("AdvanceButton"); Action(activity.Options[activity.CorrectIndex]);
+                if (Session.IsEnding)
+                    Check(_game.InterfaceRoot.GetNode<Button>("%AdvanceButton").Text == "Finish  ›", "solving final evidence exposes Finish before opening completion");
             }
             if (Session.IsEnding) break;
             var before = Session.Beat.Id;
@@ -165,6 +167,7 @@ public partial class WatchCompletionQualification : Node
                 {
                     Check(!Session.CanAdvance, "preview leaves final evidence unsolved");
                     Press("AdvanceButton"); Action(activity.Options[activity.CorrectIndex]);
+                    Check(_game.InterfaceRoot.GetNode<Button>("%AdvanceButton").Text == "Finish  ›", "preview final evidence exposes Finish before opening completion");
                 }
                 Press("AdvanceButton");
                 Check(Modal!.Title == "The light remains", "preview reaches ending only after solving final evidence");

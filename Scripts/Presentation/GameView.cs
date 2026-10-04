@@ -278,7 +278,7 @@ public partial class GameView : Node
         if (_session.Beat.Activity is not { } activity) return;
         ShowWindow("Compare the evidence", activity.Prompt, activity.Options.Select((option, index) => (option, (Action)(() =>
         {
-            if (_session.AnswerActivity(index)) { CloseModal(); _status.Text = activity.Explanation; _advance.Text = "Continue  ›"; Save(true); }
+            if (_session.AnswerActivity(index)) { CloseModal(); _status.Text = activity.Explanation; _advance.Text = _session.IsEnding ? "Finish  ›" : "Continue  ›"; Save(true); }
             else { _status.Text = "That does not fit the evidence yet. Check your catalogue and try again."; CloseModal(); }
         }))).ToArray());
     }

@@ -30,14 +30,22 @@ Official Godot 4.6.3 .NET / .NET SDK 8.0.425, Linux headless, Dummy audio driver
 `python3 integration/qa/watch_completion.py` uses owned normal-mode userdata:
 
 - Complete: 1,424 authored beats through actual Continue/evidence/Finish controls,
-  1,457 checks, finished manual save and visible failure feedback, complete record
+  1,458 checks, finished manual save and visible failure feedback, complete record
   and catalogue, cancel/close/retired callbacks, replay, preserved settings/slots,
   a freely typed authored fallback, and reopening the exact completed manual save.
 - Resume: a second native process reopens that completed save and repeats the
   completion/replay flow, 33 checks.
 - Preview: a third process solves the selected final activity before Finish,
   exposes no player save/replay actions and preserves every player-save byte,
-  6 checks.
+  7 checks.
+
+Independent review of the initial feature commit `2a3b0a32` found that solving
+the final evidence activity left the advance button labelled Continue. The
+post-answer label now uses the same ending condition as ordinary rendering.
+A native final-activity label assertion failed before the correction, and both
+full-watch and author-preview paths now assert Finish before triggering it.
+The original source-bound logs remain a separate Library evidence package;
+their success markers alone did not establish the previously unchecked label.
 
 The focused runner is part of `scripts/verify.sh`. The final aggregate returned
 zero: 4,110 core assertions, 63 story-validation checks, 11 simulated Pumas
