@@ -1,5 +1,7 @@
 # Runtime architecture and qualification
 
+For current accepted non-audio evidence and remaining audio/model/platform/accessibility gates, see the [playable coverage inventory](PLAYABLE-COVERAGE-INVENTORY.md). Historical qualification reports retain their original source scope.
+
 ## Ownership
 
 - `Content/story.json` is the authored story authority. Schema 1, five ordered chapters, scenes and beats. No generated dialogue can supply, reorder or unlock a canonical beat.
@@ -8,7 +10,7 @@
 - `StageDirector` selects and instantiates authored scenes. `StageScene` binds location settings and story cues; `StageMotion` adds animation to authored base transforms. These components do not consume conversation output or own story state.
 - `GameView` owns the Godot presentation, modal lifecycle, textbox, history/catalogue, editable suggestions, submit/cancel and stale-response rejection.
 - `PumasClient` owns the local HTTP boundary and provider verification. See PUMAS.md for exact upstream contract and qualification.
-- `SpeechRecorder` owns consent-triggered microphone capture and transfers an operation-local PCM buffer to `PumasSpeechTranscriber`, which currently reports unsupported because Pumas has no transcription API. Capture is gated before touching audio devices. The intended local Cohere runtime and operation lifecycle belong to Pumas; the game has no direct recognizer process. Transcription fills the editable input, never submits it.
+- `SpeechRecorder` retains consent-triggered microphone capture and transfers an operation-local, in-memory stereo sample buffer and capture sample rate to `PumasSpeechTranscriber`. The typed game boundary currently reports unsupported; capture is gated before consent or touching audio devices. The retained recorder has no audio-file writer, clears transferred samples after transcription completes or fails, and clears retained samples on disposal. The required typed Pumas/Cohere producer contract is still unpublished; its input encoding/conversion and lifecycle must be established before capture can be enabled. Pumas owns the intended local recognizer runtime; the game has no direct recognizer process. The intended success path fills editable input without submitting it. See [SPEECH.md](SPEECH.md).
 - `SessionStorage` owns the normal/author-preview/test persistence policy and slot paths. `SaveRecovery` validates snapshots against the current story, publishes compatible previous bytes before replacing a primary, and supplies explicit inspected recovery candidates. `SaveStore` remains the low-level schema serializer/reader. Only schema 1 is supported; recovery never silently rewrites files. See `VERIFICATION.md` for failure ordering and durability limits.
 
 ## Conversation invariants
@@ -31,7 +33,7 @@ Manual and auto saves are separate local files under Godot `user://`. Manual sav
 4. `--smoke`: full authored canonical traversal, save/reopen, construct five actual 3D sets under Godot. This is a smoke, not a five-hour playtest.
 5. GUI review: title, multiple locations/characters, text, evidence/activity flows, save/load and cancellation. Screenshots and actual observed results must be recorded.
 6. Pumas required-real: inference-enabled Pumas with loaded llama.cpp model; provider-qualified request yields response. Mock tests do not satisfy this.
-7. Speech required-real: permission, actual microphone, local recognizer/model, editable transcript, submit only on command, temp deletion/cancel. Compilation does not satisfy this.
+7. Speech required-real, after publication and integration of the typed Pumas/Cohere producer contract: verified local model/runtime provenance, explicit permission and actual microphone, bounded in-memory capture, editable transcript and submit only on command, cancellation/stale-result rejection, and terminal cleanup on both sides. The game's retained recorder does not write temporary audio files; any producer-side audio custody/removal needs separate evidence. Capture remains unavailable, and compilation does not satisfy this gate. See [SPEECH.md](SPEECH.md).
 8. Duration: five hours remains the design target. Human playtesters own duration qualification; assistant-run timed playthroughs are not an acceptance blocker. Optional chat cannot pad the main-story target.
 
 ## Editor authority and compatibility

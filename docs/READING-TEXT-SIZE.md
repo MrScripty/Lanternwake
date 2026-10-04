@@ -1,5 +1,7 @@
 # Reading text size
 
+For accepted combined non-audio qualification and its selected native graphical flows, see the [playable coverage inventory](PLAYABLE-COVERAGE-INVENTORY.md). The independent-branch qualification and deferred-combination notes below retain their original source scope; they are not the current combined status. Full accessibility/platform coverage and audio qualification remain separate gates.
+
 Reading settings now offer smaller/larger text and reset, at 100%, 125% and 150%
 of each control's authored font size. Default/reset is 100%; the existing shared
 theme remains 21-point prose and 16-point buttons. A size change applies in place,

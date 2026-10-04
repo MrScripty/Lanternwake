@@ -1,5 +1,7 @@
 # Editor authoring verification
 
+For current accepted combined non-audio evidence, including the parent-reported native graphical flows, see the [playable coverage inventory](PLAYABLE-COVERAGE-INVENTORY.md). The reports below retain their original source scope; their graphical-review limits do not replace that inventory. Full accessibility/platform, production model and audio qualification remain separate gates.
+
 Verified in Godot 4.6.3 .NET with .NET SDK 8.0.425 on the cloud Linux desktop (Mesa llvmpipe, compatibility renderer). These checks establish editor authoring and runtime consumption; they do not qualify production model quality, a physical microphone or human playtime.
 
 ## Native Editor workflow
