@@ -105,7 +105,7 @@ public partial class GameView : Node
         _entry.TextSubmitted += _ => SendReply();
         _mic.Pressed += ToggleMicrophone;
         _send.Pressed += SendReply;
-        InterfaceRoot.GetNode<Button>("%ReturnButton").Pressed += CloseConversation;
+        InterfaceRoot.GetNode<Button>("%ReturnButton").Pressed += ReturnToStory;
     }
     // Only the number, text and callbacks of these rows are determined at runtime.
     private Button ChoiceButton(string text, Action action)
@@ -165,7 +165,7 @@ public partial class GameView : Node
             var path = Path.Combine(folder, (_started ? _session.Scene.Id : "title") + ".png");
             GetViewport().GetTexture().GetImage().SavePng(path); _status.Text = "Development screenshot captured."; return;
         }
-        if (key.Keycode == Key.Escape) { if (_modal is not null) _modal.EmitSignal(Window.SignalName.CloseRequested); else if (_chatPanel.Visible) CloseConversation(); return; }
+        if (key.Keycode == Key.Escape) { if (_modal is not null) _modal.EmitSignal(Window.SignalName.CloseRequested); else if (_chatPanel.Visible) ReturnToStory(); return; }
         if (_chatPanel.Visible || _modal is not null) return;
         if (key.Keycode is Key.Space or Key.Enter) Advance();
         else if (key.Keycode == Key.H) ShowHistory();
@@ -173,12 +173,19 @@ public partial class GameView : Node
     }
     private void OpenConversation()
     {
-        if (!_started || _busy || _session.Beat.Conversation is not { } chat) return;
+        if (!_started || _busy || _closing || _chatPanel.Visible || _modal is not null || _session.Beat.Conversation is not { } chat) return;
+        _conversationReading = new(_session, _session.Beat.Id, _generation, _speaker.Text, _dialogue.Text,
+            _dialogue.VisibleCharacters, _characters, _status.Text);
+        var generation = _generation;
         foreach (var child in _suggestions.GetChildren()) { _suggestions.RemoveChild(child); child.QueueFree(); }
         foreach (var suggestion in chat.Suggestions)
         {
             var captured = suggestion;
-            var choice = ChoiceButton(captured, () => { _entry.Text = captured; _entry.GrabFocus(); _entry.CaretColumn = _entry.Text.Length; });
+            var choice = ChoiceButton(captured, () =>
+            {
+                if (generation != _generation || !_chatPanel.Visible || _closing) return;
+                _entry.Text = captured; _entry.GrabFocus(); _entry.CaretColumn = _entry.Text.Length;
+            });
             _suggestions.AddChild(choice); _readingText.Register(choice);
         }
         _chatPanel.Visible = true; _entry.Text = ""; _entry.GrabFocus();
@@ -186,12 +193,23 @@ public partial class GameView : Node
     }
     private void CloseConversation()
     {
+        var reading = _conversationReading;
+        _conversationReading = null;
+        // Load restores the same session object; the saved view also belongs to a beat and generation.
+        var restore = _chatPanel.Visible && reading is not null && reading.Session == _session &&
+            reading.BeatId == _session.Beat.Id && reading.Generation == _generation && !_closing;
         _generation++; _request?.Cancel(); _speechRequest?.Cancel(); _speech.Dispose(); _busy = false; _chatPanel.Visible = false; _mic.Text = "Use voice"; _mic.Disabled = false; _send.Disabled = false; _advance.Disabled = false; _entry.Editable = true; _advance.GrabFocus();
+        if (restore)
+        {
+            _speaker.Text = reading!.Speaker; _dialogue.Text = reading.Text;
+            _dialogue.VisibleCharacters = reading.VisibleCharacters; _characters = reading.Characters;
+            _status.Text = reading.Status;
+        }
     }
-    private void SendReply() { if (!_busy && !_closing && !_speech.Recording) _operations.Track(SendReplyAsync()); }
+    private void SendReply() { if (_chatPanel.Visible && !_busy && !_closing && !_speech.Recording) _operations.Track(SendReplyAsync()); }
     private async Task SendReplyAsync()
     {
-        if (_busy || _speech.Recording || string.IsNullOrWhiteSpace(_entry.Text) || _session.Beat.Conversation is not { } chat) return;
+        if (!_chatPanel.Visible || _closing || _busy || _speech.Recording || string.IsNullOrWhiteSpace(_entry.Text) || _session.Beat.Conversation is not { } chat) return;
         var input = _entry.Text.Trim(); var generation = _generation;
         _busy = true; _entry.Editable = false; _send.Disabled = true; _advance.Disabled = true; _status.Text = "Listening for a reply from local Pumas…";
         _request?.Dispose(); _request = new CancellationTokenSource(TimeSpan.FromSeconds(45));

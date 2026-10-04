@@ -42,6 +42,7 @@ Set GODOT_MONO to the official .NET executable and use scripts/verify.sh for the
 - Click or Space/Enter: reveal/advance
 - Stay and talk: optional conversation panel
 - Suggestions populate editable input; Say this submits
+- Return / Escape from optional conversation resumes the paused authored passage; replies remain in the record. Cancelled or retired conversation controls cannot submit hidden drafts. See [conversation return](docs/CONVERSATION-STORY-RETURN.md).
 - H: history; E: catalogue; Escape: close panel
 - Manual Save/Load; separate automatic checkpoint; explicit previous-good recovery choices
 - Finish: review the record/evidence, explicitly save the completed watch, or confirm starting a new watch. Starting again preserves manual saves and session reading/sound preferences; automatic checkpoints update as the new watch progresses.
