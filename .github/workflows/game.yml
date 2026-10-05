@@ -14,6 +14,15 @@ jobs:
       LANTERNWAKE_PUMAS_MODEL: ''
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Record exact source identity
+        env:
+          EXPECTED_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_COMMIT"
+          printf 'commit %s\n' "$(git rev-parse HEAD)"
+          git cat-file commit HEAD | sed -n '1,/^$/p'
       - uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4.3.1
         with:
           dotnet-version: '8.0.425'
@@ -30,12 +39,29 @@ jobs:
           root="$RUNNER_TEMP/godot/Godot_v4.6.3-stable_mono_linux_x86_64"
           echo "GODOT_MONO=$root/Godot_v4.6.3-stable_mono_linux.x86_64" >> "$GITHUB_ENV"
           printf '<configuration><packageSources><clear/><add key="official-godot" value="%s/GodotSharp/Tools/nupkgs"/></packageSources></configuration>\n' "$root" > "$RUNNER_TEMP/Godot.NuGet.Config"
-          dotnet restore Lanternwake.csproj --configfile "$RUNNER_TEMP/Godot.NuGet.Config"
+          dotnet restore Lanternwake.sln --configfile "$RUNNER_TEMP/Godot.NuGet.Config"
       - name: Verify canonical story metrics
         run: |
           python3 scripts/story_metrics.py
           git diff --exit-code -- docs/bible/content_metrics.json
       - name: Core, protocol, native build and Godot workflow tests
         run: bash scripts/verify.sh
+      - name: Build all Godot solution configurations
+        shell: bash
+        run: |
+          set -euo pipefail
+          for configuration in Debug ExportDebug ExportRelease; do
+            dotnet build Lanternwake.sln --configuration "$configuration" --no-restore --warnaserror
+          done
+      - name: Verify official Editor solution build
+        shell: bash
+        run: |
+          set -euo pipefail
+          log="$RUNNER_TEMP/godot-build-solutions.log"
+          "$GODOT_MONO" --headless --editor --path . --build-solutions --quit 2>&1 | tee "$log"
+          if grep -Eq '(^|[[:space:]])(ERROR:|SCRIPT ERROR:|WARNING:|error [A-Z]+[0-9]+:|warning [A-Z]+[0-9]+:)|Build FAILED|Failed to build' "$log"; then
+            echo 'Official Editor solution build emitted a warning or error.' >&2
+            exit 1
+          fi
       - name: Optional adapter protocol tests
         run: python3 -m unittest discover -s integration/pumas -v
