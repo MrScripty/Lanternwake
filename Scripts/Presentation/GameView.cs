@@ -31,6 +31,7 @@ public partial class GameView : Node
     private PanelContainer _chatPanel = null!;
     private LineEdit _entry = null!;
     private Button _advance = null!, _talk = null!, _mic = null!, _send = null!;
+    private Button _titleContentNote = null!;
     private Window? _modal;
     private PumasClient? _pumas;
     private readonly SpeechRecorder _speech = new();
@@ -92,6 +93,8 @@ public partial class GameView : Node
         _entry = InterfaceRoot.GetNode<LineEdit>("%PlayerEntry");
         _mic = InterfaceRoot.GetNode<Button>("%MicrophoneButton");
         _send = InterfaceRoot.GetNode<Button>("%SendButton");
+        _titleContentNote = InterfaceRoot.GetNode<Button>("%ContentNoteButton");
+        _titleContentNote.Pressed += ShowTitleContentNote;
         _readingText.Register(_dialogue); _readingText.Register(_entry);
         InterfaceRoot.GetNode<Button>("%EvidenceButton").Pressed += ShowEvidence;
         InterfaceRoot.GetNode<Button>("%HistoryButton").Pressed += ShowHistory;
@@ -133,6 +136,7 @@ public partial class GameView : Node
     private void RenderBeat(bool playAudioCue = true)
     {
         _generation++;
+        _titleContentNote.Visible = false;
         var scene = _session.Scene;
         Audio.ShowLocation(scene.Location);
         Audio.ApplyBeatCue(_session.Beat.Id, _session.Beat.StageCue, playAudioCue);

@@ -10,6 +10,7 @@ public partial class GameView
     private void ShowSettings()
     {
         if (_busy || _closing) return;
+        Window? settings = null;
         ShowWindow("Reading settings", "All dialogue is text. Use mouse or keyboard. Voice input is optional and local.\n\nSpace / Enter: reveal or advance\nEscape: close panel\nH: history · E: evidence\n\nOptional local conversation may improvise; only the authored catalogue establishes facts.\n\nText size applies to reading and choices for this game session.",
             [("Smaller reading text", () => SetReadingSize(_readingText.Percent - ReadingTextStyle.StepPercent)),
              ("Larger reading text", () => SetReadingSize(_readingText.Percent + ReadingTextStyle.StepPercent)),
@@ -17,7 +18,9 @@ public partial class GameView
              ("Toggle instant text", () => { _instant = !_instant; if (_instant) _dialogue.VisibleCharacters = -1; _status.Text = _instant ? "Instant text enabled" : "Typewriter text enabled"; ApplyInstantTextToPausedPassage(); CloseModal(); }),
              ("Toggle reduced motion", () => { _stage.MotionEnabled = !_stage.MotionEnabled; _status.Text = _stage.MotionEnabled ? "Environmental motion enabled" : "Reduced motion enabled"; CloseModal(); }),
              ("Sound settings", ShowAudioSettings),
+             ("Content note", () => { if (settings is not null && _modal == settings) ShowContentNote(true); }),
              ("Quit game", () => { CloseModal(); _Notification((int)NotificationWMCloseRequest); })]);
+        settings = _modal;
         if (_modal is null) return;
         var actions = _modal.GetNode<VBoxContainer>("%ModalActions").GetChildren().OfType<Button>().ToArray();
         _smallerText = actions.Single(b => b.Text == "Smaller reading text");
