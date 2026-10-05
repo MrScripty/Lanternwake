@@ -1,0 +1,155 @@
+{
+  "schemaVersion": 1,
+  "branch": "qa/caption-interaction-acceptance-20261005",
+  "baseCommit": "dcb0e0b1933b0a29a03a514093d5a7b6e0cfb6c5",
+  "baseTree": "c6a5aae7f925a79daf27fbfaa32021fdcc8c818e",
+  "productionChange": {
+    "file": "Scripts/Presentation/GameView.cs",
+    "sha256": "d396639184b02415f63fbcaaaef609dc211a54d79a1f21a47e75bd55e3ca1159",
+    "scope": "Global Space/Enter advance only without focused GUI owner; earlier Continue and chat Escape handlers preserved."
+  },
+  "negativeRegression": {
+    "baseCommit": "dcb0e0b1933b0a29a03a514093d5a7b6e0cfb6c5",
+    "nativeDllSha256": "2d570a9ffbbadc4ce14a80ddde9b842a5a1a7978c564591c10b8099f67235c51",
+    "failure": "Save key press/held repeats preserve every save before release",
+    "observedManualAndAutosaveBeat": "ch1_s1_b022",
+    "intendedBeat": "ch1_s1_b021",
+    "receiptSha256": "724ebe3889943cac3353a9d40d4554c953402161ea3ca83189b0cfac2d186191"
+  },
+  "captionCorrection": {
+    "finding": "Original disputed PNG contains complete glyphs. Earlier missing-caption interpretation was wrong; no captured UI/rendering loss is shown.",
+    "oldImageSha256": "8bb6117f046dd0121aed238be766d8f71d2b5dd8ef46a24d2fe913961c2cde91",
+    "oldTextMasksMatch": true,
+    "maximumOldRgbChannelDifference": 2,
+    "comparisons": {
+      "caption-compare": {
+        "nativeCaptures": 18,
+        "rootCaptures": 36,
+        "captionRegions": 5,
+        "maximumDifferingMaskPixels": 0,
+        "reportSha256": "d55fa35b7b4e2e6572b0ee065a5908ef9d14314ee3e408d1795581d41d25e8f6"
+      },
+      "caption-final": {
+        "nativeCaptures": 9,
+        "rootCaptures": 18,
+        "captionRegions": 5,
+        "maximumDifferingMaskPixels": 0,
+        "reportSha256": "a98a0db7fb71fd554d348960937dd27284b7e0347a24e0369098b58ae2a98a57"
+      }
+    },
+    "limits": "Stable caption regions in adjacent frames, software renderer; not every frame or physical GPU/platform acceptance."
+  },
+  "normalPlayerRuns": {
+    "focused-final": {
+      "passed": true,
+      "checks": 83,
+      "events": 124,
+      "images": 47,
+      "exitCode": 0,
+      "receiptSha256": "aa7f74a27b2124aecfbab91f2e5ef248879958172860df083ded93c40d1a1cad",
+      "controllerSha256": "33df4b8095a4f1b1abde6532e4adc79b5a760fa483690759bc72a94c874b2406",
+      "librarySha256": "7ddf2d4dd347eb3e41101c7eec5803dfb1e0ef0ddcb963d8f10d44ea0afde2c3",
+      "seed": {
+        "path": "/workspace/.lanternwake-state/direct-input-final-clean-20261005/data/godot/app_userdata/Lanternwake/save.json",
+        "sha256": "6949ebd7b9afc01c7289587dc62adea3414f74776aee3ecebe0af123f345df52",
+        "beatId": "ch1_s1_b021"
+      }
+    },
+    "question-desktop": {
+      "passed": true,
+      "checks": 259,
+      "events": 152,
+      "images": 13,
+      "exitCode": 0,
+      "receiptSha256": "b303809d5cfbbd9f6a7a2f0a14fa70fe33a7fd0b2dec244c3fad7cb7d017be63",
+      "controllerSha256": "4e9669fe25717e739b2b9f5635d01d63f944fbe9fcbaf8650ae0864c6df5a80b",
+      "librarySha256": "ebd83145fbaacd99e13f0bd8c97079ed222c394b74e175f94faa66fa7d285297",
+      "seed": {
+        "path": "/workspace/.lanternwake-state/direct-input-final-clean-20261005/data/godot/app_userdata/Lanternwake/save.json",
+        "sha256": "6949ebd7b9afc01c7289587dc62adea3414f74776aee3ecebe0af123f345df52",
+        "beatId": "ch1_s1_b021"
+      }
+    },
+    "question-resume-final": {
+      "passed": true,
+      "checks": 18,
+      "events": 23,
+      "images": 8,
+      "exitCode": 0,
+      "receiptSha256": "bdeb380727f4d221815b06b81b5f195876bf10600b7ea5d4a825c9b2daa605c3",
+      "controllerSha256": "187bbd8fd07e1186825cc906bae8c35f5129a1c6dedab1408a3652230d29a216",
+      "librarySha256": "7ddf2d4dd347eb3e41101c7eec5803dfb1e0ef0ddcb963d8f10d44ea0afde2c3",
+      "seed": {
+        "path": "/workspace/.lanternwake-state/question-desktop-20261005/data/godot/app_userdata/Lanternwake/save.json",
+        "sha256": "a50b1053ba926f4386e67e0f3bdc2973136bb9733d58a0f00ce0aad2a5312036",
+        "beatId": "ch1_s1a_evidence"
+      }
+    },
+    "caption-final": {
+      "passed": true,
+      "checks": 12,
+      "events": 152,
+      "images": 29,
+      "exitCode": 0,
+      "receiptSha256": "c2c2583aa79b033e3038b7bd2737d6d39179caa16fa6f8d2cfba22fe960ff0c4",
+      "controllerSha256": "d67f8ce204e9c3cb232b45284748a3f0388c9595c47ebb1c996dc5e3bd2c5669",
+      "librarySha256": "7ddf2d4dd347eb3e41101c7eec5803dfb1e0ef0ddcb963d8f10d44ea0afde2c3",
+      "seed": {
+        "path": "/workspace/.lanternwake-state/direct-input-final-clean-20261005/data/godot/app_userdata/Lanternwake/save.json",
+        "sha256": "6949ebd7b9afc01c7289587dc62adea3414f74776aee3ecebe0af123f345df52",
+        "beatId": "ch1_s1_b021"
+      }
+    }
+  },
+  "nativeBuilds": {
+    "Debug": {
+      "dllSha256": "a061541202863e63e98f9fea8771f7fed0384e331cfe80811e6ad6ce177378e4",
+      "pdbSha256": "9de9211dab0bd73b6397b7baf58e2443cfe88401bc7c7d08bbc25e3dac31df3a",
+      "compilerDocuments": 143,
+      "auditSha256": "47acfff84d6c354f38a092a69fe96d9ea5576b9e1b6afa149541160a9519505c"
+    },
+    "ExportDebug": {
+      "dllSha256": "18daed537a5e0752f173c90190e78ead84357895d2c5e51ac871c0aa733f8631",
+      "pdbSha256": "fe61c588a443aae7d75b2702441b33e23b148723e96ca0d9277548d65cff5033",
+      "compilerDocuments": 137,
+      "auditSha256": "a2261a92b41b59051eccac957ccd94a6c12b854d843217ce19b8cae0b72fca2c"
+    },
+    "ExportRelease": {
+      "dllSha256": "8432cdf79d85ae4ea7f52be50d77b5a416c71065ed3c9cb6840f9fad86b176cc",
+      "pdbSha256": "1a31911010a50453692d30c341d6eefef8bd3acd35db3d1abfac901f2c0c2385",
+      "compilerDocuments": 89,
+      "auditSha256": "83b12df45739fc797c8b8b2f24c0940301b9e1742a7bd50371ff3aed4906c136"
+    }
+  },
+  "nativeAggregate": {
+    "command": "bash scripts/verify.sh",
+    "exitCode": 0,
+    "warnings": 0,
+    "errors": 0,
+    "logSha256": "9fd494ca815cafdfc18358839f61419b3545d50c2503e57aaa9358b790996627",
+    "pcmFrames": 20480,
+    "audioDriver": "Dummy"
+  },
+  "questionScope": {
+    "question": "ch1_s1a_evidence",
+    "nextBeat": "ch1_s2_b001",
+    "actualContinueTransitionsToQuestion": 74,
+    "canonicalBeatsAtQuestion": 95,
+    "readingPercents": [
+      150,
+      100
+    ],
+    "firstRunObserver": "Retained initial observer library; final fresh-resume and focused runs use delivered title-region OCR observer."
+  },
+  "evidenceRoot": "/workspace/lanternwake-caption-question-20261005",
+  "packet": "/workspace/lanternwake-caption-question-20261005.tar.gz",
+  "limits": [
+    "X11 synthetic inputs; no physical input/display/hearing/accessibility acceptance",
+    "No real-model inference, in-flight provider cancellation or microphone/ASR claim",
+    "No human five-hour/editorial/emotional duration acceptance",
+    "No gamepad bindings or acceptance; no separate full-game unfocused-input test",
+    "Standalone export deferred; cached templates unused",
+    "No Library upload; separate approval pending",
+    "No new PR, hosted-CI claim, merge or release publication"
+  ]
+}

@@ -91,13 +91,13 @@ interim; it does not count as acceptance.
 
 One attempt observed History absent immediately after its key event and was
 rejected. The final fresh-display run waits for visible changes and passes;
-this does not establish the cause of that earlier observation. Several external
-root-screen captures contain missing portions of button captions. A separate
-normal-runtime diagnostic uses the existing Debug F12 shortcut to capture the
-actual viewport; that image and neighboring root captures show complete labels.
-The comparison did not reproduce the earlier incomplete glyphs, so their
-capture/renderer cause remains unresolved. Those partial PNGs are retained but
-do not qualify complete-label appearance. The native diagnostic exits 0 via
+this does not establish the cause of that earlier observation. Initial image
+previews were interpreted as incomplete button captions. A later original-file
+pixel audit found that the saved PNGs contain the complete glyphs; their caption
+masks match native captures. The earlier claim of missing pixels in those PNGs
+is withdrawn. See the [follow-up comparison](FOCUSED-CONTROL-QUESTION-ACCEPTANCE.md)
+for the raw-image measurements and repeated normal-player comparisons. The
+native diagnostic exits 0 via
 production Quit and preserves all tracked sources and any pre-existing capture.
 Assistant inspection covers arrival/reveal, editing, fallback, Escape return,
 explicit damaged-current recovery, recovered passage and the native viewport;

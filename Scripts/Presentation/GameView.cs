@@ -188,7 +188,13 @@ public partial class GameView : Node
         }
         if (key.Keycode == Key.Escape) { if (_modal is not null) _modal.EmitSignal(Window.SignalName.CloseRequested); else if (_chatPanel.Visible) ReturnToStory(); return; }
         if (_chatPanel.Visible || _modal is not null) return;
-        if (key.Keycode is Key.Space or Key.Enter) Advance();
+        if (key.Keycode is Key.Space or Key.Enter)
+        {
+            // Focused controls own keyboard activation through GUI dispatch.
+            // Continue is handled once in _Input; other controls must not also
+            // advance the story on key-down before their key-up activation.
+            if (GetViewport().GuiGetFocusOwner() is null) Advance();
+        }
         else if (key.Keycode == Key.H) ShowHistory();
         else if (key.Keycode == Key.E) ShowEvidence();
     }
