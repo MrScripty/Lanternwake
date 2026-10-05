@@ -24,17 +24,27 @@ grow_horizontal = 2
 [node name="TopRow" type="HBoxContainer" parent="TopBar"]
 layout_mode = 2
 
-[node name="Titles" type="VBoxContainer" parent="TopBar/TopRow"]
+[node name="Titles" type="PanelContainer" parent="TopBar/TopRow"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ChapterLabel" type="Label" parent="TopBar/TopRow/Titles"]
+[node name="Padding" type="MarginContainer" parent="TopBar/TopRow/Titles"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 3
+
+[node name="Text" type="VBoxContainer" parent="TopBar/TopRow/Titles/Padding"]
+layout_mode = 2
+
+[node name="ChapterLabel" type="Label" parent="TopBar/TopRow/Titles/Padding/Text"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.870588, 0.717647, 0.490196, 1)
 text = "L A N T E R N W A K E"
 
-[node name="PlaceLabel" type="Label" parent="TopBar/TopRow/Titles"]
+[node name="PlaceLabel" type="Label" parent="TopBar/TopRow/Titles/Padding/Text"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.603922, 0.690196, 0.701961, 1)
