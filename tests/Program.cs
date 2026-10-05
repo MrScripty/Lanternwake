@@ -13,6 +13,7 @@ var originalJson = File.ReadAllText(storyPath);
 count += CharacterAuthoringTests.Run(story, originalJson);
 count += SessionStorageTests.Run(story);
 count += SessionLaunchTests.Run(story);
+count += CupStageCueTests.Run(story, originalJson);
 count += SaveRecoveryTests.Run(story);
 var authoring = new StoryAuthoringIndex(story);
 Assert(authoring.Entries.Length == ordered.Length, "Author index includes every beat");

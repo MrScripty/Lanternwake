@@ -11,7 +11,7 @@ Root: `schemaVersion:1`, `title`, `characters`, `facts`, `items`, `chapters`.
 - Item: `id`, `name`, `description`.
 - Chapter: `id`, `title` (nonblank text), `scenes`.
 - Scene: `id`, `title`, `location`, `timeOfDay` (nonblank text, not an enumerated vocabulary), `characterIds`, `beats`.
-- Beat: `id`, `speaker` (character ID or `narrator`), `text`, optional `unlockFacts`, `unlockItems`, `conversation`, `activity`, `stageCue`. Supported stage cue: `bell_lowered`; cumulative authored cues replay on load.
+- Beat: `id`, `speaker` (character ID or `narrator`), `text`, optional `unlockFacts`, `unlockItems`, `conversation`, `activity`, `stageCue`. Supported stage cues: `bell_lowered`, `cup_broken`, `cup_boxed`, `steel_mug`; cumulative authored cues replay on load. The cup cues occur at the existing canonical break, boxing and mug-substitution beats; they change native stage visibility without new interactions, timers or save fields.
 - Conversation: `characterId`, `prompt`, `suggestions` (editable strings), `fallback` (authored response), `allowedFacts` (fact IDs). Available facts are further intersected with current unlocks and character knowledge before prompt assembly.
 - Activity: `prompt` (nonblank text), `options` (at least 2, each nonblank text), `correctIndex` (zero-based), `explanation`. Correct selection unlocks advance; incorrect selection gives retry feedback without penalty.
 

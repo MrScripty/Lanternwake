@@ -3734,7 +3734,8 @@
             {
               "id": "ch2_s5_b012",
               "speaker": "narrator",
-              "text": "The first seconds of 16:12 pass quietly. Then the pressure line beneath the floor knocks once. The table shivers. The repaired handle separates from the cup with a sound no louder than a snapped pencil lead. The cup tips against its own shifted weight, strikes the edge, and falls. Blue pieces scatter inside the empty area you have cleared."
+              "text": "The first seconds of 16:12 pass quietly. Then the pressure line beneath the floor knocks once. The table shivers. The repaired handle separates from the cup with a sound no louder than a snapped pencil lead. The cup tips against its own shifted weight, strikes the edge, and falls. Blue pieces scatter inside the empty area you have cleared.",
+              "stageCue": "cup_broken"
             },
             {
               "id": "ch2_s5_b013",
@@ -3829,7 +3830,8 @@
             {
               "id": "ch2_s5_b026",
               "speaker": "narrator",
-              "text": "Tomas picks up the cup fragments only after you have photographed their positions. He places them in a shallow box with tissue between them. The handle remains where it fell until Sera finishes measuring the plate. Obeying the sentence and documenting a sensible procedure have briefly produced the same behavior. You do not mistake that coincidence for permission to stop judging."
+              "text": "Tomas picks up the cup fragments only after you have photographed their positions. He places them in a shallow box with tissue between them. The handle remains where it fell until Sera finishes measuring the plate. Obeying the sentence and documenting a sensible procedure have briefly produced the same behavior. You do not mistake that coincidence for permission to stop judging.",
+              "stageCue": "cup_boxed"
             },
             {
               "id": "ch2_s5_b027",
@@ -5609,7 +5611,8 @@
             {
               "id": "ch3_s5_b001",
               "speaker": "narrator",
-              "text": "All four of you end up around the keeper's table because it is the only place nearby with enough chairs. The broken cup has become a shallow box of fragments. Nessa sets a plain steel mug where it used to stand. No one remarks on the substitution, but you are grateful for it."
+              "text": "All four of you end up around the keeper's table because it is the only place nearby with enough chairs. The broken cup has become a shallow box of fragments. Nessa sets a plain steel mug where it used to stand. No one remarks on the substitution, but you are grateful for it.",
+              "stageCue": "steel_mug"
             },
             {
               "id": "ch3_s5_b002",

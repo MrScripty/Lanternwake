@@ -11,6 +11,7 @@ func snapshot(node: Node, origin: Node, result: Dictionary) -> void:
 	var values: Dictionary = {}
 	if node is Node3D:
 		values["transform"] = node.transform
+		values["visible"] = node.visible
 	if node is AudioStreamPlayer:
 		values["bus"] = node.bus
 		values["playing"] = node.playing
@@ -23,6 +24,11 @@ func snapshot(node: Node, origin: Node, result: Dictionary) -> void:
 		match script.resource_path.get_file():
 			"StageScene.cs":
 				properties = ["BellLoweredOffset", "DawnKeyLightColor", "DuskKeyLightColor", "DawnKeyLightEnergyMultiplier", "DuskKeyLightEnergyMultiplier", "PairSpacing", "TrioSpacing", "EnsembleSpacing", "FacingDegrees", "FacingStepDegrees"]
+				for binding in ["CupIntact", "CupFragments", "CupFloorHandle", "CupBoxed", "SteelMug"]:
+					var target: Node = node.get(binding)
+					values[binding] = str(node.get_path_to(target)) if target != null else ""
+					if origin.name == "KeeperHouse" and target == null:
+						failures.append("Unassigned keeper-house cup state: " + binding)
 			"StageMotion.cs":
 				properties = ["Kind", "Enabled", "Phase", "Amount", "Speed", "RainFirstFallDistance", "RainHeight", "RainSlant"]
 			"StageDirector.cs":

@@ -41,6 +41,7 @@ Set GODOT_MONO to the official .NET executable and use scripts/verify.sh for the
 
 - Click or Space/Enter: reveal/advance
 - Content note: available before Arrival and through Settings during play. Uses the existing bible's note; reading it does not start or advance the story. See [content-note qualification](docs/PLAYER-CONTENT-NOTE.md).
+- Keeper-house cup states follow the existing canonical break, boxing and steel-mug beats, including save/load and replay. See [cup-stage qualification and visual limits](docs/CANONICAL-CUP-STATES.md).
 - Stay and talk: optional conversation panel
 - Suggestions populate editable input; Say this submits
 - Return / Escape from optional conversation resumes the paused authored passage; replies remain in the record. Cancelled or retired conversation controls cannot submit hidden drafts. See [conversation return](docs/CONVERSATION-STORY-RETURN.md).

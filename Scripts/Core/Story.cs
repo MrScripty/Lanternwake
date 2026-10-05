@@ -99,7 +99,7 @@ public sealed record Story(int SchemaVersion, string Title, Character[] Characte
                 if (string.IsNullOrWhiteSpace(beat.Text) || (beat.Speaker != "narrator" && !characters.Contains(beat.Speaker))) throw new InvalidDataException($"Invalid beat {beat.Id}.");
                 if ((beat.UnlockFacts ?? []).Any(f => !facts.Contains(f)) || (beat.UnlockItems ?? []).Any(i => !items.Contains(i))) throw new InvalidDataException($"Unknown unlock at {beat.Id}.");
                 unlocked.UnionWith(beat.UnlockFacts ?? []);
-                if (beat.StageCue is not (null or "bell_lowered")) throw new InvalidDataException($"Unknown stage cue at {beat.Id}.");
+                if (beat.StageCue is not (null or "bell_lowered" or "cup_broken" or "cup_boxed" or "steel_mug")) throw new InvalidDataException($"Unknown stage cue at {beat.Id}.");
                 if (beat.Activity is { } activity && (activity.Options.Length < 2 || activity.CorrectIndex < 0 || activity.CorrectIndex >= activity.Options.Length || string.IsNullOrWhiteSpace(activity.Explanation))) throw new InvalidDataException($"Invalid activity at {beat.Id}.");
                 if (beat.Conversation is { } chat && (!characters.Contains(chat.CharacterId) || chat.CharacterId is "ada" or "ivo" or "operator" or "clerk" || chat.AllowedFacts.Any(f => !facts.Contains(f)) || string.IsNullOrWhiteSpace(chat.Fallback))) throw new InvalidDataException($"Invalid conversation at {beat.Id}.");
                 if (beat.Conversation is { } bounded && bounded.AllowedFacts.Any(f => !unlocked.Contains(f) || !Characters.Single(c => c.Id == bounded.CharacterId).Knowledge.Contains(f)))

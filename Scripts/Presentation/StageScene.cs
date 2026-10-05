@@ -15,6 +15,13 @@ public partial class StageScene : Node3D
     [Export] public Node3D? BellBody { get; set; }
     [Export] public Vector3 BellLoweredOffset { get; set; } = new(0, -2.1f, 0);
 
+    [ExportGroup("Optional cup states")]
+    [Export] public Node3D? CupIntact { get; set; }
+    [Export] public Node3D? CupFragments { get; set; }
+    [Export] public Node3D? CupFloorHandle { get; set; }
+    [Export] public Node3D? CupBoxed { get; set; }
+    [Export] public Node3D? SteelMug { get; set; }
+
     [ExportGroup("Optional time-of-day looks")]
     [Export] public Godot.Environment? DawnEnvironment { get; set; }
     [Export] public Godot.Environment? DuskEnvironment { get; set; }
@@ -60,6 +67,14 @@ public partial class StageScene : Node3D
     public void ApplyAuthoredCues(string[] cues)
     {
         if (BellBody != null) BellBody.Position = _bellOrigin + (Array.IndexOf(cues, "bell_lowered") >= 0 ? BellLoweredOffset : Vector3.Zero);
+        bool mug = Array.IndexOf(cues, "steel_mug") >= 0;
+        bool boxed = mug || Array.IndexOf(cues, "cup_boxed") >= 0;
+        bool broken = boxed || Array.IndexOf(cues, "cup_broken") >= 0;
+        if (CupIntact != null) CupIntact.Visible = !broken;
+        if (CupFragments != null) CupFragments.Visible = broken && !boxed;
+        if (CupFloorHandle != null) CupFloorHandle.Visible = broken && !mug;
+        if (CupBoxed != null) CupBoxed.Visible = boxed;
+        if (SteelMug != null) SteelMug.Visible = mug;
     }
 
     public void SetMotionEnabled(bool enabled) => SetMotionEnabledBelow(this, enabled);
