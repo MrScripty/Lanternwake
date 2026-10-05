@@ -158,6 +158,23 @@ public partial class GameView : Node
         if (_started && _dialogue.VisibleCharacters >= 0) { _characters += delta * CharactersPerSecond; _dialogue.VisibleCharacters = Math.Min((int)_characters, _dialogue.GetTotalCharacterCount()); }
         if (_speech.Recording) { _speech.Poll(); _recordSeconds += delta; _mic.Text = $"Stop ({_recordSeconds:0}s)"; if (_recordSeconds >= 30) ToggleMicrophone(); }
     }
+    public override void _Input(InputEvent @event)
+    {
+        if (Engine.IsEditorHint() || _closing || _chatPanel is null || @event is not InputEventKey key) return;
+        // LineEdit consumes Escape during GUI dispatch, so handle the intended
+        // conversation cancellation before it merely releases text-field focus.
+        if (_chatPanel.Visible && _modal is null && key.Keycode == Key.Escape)
+        {
+            GetViewport().SetInputAsHandled();
+            if (key.Pressed && !key.Echo) ReturnToStory();
+            return;
+        }
+        if (_chatPanel.Visible || _modal is not null || _advance?.HasFocus() != true || key.Keycode is not (Key.Space or Key.Enter)) return;
+        // The focused Button and global reveal shortcut can otherwise both act on
+        // the same physical press. Own both edges here, before GUI dispatch.
+        GetViewport().SetInputAsHandled();
+        if (key.Pressed && !key.Echo) Advance();
+    }
     public override void _UnhandledKeyInput(InputEvent @event)
     {
         if (Engine.IsEditorHint()) return;
