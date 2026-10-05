@@ -21,6 +21,7 @@ public partial class StageScene : Node3D
     [Export] public Node3D? CupFloorHandle { get; set; }
     [Export] public Node3D? CupBoxed { get; set; }
     [Export] public Node3D? SteelMug { get; set; }
+    [Export] public Camera3D? CupFloorCamera { get; set; }
 
     [ExportGroup("Optional time-of-day looks")]
     [Export] public Godot.Environment? DawnEnvironment { get; set; }
@@ -64,7 +65,7 @@ public partial class StageScene : Node3D
         KeyLight.LightEnergy = _nightEnergy * (dawn ? DawnKeyLightEnergyMultiplier : dusk ? DuskKeyLightEnergyMultiplier : 1);
     }
 
-    public void ApplyAuthoredCues(string[] cues)
+    public void ApplyAuthoredCues(string[] cues, string? currentCue = null)
     {
         if (BellBody != null) BellBody.Position = _bellOrigin + (Array.IndexOf(cues, "bell_lowered") >= 0 ? BellLoweredOffset : Vector3.Zero);
         bool mug = Array.IndexOf(cues, "steel_mug") >= 0;
@@ -75,6 +76,13 @@ public partial class StageScene : Node3D
         if (CupFloorHandle != null) CupFloorHandle.Visible = broken && !mug;
         if (CupBoxed != null) CupBoxed.Visible = boxed;
         if (SteelMug != null) SteelMug.Visible = mug;
+        // Persistent object state survives recovery; the insert belongs only to
+        // the currently authored break, never to its later cumulative history.
+        if (!Engine.IsEditorHint())
+        {
+            var camera = currentCue == "cup_broken" && broken && !boxed ? CupFloorCamera ?? StoryCamera : StoryCamera;
+            if (!camera.Current) camera.MakeCurrent();
+        }
     }
 
     public void SetMotionEnabled(bool enabled) => SetMotionEnabledBelow(this, enabled);

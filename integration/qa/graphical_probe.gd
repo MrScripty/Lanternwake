@@ -83,6 +83,21 @@ func run() -> void:
 			await key("space")
 		if not check(passage.text == prose and (passage.visible_characters == -1 or passage.visible_characters >= passage.get_total_character_count()), "native Space reveals selected authored passage without advancing"):
 			return
+		if beat == "ch2_s5_b012":
+			var stage: Node3D = game.get("Stage").get_node("KeeperHouse")
+			var camera: Camera3D = root.get_camera_3d()
+			if not check(camera == stage.get_node("CupFloorCamera"), "authored break selects the object insert"):
+				return
+			var panel: Control = game.get("InterfaceRoot").get_node("DialoguePanel")
+			var measurements: Array = []
+			var meshes := stage.get_node("Scenery/CupFragments").get_children()
+			meshes.append_array(stage.get_node("Scenery/CupFloorHandle").get_children())
+			for mesh: MeshInstance3D in meshes:
+				var point := camera.unproject_position(mesh.global_position)
+				measurements.append({"node": str(mesh.name), "x": point.x, "y": point.y})
+				if not check(not camera.is_position_behind(mesh.global_position) and point.x > 0 and point.x < root.get_visible_rect().size.x and point.y > 100 and point.y < panel.global_position.y, "fallen mesh projects above reading panel: " + str(mesh.name)):
+					return
+			print("LANTERNWAKE_CUP_INSERT_PROJECTION " + JSON.stringify({"meshCentres": measurements, "panelTop": panel.global_position.y, "viewportSize": str(root.get_visible_rect().size), "windowSize": str(root.size)}))
 		await screenshot(root, beat)
 		var authored: Dictionary = {}
 		var story: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://Content/story.json"))

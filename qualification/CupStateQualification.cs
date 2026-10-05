@@ -59,6 +59,20 @@ public partial class CupStateQualification : Node
         }
         Check(Stage.FindChildren("*", "CollisionObject3D", true, false).Count == 0, "cup state has no player-triggered physics or interaction");
         Check(!Observe<StageDirector>("_stage").MotionEnabled, "canonical change is independent of environmental motion");
+        var camera = Session.Beat.Id == "ch2_s5_b012" ? Stage.CupFloorCamera : Stage.StoryCamera;
+        Check(camera is not null && Stage.GetViewport().GetCamera3D() == camera,
+            "current-beat camera follows advance/recovery/replay rather than cumulative break history");
+        if (expected == "broken")
+        {
+            // The original floorboards top at 0.095; old fallen meshes were below it.
+            var board = Stage.GetNode<MeshInstance3D>("Scenery/Panel058");
+            var floorTop = (board.GlobalTransform * board.GetAabb()).End.Y;
+            var fallen = Stage.CupFragments!.GetChildren().OfType<MeshInstance3D>()
+                .Concat(Stage.CupFloorHandle!.GetChildren().OfType<MeshInstance3D>());
+            foreach (var mesh in fallen)
+                Check((mesh.GlobalTransform * mesh.GetAabb()).Position.Y >= floorTop - 0.0001f,
+                    mesh.Name + " rests above the existing floorboard surface");
+        }
     }
     private void Capture(string state)
     {

@@ -8,10 +8,13 @@ from pathlib import Path
 import subprocess
 import tempfile
 
+from non_audio_flows import fingerprint
+
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--display-state', type=Path, required=True, help='Metadata from this run\'s owned authenticated Xorg display.')
+    parser.add_argument('--case', action='append', help='Run only named cases; repeat for a focused check.')
     args = parser.parse_args()
     display = json.loads(args.display_state.read_text())
     if not display['authenticated'] or display['tcp'] != 'disabled':
@@ -30,6 +33,11 @@ def main():
         ('house-broken', 'ch2_s5_b012'), ('house-boxed', 'ch2_s5_b026'), ('house-mug', 'ch3_s5_b001'),
         ('archive', 'ch1_s4_b001'), ('tower-before', 'ch5_s3_b005'), ('tower-lowered', 'ch5_s3_b006'),
         ('cave', 'ch3_s1_b001'), ('ending', 'ch5_s5_evidence')]
+    if args.case:
+        if set(args.case) - {label for label, _ in cases}:
+            raise SystemExit('Unknown graphical case.')
+        cases = [(label, beat) for label, beat in cases if label in args.case]
+    before = fingerprint(project)
     results = []
     for label, beat in cases:
         output = evidence / label
@@ -53,17 +61,20 @@ def main():
             text = (output / 'native.log').read_text(errors='replace')
             warnings = [line for line in text.splitlines() if line.startswith('WARNING:')]
             unexpected = [line for line in warnings if 'Could not set V-Sync mode' not in line]
-            if process.returncode or 'ERROR:' in text or 'SCRIPT ERROR:' in text or unexpected or 'LANTERNWAKE_GRAPHICAL_PROBE_OK' not in text:
+            if process.returncode or 'ERROR:' in text or 'SCRIPT ERROR:' in text or unexpected or 'LANTERNWAKE_GRAPHICAL_PROBE_OK' not in text or 'llvmpipe' not in text:
                 raise RuntimeError(f'Native rendered {label} failed; inspect {output / "native.log"}')
             if list((fixture / 'data').rglob('*.json')):
                 raise RuntimeError(f'{label} wrote player saves despite title/author-preview isolation.')
+            if fingerprint(project) != before:
+                raise RuntimeError(f'{label} changed tracked source.')
         images = {p.name: {'bytes': p.stat().st_size, 'sha256': hashlib.sha256(p.read_bytes()).hexdigest()} for p in output.glob('*.png')}
         if not images:
             raise RuntimeError(f'Native rendered {label} produced no image.')
         results.append({'case': label, 'beat': beat, 'exitCode': process.returncode, 'images': images,
             'environmentWarnings': warnings, 'unexpectedWarnings': 0, 'playerSaveWrites': 0})
         print('PASS rendered', label, 'native synthetic input and production Quit', flush=True)
-    report = {'sourceBase': '33aa46899305bcbb4b7a232e0377504b420d1595', 'display': display['display'], 'mitShm': display.get('mitShm', 'not recorded'),
+    report = {'productionBaseline': '33aa46899305bcbb4b7a232e0377504b420d1595', 'sourceFingerprint': before,
+        'display': display['display'], 'mitShm': display.get('mitShm', 'not recorded'),
         'authentication': 'private Xauthority; TCP disabled', 'renderer': 'Mesa llvmpipe OpenGL compatibility',
         'audio': 'Dummy; no microphone', 'maxFPS': 30, 'cases': results,
         'limits': ['Software-rendered X11 screenshots and synthetic input; no physical keyboard/mouse/monitor/hearing acceptance',

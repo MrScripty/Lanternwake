@@ -12,6 +12,9 @@ func snapshot(node: Node, origin: Node, result: Dictionary) -> void:
 	if node is Node3D:
 		values["transform"] = node.transform
 		values["visible"] = node.visible
+	if node is Camera3D:
+		for property in ["projection", "size", "h_offset", "v_offset", "near", "far"]:
+			values[property] = node.get(property)
 	if node is AudioStreamPlayer:
 		values["bus"] = node.bus
 		values["playing"] = node.playing
@@ -24,7 +27,7 @@ func snapshot(node: Node, origin: Node, result: Dictionary) -> void:
 		match script.resource_path.get_file():
 			"StageScene.cs":
 				properties = ["BellLoweredOffset", "DawnKeyLightColor", "DuskKeyLightColor", "DawnKeyLightEnergyMultiplier", "DuskKeyLightEnergyMultiplier", "PairSpacing", "TrioSpacing", "EnsembleSpacing", "FacingDegrees", "FacingStepDegrees"]
-				for binding in ["CupIntact", "CupFragments", "CupFloorHandle", "CupBoxed", "SteelMug"]:
+				for binding in ["CupIntact", "CupFragments", "CupFloorHandle", "CupBoxed", "SteelMug", "CupFloorCamera"]:
 					var target: Node = node.get(binding)
 					values[binding] = str(node.get_path_to(target)) if target != null else ""
 					if origin.name == "KeeperHouse" and target == null:
