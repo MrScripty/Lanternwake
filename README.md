@@ -24,6 +24,8 @@ godot-mono --path . --editor
 
 Run setup before opening `project.godot` with the .NET editor, then run. On Windows without Bash, use `py -3 scripts/setup_audio.py`; on other systems, `python3 scripts/setup_audio.py` is equivalent. Setup requires only the Python standard library, performs no downloads, and safely skips already verified audio. Missing Python stops setup with installation guidance; install it before proceeding. Generated WAVs are intentionally not tracked in Git. No LLM is required for the authored main story. Local Pumas setup is in `docs/PUMAS.md`; local speech setup is in `docs/SPEECH.md`.
 
+`Lanternwake.sln` tracks the Godot C# build configurations `Debug`, `ExportDebug` and `ExportRelease`. Executable export also requires the matching official .NET player templates; current partial export evidence and limits are recorded in [export qualification](docs/EXPORT-SOLUTION.md).
+
 To adjust the game, see [the editor authoring guide](docs/AUTHORING.md). Locations, characters, camera, lighting and interface styling live in normal Godot scenes/resources. The Story Text dock edits the canonical story JSON without changing C#.
 
 ## Verify
