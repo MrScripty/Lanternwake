@@ -338,8 +338,10 @@ public partial class GameView : Node
         }
         _modal.CloseRequested += Dismiss;
         _modal.WindowInput += input => { if (input is InputEventKey { Pressed: true, Keycode: Key.Escape }) Dismiss(); };
-        _modal.GetNode<RichTextLabel>("%ModalText").Text = text;
-        _readingText.Register(_modal.GetNode<RichTextLabel>("%ModalText"));
+        var prose = _modal.GetNode<RichTextLabel>("%ModalText");
+        prose.Text = text;
+        _readingText.Register(prose);
+        EnableKeyboardReading(prose);
         var actionRows = _modal.GetNode<VBoxContainer>("%ModalActions");
         _modal.GetNode<ScrollContainer>("%ModalActionsScroll").Visible = actions is { Length: > 0 };
         if (actions is not null)

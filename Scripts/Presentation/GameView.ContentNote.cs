@@ -24,11 +24,6 @@ public partial class GameView
         ShowWindow("Content note", ContentNoteText, dismiss: Return);
         note = _modal;
         if (note is null) return;
-        // Keyboard users can read an enlarged note that exceeds the prose viewport.
-        var scrollbar = note.GetNode<RichTextLabel>("%ModalText").GetVScrollBar();
-        scrollbar.FocusMode = Control.FocusModeEnum.All;
-        scrollbar.FocusNeighborTop = scrollbar.GetPath();
-        scrollbar.FocusNeighborBottom = scrollbar.GetPath();
         var close = note.GetNode<Button>("%ModalCloseButton");
         close.Text = returnToSettings ? "Back to settings" : "Return to title";
         close.GrabFocus();

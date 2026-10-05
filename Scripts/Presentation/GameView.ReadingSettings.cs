@@ -48,6 +48,31 @@ public partial class GameView
             _resetText.GrabFocus();
     }
 
+    private static void EnableKeyboardReading(RichTextLabel prose)
+    {
+        // Native arrows scroll; Tab still reaches actions and return controls.
+        var scrollbar = prose.GetVScrollBar();
+        scrollbar.FocusMode = Control.FocusModeEnum.All;
+        scrollbar.FocusNeighborTop = scrollbar.GetPath();
+        scrollbar.FocusNeighborBottom = scrollbar.GetPath();
+        scrollbar.GuiInput += input =>
+        {
+            if (!scrollbar.HasFocus() || input is not InputEventKey { Pressed: true } key) return;
+            double? target = key.Keycode switch
+            {
+                Key.Pageup => scrollbar.Value - scrollbar.Page,
+                Key.Pagedown => scrollbar.Value + scrollbar.Page,
+                Key.Home => scrollbar.MinValue,
+                Key.End => scrollbar.MaxValue - scrollbar.Page,
+                _ => null,
+            };
+            if (target is null) return;
+            scrollbar.Value = Math.Clamp(target.Value, scrollbar.MinValue,
+                Math.Max(scrollbar.MinValue, scrollbar.MaxValue - scrollbar.Page));
+            scrollbar.AcceptEvent();
+        };
+    }
+
     private static void FitModalActions(Window? window)
     {
         if (window is null || !GodotObject.IsInstanceValid(window) || !window.IsInsideTree() || window.IsQueuedForDeletion()) return;

@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "branch": "feat/keyboard-record-reading-20261005",
+  "baseCommit": "43b8b8a9b1ba2fd1d92db96fd80fb8ece93254b4",
+  "baseTree": "3834caafe5dcc432a95d6a2368ce961c14cd2c05",
+  "feature": "Keyboard reading of long record/catalogue/shared modal prose, including unanswered-question review.",
+  "productionSourceSha256": {
+    "Scripts/Presentation/GameView.cs": "058d3c26ea47f846c55d8a7f8e4d4fd0aac16ba2cdd7080107ff97ad00090a61",
+    "Scripts/Presentation/GameView.ReadingSettings.cs": "d2423c6c313d2061e5a995ca7ba71cc01424b22d19f8d07eca662973f8665f1f",
+    "Scripts/Presentation/GameView.ContentNote.cs": "009c8982f24e095f0af1e1a488b1fa49bf338c3254fbbb52c63892eaa9fa6a91",
+    "Scenes/UI/LanternwakeTheme.tres": "3954f781ce63894dfd3ca18a0fcf39fbbdba9b9a3b9d903d8bc29f0d21c88527"
+  },
+  "acceptedInputHandlersPreserved": true,
+  "baseline": {
+    "baseCommit": "43b8b8a9b1ba2fd1d92db96fd80fb8ece93254b4",
+    "nativeDllSha256": "a061541202863e63e98f9fea8771f7fed0384e331cfe80811e6ad6ce177378e4",
+    "region": [
+      324,
+      211,
+      1116,
+      655
+    ],
+    "keySequencePerCycle": [
+      "Tab",
+      "PageDown",
+      "Down"
+    ],
+    "differingProseMaskPixels": {
+      "tab-0.png": 0,
+      "tab-1.png": 0,
+      "tab-2.png": 0,
+      "tab-3.png": 0,
+      "tab-4.png": 0
+    },
+    "finding": "All five keyboard attempts retain exact initial record prose; Close keeps focus."
+  },
+  "acceptedRuns": {
+    "preparation-final": {
+      "checks": 112,
+      "events": 204,
+      "images": 2,
+      "exitCode": 0,
+      "receiptSha256": "8e07e24d69b6dc6b5319c9864240909b629745da3acbf61e8cca4fc868be8c86",
+      "controllerSha256": "801a8fb9c3fea6f87c7cf74275262cc6b9a90cd4216a017746e5fdab322f6224",
+      "librarySha256": "7ddf2d4dd347eb3e41101c7eec5803dfb1e0ef0ddcb963d8f10d44ea0afde2c3",
+      "nativeDllSha256": "d5e6cdc21325f17c701cf197dc0d78c1ea2ab87180c4d75ba3123fad74bd57de",
+      "seed": {
+        "path": "/workspace/lanternwake-caption-question-20261005/question-desktop/save-slots/save.json",
+        "sha256": "a50b1053ba926f4386e67e0f3bdc2973136bb9733d58a0f00ce0aad2a5312036",
+        "beatId": "ch1_s1a_evidence"
+      }
+    },
+    "qualified": {
+      "checks": 129,
+      "events": 120,
+      "images": 87,
+      "exitCode": 0,
+      "receiptSha256": "bbba7615b456fae47332488573bb8a166e2abf8360781b8d74581bd2c0de6bdb",
+      "controllerSha256": "3efa8ceb6ed83bc9faf5e8bbd7e64770b66b1b93259d0cc5411a0ae6bcbae5dc",
+      "librarySha256": "7ddf2d4dd347eb3e41101c7eec5803dfb1e0ef0ddcb963d8f10d44ea0afde2c3",
+      "nativeDllSha256": "d5e6cdc21325f17c701cf197dc0d78c1ea2ab87180c4d75ba3123fad74bd57de",
+      "seed": {
+        "path": "/workspace/.lanternwake-state/keyboard-record-preparation-final-20261005/data/godot/app_userdata/Lanternwake/save.json",
+        "sha256": "51969ffd601a19197179ed72cd658c70a8260919ada32c47e145b99feaf261bd",
+        "beatId": "ch1_s3_evidence"
+      }
+    },
+    "final-resume": {
+      "checks": 129,
+      "events": 119,
+      "images": 87,
+      "exitCode": 0,
+      "receiptSha256": "c6878b2421d2bad4219de6fc7c9abaaed0db763516166a9ab85f19c941f6109f",
+      "controllerSha256": "8dbc1a341f3577a8402188d9b8336493de29b34f7b0b09949041f599499bf242",
+      "librarySha256": "7ddf2d4dd347eb3e41101c7eec5803dfb1e0ef0ddcb963d8f10d44ea0afde2c3",
+      "nativeDllSha256": "d5e6cdc21325f17c701cf197dc0d78c1ea2ab87180c4d75ba3123fad74bd57de",
+      "seed": {
+        "path": "/workspace/.lanternwake-state/keyboard-record-reached-settled-20261005/data/godot/app_userdata/Lanternwake/save.json",
+        "sha256": "51969ffd601a19197179ed72cd658c70a8260919ada32c47e145b99feaf261bd",
+        "beatId": "ch1_s3_evidence"
+      }
+    }
+  },
+  "preparationAudit": {
+    "passed": true,
+    "canonicalBeats": 192,
+    "orderedIdsAndAuthoredTextExact": true,
+    "solvedActivities": [
+      "ch1_s1a_evidence",
+      "ch1_s2_evidence",
+      "ch1_s2a_evidence"
+    ],
+    "pendingQuestion": "ch1_s3_evidence",
+    "manualSha256": "51969ffd601a19197179ed72cd658c70a8260919ada32c47e145b99feaf261bd",
+    "identicalToAcceptedEarlierResumeSeed": true,
+    "checks": 112,
+    "events": 204,
+    "exitCode": 0
+  },
+  "managedBuilds": {
+    "Debug": {
+      "dllSha256": "d5e6cdc21325f17c701cf197dc0d78c1ea2ab87180c4d75ba3123fad74bd57de",
+      "pdbSha256": "89541fe295958375e4e688c6d5139473de3f7c9d71813c922f1faad827bcb296",
+      "compilerDocuments": 143,
+      "auditSha256": "cbdab39c527c202c6278f50568bedc346cab92dadd06c7d3b5f740ca87536929"
+    },
+    "ExportDebug": {
+      "dllSha256": "cca0fda20fd8b9f9711490fb5121ebea454ca58881ad26098369f36b8eb483dc",
+      "pdbSha256": "7aa7fe70a5a789da550383dd13ec21c78af593792bdb0e292d191adc1b48adb7",
+      "compilerDocuments": 137,
+      "auditSha256": "0ca78bad3636e6502b671f0c2799d2b5c61daa87ce0d257b9cfb21ba30afd29f"
+    },
+    "ExportRelease": {
+      "dllSha256": "0371857519573bd7fbd39b4915d2be24f680680db17de6f457b9926ea1a193cb",
+      "pdbSha256": "1438234929c9a1974377ddda450bd3e75e8cce94ffd18756a322c4208ba06456",
+      "compilerDocuments": 89,
+      "auditSha256": "fedc6248418568735c99aed2f80ee36a240cdb53d5fcb57e149a8e7db8213285"
+    }
+  },
+  "nativeAggregate": {
+    "command": "bash scripts/verify.sh",
+    "exitCode": 0,
+    "warnings": 0,
+    "errors": 0,
+    "logSha256": "71e138e4e653c7d9d9515aff73635eafbc7e59fee2875516a699f93de8f73f76",
+    "coreAssertions": 4125,
+    "storyValidationChecks": 63,
+    "simulatedPumasScenarios": 11,
+    "editorScenes": 13,
+    "mixerPcmFrames": 20480,
+    "audioDriver": "Dummy"
+  },
+  "evidenceRoot": "/workspace/lanternwake-keyboard-record-20261005",
+  "packet": "/workspace/lanternwake-keyboard-record-20261005.tar.gz",
+  "limits": [
+    "Synthetic X11 input, observed software-rendered pixels and Dummy mixer; no physical input, assistive-tool or hearing claim.",
+    "No loaded-model inference, production voice, microphone or ASR claim.",
+    "No human reading/editorial/emotional or five-hour duration acceptance.",
+    "No new standalone export or platform/gamepad acceptance.",
+    "No Library upload, PR metadata action, merge, account/credential change or publication."
+  ],
+  "rejectedAndIntermediateEvidence": "Observer calibration attempts, initial UID import warnings and the failed Debug --no-restore attempt after ExportRelease are retained separately. Debug restore repaired the local dependency cache without production/build-script changes."
+}

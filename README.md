@@ -48,6 +48,7 @@ Set GODOT_MONO to the official .NET executable and use scripts/verify.sh for the
 - Suggestions populate editable input; Say this submits
 - Return / Escape from optional conversation resumes the paused authored passage; replies remain in the record. Cancelled or retired conversation controls cannot submit hidden drafts. See [conversation return](docs/CONVERSATION-STORY-RETURN.md).
 - H: history; E: catalogue; Escape: close panel
+- Long record/catalogue text: Tab to the gold-outlined scrollbar, Up/Down or Page Up/Down to read, Home/End for the beginning/end; Tab reaches Close or Back to question. See [keyboard reading](docs/KEYBOARD-RECORD-READING.md).
 - Manual Save/Load; separate automatic checkpoint; explicit previous-good recovery choices
 - Finish: review the record/evidence, explicitly save the completed watch, or confirm starting a new watch. Starting again preserves manual saves and session reading/sound preferences; automatic checkpoints update as the new watch progresses.
 - Evidence questions: review known evidence or read the record, then return to the same unanswered question. Review, return and cancellation preserve the current question and save files. See [question review](docs/QUESTION-EVIDENCE-REVIEW.md) for qualification and limits.
