@@ -418,6 +418,7 @@ Forbidden future confirmations after this scene: f_authorship, f_loop_completed,
 - Required evidence activity `ch4_s3a_evidence`: Two similar names appear on different household codes. What should the team do?
   - Supported answer: Treat them as distinct until identities and locations are checked.
   - Explanation: The second identifier prevents a false duplicate and an inaccurate headcount.
+  - Wrong options receive specific Nessa/Tomas feedback: neither deleting a row nor assuming an identity verifies a person's arrival. Retry preserves the list and original gate.
 No optional model conversation is enabled in this scene.
 ### ch4_s4 — The Hand at the Other End
 Location: `lantern_room`; time: dusk; living stage participants: Ada Vale, Dr Sera Wynn, Tomas Rook, Nessa Ward.
