@@ -9,6 +9,7 @@ import subprocess
 import tempfile
 
 from non_audio_flows import fingerprint
+from evidence_runs import new_evidence_run
 
 
 def main():
@@ -20,7 +21,7 @@ def main():
         raise SystemExit('Owned private authenticated display required.')
     os.kill(display['pid'], 0)
     project = Path(__file__).resolve().parents[2]
-    output = project / 'artifacts/character-performance/rendered'; output.mkdir(parents=True, exist_ok=True)
+    output = new_evidence_run(project / 'artifacts/character-performance/runs', 'rendered')
     before = fingerprint(project); results = []
     cases = [('house-speaking', 'ch1_s2_b009'), ('house-listening', 'ch1_s2_b010'),
         ('cave-measurement', 'ch3_s1_b014'), ('archive-work', 'ch3_s2_b001'),
@@ -28,7 +29,7 @@ def main():
         ('release-resting', 'ch5_s3_b004'), ('catalogue-working', 'ch5_s5_b002'),
         ('catalogue-resting', 'ch5_s5_b003')]
     for label, beat in cases:
-        destination = output / label; destination.mkdir(exist_ok=True)
+        destination = output / label; destination.mkdir(exist_ok=False)
         with tempfile.TemporaryDirectory(prefix='lanternwake-performance-render-') as temporary:
             fixture = Path(temporary); (fixture / 'owned-fixture').touch()
             (fixture / 'display-contract.json').write_text(json.dumps(display))
@@ -47,7 +48,8 @@ def main():
             if list((fixture / 'data').rglob('*.json')) or fingerprint(project) != before:
                 raise RuntimeError('Preview changed player slots or source: ' + label)
         images = {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in destination.glob('*.png')}
-        if not images: raise RuntimeError('No actual rendered image: ' + label)
+        if set(images) != {beat + '.png'}:
+            raise RuntimeError('Unexpected or missing rendered images: ' + label + ': ' + str(sorted(images)))
         results.append(dict(case=label, beat=beat, exitCode=run.returncode, images=images))
         print('PASS rendered performance ' + label, flush=True)
     (output / 'receipt.json').write_text(json.dumps(dict(passed=True, cases=results,

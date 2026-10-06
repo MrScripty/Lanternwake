@@ -8,11 +8,12 @@ import shutil
 import subprocess
 import tempfile
 
+from evidence_runs import new_evidence_run
+
 
 def main():
     project = Path(__file__).resolve().parents[2]
-    evidence = project / 'artifacts/character-performance'
-    evidence.mkdir(parents=True, exist_ok=True)
+    evidence = new_evidence_run(project / 'artifacts/character-performance/runs', 'native')
     with tempfile.TemporaryDirectory(prefix='lanternwake-performance-') as temporary:
         root = Path(temporary); (root / 'owned-fixture').touch()
         env = os.environ.copy()
@@ -29,10 +30,10 @@ def main():
         if result.returncode or 'ERROR:' in text or 'WARNING:' in text or len(markers) != 1:
             raise RuntimeError(f'Native character performance failed; inspect {log}')
         receipt = json.loads(markers[0].split(' ', 1)[1])
-        shutil.copytree(root / 'fixtures', evidence / 'fixtures', dirs_exist_ok=True)
+        shutil.copytree(root / 'fixtures', evidence / 'fixtures')
         receipt.update(passed=True, nativeDllSha256=hashlib.sha256((project / '.godot/mono/temp/bin/Debug/Lanternwake.dll').read_bytes()).hexdigest(),
             fixtureOrigin='Actual canonical Core traversal; setup snapshots, not human playtime.',
-            fixtureSha256={p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in (root / 'fixtures').glob('*.json')})
+            fixtureSha256={p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in (evidence / 'fixtures').glob('*.json')})
         (evidence / 'receipt.json').write_text(json.dumps(receipt, indent=2) + '\n')
         print(markers[0]); print('PASS native performance; no human art, hearing or duration acceptance claim.')
 
