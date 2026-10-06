@@ -3267,7 +3267,12 @@
                   "The visitor map predicts the tide."
                 ],
                 "correctIndex": 1,
-                "explanation": "It documents a lost opportunity without claiming certainty about an outcome that was never observed."
+                "explanation": "It documents a lost opportunity without claiming certainty about an outcome that was never observed.",
+                "optionFeedback": [
+                  "Tomas: I want that ending, but we didn't observe it. Nessa marked where a timely direct instruction could have changed the rescue craft's movement. The blocks show lost time and a documented opportunity, not proof that everyone would have reached safety.",
+                  "It documents a lost opportunity without claiming certainty about an outcome that was never observed.",
+                  "Nessa: A visitor map shows what a visitor can see. It doesn't report the water level. We used the working chart, the logged positions, and the conditions on that night. That's why the sheltered approach matters; the model isn't a tide prediction."
+                ]
               }
             }
           ]
