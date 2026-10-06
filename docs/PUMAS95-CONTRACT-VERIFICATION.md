@@ -61,9 +61,11 @@ and Cohere transcription remain separate gates.
 The previous adapter combined alias and model-ID matches, incorrectly rejecting
 a unique alias when another library ID happened to equal it. It now follows
 the inspected gateway's alias-first selection among loaded models with current
-router observations. Duplicate selected aliases/base IDs remain unavailable;
-malformed/duplicate router observations fail closed. Completion text must have
-assistant role.
+router observations. Duplicate selected aliases/base IDs remain unavailable.
+The router-profile collection shape and non-object entries are validated;
+duplicate observations for a matching loaded candidate's profile fail closed.
+Unrelated malformed or stale profile objects are ignored. Completion text must
+have assistant role.
 
 The package-free .NET harness passes **22 simulated contract scenarios**,
 including current/pending/stale routers, dedicated profiles without router
@@ -74,6 +76,25 @@ merged main fails the new alias-precedence fixture; the repaired adapter passes.
 These fixtures are explicitly source-derived simulations, not real inference.
 `LiveSmoke` now uses the game's exact authored context and emits structured
 outcomes with context hash and canonical-state preservation.
+
+### Independent-review fixture correction — 2026-10-06
+
+The separate `fix/pumas95-review-fixtures-20261006` successor preserves frozen
+`bfa952c460c913c163d92a016d5b3eb35589c955` and changes no production code.
+The null-content response now supplies assistant role. The duplicate-choices
+response contains two otherwise valid assistant choices arrays; its corresponding
+single-field control succeeds. All 22 contract scenarios pass, including an
+unrelated malformed/duplicated profile-object control for the narrowed claim above.
+
+A temporary copy removing only the call to `HasDuplicateProperties` passes the
+preceding null-content scenario, then fails the duplicate-field assertion (exit 134).
+This demonstrates that the repaired negative fixture requires the production
+duplicate guard. The original guard and production source remain unchanged.
+See the [derived receipt](evidence/pumas95-review-fixtures-20261006.json).
+Raw local logs/mutant files remain under
+`/workspace/lanternwake-pumas95-review-evidence-20261006`; none were uploaded.
+The actual shell, .NET 8.0.425 and Godot 4.6.3 mono were available despite the
+disconnect callback. No model-acquisition or Library route was retried.
 
 ## Authored content and combined acceptance
 

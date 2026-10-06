@@ -1,0 +1,28 @@
+{
+  "baseCommit": "bfa952c460c913c163d92a016d5b3eb35589c955",
+  "scope": "Independent-review negative fixtures and precise router-profile claim; production semantics unchanged",
+  "productionPumasClientSha256": "bec88d3e5dd72c362510a562ea9b1918e75267c4d9b766006f041d665655733a",
+  "harnessSha256": "a7014a346bbf172ddbc28c6d888946ac3858d2141b83ad35b3313f8fb161b95b",
+  "tests": {
+    "simulatedContracts": 22,
+    "productionHarnessExit": 0,
+    "duplicateGuardMutation": {
+      "exitCode": 134,
+      "mutation": "remove only HasDuplicateProperties(document.RootElement) from temporary copy",
+      "failedAt": "duplicate JSON fields rejected",
+      "previousNullContentScenario": "passed",
+      "productionSourceUnchanged": true
+    }
+  },
+  "localEvidenceSha256": {
+    "contracts.log": "c780f58fee235d485d8a7b34c8354d4a010b0cfd2e04df782b206bfe801aaff0",
+    "duplicate-guard-mutant.log": "cf4a7d6a61e9b1e74d5771f3051676df0fd89d7bd7c0e7684a7500849454d900",
+    "duplicate-guard-mutant-confirmed.log": "cf4a7d6a61e9b1e74d5771f3051676df0fd89d7bd7c0e7684a7500849454d900",
+    "mutation-result.json": "2cf285bb848fe3d488b94f2b901e2a5e24cf0cc68f9e2dab56f6d1ef58cf60e6"
+  },
+  "limits": [
+    "Source-derived simulations; no live inference claim.",
+    "No blocked acquisition or Library retry.",
+    "Raw logs remain local; receipt contains hashes and derived outcomes."
+  ]
+}

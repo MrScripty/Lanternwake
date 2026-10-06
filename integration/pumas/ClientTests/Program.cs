@@ -68,6 +68,11 @@ await Check("unrelated stale router does not block selected profile", async () =
 {
     await WithStatus(EditStatus(s => s["router_profiles"]!.AsArray().Add(new JsonObject
         { ["profile_id"] = "other", ["observation_state"] = "unavailable", ["catalog_state"] = "uncertain" })), "", true);
+    await WithStatus(EditStatus(s => {
+        s["router_profiles"]!.AsArray().Add(new JsonObject { ["profile_id"] = "other", ["observation_state"] = 42 });
+        s["router_profiles"]!.AsArray().Add(new JsonObject { ["profile_id"] = "other" });
+        s["router_profiles"]!.AsArray().Add(new JsonObject { ["profile_id"] = 42 });
+    }), "", true);
 });
 await Check("alias takes precedence over matching library ID as in Pumas95 gateway", async () =>
 {
@@ -100,7 +105,7 @@ await Check("nonloaded states never generate", async () =>
     foreach (var state in new[] { "requested", "loading", "unloading", "unloaded", "failed" })
         await WithStatus(EditStatus(s => s["served_models"]![0]!["load_state"] = state), "model_unavailable");
 });
-await Check("malformed or duplicated router observations fail closed", async () =>
+await Check("router collection shape and selected profile duplicates fail closed", async () =>
 {
     await WithStatus(EditStatus(s => s["router_profiles"] = new JsonObject()), "pumas_contract");
     await WithStatus(EditStatus(s => s["router_profiles"]!.AsArray().Add(1)), "pumas_contract");
@@ -119,13 +124,17 @@ await Check("completion must be assistant dialogue", async () =>
 });
 await Check("malformed completion is not fabricated", async () =>
 {
-    await using var server = new FakePumas { Completion = """{"choices":[{"message":{"content":null}}]}""" };
+    await using var server = new FakePumas { Completion = """{"choices":[{"message":{"role":"assistant","content":null}}]}""" };
     using var client = new PumasClient(server.Uri, "game-dialogue");
     Require((await client.GenerateAsync("Mara", "Harbor.", "Hello")).ErrorCode == "invalid_response", "null reply");
 });
 await Check("duplicate JSON fields rejected", async () =>
 {
-    await using var server = new FakePumas { Completion = """{"choices":[],"choices":[{"message":{"content":"fake"}}]}""" };
+    const string valid = """{"choices":[{"message":{"role":"assistant","content":"Mind the old pier."}}]}""";
+    await using var control = new FakePumas { Completion = valid };
+    using var controlClient = new PumasClient(control.Uri, "game-dialogue");
+    Require((await controlClient.GenerateAsync("Mara", "Harbor.", "Hello")).Success, "same response without a duplicated field is valid");
+    await using var server = new FakePumas { Completion = """{"choices":[{"message":{"role":"assistant","content":"Mind the old pier."}}],"choices":[{"message":{"role":"assistant","content":"Mind the old pier."}}]}""" };
     using var client = new PumasClient(server.Uri, "game-dialogue");
     Require((await client.GenerateAsync("Mara", "Harbor.", "Hello")).ErrorCode == "invalid_response", "duplicate");
 });
