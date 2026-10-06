@@ -1,0 +1,413 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-06",
+  "requestedEnvironmentVersion": "cecfgver_6ac4b26339608192af8e57f6369e3db7",
+  "environmentVersionVerification": "Delegation label; no independent environment-version introspection available.",
+  "lanternwakeSource": "19495fac93124917d20a1036c6a84d18e01b4f98",
+  "pumasSource": "95a0baad2d0aea4650fc36ad4afd969ac9391bf5",
+  "pumasTree": "3ee66988eb1668188011b2124890b10031403ebd",
+  "pumasBinarySha256": "ef367e83a24b8ba6d2018f266a33a0c60cf0a3ee82b0bfc532f9c65ece20ec4a",
+  "pumasBinary": "/workspace/lanternwake-metadata-verification/target/release/pumas-rpc",
+  "build": {
+    "rustc": "rustc 1.92.0 (ded5c06cf 2025-12-08)",
+    "rpcFeatures": "default inference-plugins, hf-client",
+    "ortDownloadBinaries": false,
+    "ortCopyDylibs": false,
+    "cargoSources": "Official crates.io registry; dependency acquisition completed before offline build.",
+    "buildJobs": 2,
+    "buildDeadlineSeconds": 1500,
+    "newlyApprovedMetadataHosts": [
+      "api.github.com",
+      "huggingface.co"
+    ],
+    "sourcePolicy": "Normal git fetch through existing github.com support; no credentials/proxy/auth/allowlist changes.",
+    "command": "cargo build --locked --offline --manifest-path rust/Cargo.toml -p pumas-rpc --release -j 2",
+    "exitCode": 0,
+    "elapsed": "16m25s"
+  },
+  "ownership": {
+    "verified": true,
+    "clientTransport": "Python standard-library http.client, literal 127.0.0.1 only, POST /rpc; same JSON-RPC pathway as Lanternwake PumasClient.",
+    "productionClientLimit": "Lanternwake PumasClient has serving-status/inference only; no existing game discovery/acquisition method was invoked or added.",
+    "initialNetworkProcessId": 5897,
+    "cachedReadProcessId": 5960,
+    "actualOutboundMetadataOwners": "Pinned Pumas HuggingFaceClient and GitHubClient, linked into the traced pumas-rpc executable.",
+    "observedMetadataHosts": [
+      "api.github.com",
+      "huggingface.co"
+    ],
+    "startupProbe": "PumasApiBuilder starts its own connectivity HEAD probe to api.github.com (builder.rs:373); this is separate from the model/tree and release-list requests.",
+    "originalNetworkFetch": "First run: fresh launcher, successful model tree RPC; Pumas log confirms a successful 100-release upstream fetch. Runtime RPC response exceeded the client capture limit.",
+    "acceptedCapture": "Second run: same executable, same Pumas-owned cache, get_available_versions force_refresh=false. No release-list network retry.",
+    "additionalRedirectHost": null,
+    "archiveDownloadUrls": "Only strings in metadata; not requested."
+  },
+  "model": {
+    "rpcMethod": "get_hf_download_details",
+    "params": {
+      "repo_id": "Qwen/Qwen2.5-0.5B-Instruct-GGUF",
+      "quants": [
+        "Q4_K_M"
+      ]
+    },
+    "localHttpStatus": 200,
+    "success": true,
+    "upstreamHttpStatus": "2xx inferred from successful Pumas source branch; exact status not exposed by RPC.",
+    "revisionSelector": "main",
+    "immutableRevision": null,
+    "revisionLimit": "get_hf_download_details returns file options/sizes; neither its RPC DTO nor its main-tree cache includes an immutable repository commit.",
+    "rpcDetails": {
+      "downloadOptions": [
+        {
+          "quant": "fp16",
+          "sizeBytes": 1266425696
+        },
+        {
+          "quant": "q2_k",
+          "sizeBytes": 415182688
+        },
+        {
+          "quant": "q3_k_m",
+          "sizeBytes": 432041824
+        },
+        {
+          "quant": "q4_0",
+          "sizeBytes": 428730208
+        },
+        {
+          "quant": "q4_k_m",
+          "sizeBytes": 491400032
+        },
+        {
+          "quant": "q5_0",
+          "sizeBytes": 490475360
+        },
+        {
+          "quant": "q5_k_m",
+          "sizeBytes": 522186592
+        },
+        {
+          "quant": "q6_k",
+          "sizeBytes": 650379104
+        },
+        {
+          "quant": "q8_0",
+          "sizeBytes": 675710816
+        }
+      ],
+      "repoId": "Qwen/Qwen2.5-0.5B-Instruct-GGUF",
+      "totalSizeBytes": 5372532320
+    },
+    "pumasOwnedFileTree": {
+      "repo_id": "Qwen/Qwen2.5-0.5B-Instruct-GGUF",
+      "lfs_files": [
+        {
+          "filename": "qwen2.5-0.5b-instruct-fp16.gguf",
+          "size": 1266425696,
+          "sha256": "8e0ae26000627ed62de0e78e41860af70094558b9d2913385c842a6aa06cf3fc"
+        },
+        {
+          "filename": "qwen2.5-0.5b-instruct-q2_k.gguf",
+          "size": 415182688,
+          "sha256": "9ee36184e616dfc76df4f5dd66f908dbde6979524ae36e6cefb67f532f798cb8"
+        },
+        {
+          "filename": "qwen2.5-0.5b-instruct-q3_k_m.gguf",
+          "size": 432041824,
+          "sha256": "590d2479d401db206fe12a4562294d2de6211e06338a6e34fbad64b32f1469d0"
+        },
+        {
+          "filename": "qwen2.5-0.5b-instruct-q4_0.gguf",
+          "size": 428730208,
+          "sha256": "7671c0c304e6ce5a7fc577bcb12aba01e2c155cc2efd29b2213c95b18edaf6ed"
+        },
+        {
+          "filename": "qwen2.5-0.5b-instruct-q4_k_m.gguf",
+          "size": 491400032,
+          "sha256": "74a4da8c9fdbcd15bd1f6d01d621410d31c6fc00986f5eb687824e7b93d7a9db"
+        },
+        {
+          "filename": "qwen2.5-0.5b-instruct-q5_0.gguf",
+          "size": 490475360,
+          "sha256": "925946ab27801fea3eead42933f857b6449c6d299f062e374cee2ac48426f2a5"
+        },
+        {
+          "filename": "qwen2.5-0.5b-instruct-q5_k_m.gguf",
+          "size": 522186592,
+          "sha256": "041474553fcabfc2a2d67903f9d2c2e50bd92528e670da4f33b5d0ce6e59fd55"
+        },
+        {
+          "filename": "qwen2.5-0.5b-instruct-q6_k.gguf",
+          "size": 650379104,
+          "sha256": "2f82233630c349ccf6b8daccf48f9a7865713d9f08a2eadfa456cebe9b97c7f5"
+        },
+        {
+          "filename": "qwen2.5-0.5b-instruct-q8_0.gguf",
+          "size": 675710816,
+          "sha256": "ca59ca7f13d0e15a8cfa77bd17e65d24f6844b554a7b6c12e07a5f89ff76844e"
+        }
+      ],
+      "regular_files": [
+        ".gitattributes",
+        "LICENSE",
+        "README.md"
+      ],
+      "cached_at": "2026-10-06T08:57:57.926789401+00:00",
+      "last_modified": null,
+      "cache_version": 2
+    },
+    "cacheSha256": "1146a505f038c064293619f1e41ef7a5cc719b8127f8c5b7091b8b03d5b1d718"
+  },
+  "runtime": {
+    "rpcMethod": "get_available_versions",
+    "originalParams": {
+      "app_id": "llama-cpp",
+      "force_refresh": true
+    },
+    "acceptedParams": {
+      "app_id": "llama-cpp",
+      "force_refresh": false
+    },
+    "localHttpStatus": 200,
+    "success": true,
+    "responseBytes": 4505618,
+    "upstreamReleaseCount": 100,
+    "projectedVariantCount": 693,
+    "upstreamHttpStatus": "2xx inferred from successful Pumas source branch; exact status not exposed by RPC.",
+    "firstCpuVariant": {
+      "tagName": "b11435+cpu",
+      "name": "b11435 (CPU)",
+      "publishedAt": "2026-10-06T06:16:04Z",
+      "prerelease": true,
+      "archiveSize": 17692966,
+      "assets": [
+        {
+          "downloadUrl": "https://github.com/ggml-org/llama.cpp/releases/download/b11435/llama-b11435-bin-ubuntu-x64.tar.gz",
+          "name": "llama-b11435-bin-ubuntu-x64.tar.gz",
+          "size": 17692966
+        }
+      ]
+    }
+  },
+  "invariants": {
+    "modelsBeforeAfter": {},
+    "llamaCppInstalledVersionsBeforeAfter": [],
+    "modelWeightsDownloaded": false,
+    "runtimeArchivesDownloaded": false,
+    "onnxOrtBuildDownloads": false,
+    "credentialsAuthenticationProxyNetworkPolicyChanged": false,
+    "sharedCheckoutModified": false,
+    "realInference": false,
+    "ownedServicesExited": true
+  },
+  "rejectedAttempt": {
+    "reason": "Client 4 MiB response capture assertion, with a 4,505,618-byte expanded runtime RPC response. No network rejection occurred.",
+    "retainedReceipt": "/workspace/lanternwake-metadata-verification/evidence/initial-rejected/receipt.json",
+    "pumasExitCode": 0,
+    "finalClientCaptureLimitBytes": 16777216
+  },
+  "rawEvidenceRoot": "/workspace/lanternwake-metadata-verification/evidence",
+  "rawEvidenceSha256": {
+    "receipt.json": "7cc0d0eef65723a921340753abffe34de7873d942ad52f62a11a2a0aa83cb956",
+    "metadata_probe.py": "c6b9407d8bea52fd6300ddb5fee1fe6ed8a49e22f10aa8e8a8be9fbdf38e0e36",
+    "pumas.log": "0332588ce23dc66a806f4943dcaeb70104a3b1c9ea4a5074c17c9273d3c995c5",
+    "pumas-syscalls.log": "c20d0d4e650043707caeb96d764115e8b818099793ddac93617f181eed0b9091",
+    "get_available_versions-1.json": "dd558092b815397b809827fef4d9a619a665f90238ebcb7faf462cff95257734",
+    "model-file-tree.json": "55b93dd76b015eda1759a46ce2df85d76255e61491427ecf44aff2fda3d4b05a",
+    "initial-rejected/receipt.json": "d7cf6bdb7c3894e8be2b15726f7f0c3f76bfa59e1eaedd346ad5082f9a5e2cc9",
+    "initial-rejected/pumas.log": "7302b4015482d541c168209f099ace12bfc964478be0519eecbbb12d2501f0b3",
+    "initial-rejected/pumas-syscalls.log": "c705c62f3de49bea58a487f2000a65eb6181d18f17a1ae0bcefda20e9c3ae053",
+    "build.log": "3f03992a23924dd2335ba1225c8b4c0b8a3fb6d8b016d7187e9e937dab33168f",
+    "cargo-features.log": "274d00b6a21278405c423a99f5669932d6fa518b1594f0966d189852ddc01d05"
+  },
+  "blockers": [
+    "Immutable model commit is not exposed by existing metadata-only RPC; no acquisition was invoked to resolve one.",
+    "Lanternwake has no discovery/acquisition wrapper in its production C# client; this qualifies the existing Pumas RPC setup path, not a new game feature."
+  ],
+  "sourceReview": {
+    "instructions": "No tracked AGENTS.md or .agents/skills in either fetched source tree; /workspace/.agents is empty.",
+    "sourceFiles": [
+      {
+        "repo": "Pumas-Library",
+        "path": "rust/crates/pumas-rpc/src/main.rs",
+        "lines": [
+          158,
+          162,
+          253
+        ],
+        "sha256": "0e378c12e71e22672ce4bf53ba49f6574d6fbe233523ed361fcef3fe3a758b53"
+      },
+      {
+        "repo": "Pumas-Library",
+        "path": "rust/crates/pumas-rpc/src/handlers/mod.rs",
+        "lines": [
+          779,
+          975
+        ],
+        "sha256": "098e03ce073d4bf8e6bf63ee1785bb7d14d36503cea84a065e0f6fdafa3ca1de"
+      },
+      {
+        "repo": "Pumas-Library",
+        "path": "rust/crates/pumas-rpc/src/handlers/models/search.rs",
+        "lines": [
+          51
+        ],
+        "sha256": "7ec98638876c76f8f701ef090f45ffb0cc6eed9c703d15deeb9a3bced7d62b42"
+      },
+      {
+        "repo": "Pumas-Library",
+        "path": "rust/crates/pumas-core/src/api/hf.rs",
+        "lines": [
+          221
+        ],
+        "sha256": "a69f2fe3dc191bb042518cedc308c1f2ccfb7ee1979f3dfcfe70aa65472998c6"
+      },
+      {
+        "repo": "Pumas-Library",
+        "path": "rust/crates/pumas-core/src/model_library/hf/search.rs",
+        "lines": [
+          715
+        ],
+        "sha256": "b7ee08e643a22e604665c86233a8f2ee76dbc7ff025d0e50c08d7586e457bc81"
+      },
+      {
+        "repo": "Pumas-Library",
+        "path": "rust/crates/pumas-core/src/model_library/hf/metadata.rs",
+        "lines": [
+          255,
+          273,
+          286,
+          293
+        ],
+        "sha256": "0a872d3a6ebba4ef7de990237e57a3c4e4395ab8bee6607e993bb0d8c50ebb9a"
+      },
+      {
+        "repo": "Pumas-Library",
+        "path": "rust/crates/pumas-core/src/model_library/hf/mod.rs",
+        "lines": [
+          271,
+          304,
+          557
+        ],
+        "sha256": "319fd9e230e94d4de03a5d0b9249d2bc094c9d7808f737eab75742b1bd294c8d"
+      },
+      {
+        "repo": "Pumas-Library",
+        "path": "rust/crates/pumas-rpc/src/handlers/versions/release.rs",
+        "lines": [
+          8
+        ],
+        "sha256": "fba89e2318b0dc5c53f6675cc57a0f45435ae8e043eda0390570943e27d0f1cd"
+      },
+      {
+        "repo": "Pumas-Library",
+        "path": "rust/crates/pumas-app-manager/src/version_manager/mod.rs",
+        "lines": [
+          830
+        ],
+        "sha256": "0983334ef6f121bfcd0fee40820f9f3d7b6b03111ca87e83371d350d7fe8b469"
+      },
+      {
+        "repo": "Pumas-Library",
+        "path": "rust/crates/pumas-core/src/network/github.rs",
+        "lines": [
+          641,
+          707,
+          1022,
+          1098,
+          1113
+        ],
+        "sha256": "f4b46ee62b825cd2143d4760928c5fd27bd479ce16695c2a9b47a17a7509b08a"
+      },
+      {
+        "repo": "Pumas-Library",
+        "path": "rust/crates/pumas-core/src/network/client.rs",
+        "lines": [
+          89,
+          163
+        ],
+        "sha256": "7b36e6f8df7d10b6f52e0978fb6e636bcf21541762c1f6f1769ede371e0530a1"
+      },
+      {
+        "repo": "Pumas-Library",
+        "path": "rust/Cargo.toml",
+        "lines": [
+          84
+        ],
+        "sha256": "20bc7d7e683b50911c3182ad3056bd09a3b0fc00081cb38904dc7651346a7ebd"
+      },
+      {
+        "repo": "Pumas-Library",
+        "path": "rust/crates/pumas-rpc/Cargo.toml",
+        "lines": [
+          62
+        ],
+        "sha256": "8adfc44f73c0d325d27d8bf2055a6d5260eef67ba8361d6e4b0147efaf11a61c"
+      },
+      {
+        "repo": "Pumas-Library",
+        "path": "rust/crates/pumas-core/src/models/model.rs",
+        "lines": [
+          665
+        ],
+        "sha256": "77091b25a4a49603186ee81b3bb889c03e8efb656d2b6c14d7d56610648ecc80"
+      },
+      {
+        "repo": "Pumas-Library",
+        "path": "rust/crates/pumas-core/src/config.rs",
+        "lines": [
+          65,
+          72
+        ],
+        "sha256": "e34883cae9eb112f4c8f7a6b0aa239b612a15c16183b140535b127c670ab98d9"
+      },
+      {
+        "repo": "Lanternwake",
+        "path": "Scripts/Conversation/PumasClient.cs",
+        "lines": [
+          29,
+          38,
+          60,
+          158
+        ],
+        "sha256": "bec88d3e5dd72c362510a562ea9b1918e75267c4d9b766006f041d665655733a"
+      },
+      {
+        "repo": "Lanternwake",
+        "path": "integration/pumas/current_source_probe.py",
+        "lines": [
+          14,
+          58,
+          76
+        ],
+        "sha256": "fb5527a994154bee63004a773d45837b3c8ca9e2c29f19f47301c14e3d06b5c0"
+      },
+      {
+        "repo": "Lanternwake",
+        "path": "docs/PUMAS.md",
+        "lines": [
+          93,
+          150
+        ],
+        "sha256": "ae864b318719984fea1e634dd8905926e4612d7f4f0aa000d7e39a0b68ba779e"
+      },
+      {
+        "repo": "Pumas-Library",
+        "path": "rust/crates/pumas-core/src/api/builder.rs",
+        "lines": [
+          373
+        ],
+        "sha256": "7eb86df97736a026da250d55d19d1e881b50e737f2a1df7941f78d565183db77"
+      },
+      {
+        "repo": "Pumas-Library",
+        "path": "rust/crates/pumas-core/src/network/manager.rs",
+        "lines": [
+          63,
+          169
+        ],
+        "sha256": "4c1c13ea955f123b1ba5e5bbd668ff521766d5080fc676e759e9a61a26f05b3e"
+      }
+    ]
+  }
+}
