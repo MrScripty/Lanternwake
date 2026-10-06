@@ -59,9 +59,17 @@ public partial class CupStateQualification : Node
         }
         Check(Stage.FindChildren("*", "CollisionObject3D", true, false).Count == 0, "cup state has no player-triggered physics or interaction");
         Check(!Observe<StageDirector>("_stage").MotionEnabled, "canonical change is independent of environmental motion");
-        var camera = Session.Beat.Id == "ch2_s5_b012" ? Stage.CupFloorCamera : Stage.StoryCamera;
+        var camera = Session.Beat.Id == "ch2_s5_b012" ? Stage.CupFloorCamera
+            : Session.Beat.Id == "ch1_s2_b008" ? Stage.CupInventoryCamera : Stage.StoryCamera;
         Check(camera is not null && Stage.GetViewport().GetCamera3D() == camera,
             "current-beat camera follows advance/recovery/replay rather than cumulative break history");
+        if (expected == "intact")
+        {
+            var cup = Stage.CupIntact!.GetNode<MeshInstance3D>("Cylinder009");
+            var seam = Stage.CupIntact.GetNode<MeshInstance3D>("AdhesiveSeam");
+            Check((seam.GlobalTransform * seam.GetAabb()).End.X > (cup.GlobalTransform * cup.GetAabb()).End.X,
+                "repair marker reaches the cup's outside surface instead of remaining buried inside it");
+        }
         if (expected == "broken")
         {
             // The original floorboards top at 0.095; old fallen meshes were below it.

@@ -83,6 +83,24 @@ func run() -> void:
 			await key("space")
 		if not check(passage.text == prose and (passage.visible_characters == -1 or passage.visible_characters >= passage.get_total_character_count()), "native Space reveals selected authored passage without advancing"):
 			return
+		if beat == "ch1_s2_b008":
+			var stage: Node3D = game.get("Stage").get_node("KeeperHouse")
+			var camera: Camera3D = root.get_camera_3d()
+			if not check(camera == stage.get_node("CupInventoryCamera"), "first inventory selects the static table insert"):
+				return
+			var panel: Control = game.get("InterfaceRoot").get_node("DialoguePanel")
+			var measurements: Array = []
+			for mesh: MeshInstance3D in stage.get_node("Scenery/CupIntact").get_children():
+				var point := camera.unproject_position(mesh.global_position)
+				measurements.append({"node": str(mesh.name), "x": point.x, "y": point.y})
+				var bounds := mesh.get_aabb()
+				for corner in range(8):
+					var local := bounds.position + bounds.size * Vector3(corner & 1, (corner >> 1) & 1, (corner >> 2) & 1)
+					var world := mesh.global_transform * local
+					var screen := camera.unproject_position(world)
+					if not check(not camera.is_position_behind(world) and screen.x > 0 and screen.x < root.get_visible_rect().size.x and screen.y > 80 and screen.y < panel.global_position.y, "intact mesh bounds project above the reading panel: " + str(mesh.name)):
+						return
+			print("LANTERNWAKE_CUP_INVENTORY_PROJECTION " + JSON.stringify({"meshCentres": measurements, "panelTop": panel.global_position.y, "viewportSize": str(root.get_visible_rect().size), "windowSize": str(root.size)}))
 		if beat == "ch2_s5_b012":
 			var stage: Node3D = game.get("Stage").get_node("KeeperHouse")
 			var camera: Camera3D = root.get_camera_3d()

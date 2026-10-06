@@ -29,7 +29,7 @@ def main():
     project = Path(__file__).resolve().parents[2]
     evidence = project / 'artifacts' / 'graphical-native'
     evidence.mkdir(parents=True, exist_ok=True)
-    cases = [('title', None), ('harbor', 'ch1_s1_b001'), ('conversation', 'ch1_s1_b021'), ('house-intact', 'ch2_s5_b011'),
+    cases = [('title', None), ('harbor', 'ch1_s1_b001'), ('conversation', 'ch1_s1_b021'), ('house-inventory', 'ch1_s2_b008'), ('house-intact', 'ch2_s5_b011'),
         ('house-broken', 'ch2_s5_b012'), ('house-boxed', 'ch2_s5_b026'), ('house-mug', 'ch3_s5_b001'),
         ('archive', 'ch1_s4_b001'), ('tower-before', 'ch5_s3_b005'), ('tower-lowered', 'ch5_s3_b006'),
         ('cave', 'ch3_s1_b001'), ('ending', 'ch5_s5_evidence')]
