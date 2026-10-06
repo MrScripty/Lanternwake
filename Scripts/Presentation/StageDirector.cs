@@ -97,10 +97,10 @@ public partial class StageDirector : Node3D
         _castKey = castKey;
     }
 
-    public void ApplyAuthoredCues(string[] cues, string? currentCue = null, string? currentBeatId = null)
+    public void ApplyAuthoredCues(string[] cues, string? currentCue = null, string? currentBeatId = null, bool playTransition = true)
     {
         ArgumentNullException.ThrowIfNull(cues);
-        _stage?.ApplyAuthoredCues(cues, currentCue, currentBeatId);
+        _stage?.ApplyAuthoredCues(cues, currentCue, currentBeatId, playTransition);
     }
 
     private void ClearActors()
