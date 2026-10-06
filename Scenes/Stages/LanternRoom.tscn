@@ -939,13 +939,23 @@ size = Vector3(1.15, 0.11, 0.33)
 [sub_resource type="BoxMesh" id="BoxMesh_ebya2"]
 size = Vector3(1.15, 0.11, 0.33)
 
-[node name="LanternRoom" type="Node3D" unique_id=791372443 node_paths=PackedStringArray("StoryCamera", "Atmosphere", "KeyLight", "CastOrigin", "BellBody")]
+[sub_resource type="BoxMesh" id="BoxMesh_bell_guide"]
+size = Vector3(0.09, 3.8, 0.12)
+
+[sub_resource type="BoxMesh" id="BoxMesh_bell_mark"]
+size = Vector3(0.3, 0.055, 0.15)
+
+[node name="LanternRoom" type="Node3D" unique_id=791372443 node_paths=PackedStringArray("StoryCamera", "Atmosphere", "KeyLight", "CastOrigin", "BellBody", "BellReleaseCamera", "BellSuspension")]
 script = ExtResource("1_ntfim")
 StoryCamera = NodePath("StoryCamera")
 Atmosphere = NodePath("IslandAtmosphere")
 KeyLight = NodePath("Moonlight")
 CastOrigin = NodePath("CastOrigin")
 BellBody = NodePath("Scenery/CounterweightInstallation/CounterweightBell")
+BellDescentStartBeatId = "ch5_s3_b004"
+BellDescentFlowBeatId = "ch5_s3_b005"
+BellReleaseCamera = NodePath("BellReleaseCamera")
+BellSuspension = NodePath("Scenery/CounterweightInstallation/Cylinder002")
 DawnEnvironment = SubResource("Environment_hvd81")
 DuskEnvironment = SubResource("Environment_1ie64")
 DawnKeyLightEnergyMultiplier = 1.2272727
@@ -974,6 +984,13 @@ near = 0.1
 far = 180.0
 
 [node name="Scenery" type="Node3D" parent="." unique_id=1779837888]
+
+[node name="BellReleaseCamera" type="Camera3D" parent="."]
+transform = Transform3D(0.85072674, 0.30269087, -0.42970019, 0, 0.81752941, 0.57588685, 0.52560824, -0.48992234, 0.69549412, -7, 14, 15)
+projection = 1
+size = 9.6
+near = 0.1
+far = 180.0
 
 [node name="TidalWater" type="MeshInstance3D" parent="Scenery" unique_id=272672297]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, -4)
@@ -1537,6 +1554,31 @@ material_override = SubResource("StandardMaterial3D_r1i72")
 mesh = SubResource("CylinderMesh_psawl")
 
 [node name="CounterweightBell" type="Node3D" parent="Scenery/CounterweightInstallation" unique_id=1034435461]
+
+[node name="GuideLeft" type="MeshInstance3D" parent="Scenery/CounterweightInstallation"]
+position = Vector3(-1.12, 2.05, 0.08)
+material_override = SubResource("StandardMaterial3D_r1i72")
+mesh = SubResource("BoxMesh_bell_guide")
+
+[node name="GuideRight" type="MeshInstance3D" parent="Scenery/CounterweightInstallation"]
+position = Vector3(1.12, 2.05, 0.08)
+material_override = SubResource("StandardMaterial3D_r1i72")
+mesh = SubResource("BoxMesh_bell_guide")
+
+[node name="MarkHigh" type="MeshInstance3D" parent="Scenery/CounterweightInstallation/GuideLeft"]
+position = Vector3(0, -0.1, 0)
+material_override = SubResource("StandardMaterial3D_abd18")
+mesh = SubResource("BoxMesh_bell_mark")
+
+[node name="MarkMiddle" type="MeshInstance3D" parent="Scenery/CounterweightInstallation/GuideLeft"]
+position = Vector3(0, -0.5, 0)
+material_override = SubResource("StandardMaterial3D_abd18")
+mesh = SubResource("BoxMesh_bell_mark")
+
+[node name="MarkLow" type="MeshInstance3D" parent="Scenery/CounterweightInstallation/GuideLeft"]
+position = Vector3(0, -1.25, 0)
+material_override = SubResource("StandardMaterial3D_abd18")
+mesh = SubResource("BoxMesh_bell_mark")
 
 [node name="Cylinder001" type="MeshInstance3D" parent="Scenery/CounterweightInstallation/CounterweightBell" unique_id=178758157]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.04, 0)

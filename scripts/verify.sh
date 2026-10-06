@@ -44,6 +44,7 @@ python3 integration/qa/conversation_return.py
 python3 integration/qa/content_note.py
 python3 integration/qa/cup_states.py
 python3 integration/qa/family_exchange.py
+python3 integration/qa/bell_descent.py
 log="$(mktemp)"
 trap 'rm -f "$log"' EXIT
 timeout 120 "$GODOT_MONO" --headless --editor --path . -- --editor-roundtrip 2>&1 | tee "$log"

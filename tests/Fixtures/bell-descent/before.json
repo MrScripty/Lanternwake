@@ -1,0 +1,78 @@
+{
+  "version": 2,
+  "storyTitle": "Lanternwake",
+  "beatId": "ch5_s3_b003",
+  "history": [
+    {
+      "speaker": "narrator",
+      "text": "Talk through the final distinction between a warning and a plan.",
+      "generated": false,
+      "beatId": "ch5_s2_b019",
+      "sceneId": null,
+      "conversationCharacterId": null
+    },
+    {
+      "speaker": "narrator",
+      "text": "Wind brushes the tower windows with rain. The old lens catches the service lamp and scatters a pale band across the wall. You can hear the pressure line under the floor, the radio at Nessa's shoulder, and Tomas's recorder counting the evening in small mechanical clicks. None of the sounds is a voice from elsewhere.",
+      "generated": false,
+      "beatId": "ch5_s2_b020",
+      "sceneId": null,
+      "conversationCharacterId": null
+    },
+    {
+      "speaker": "narrator",
+      "text": "Review the evidence before continuing.",
+      "generated": false,
+      "beatId": "ch5_s2_evidence",
+      "sceneId": null,
+      "conversationCharacterId": null
+    },
+    {
+      "speaker": "narrator",
+      "text": "Sera watches the manometer until the rising column touches the marked release range. She reads the number aloud. Nessa repeats it. Tomas repeats the time. You check the exit one final time and keep your hands away from controls that are not yours.",
+      "generated": false,
+      "beatId": "ch5_s3_b001",
+      "sceneId": null,
+      "conversationCharacterId": null
+    },
+    {
+      "speaker": "sera",
+      "text": "Release condition reached. All measured conditions remain within the tested procedure.",
+      "generated": false,
+      "beatId": "ch5_s3_b002",
+      "sceneId": null,
+      "conversationCharacterId": null
+    },
+    {
+      "speaker": "nessa",
+      "text": "Releasing brake in three. Two. One.",
+      "generated": false,
+      "beatId": "ch5_s3_b003",
+      "sceneId": null,
+      "conversationCharacterId": null
+    }
+  ],
+  "solvedActivities": [
+    "ch1_s1a_evidence",
+    "ch1_s2_evidence",
+    "ch1_s2a_evidence",
+    "ch1_s3_evidence",
+    "ch1_s3a_evidence",
+    "ch2_s1_evidence",
+    "ch2_s2a_evidence",
+    "ch2_s3_evidence",
+    "ch2_s3a_evidence",
+    "ch2_s5_evidence",
+    "ch3_s1_evidence",
+    "ch3_s2_evidence",
+    "ch3_s2a_evidence",
+    "ch3_s4_evidence",
+    "ch4_s1_evidence",
+    "ch4_s2_reconstruction_evidence",
+    "ch4_s2_evidence",
+    "ch4_s2a_evidence",
+    "ch4_s3a_evidence",
+    "ch4_s4_evidence",
+    "ch5_s2_evidence"
+  ]
+}
