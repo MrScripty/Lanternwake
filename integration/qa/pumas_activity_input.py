@@ -110,9 +110,18 @@ def select(game, download_id):
 def read_end(game, phrase):
     for _ in range(14):
         if normalized(phrase) in game.visible():
-            game.check(True, 'keyboard-readable prose: ' + phrase)
+            game.check(True, 'readable prose: ' + phrase)
             return
         game.key('Tab'); game.key('End')
+        # End can put a paragraph's first line just above the viewport. Once
+        # the prose scrollbar is focused, native Up steps reveal that line;
+        # on action buttons these keys only navigate focus and send no command.
+        for _ in range(20):
+            if normalized(phrase) in game.visible():
+                game.check(True, 'keyboard-scrolled prose: ' + phrase)
+                return
+            for _ in range(4):
+                game.key('Up')
     raise RuntimeError('Keyboard reader did not reach: ' + phrase)
 
 
