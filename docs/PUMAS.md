@@ -4,7 +4,7 @@
 
 The game uses **native C# `HttpClient` directly against Pumas**. Python, an
 OpenAI account, cloud inference, and generated UniFFI bindings are not runtime
-requirements. `Scripts/Conversation/PumasClient.cs` accepts character, observed
+requirements. The dialogue operation in `Scripts/Conversation/PumasClient.cs` accepts character, observed
 world context, and player text, and returns only `PumasReply(Success, Text,
 ErrorCode)`. It has no game-state reference, save-file access, tool execution, or
 quest/inventory mutation surface.
@@ -208,6 +208,11 @@ Suggested presentation of stable `ErrorCode` values:
 Never present any of these outcomes as a successful live-model reply.
 
 ## Verification commands and optional adapter
+
+The new setup wrappers and controlled normal-player UI results are recorded in
+[PUMAS-DISCOVERY-SETUP-VERIFICATION.md](PUMAS-DISCOVERY-SETUP-VERIFICATION.md).
+These qualify the consumed source contract and fixture behavior; they do not
+establish real acquisition, installation or inference on the approved pin.
 
 ```sh
 dotnet run --project integration/pumas/ClientTests/ClientTests.csproj
