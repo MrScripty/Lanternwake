@@ -49,3 +49,15 @@ persistence-restore, immutable artifact, loaded-model or runtime evidence.
 Pause/resume and token-authorized interrupted-transfer recovery remain Pumas
 operations; Lanternwake does not invent recovery tokens or replay commands.
 See [activity qualification](PUMAS-DOWNLOAD-ACTIVITY-VERIFICATION.md).
+
+## Guided descent integrated qualification, 2026-10-06
+
+The distinct normal integration successor combines main `a3ee5bc` and frozen
+guided review `ff0f479c`, retaining Pumas setup/activity and guided descent without
+character-performance integration. Fresh aggregate, post-Editor/native descent,
+rendered motion/reduced-motion/rapid, live-state Save/Load, interruption/restart,
+repeat/recovery and controlled Pumas activity checks pass. Historical receipts
+retain their identities and failures. See [the integration report](GUIDED-DESCENT-INTEGRATION-20261006.md)
+for tested source/binary/evidence identities and scope. Final-head hosted CI and
+parent-owned PR/review/readiness/merge remain pending; human/device/provider/voice
+and measured-duration acceptance are unchanged.
