@@ -8,6 +8,7 @@ if ! "$GODOT_MONO" --version | grep -q '\.mono\.'; then
   exit 1
 fi
 python3 -m unittest discover -s integration/audio -v
+python3 -m unittest discover -s integration/qa -p 'test_evidence_runs.py' -v
 dotnet run --project tests/Lanternwake.Tests.csproj -- Content/story.json
 dotnet run --project integration/story-validation/StoryValidation.csproj -- Content/story.json
 dotnet run --project integration/pumas/ClientTests/ClientTests.csproj
@@ -45,6 +46,7 @@ python3 integration/qa/content_note.py
 python3 integration/qa/cup_states.py
 python3 integration/qa/family_exchange.py
 python3 integration/qa/bell_descent.py
+python3 integration/qa/character_performance.py
 log="$(mktemp)"
 trap 'rm -f "$log"' EXIT
 timeout 120 "$GODOT_MONO" --headless --editor --path . -- --editor-roundtrip 2>&1 | tee "$log"

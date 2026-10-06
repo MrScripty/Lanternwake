@@ -24,3 +24,19 @@ new puzzle, timer, relationship score, prose branch or clue hidden in geometry.
 See [guided descent verification](GUIDED-DESCENT-VERIFICATION.md),
 [stage bible](bible/03_ITEM_STAGE_SOUND_BIBLE.md) and
 [pacing/accessibility bible](bible/05_PACING_ACCESSIBILITY_QA.md).
+
+## Next bounded feature: character performance
+
+Separate `feat/character-performance-20261006` preserves frozen guided-descent
+review `ff0f479c` and adds the bible's three readable pose families for each
+living character. Six authored scenes direct work, speaker/listener attention
+and restraint: house inventory, cave measurement, archive playback, full
+testimony, controlled release and final catalogue. Working/head/torso offsets
+are editable resources; actor roots and feet stay fixed. Still scenes suppress
+breathing, reduced motion and Load show the authored pose immediately, and no
+pose gates or automatically advances the story. Other scenes keep their neutral
+sculptures. Broader choreography, score/sound, human performance/composition and
+representative reading duration remain open.
+
+See [character performance verification](CHARACTER-PERFORMANCE-VERIFICATION.md).
+This is functional staging, not new prose or a five-hour human playtime claim.

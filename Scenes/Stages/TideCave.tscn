@@ -841,12 +841,13 @@ height = 1.76
 radial_segments = 5
 rings = 1
 
-[node name="TideCave" type="Node3D" unique_id=2084828949 node_paths=PackedStringArray("StoryCamera", "Atmosphere", "KeyLight", "CastOrigin")]
+[node name="TideCave" type="Node3D" unique_id=2084828949 node_paths=PackedStringArray("StoryCamera", "Atmosphere", "KeyLight", "CastOrigin", "PerformanceFocus")]
 script = ExtResource("1_a4nha")
 StoryCamera = NodePath("StoryCamera")
 Atmosphere = NodePath("IslandAtmosphere")
 KeyLight = NodePath("Moonlight")
 CastOrigin = NodePath("CastOrigin")
+PerformanceFocus = NodePath("Scenery/PressureWorks")
 DawnEnvironment = SubResource("Environment_dwqwh")
 DuskEnvironment = SubResource("Environment_hx1ei")
 
