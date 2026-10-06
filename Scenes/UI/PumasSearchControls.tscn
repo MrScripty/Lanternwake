@@ -1,0 +1,18 @@
+[gd_scene format=3]
+
+[node name="PumasSearchControls" type="VBoxContainer"]
+layout_mode = 2
+
+[node name="QueryLabel" type="Label" parent="."]
+layout_mode = 2
+text = "Model name or repository"
+
+[node name="Query" type="LineEdit" parent="."]
+layout_mode = 2
+placeholder_text = "Enter a model name"
+max_length = 200
+tooltip_text = "Search through your local Pumas service"
+
+[node name="Search" type="Button" parent="."]
+layout_mode = 2
+text = "Search through Pumas"

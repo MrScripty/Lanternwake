@@ -1,0 +1,1 @@
+{"success":true,"models":[{"repoId":"Fixture/Dialogue-GGUF","name":"Dialogue-GGUF","developer":"Fixture","kind":"text-generation","formats":["gguf"],"quants":["Q4_K_M"],"downloadOptions":[{"quant":"Q4_K_M","sizeBytes":491000000}],"url":"https://huggingface.co/Fixture/Dialogue-GGUF","releaseDate":null,"license":"apache-2.0","compatibleEngines":["llama_cpp"]}]}

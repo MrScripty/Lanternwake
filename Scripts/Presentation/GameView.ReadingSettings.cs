@@ -18,6 +18,7 @@ public partial class GameView
              ("Toggle instant text", () => { _instant = !_instant; if (_instant) _dialogue.VisibleCharacters = -1; _status.Text = _instant ? "Instant text enabled" : "Typewriter text enabled"; ApplyInstantTextToPausedPassage(); CloseModal(); }),
              ("Toggle reduced motion", () => { _stage.MotionEnabled = !_stage.MotionEnabled; _status.Text = _stage.MotionEnabled ? "Environmental motion enabled" : "Reduced motion enabled"; CloseModal(); }),
              ("Sound settings", ShowAudioSettings),
+             ("Local conversation setup", ShowPumasSetup),
              ("Content note", () => { if (settings is not null && _modal == settings) ShowContentNote(true); }),
              ("Quit game", () => { CloseModal(); _Notification((int)NotificationWMCloseRequest); })]);
         settings = _modal;
