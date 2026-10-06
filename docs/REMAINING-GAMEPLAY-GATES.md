@@ -13,7 +13,7 @@ evidence identities are recorded in each milestone's delivery manifest.
 | Optional conversation Return | The reviewed Return and explicit instant-text repair restore the paused authored passage and retire cancelled callbacks. No further change is indicated by the current native suite. |
 | Content note | Existing bible copy is now available before Arrival and through Settings, including enlarged keyboard scrolling and active drafts. Native checks pass; human appearance and accessibility-tool acceptance remain separate. |
 | Cup stage continuity | Three existing authored events now drive intact/broken/boxed/mug state across recovery, later visits and replay. Human camera composition, recognizable shape/material and safe staging still require the parent native visual review. |
-| Other stage/performance direction | Working/listening/resting poses, composed object inserts and detailed guided-release staging remain production art direction. The bell's cumulative lowered state and reduced-motion control exist. Headless transforms/visibility cannot establish human composition or performance quality. These are not additional required puzzles or permission to alter chronology. |
+| Other stage/performance direction | The separate guided-descent successor now presents the existing release beats with vertical travel, guide marks, an empty cradle, fixed release view and immediate reduced-motion/load phases; see [guided descent](GUIDED-DESCENT-VERIFICATION.md). Native and normal project checks establish that behavior. Working/listening/resting poses, broader composed inserts, score/sound production and human composition/performance acceptance remain open. These are not additional required puzzles or permission to alter chronology. |
 | Wrong-answer feedback | Optional per-option rationales now exist in the Activity contract. Source reconstruction, evacuation identity and route reconstruction checks have distinct authored explanations in the shared keyboard reader, with exact state/save preservation. Other 21 activities retain generic retry feedback and authored correct-answer explanations; broader editorial coverage remains open. See the route successor's qualification report for its actual checks. |
 | Relationships/disclosure | Six Working Lives now offers three distinct authored Tomas responses about permissions and public evidence, retaining one selection without a score or new gate; see [family boundaries](FAMILY-BOUNDARIES-VERIFICATION.md). Additional progression mechanics need author design; do not invent scores, romance branches or model-dependent gates. |
 | Human editorial/duration | Representative readers must assess prose, pacing, emotional continuity and completion time. Five hours is a target, not established by automated elapsed time or expanded word counts. |
@@ -49,3 +49,15 @@ persistence-restore, immutable artifact, loaded-model or runtime evidence.
 Pause/resume and token-authorized interrupted-transfer recovery remain Pumas
 operations; Lanternwake does not invent recovery tokens or replay commands.
 See [activity qualification](PUMAS-DOWNLOAD-ACTIVITY-VERIFICATION.md).
+
+## Guided descent integrated qualification, 2026-10-06
+
+The distinct normal integration successor combines main `a3ee5bc` and frozen
+guided review `ff0f479c`, retaining Pumas setup/activity and guided descent without
+character-performance integration. Fresh aggregate, post-Editor/native descent,
+rendered motion/reduced-motion/rapid, live-state Save/Load, interruption/restart,
+repeat/recovery and controlled Pumas activity checks pass. Historical receipts
+retain their identities and failures. See [the integration report](GUIDED-DESCENT-INTEGRATION-20261006.md)
+for tested source/binary/evidence identities and scope. Final-head hosted CI and
+parent-owned PR/review/readiness/merge remain pending; human/device/provider/voice
+and measured-duration acceptance are unchanged.
