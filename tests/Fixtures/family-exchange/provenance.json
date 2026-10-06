@@ -1,0 +1,19 @@
+{
+  "frozenCommit": "935c8fe27eb4c5a3ef4aeb3f1e547f7f7045c457",
+  "frozenStorySha256": "de4cf1b809e83565e1139c83b13a14cd22ef6c5e9fe61c8e4c4392468069b562",
+  "method": "Traverse the actual frozen v2 production core, answer its existing activities, capture target/after/completed. Retain the last six valid transcript entries for compact fixtures; frozen core restores each. No history reconstructed by hand. Full snapshots remain local.",
+  "fixtures": {
+    "target": {
+      "compactSha256": "4b90d8a6b40236cff7aae588f3ddc80e9349e7f72db7ea4f538354b40e438677",
+      "fullSnapshotSha256": "579d89f22662794877af0631acc4fc2076d112e07468c76f418e56603043aff1"
+    },
+    "after": {
+      "compactSha256": "21c18ccfc484c4b52de87fd0a57a30b0ef2fc5956cf82f78035c77e4b04c8f8b",
+      "fullSnapshotSha256": "fb8bcc06ac68c36939d89cc1ce1524a0b46d221b5053b9dfd59abd94df25f404"
+    },
+    "completed": {
+      "compactSha256": "93990ce2073d3ae8732f949b59ad99d9655655daafe93c2d37271230b0db3c7d",
+      "fullSnapshotSha256": "172019506cb854b9f9c6173f467de5ff422c578c85ac0acbd125392bd6494932"
+    }
+  }
+}

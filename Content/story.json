@@ -6153,7 +6153,25 @@
             {
               "id": "ch4_s1a_b035",
               "speaker": "narrator",
-              "text": "Nessa nods and closes a folder whose contents have not been cleared for public use. She has learned something by looking at the permission sheet first. So have you: care is not only adding information. Sometimes it is preserving a boundary while keeping the important public evidence available."
+              "text": "Nessa nods and closes a folder whose contents have not been cleared for public use. She has learned something by looking at the permission sheet first. So have you: care is not only adding information. Sometimes it is preserving a boundary while keeping the important public evidence available.",
+              "exchange": {
+                "characterId": "tomas",
+                "prompt": "The private folder is closed. Decide how to support Tomas while keeping the public record clear. You can also leave this moment unspoken.",
+                "options": [
+                  {
+                    "label": "I can help check the permission labels.",
+                    "reply": "Thank you. Keep the permission sheet with the captions, and keep each permission specific. Ruth's family asked for her checklist to be included; that doesn't open every letter in the folder. Being able to hand the next person a clear boundary is useful work."
+                  },
+                  {
+                    "label": "You don't have to share anything private for this record to matter.",
+                    "reply": "I appreciate that. Sometimes I feel expected to produce a more painful photograph before people believe the work matters. These are the ones the families chose for public use. The rest can remain theirs. I can want the account corrected without offering strangers every memory of my father."
+                  },
+                  {
+                    "label": "Could the correction stand without the family photographs?",
+                    "reply": "Yes. The channel log and the deposition support the correction. The photographs help people meet the crew as people; they aren't the proof of a vessel order that never existed. We can make the public finding checkable and let the families decide how much of their ordinary lives they want shown."
+                  }
+                ]
+              }
             },
             {
               "id": "ch4_s1a_b036",

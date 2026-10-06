@@ -365,7 +365,7 @@ Entry-known facts: f_bell_warning, f_cup_prediction, f_full_testimony, f_future_
 Required new facts: none; this scene deepens existing context without a new secret.
 Forbidden future confirmations after this scene: f_authorship, f_evidence_preserved, f_loop_completed, f_release_safe.
 
-No optional model conversation is enabled in this scene.
+No optional model conversation is enabled in this scene. Optional authored exchange `ch4_s1a_b035` offers Tomas practical help with permission labels, respect for private family material, or an evidentiary question about photographs. All three retain distinct authored replies in the record; leaving the moment unspoken also advances normally. This exchange grants no fact/item/gate and makes no new family permission or future preservation claim.
 ### ch4_s2 — No Single Keeper
 Location: `archive`; time: evening; living stage participants: Ada Vale, Tomas Rook, Nessa Ward, Dr Sera Wynn.
 

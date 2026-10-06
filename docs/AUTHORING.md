@@ -39,7 +39,7 @@ their scrolling containers. See [text-size qualification and integration notes](
 
 Use **Search story** to find beats across all chapters by line text, speaker, scene/beat ID, location, evidence prompt or conversation metadata. Whitespace-separated terms all have to match (case-insensitive). Results stay in story order; selecting a match navigates to its original scene and beat. The result count includes all matches; clearing search hides the list. Save or discard a draft before selecting a result.
 
-The read-only **Author context** panel shows the scene/cast, stable beat ID, fact/item unlocks, stage cue, mandatory evidence answer/explanation and optional conversation prompt, allowed facts, suggestions and authored fallback. It contains spoilers for authors, not player-visible knowledge. Editing a beat still changes only its speaker and text. Successful reloads retain the selected stable beat ID when it still exists; a failed reload keeps the last valid selection and unsaved draft intact.
+The read-only **Author context** panel shows the scene/cast, stable beat ID, fact/item unlocks, stage cue, mandatory evidence answer/explanation, optional conversation prompt, allowed facts, suggestions and authored fallback, and every authored exchange intention and response. It contains spoilers for authors, not player-visible knowledge. Editing a beat still changes only its speaker and text. Successful reloads retain the selected stable beat ID when it still exists; a failed reload keeps the last valid selection and unsaved draft intact.
 
 Activities may also include `optionFeedback` in JSON. The Author context exposes
 each saved rationale and story search includes it. The dock preserves these

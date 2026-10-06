@@ -147,7 +147,8 @@ public partial class GameView : Node
         _place.Text = scene.Title + "  ·  " + scene.TimeOfDay.Replace('_', ' ');
         _speaker.Text = DisplayName(_session.Beat.Speaker);
         _dialogue.Text = _session.Beat.Text; _characters = 0; _dialogue.VisibleCharacters = _instant ? -1 : 0;
-        _talk.Visible = _session.Beat.Conversation is not null;
+        _talk.Visible = _session.Beat.Conversation is not null || _session.Beat.Exchange is not null;
+        _talk.Text = _session.Beat.Exchange is { } exchange ? "Speak with " + DisplayName(exchange.CharacterId) : "Stay and talk";
         _advance.Text = !_session.CanAdvance ? "Examine evidence  ›" : _session.IsEnding ? "Finish  ›" : "Continue  ›";
         _status.Text = (_previewMode ? "AUTHOR PREVIEW · player saves disabled · " : "") + $"{_session.Progress:P0} · Space / Enter to continue · E evidence · H history";
     }
@@ -156,7 +157,7 @@ public partial class GameView : Node
     {
         if (Engine.IsEditorHint()) return;
         _operations.ObserveCompleted(error => GD.PushWarning(error.Message));
-        if (_started && _dialogue.VisibleCharacters >= 0) { _characters += delta * CharactersPerSecond; _dialogue.VisibleCharacters = Math.Min((int)_characters, _dialogue.GetTotalCharacterCount()); }
+        if (_started && _exchangeReading is null && _dialogue.VisibleCharacters >= 0) { _characters += delta * CharactersPerSecond; _dialogue.VisibleCharacters = Math.Min((int)_characters, _dialogue.GetTotalCharacterCount()); }
         if (_speech.Recording) { _speech.Poll(); _recordSeconds += delta; _mic.Text = $"Stop ({_recordSeconds:0}s)"; if (_recordSeconds >= 30) ToggleMicrophone(); }
     }
     public override void _Input(InputEvent @event)
@@ -201,6 +202,7 @@ public partial class GameView : Node
     }
     private void OpenConversation()
     {
+        if (_session.Beat.Exchange is not null) { ShowAuthoredExchange(); return; }
         if (!_started || _busy || _closing || _chatPanel.Visible || _modal is not null || _session.Beat.Conversation is not { } chat) return;
         _conversationReading = new(_session, _session.Beat.Id, _generation, _speaker.Text, _dialogue.Text,
             _dialogue.VisibleCharacters, _characters, _status.Text);
@@ -358,7 +360,7 @@ public partial class GameView : Node
         _modal.GetNode<Button>("%ModalCloseButton").Pressed += Dismiss;
         _modal.PopupCentered();
     }
-    private void CloseModal() { if (_modal is not null) { _modal.Hide(); _modal.Exclusive = false; _modal.QueueFree(); _modal = null; _advance.GrabFocus(); } }
+    private void CloseModal() { _exchangeReading = null; if (_modal is not null) { _modal.Hide(); _modal.Exclusive = false; _modal.QueueFree(); _modal = null; _advance.GrabFocus(); } }
     private void ShowStagePreview()
     {
         var locations = new[] { "harbor", "keeper_house", "archive", "lantern_room", "tide_cave" };

@@ -15,7 +15,8 @@ public sealed record StoryAuthoringEntry(int SceneIndex, int BeatIndex, string C
         $"Stage cue: {Beat.StageCue ?? "none"}",
         Beat.Activity is { } activity ? $"Required evidence: {activity.Prompt}\nAnswer: {activity.Options[activity.CorrectIndex]}\nExplanation: {activity.Explanation}" +
             (activity.OptionFeedback is { } feedback ? "\nOption feedback:\n" + string.Join("\n", feedback.Select((text, index) => $"{index}: {text}")) : "") : "Required evidence: none",
-        Beat.Conversation is { } chat ? $"Optional conversation: {chat.CharacterId}\nPrompt: {chat.Prompt}\nAllowed facts: {string.Join(", ", chat.AllowedFacts)}\nSuggestions: {string.Join(" / ", chat.Suggestions)}\nAuthored fallback: {chat.Fallback}" : "Optional conversation: none"
+        Beat.Conversation is { } chat ? $"Optional conversation: {chat.CharacterId}\nPrompt: {chat.Prompt}\nAllowed facts: {string.Join(", ", chat.AllowedFacts)}\nSuggestions: {string.Join(" / ", chat.Suggestions)}\nAuthored fallback: {chat.Fallback}" : "Optional conversation: none",
+        Beat.Exchange is { } exchange ? $"Optional authored exchange: {exchange.CharacterId}\nPrompt: {exchange.Prompt}\n" + string.Join("\n\n", exchange.Options.Select(o => $"Ada: {o.Label}\nReply: {o.Reply}")) : "Authored exchange: none"
     });
 }
 

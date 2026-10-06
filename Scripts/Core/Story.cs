@@ -9,7 +9,9 @@ public sealed record Fact(string Id, string Text);
 public sealed record Item(string Id, string Name, string Description);
 public sealed record Conversation(string CharacterId, string Prompt, string[] Suggestions, string Fallback, string[] AllowedFacts);
 public sealed record EvidenceActivity(string Prompt, string[] Options, int CorrectIndex, string Explanation, string[]? OptionFeedback = null);
-public sealed record Beat(string Id, string Speaker, string Text, string[]? UnlockFacts = null, string[]? UnlockItems = null, Conversation? Conversation = null, EvidenceActivity? Activity = null, string? StageCue = null);
+public sealed record AuthoredOption(string Label, string Reply);
+public sealed record AuthoredExchange(string CharacterId, string Prompt, AuthoredOption[] Options);
+public sealed record Beat(string Id, string Speaker, string Text, string[]? UnlockFacts = null, string[]? UnlockItems = null, Conversation? Conversation = null, EvidenceActivity? Activity = null, string? StageCue = null, AuthoredExchange? Exchange = null);
 public sealed record Scene(string Id, string Title, string Location, string TimeOfDay, string[] CharacterIds, Beat[] Beats);
 public sealed record Chapter(string Id, string Title, Scene[] Scenes);
 public sealed record Story(int SchemaVersion, string Title, Character[] Characters, Fact[] Facts, Chapter[] Chapters, Item[] Items)
@@ -55,6 +57,23 @@ public sealed record Story(int SchemaVersion, string Title, Character[] Characte
                 RequireCollection(scene.CharacterIds, $"characters in scene {scene.Id}");
                 foreach (var beat in scene.Beats)
                 {
+                    if (beat.Exchange is { } exchange)
+                    {
+                        RequireText(exchange.Prompt, "exchange.prompt", $"Beat {beat.Id}");
+                        RequireCollection(exchange.Options, $"exchange.options at {beat.Id}");
+                        if (exchange.Options.Length is < 2 or > 6 || beat.Conversation is not null || beat.Activity is not null ||
+                            exchange.CharacterId is not ("nessa" or "tomas" or "sera") || !scene.CharacterIds.Contains(exchange.CharacterId))
+                            throw new InvalidDataException($"Invalid authored exchange at {beat.Id}.");
+                        foreach (var option in exchange.Options)
+                        {
+                            RequireText(option.Label, "exchange.option.label", $"Beat {beat.Id}");
+                            RequireText(option.Reply, "exchange.option.reply", $"Beat {beat.Id}");
+                            if (option.Label.Length > 300 || option.Reply.Length > 2000)
+                                throw new InvalidDataException($"Authored exchange text exceeds bounds at {beat.Id}.");
+                        }
+                        if (exchange.Options.Select(o => o.Label).Distinct(StringComparer.Ordinal).Count() != exchange.Options.Length)
+                            throw new InvalidDataException($"Duplicate authored exchange option at {beat.Id}.");
+                    }
                     if (beat.Activity is { } activity)
                     {
                         RequireText(activity.Prompt, "activity.prompt", $"Beat {beat.Id}");
