@@ -3,6 +3,10 @@
 [ext_resource type="Script" uid="uid://dnh6dsp6fca78" path="res://Scripts/Presentation/StageCharacter.cs" id="1_7v036"]
 [ext_resource type="Script" uid="uid://323c50kwdbwv" path="res://Scripts/Presentation/StageMotion.cs" id="2_rkkod"]
 
+[ext_resource type="Resource" path="res://Scenes/Characters/Poses/NessaListening.tres" id="pose_listening"]
+[ext_resource type="Resource" path="res://Scenes/Characters/Poses/NessaWorking.tres" id="pose_working"]
+[ext_resource type="Resource" path="res://Scenes/Characters/Poses/NessaResting.tres" id="pose_resting"]
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sc1rp"]
 cull_mode = 2
 diffuse_mode = 3
@@ -250,9 +254,38 @@ height = 0.16
 radial_segments = 8
 rings = 1
 
-[node name="Nessa" type="Node3D" unique_id=469851399 node_paths=PackedStringArray("Breathing")]
+[node name="Nessa" type="Node3D" unique_id=469851399 node_paths=PackedStringArray("Breathing", "Torso", "Head", "LeftShoulder", "LeftElbow", "RightShoulder", "RightElbow")]
 script = ExtResource("1_7v036")
 Breathing = NodePath("Breathing")
+
+CharacterId = "nessa"
+Torso = NodePath("Torso")
+Head = NodePath("Torso/Head")
+LeftShoulder = NodePath("Torso/LeftShoulder")
+LeftElbow = NodePath("Torso/LeftShoulder/LeftElbow")
+RightShoulder = NodePath("Torso/RightShoulder")
+RightElbow = NodePath("Torso/RightShoulder/RightElbow")
+Listening = ExtResource("pose_listening")
+Working = ExtResource("pose_working")
+Resting = ExtResource("pose_resting")
+
+[node name="Torso" type="Node3D" parent="."]
+position = Vector3(0, 1.35, 0)
+
+[node name="Head" type="Node3D" parent="Torso"]
+position = Vector3(0, 0.96, 0)
+
+[node name="LeftShoulder" type="Node3D" parent="Torso"]
+position = Vector3(-0.38, 0.76, 0)
+
+[node name="LeftElbow" type="Node3D" parent="Torso/LeftShoulder"]
+position = Vector3(-0.23, -0.45, 0.075)
+
+[node name="RightShoulder" type="Node3D" parent="Torso"]
+position = Vector3(0.38, 0.76, 0)
+
+[node name="RightElbow" type="Node3D" parent="Torso/RightShoulder"]
+position = Vector3(0.17, -0.46, 0)
 
 [node name="Cylinder001" type="MeshInstance3D" parent="." unique_id=262786837]
 transform = Transform3D(0.99939084, 0.034899496, 0, -0.034851667, 0.9980212, 0.05233596, 0.0018264985, -0.052304078, 0.9986295, -0.19, 0.58, 0)
@@ -279,128 +312,128 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
 material_override = SubResource("StandardMaterial3D_rspsf")
 mesh = SubResource("CylinderMesh_2gebp")
 
-[node name="Cylinder004" type="MeshInstance3D" parent="." unique_id=860568071]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.7, 0, 1.87, 0)
+[node name="Cylinder004" type="MeshInstance3D" parent="Torso" unique_id=860568071]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.7, 0.0, 0.52, 0.0)
 material_override = SubResource("StandardMaterial3D_rspsf")
 mesh = SubResource("CylinderMesh_6j7mw")
 
-[node name="SculptedDetail003" type="MeshInstance3D" parent="." unique_id=867851392]
-transform = Transform3D(0.21, 0, 0, 0, 0.21, 0, 0, 0, 0.22, -0.38, 2.11, 0)
+[node name="SculptedDetail003" type="MeshInstance3D" parent="Torso" unique_id=867851392]
+transform = Transform3D(0.21, 0, 0, 0, 0.21, 0, 0, 0, 0.22, -0.38, 0.76, 0.0)
 material_override = SubResource("StandardMaterial3D_rspsf")
 mesh = SubResource("SphereMesh_4bkno")
 
-[node name="SculptedDetail004" type="MeshInstance3D" parent="." unique_id=205696775]
-transform = Transform3D(0.21, 0, 0, 0, 0.21, 0, 0, 0, 0.22, 0.38, 2.11, 0)
+[node name="SculptedDetail004" type="MeshInstance3D" parent="Torso" unique_id=205696775]
+transform = Transform3D(0.21, 0, 0, 0, 0.21, 0, 0, 0, 0.22, 0.38, 0.76, 0.0)
 material_override = SubResource("StandardMaterial3D_rspsf")
 mesh = SubResource("SphereMesh_5ppqk")
 
-[node name="Cylinder005" type="MeshInstance3D" parent="." unique_id=121840245]
-transform = Transform3D(-0.4620136, -0.27404895, 0.84346944, 0.27404895, -0.9486306, -0.15810518, 0.84346944, 0.15810518, 0.513383, -0.495, 1.865, 0.0375)
+[node name="Cylinder005" type="MeshInstance3D" parent="Torso/LeftShoulder" unique_id=121840245]
+transform = Transform3D(-0.4620136, -0.27404895, 0.84346944, 0.27404895, -0.9486306, -0.15810518, 0.84346944, 0.15810518, 0.513383, -0.115, -0.245, 0.0375)
 material_override = SubResource("StandardMaterial3D_rspsf")
 mesh = SubResource("CylinderMesh_fppdr")
 
-[node name="Cylinder006" type="MeshInstance3D" parent="." unique_id=1844948880]
-transform = Transform3D(0.6328372, 0.3413366, -0.69498664, -0.3413366, -0.6826731, -0.6461013, -0.69498664, 0.6461013, -0.31551027, -0.49, 1.5, 0.20750001)
+[node name="Cylinder006" type="MeshInstance3D" parent="Torso/LeftShoulder/LeftElbow" unique_id=1844948880]
+transform = Transform3D(0.6328372, 0.3413366, -0.69498664, -0.3413366, -0.6826731, -0.6461013, -0.69498664, 0.6461013, -0.31551027, 0.12, -0.16, 0.13250001)
 material_override = SubResource("StandardMaterial3D_rspsf")
 mesh = SubResource("CylinderMesh_hw6sm")
 
-[node name="SculptedDetail005" type="MeshInstance3D" parent="." unique_id=304853582]
-transform = Transform3D(0.105, 0, 0, 0, 0.15, 0, 0, 0, 0.085, -0.4, 1.3, 0.36)
+[node name="SculptedDetail005" type="MeshInstance3D" parent="Torso/LeftShoulder/LeftElbow" unique_id=304853582]
+transform = Transform3D(0.105, 0, 0, 0, 0.15, 0, 0, 0, 0.085, 0.21, -0.36, 0.285)
 material_override = SubResource("StandardMaterial3D_rb7qi")
 mesh = SubResource("SphereMesh_uf5gn")
 
-[node name="Cylinder007" type="MeshInstance3D" parent="." unique_id=1414292024]
-transform = Transform3D(-0.96476376, 0.26311737, 0, -0.26311737, -0.96476376, 0, 0, 0, 1, 0.49, 1.8699999, 0)
+[node name="Cylinder007" type="MeshInstance3D" parent="Torso/RightShoulder" unique_id=1414292024]
+transform = Transform3D(-0.96476376, 0.26311737, 0, -0.26311737, -0.96476376, 0, 0, 0, 1, 0.11, -0.2400001, 0.0)
 material_override = SubResource("StandardMaterial3D_rspsf")
 mesh = SubResource("CylinderMesh_l6ej8")
 
-[node name="Cylinder008" type="MeshInstance3D" parent="." unique_id=902178342]
-transform = Transform3D(1, 0, 0, 0, -0.96244967, -0.27146018, 0, 0.27146018, -0.96244967, 0.55, 1.4549999, 0.055)
+[node name="Cylinder008" type="MeshInstance3D" parent="Torso/RightShoulder/RightElbow" unique_id=902178342]
+transform = Transform3D(1, 0, 0, 0, -0.96244967, -0.27146018, 0, 0.27146018, -0.96244967, 0.0, -0.1950001, 0.055)
 material_override = SubResource("StandardMaterial3D_rspsf")
 mesh = SubResource("CylinderMesh_sx7aj")
 
-[node name="SculptedDetail006" type="MeshInstance3D" parent="." unique_id=941350517]
-transform = Transform3D(0.105, 0, 0, 0, 0.15, 0, 0, 0, 0.085, 0.55, 1.18, 0.11)
+[node name="SculptedDetail006" type="MeshInstance3D" parent="Torso/RightShoulder/RightElbow" unique_id=941350517]
+transform = Transform3D(0.105, 0, 0, 0, 0.15, 0, 0, 0, 0.085, 0.0, -0.47, 0.11)
 material_override = SubResource("StandardMaterial3D_rb7qi")
 mesh = SubResource("SphereMesh_lsbfg")
 
-[node name="Cylinder009" type="MeshInstance3D" parent="." unique_id=32333288]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.31, 0)
+[node name="Cylinder009" type="MeshInstance3D" parent="Torso" unique_id=32333288]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.96, 0.0)
 material_override = SubResource("StandardMaterial3D_rb7qi")
 mesh = SubResource("CylinderMesh_af8sd")
 
-[node name="SculptedDetail007" type="MeshInstance3D" parent="." unique_id=359995609]
-transform = Transform3D(0.245, 0, 0, 0, 0.32, 0, 0, 0, 0.23, 0, 2.62, 0.02)
+[node name="SculptedDetail007" type="MeshInstance3D" parent="Torso/Head" unique_id=359995609]
+transform = Transform3D(0.245, 0, 0, 0, 0.32, 0, 0, 0, 0.23, 0.0, 0.31, 0.02)
 material_override = SubResource("StandardMaterial3D_rb7qi")
 mesh = SubResource("SphereMesh_ryh8n")
 
-[node name="SculptedDetail008" type="MeshInstance3D" parent="." unique_id=1209870122]
-transform = Transform3D(0.052, 0, 0, 0, 0.078, 0, 0, 0, 0.048, -0.234, 2.6, 0)
+[node name="SculptedDetail008" type="MeshInstance3D" parent="Torso/Head" unique_id=1209870122]
+transform = Transform3D(0.052, 0, 0, 0, 0.078, 0, 0, 0, 0.048, -0.234, 0.29, 0.0)
 material_override = SubResource("StandardMaterial3D_rb7qi")
 mesh = SubResource("SphereMesh_sk2dg")
 
-[node name="SculptedDetail009" type="MeshInstance3D" parent="." unique_id=184037219]
-transform = Transform3D(0.052, 0, 0, 0, 0.078, 0, 0, 0, 0.048, 0.234, 2.6, 0)
+[node name="SculptedDetail009" type="MeshInstance3D" parent="Torso/Head" unique_id=184037219]
+transform = Transform3D(0.052, 0, 0, 0, 0.078, 0, 0, 0, 0.048, 0.234, 0.29, 0.0)
 material_override = SubResource("StandardMaterial3D_rb7qi")
 mesh = SubResource("SphereMesh_w11i6")
 
-[node name="SculptedDetail010" type="MeshInstance3D" parent="." unique_id=808702508]
-transform = Transform3D(0.255, 0, 0, 0, 0.17, 0, 0, 0, 0.235, 0, 2.81, -0.04)
+[node name="SculptedDetail010" type="MeshInstance3D" parent="Torso/Head" unique_id=808702508]
+transform = Transform3D(0.255, 0, 0, 0, 0.17, 0, 0, 0, 0.235, 0.0, 0.5, -0.04)
 material_override = SubResource("StandardMaterial3D_kou0w")
 mesh = SubResource("SphereMesh_sgj3t")
 
-[node name="SculptedDetail011" type="MeshInstance3D" parent="." unique_id=1068380986]
-transform = Transform3D(0.13, 0, 0, 0, 0.16, 0, 0, 0, 0.1, -0.15, 2.7, 0.145)
+[node name="SculptedDetail011" type="MeshInstance3D" parent="Torso/Head" unique_id=1068380986]
+transform = Transform3D(0.13, 0, 0, 0, 0.16, 0, 0, 0, 0.1, -0.15, 0.39, 0.145)
 material_override = SubResource("StandardMaterial3D_kou0w")
 mesh = SubResource("SphereMesh_amnok")
 
-[node name="SculptedDetail012" type="MeshInstance3D" parent="." unique_id=1010353209]
-transform = Transform3D(0.05, 0, 0, 0, 0.07, 0, 0, 0, 0.075, 0, 2.6, 0.236)
+[node name="SculptedDetail012" type="MeshInstance3D" parent="Torso/Head" unique_id=1010353209]
+transform = Transform3D(0.05, 0, 0, 0, 0.07, 0, 0, 0, 0.075, 0.0, 0.29, 0.236)
 material_override = SubResource("StandardMaterial3D_rb7qi")
 mesh = SubResource("SphereMesh_3bbhx")
 
-[node name="Panel001" type="MeshInstance3D" parent="." unique_id=1684892111]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.095, 2.66, 0.232)
+[node name="Panel001" type="MeshInstance3D" parent="Torso/Head" unique_id=1684892111]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.095, 0.35, 0.232)
 material_override = SubResource("StandardMaterial3D_sc1rp")
 mesh = SubResource("BoxMesh_iq5ae")
 
-[node name="Panel002" type="MeshInstance3D" parent="." unique_id=58176162]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.095, 2.66, 0.232)
+[node name="Panel002" type="MeshInstance3D" parent="Torso/Head" unique_id=58176162]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.095, 0.35, 0.232)
 material_override = SubResource("StandardMaterial3D_sc1rp")
 mesh = SubResource("BoxMesh_ir6ap")
 
-[node name="Panel003" type="MeshInstance3D" parent="." unique_id=1088336957]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.48, 0.219)
+[node name="Panel003" type="MeshInstance3D" parent="Torso/Head" unique_id=1088336957]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.17, 0.219)
 material_override = SubResource("StandardMaterial3D_0p25e")
 mesh = SubResource("BoxMesh_pfqsf")
 
-[node name="Panel004" type="MeshInstance3D" parent="." unique_id=470740133]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.03, 0.282)
+[node name="Panel004" type="MeshInstance3D" parent="Torso" unique_id=470740133]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.68, 0.282)
 material_override = SubResource("StandardMaterial3D_4ew0x")
 mesh = SubResource("BoxMesh_mpfgm")
 
-[node name="Panel005" type="MeshInstance3D" parent="." unique_id=1042999039]
-transform = Transform3D(0.95105654, -0.309017, 0, 0.309017, 0.95105654, 0, 0, 0, 1, -0.16, 2.06, 0.29)
+[node name="Panel005" type="MeshInstance3D" parent="Torso" unique_id=1042999039]
+transform = Transform3D(0.95105654, -0.309017, 0, 0.309017, 0.95105654, 0, 0, 0, 1, -0.16, 0.71, 0.29)
 material_override = SubResource("StandardMaterial3D_rspsf")
 mesh = SubResource("BoxMesh_hkouw")
 
-[node name="Panel006" type="MeshInstance3D" parent="." unique_id=1328792152]
-transform = Transform3D(0.95105654, 0.309017, 0, -0.309017, 0.95105654, 0, 0, 0, 1, 0.16, 2.06, 0.29)
+[node name="Panel006" type="MeshInstance3D" parent="Torso" unique_id=1328792152]
+transform = Transform3D(0.95105654, 0.309017, 0, -0.309017, 0.95105654, 0, 0, 0, 1, 0.16, 0.71, 0.29)
 material_override = SubResource("StandardMaterial3D_rspsf")
 mesh = SubResource("BoxMesh_v7lc8")
 
-[node name="SculptedDetail013" type="MeshInstance3D" parent="." unique_id=1956193991]
-transform = Transform3D(0.032, 0, 0, 0, 0.032, 0, 0, 0, 0.022, 0.09, 1.84, 0.345)
+[node name="SculptedDetail013" type="MeshInstance3D" parent="Torso" unique_id=1956193991]
+transform = Transform3D(0.032, 0, 0, 0, 0.032, 0, 0, 0, 0.022, 0.09, 0.49, 0.345)
 material_override = SubResource("StandardMaterial3D_o0fx1")
 mesh = SubResource("SphereMesh_u3drr")
 
-[node name="SculptedDetail014" type="MeshInstance3D" parent="." unique_id=1272905166]
-transform = Transform3D(0.032, 0, 0, 0, 0.032, 0, 0, 0, 0.022, 0.09, 1.62, 0.345)
+[node name="SculptedDetail014" type="MeshInstance3D" parent="Torso" unique_id=1272905166]
+transform = Transform3D(0.032, 0, 0, 0, 0.032, 0, 0, 0, 0.022, 0.09, 0.27, 0.345)
 material_override = SubResource("StandardMaterial3D_o0fx1")
 mesh = SubResource("SphereMesh_il00t")
 
-[node name="SculptedDetail015" type="MeshInstance3D" parent="." unique_id=510179810]
-transform = Transform3D(0.032, 0, 0, 0, 0.032, 0, 0, 0, 0.022, 0.09, 1.4000001, 0.345)
+[node name="SculptedDetail015" type="MeshInstance3D" parent="Torso" unique_id=510179810]
+transform = Transform3D(0.032, 0, 0, 0, 0.032, 0, 0, 0, 0.022, 0.09, 0.0500001, 0.345)
 material_override = SubResource("StandardMaterial3D_o0fx1")
 mesh = SubResource("SphereMesh_jaqbt")
 
@@ -409,13 +442,13 @@ transform = Transform3D(0.032, 0, 0, 0, 0.032, 0, 0, 0, 0.022, 0.09, 1.1800001, 
 material_override = SubResource("StandardMaterial3D_o0fx1")
 mesh = SubResource("SphereMesh_foseq")
 
-[node name="Cylinder010" type="MeshInstance3D" parent="." unique_id=229994016]
-transform = Transform3D(1, 0, 0, 0, 0.81915206, -0.57357645, 0, 0.57357645, 0.81915206, -0.44, 1.4, 0.3)
+[node name="Cylinder010" type="MeshInstance3D" parent="Torso/LeftShoulder/LeftElbow" unique_id=229994016]
+transform = Transform3D(1, 0, 0, 0, 0.81915206, -0.57357645, 0, 0.57357645, 0.81915206, 0.17, -0.26, 0.225)
 material_override = SubResource("StandardMaterial3D_fkqfd")
 mesh = SubResource("CylinderMesh_t7mxs")
 
-[node name="Cylinder011" type="MeshInstance3D" parent="." unique_id=1169434897]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 1.31, 0.095)
+[node name="Cylinder011" type="MeshInstance3D" parent="Torso/RightShoulder/RightElbow" unique_id=1169434897]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, -0.34, 0.095)
 material_override = SubResource("StandardMaterial3D_fkqfd")
 mesh = SubResource("CylinderMesh_uqr14")
 

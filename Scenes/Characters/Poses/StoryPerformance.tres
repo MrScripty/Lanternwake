@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="PerformanceDirection" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Presentation/PerformanceDirection.cs" id="1_direction"]
+
+[resource]
+script = ExtResource("1_direction")
+SceneIds = PackedStringArray("ch1_s2", "ch3_s1", "ch3_s2", "ch4_s1", "ch5_s3", "ch5_s5")
+RestingSceneIds = PackedStringArray("ch4_s1", "ch5_s3", "ch5_s5")
+StillSceneIds = PackedStringArray("ch4_s1", "ch5_s3", "ch5_s5")
+WorkingBeatActors = Dictionary[String, String]({
+"ch1_s2_b008": "ada",
+"ch3_s1_b014": "sera",
+"ch3_s2_b001": "tomas",
+"ch4_s1_b011": "tomas",
+"ch5_s3_b001": "sera",
+"ch5_s3_b003": "nessa",
+"ch5_s5_b002": "ada"
+})

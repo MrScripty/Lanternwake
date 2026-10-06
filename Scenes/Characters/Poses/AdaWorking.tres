@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="CharacterPose" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Presentation/CharacterPose.cs" id="1_pose"]
+
+[resource]
+script = ExtResource("1_pose")
+TorsoDegrees = Vector3(3, 0, 0)
+HeadDegrees = Vector3(8, 0, 0)
+LeftShoulderDegrees = Vector3(-22, 0, 10)
+LeftElbowDegrees = Vector3(-32, 0, 0)
+RightShoulderDegrees = Vector3(-32, 0, -16)
+RightElbowDegrees = Vector3(-38, 0, 0)

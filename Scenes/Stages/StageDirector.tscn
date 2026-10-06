@@ -11,6 +11,8 @@
 [ext_resource type="PackedScene" path="res://Scenes/Characters/Tomas.tscn" id="9_tomas"]
 [ext_resource type="PackedScene" path="res://Scenes/Characters/Sera.tscn" id="10_sera"]
 
+[ext_resource type="Resource" path="res://Scenes/Characters/Poses/StoryPerformance.tres" id="11_performance"]
+
 [node name="StageDirector" type="Node3D" unique_id=278341094]
 script = ExtResource("1_director")
 Harbor = ExtResource("2_harbor")
@@ -22,3 +24,4 @@ Ada = ExtResource("7_ada")
 Nessa = ExtResource("8_nessa")
 Tomas = ExtResource("9_tomas")
 Sera = ExtResource("10_sera")
+Performance = ExtResource("11_performance")
