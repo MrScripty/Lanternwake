@@ -4,10 +4,29 @@
 
 The game uses **native C# `HttpClient` directly against Pumas**. Python, an
 OpenAI account, cloud inference, and generated UniFFI bindings are not runtime
-requirements. `Scripts/Conversation/PumasClient.cs` accepts character, observed
+requirements. The dialogue operation in `Scripts/Conversation/PumasClient.cs` accepts character, observed
 world context, and player text, and returns only `PumasReply(Success, Text,
 ErrorCode)`. It has no game-state reference, save-file access, tool execution, or
 quest/inventory mutation surface.
+
+The optional **Settings → Local conversation setup** panel uses typed native C#
+wrappers in `PumasClient.Discovery.cs`: `search_hf_models`,
+`get_hf_download_details`, and `start_model_download_from_hf`. Search and inspection
+only request metadata. Selecting an option opens a review panel; only **Request
+download through Pumas** sends the acquisition RPC. Grouped options preserve the
+exact filenames Pumas returns. A download ID is an acceptance receipt, not proof
+of completion, verification, runtime installation, loading, or dialogue quality.
+
+All setup transport uses the same strict loopback-only, no-proxy/no-redirect
+boundary as conversation. Lanternwake does not contact Hugging Face, transfer
+model bytes, verify artifacts, resolve revisions, or acquire runtimes. Pumas owns
+these operations. Preview `main` is mutable; immutable revision is unknown in the
+approved preview response. Pumas resolves the revision during acquisition and
+stored model metadata can expose `upstream_revision`. Never promote `main` or a
+download ID into an immutable-revision receipt. Closing cancels Lanternwake's
+wait; it does not undo a request already accepted by Pumas. An interrupted or
+unsupported acquisition response has unknown acceptance and is never replayed.
+Check Pumas before sending another request.
 
 This integration was historically source-qualified against Pumas commit
 [`e37bbf4b964a0e2aadf25f80ab71edd8fa6b3eb3`](https://github.com/MrScripty/Pumas-Library/commit/e37bbf4b964a0e2aadf25f80ab71edd8fa6b3eb3),
@@ -70,7 +89,8 @@ JSON properties are rejected. No output is parsed as a game instruction.
 2. Install/select a compatible llama.cpp runtime through Pumas. Serving code
    requires an active `llama-cpp` version; merely starting an unrelated
    `llama-server` does not satisfy the Pumas managed-runtime contract.
-3. Register a licensed, instruction-capable GGUF in the Pumas model library.
+3. Register a licensed, instruction-capable GGUF in the Pumas model library,
+   or explicitly request acquisition through the optional game setup panel.
    Preserve the actual model ID returned by Pumas. The adapter does not
    download models, install runtimes, or change profiles automatically.
 4. Configure and serve that model with a `llama_cpp` profile. CPU placement is
@@ -189,8 +209,14 @@ Never present any of these outcomes as a successful live-model reply.
 
 ## Verification commands and optional adapter
 
+The new setup wrappers and controlled normal-player UI results are recorded in
+[PUMAS-DISCOVERY-SETUP-VERIFICATION.md](PUMAS-DISCOVERY-SETUP-VERIFICATION.md).
+These qualify the consumed source contract and fixture behavior; they do not
+establish real acquisition, installation or inference on the approved pin.
+
 ```sh
 dotnet run --project integration/pumas/ClientTests/ClientTests.csproj
+dotnet run --project integration/pumas/DiscoveryTests/DiscoveryTests.csproj
 python3 -m unittest discover -s integration/pumas -v
 ```
 

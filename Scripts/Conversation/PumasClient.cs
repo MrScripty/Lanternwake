@@ -19,7 +19,7 @@ public sealed record PumasReply(bool Success, string Text, string ErrorCode)
 /// Direct client of the source-qualified Pumas headless inference API.
 /// Owns its transport and contains no Godot objects or canonical game state.
 /// </summary>
-public sealed class PumasClient : IDisposable
+public sealed partial class PumasClient : IDisposable
 {
     private const int MaxResponseBytes = 262_144;
     private readonly HttpClient _http;
@@ -209,5 +209,5 @@ public sealed class PumasClient : IDisposable
     }
 
     /// <summary>Caller must cancel and await active invocations before disposing.</summary>
-    public void Dispose() { _http.Dispose(); _generation.Dispose(); }
+    public void Dispose() { _http.Dispose(); _generation.Dispose(); _setup.Dispose(); }
 }

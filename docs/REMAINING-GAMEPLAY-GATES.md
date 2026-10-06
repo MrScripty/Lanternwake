@@ -26,3 +26,15 @@ branch, timed failure, relationship mechanic or provider integration. The remain
 items above identify their actual evidence or author owners; they are not inferred
 permission gates for already-authorized reversible work. PR7–10 and the frozen
 source branches are preserved. No external review request or merge is made.
+
+## Pumas setup candidate boundary, 2026-10-06
+
+Typed discovery and explicit request wrappers now have controlled C# and normal
+Godot acceptance at 100% and 150%; see
+[PUMAS-DISCOVERY-SETUP-VERIFICATION.md](PUMAS-DISCOVERY-SETUP-VERIFICATION.md).
+Real acquisition/completion, immutable artifact receipts, Pumas runtime
+installation, loaded-model wire qualification on `95a0baad`, production dialogue
+quality and real-provider cancellation remain separate gates. Preview `main`
+stays mutable; Pumas resolves the revision during acquisition. This candidate
+adds no real download or external host and leaves parent-owned review/publication
+and raw-upload approval gates intact.

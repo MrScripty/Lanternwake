@@ -4,7 +4,7 @@
     <ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="../../../Scripts/Conversation/PumasClient.cs" Link="PumasClient.cs" />
+    <Compile Include="../../../Scripts/Conversation/PumasClient*.cs" Link="%(Filename)%(Extension)" />
     <Compile Include="../../../Scripts/Core/*.cs" Link="Core/%(Filename)%(Extension)" />
   </ItemGroup>
 </Project>

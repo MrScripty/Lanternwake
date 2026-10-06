@@ -360,7 +360,7 @@ public partial class GameView : Node
         _modal.GetNode<Button>("%ModalCloseButton").Pressed += Dismiss;
         _modal.PopupCentered();
     }
-    private void CloseModal() { _exchangeReading = null; if (_modal is not null) { _modal.Hide(); _modal.Exclusive = false; _modal.QueueFree(); _modal = null; _advance.GrabFocus(); } }
+    private void CloseModal() { _setupRequest?.Cancel(); _exchangeReading = null; if (_modal is not null) { _modal.Hide(); _modal.Exclusive = false; _modal.QueueFree(); _modal = null; _advance.GrabFocus(); } }
     private void ShowStagePreview()
     {
         var locations = new[] { "harbor", "keeper_house", "archive", "lantern_room", "tide_cave" };
@@ -465,10 +465,10 @@ public partial class GameView : Node
     {
         if (Engine.IsEditorHint()) return;
         if (what != NotificationWMCloseRequest || _closing) return;
-        _closing = true; _generation++; _request?.Cancel(); _speechRequest?.Cancel(); _speech.Dispose();
+        _closing = true; _generation++; _request?.Cancel(); _speechRequest?.Cancel(); _setupRequest?.Cancel(); _speech.Dispose();
         try { await _operations.DrainAsync(); }
         catch (Exception error) { GD.PushWarning("Shutdown operation: " + error.Message); }
-        finally { _pumas?.Dispose(); _pumas = null; QuitAfterAudio(); }
+        finally { _pumas?.Dispose(); _pumas = null; _setupPumas?.Dispose(); _setupPumas = null; QuitAfterAudio(); }
     }
-    public override void _ExitTree() { if (Engine.IsEditorHint()) return; _generation++; _request?.Cancel(); _request?.Dispose(); _speechRequest?.Cancel(); _speech.Dispose(); _storage?.Dispose(); }
+    public override void _ExitTree() { if (Engine.IsEditorHint()) return; _generation++; _request?.Cancel(); _request?.Dispose(); _speechRequest?.Cancel(); _setupRequest?.Cancel(); _speech.Dispose(); _storage?.Dispose(); }
 }

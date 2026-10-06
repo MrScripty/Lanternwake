@@ -79,3 +79,16 @@ Detailed records:
 The requested deterministic non-audio qualification gaps are complete. Remaining
 gates require their stated evidence/owners; this inventory proposes no new feature
 work, PR7 merge or external review request.
+
+## Separate Pumas setup candidate, 2026-10-06
+
+The optional native model-discovery/setup panel on a separate branch from main
+`19495fac` implements typed Pumas search, download-details and explicit acquisition
+requests. Twelve controlled acquisition/discovery scenarios, 23 existing client
+scenarios and normal Godot sessions at 100%/150% (29 checks each) pass. Inspection
+does not acquire; the explicit request returns only an acceptance receipt. Pumas
+owns external requests, revision resolution, transfer, verification and runtimes.
+Canonical content and player state are preserved. This is not real acquisition,
+installation or inference qualification. The frozen character-performance and
+guided-descent review heads are not composed here. See
+[bounded setup qualification](PUMAS-DISCOVERY-SETUP-VERIFICATION.md).
