@@ -38,3 +38,14 @@ quality and real-provider cancellation remain separate gates. Preview `main`
 stays mutable; Pumas resolves the revision during acquisition. This candidate
 adds no real download or external host and leaves parent-owned review/publication
 and raw-upload approval gates intact.
+
+## Pumas activity candidate boundary, 2026-10-06
+
+Progress/completion/failure, exact-ID cancellation and recovery of a closed
+activity view now have controlled C# and normal Godot acceptance at 100%/150%.
+The setup PR14 merge is incorporated into the separate activity branch without
+changing its qualified bytes. This establishes no real transfer, cleanup,
+persistence-restore, immutable artifact, loaded-model or runtime evidence.
+Pause/resume and token-authorized interrupted-transfer recovery remain Pumas
+operations; Lanternwake does not invent recovery tokens or replay commands.
+See [activity qualification](PUMAS-DOWNLOAD-ACTIVITY-VERIFICATION.md).

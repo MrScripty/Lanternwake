@@ -92,3 +92,16 @@ Canonical content and player state are preserved. This is not real acquisition,
 installation or inference qualification. The frozen character-performance and
 guided-descent review heads are not composed here. See
 [bounded setup qualification](PUMAS-DISCOVERY-SETUP-VERIFICATION.md).
+
+## Pumas download activity candidate, 2026-10-06
+
+The next separate candidate adds the missing progress/completion/failure view,
+explicit cancellation and activity-view recovery using three existing Pumas RPCs.
+Twenty-six discovery/activity contract scenarios (14 new lifecycle cases), 23
+existing conversation scenarios, native UI smoke and normal 100%/150% sessions
+(62 checks each) pass. The approved setup main `9019fe1` was merged into this
+feature at a safe boundary with no qualified source-byte change. Character and
+descent candidates remain separate. Recovery reads Pumas records; it does not
+resume transfers or duplicate the downloader. Runtime loading, immutable artifact
+receipts and real acquisition/cleanup remain unqualified here. See
+[bounded activity qualification](PUMAS-DOWNLOAD-ACTIVITY-VERIFICATION.md).

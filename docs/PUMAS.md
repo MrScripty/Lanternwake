@@ -28,6 +28,24 @@ wait; it does not undo a request already accepted by Pumas. An interrupted or
 unsupported acquisition response has unknown acceptance and is never replayed.
 Check Pumas before sending another request.
 
+The accepted receipt now offers **View this request**, and setup offers
+**View Pumas download activity**. Typed wrappers in
+`PumasClient.DownloadActivity.cs` call `list_model_downloads`,
+`get_model_download_status` and `cancel_model_download`. Activity lists all
+currently tracked Pumas requests. Choose an exact ID and refresh explicitly;
+closing/reopening recovers the view from Pumas without a local journal or new
+acquisition. Percentages do not determine terminal state. Backend completion
+and returned library/artifact IDs do not qualify runtime loading or dialogue.
+
+Cancellation has its own exact-ID review and explicit send action. Closing the
+review sends no command. An acknowledgement is separate from terminal
+`cancelled`; refresh the backend status to confirm it. Closing a pending command
+only stops Lanternwake's wait and leaves its outcome unknown locally. Reopening
+reads Pumas and never replays cancellation. Pause/resume and interrupted-transfer
+recovery remain Pumas controls; no transfer or cleanup implementation is added
+to Lanternwake. See [activity qualification](PUMAS-DOWNLOAD-ACTIVITY-VERIFICATION.md)
+for controlled contracts and native UI evidence, including their limits.
+
 This integration was historically source-qualified against Pumas commit
 [`e37bbf4b964a0e2aadf25f80ab71edd8fa6b3eb3`](https://github.com/MrScripty/Pumas-Library/commit/e37bbf4b964a0e2aadf25f80ab71edd8fa6b3eb3),
 whose Cargo package version is **0.7.0** and Git description is
