@@ -125,7 +125,8 @@ await Check("in-flight cancellation releases setup ownership; acquisition is nev
     fixture.Hold = false; fixture.Released.TrySetResult();
     Require((await client.SearchHfModelsAsync("x")).Success && fixture.Bodies.Count == 2, "explicit next lookup");
 });
-Console.WriteLine($"PASS {count} controlled discovery/acquisition scenarios; no external network or real acquisition.");
+await ActivityContractTests.Run(Check);
+Console.WriteLine($"PASS {count} controlled discovery/acquisition/activity scenarios; no external network or real acquisition.");
 async Task Check(string name, Func<Task> test) { await test(); count++; Console.WriteLine("PASS " + name); }
 static void Require(bool condition, string claim) { if (!condition) throw new Exception(claim); }
 static HfDownloadRequest Request() => new("Fixture/Dialogue-GGUF", "Dialogue", "Dialogue", "Q4_K_M");
@@ -161,7 +162,8 @@ sealed class RpcFixture : IAsyncDisposable
             var request = JsonNode.Parse(await reader.ReadToEndAsync())!; Bodies.Enqueue(request); Entered.TrySetResult();
             if (Hold) await Released.Task;
             var method = request["method"]!.GetValue<string>();
-            var name = method switch { "search_hf_models" => "search", "get_hf_download_details" => "details", "start_model_download_from_hf" => "started", _ => throw new Exception("Unexpected method") };
+            var name = method switch { "search_hf_models" => "search", "get_hf_download_details" => "details", "start_model_download_from_hf" => "started",
+                "list_model_downloads" => "downloads", "get_model_download_status" => "progress", "cancel_model_download" => "cancel-ack", _ => throw new Exception("Unexpected method") };
             var envelope = new JsonObject { ["jsonrpc"] = "2.0", ["id"] = request["id"]!.DeepClone(), ["result"] = JsonNode.Parse(Result ?? Read(name)) };
             EditEnvelope?.Invoke(envelope);
             var bytes = Encoding.UTF8.GetBytes(Raw ?? envelope.ToJsonString());
