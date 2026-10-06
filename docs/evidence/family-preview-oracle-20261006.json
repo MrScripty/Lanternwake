@@ -1,0 +1,29 @@
+{
+  "baseCommit": "c8b86bcf71a0f698ae6c84ce3df7a1eddd79cc35",
+  "productionUnchanged": true,
+  "nativeBinarySha256": "d33ceac7f2cd2a6bb80f3c0cdba440b99f8d6adfbdb59d5f24fea4eac34235b7",
+  "sourceSha256": {
+    "integration/qa/family_exchange.py": "74bd2a8cda0f31343ea17f23d09cdea1802813d4e9bf10069bdc34bb52ec42cf",
+    "qualification/FamilyExchangeQualification.cs": "e32ccb66ce7b82ce8ced70247909b0af2f6c4386c4ec656b812580024c5ca3d9"
+  },
+  "tests": {
+    "playerChecks": 71,
+    "previewChecks": 21,
+    "parsedModeMarkersMatchExpected": true,
+    "previewJSONSlotsUnchanged": true,
+    "intentionallyMissingPreviewArguments": "native mode assertion rejects before Load/choice; nonzero exit, no success marker, all JSON slots unchanged"
+  },
+  "localEvidenceSha256": {
+    "build.log": "aa73e7750f35f74fd7c01b01d85e23cd884761ad83b751656d94ecace4107c1e",
+    "import.log": "65214d8d76123f51187c7deb4b51509b8d83bb0dc250e396d656e35a7f3b047d",
+    "controller.log": "526b779526e46bc749aa2ae09837c9d7f73d3ee1812b3b7f405259f4359fe6f7",
+    "player.log": "5e02ca7c029634548b257820f736ef4b22147ecb2199ff6460a2c9514ed29e53",
+    "preview.log": "663f12b280df9408df32c1b851562b1b1fbbb139650eb1f5c6a5527f48639b5e",
+    "preview-mode-mismatch.log": "826e39e4e82d5b9824dffcf5a0311af3b65563c3381acbcbc2cba2189e4d3edb"
+  },
+  "limits": [
+    "Qualification-only repair; no production failure claimed.",
+    "Original family source/evidence remains frozen.",
+    "Raw evidence local; no Library or blocked acquisition retry."
+  ]
+}
