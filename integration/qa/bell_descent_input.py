@@ -5,6 +5,7 @@ import time
 
 from normal_player import digest, normalized
 from pumas_unavailable_input import SettledPlayer
+from bell_restore_observation import observe_player, verify_restore
 
 
 def capture_beat(game, name, beat_id):
@@ -22,7 +23,7 @@ def main():
         parser.add_argument('--' + name, type=Path, required=True)
     parser.add_argument('--reduced', action='store_true')
     args = parser.parse_args()
-    with SettledPlayer(args.display_state, args.fixture, args.output, args.seed) as game:
+    with observe_player(SettledPlayer(args.display_state, args.fixture, args.output, args.seed)) as game:
         game.result['controllerSha256'] = digest(__file__)
         game.result['reducedMotion'] = args.reduced
         game.click('Settings'); game.click('Toggle instant text')
@@ -42,16 +43,14 @@ def main():
                    first['history'][:-1] == original['history'], 'one keyboard press reaches only existing descent beat')
         time.sleep(1.8); capture_beat(game, 'descent-settled', 'ch5_s3_b004')
         game.check(game.slots() == saved, 'cosmetic travel changes no saved progress')
-        game.click('Save'); game.click('Load'); game.click('Load current manual save')
-        game.check(game.snapshot() == first, 'Save/Load retains exact descent record without a timer field')
+        verify_restore(game, 'ch5_s3_b004', 'ch5_s3_b005')
         capture_beat(game, 'descent-loaded', 'ch5_s3_b004')
         game.key('Return'); time.sleep(2); capture_beat(game, 'flow-settled', 'ch5_s3_b005')
         game.check(game.snapshot('autosave.json')['beatId'] == 'ch5_s3_b005', 'Continue remains available through flow phase')
         game.key('Return'); time.sleep(.5); capture_beat(game, 'seated', 'ch5_s3_b006')
         seated = game.snapshot('autosave.json')
         game.check(seated['beatId'] == 'ch5_s3_b006' and seated['solvedActivities'] == original['solvedActivities'], 'same arrival cue beat reached without a new gate')
-        game.click('Save'); game.click('Load'); game.click('Load current manual save')
-        game.check(game.snapshot() == seated, 'seated save restores exact canonical state')
+        verify_restore(game, 'ch5_s3_b006', 'ch5_s3_b007')
         capture_beat(game, 'seated-loaded', 'ch5_s3_b006')
         game.key('Return'); time.sleep(.5); capture_beat(game, 'wide-after-release', 'ch5_s3_b007')
         game.check(game.snapshot('autosave.json')['beatId'] == 'ch5_s3_b007', 'next original beat restores wide stage without accidental advance')

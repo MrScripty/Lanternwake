@@ -19,7 +19,33 @@ public partial class BellDescentQualification : Node
     private void Press(string name) => _game.InterfaceRoot.GetNode<Button>("%" + name).EmitSignal(BaseButton.SignalName.Pressed);
     private void Action(string caption) => Modal!.GetNode<VBoxContainer>("%ModalActions").GetChildren().OfType<Button>().Single(b => b.Text == caption).EmitSignal(BaseButton.SignalName.Pressed);
     private async Task Frames(int count) { for (var i = 0; i < count; i++) await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame); }
-    private string Snapshot() => JsonSerializer.Serialize(Session.Snapshot(), Story.Json);
+    private string Snapshot() => BellRuntimeState.Read(Session);
+    private void CheckMarks()
+    {
+        var rim = Stage.BellBody!.GetNode<MeshInstance3D>("Cylinder002");
+        var halfRim = rim.Mesh.GetAabb().Size.Y * .5f;
+        var marks = new[] { "MarkHigh", "MarkMiddle", "MarkLow" }
+            .Select(name => Stage.GetNode<MeshInstance3D>("Scenery/CounterweightInstallation/GuideLeft/" + name)).ToArray();
+        var heights = marks.Select(mark => mark.Position.Y + mark.GetParent<Node3D>().Position.Y).ToArray();
+        Check(heights.SequenceEqual(new[] { 1.95f, 1.55f, .8f }, new ApproximateFloatComparer()), "three painted marks retain descending order inside the authored travel");
+        foreach (var mark in marks)
+        {
+            var centre = mark.Position.Y + mark.GetParent<Node3D>().Position.Y;
+            var halfMark = mark.Mesh.GetAabb().Size.Y * .5f;
+            Check(centre + halfMark < rim.Position.Y - halfRim &&
+                  centre - halfMark > rim.Position.Y + Stage.BellLoweredOffset.Y + halfRim,
+                  "entire painted mark is passed by the dark rim between frozen endpoints: " + mark.Name);
+        }
+        Check(heights.Take(2).All(y => y - .0275f > rim.Position.Y - 1.05f + halfRim) &&
+              heights[2] + .0275f < rim.Position.Y - 1.05f - halfRim &&
+              heights[2] - .0275f > rim.Position.Y - 1.89f + halfRim,
+              "first phase passes high/middle; flow phase passes low before authored arrival");
+    }
+    private sealed class ApproximateFloatComparer : IEqualityComparer<float>
+    {
+        public bool Equals(float a, float b) => Mathf.IsEqualApprox(a, b);
+        public int GetHashCode(float value) => 0;
+    }
     private void CheckSuspension()
     {
         var cable = Stage.BellSuspension!;
@@ -55,6 +81,7 @@ public partial class BellDescentQualification : Node
             var origin = Vector3.Zero; // authored BellBody local origin in the frozen scene
             var offset = new Vector3(0, -2.1f, 0);
             Check(Stage.BellBody != null && Stage.BellLoweredOffset == offset, "existing authored endpoint unchanged");
+            CheckMarks();
             CheckSuspension();
             if (mode is "preview" or "resume")
             {
@@ -73,7 +100,11 @@ public partial class BellDescentQualification : Node
                 CheckSuspension();
                 Check(Snapshot() == state && Session.CanAdvance, "cosmetic travel never changes or gates progress"); SameFiles(files);
                 Check(Stage.BellReleaseCamera!.Current, "fixed authored release viewpoint selected");
-                Press("SaveButton"); Load("ch5_s3_b004");
+                Press("SaveButton");
+                Press("AdvanceButton");
+                Check(Snapshot() != state, "unchanged saved file cannot satisfy live-state equality after advancing away");
+                Load("ch5_s3_b004");
+                Check(Snapshot() == state, "Load restores full live transcript, facts, inventory, solved activities and derived snapshot fields");
                 Check(Stage.BellBody.Position.IsEqualApprox(origin + offset * .5f), "save during motion restores a settled authored phase");
                 CheckSuspension();
                 await Frames(12); Check(Stage.BellBody.Position.IsEqualApprox(origin + offset * .5f), "retired pre-load tween cannot move loaded bell");
@@ -93,7 +124,14 @@ public partial class BellDescentQualification : Node
             Press("AdvanceButton"); Check(Session.Beat.Id == "ch5_s3_b007" && Stage.StoryCamera.Current && Stage.BellBody.Position.IsEqualApprox(origin + offset), "next beat restores wide camera while bell stays seated");
             if (mode != "preview")
             {
-                Press("SaveButton"); Load("ch5_s3_b007"); Check(Stage.BellBody.Position.IsEqualApprox(origin + offset), "seated save reload retains endpoint");
+                var seatedState = Snapshot();
+                Press("SaveButton");
+                _game.InterfaceRoot.GetNode<RichTextLabel>("%DialogueText").VisibleCharacters = -1;
+                Press("AdvanceButton");
+                Check(Snapshot() != seatedState, "seated live-state oracle rejects an unchanged save file after advance");
+                Load("ch5_s3_b007");
+                Check(Snapshot() == seatedState, "seated Load restores full live session state");
+                Check(Stage.BellBody.Position.IsEqualApprox(origin + offset), "seated save reload retains endpoint");
                 Press("LoadButton"); Action("Recover previous manual save · ch5_s3_b004");
                 Check(Session.Beat.Id == "ch5_s3_b004" && Stage.BellBody.Position.IsEqualApprox(origin + offset * .5f), "earlier recovery rolls visual phase back without tween replay");
                 CheckSuspension();

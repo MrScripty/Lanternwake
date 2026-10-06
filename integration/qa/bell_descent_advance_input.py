@@ -6,6 +6,7 @@ import time
 from normal_player import digest
 from pumas_unavailable_input import SettledPlayer
 from bell_descent_input import capture_beat
+from bell_restore_observation import observe_player, verify_restore
 
 
 def main():
@@ -13,7 +14,7 @@ def main():
     for name in ['display-state', 'fixture', 'output', 'seed']:
         parser.add_argument('--' + name, type=Path, required=True)
     args = parser.parse_args()
-    with SettledPlayer(args.display_state, args.fixture, args.output, args.seed) as game:
+    with observe_player(SettledPlayer(args.display_state, args.fixture, args.output, args.seed)) as game:
         game.result['controllerSha256'] = digest(__file__)
         game.click('Settings'); game.click('Toggle instant text')
         game.wait_visible('Instant text enabled')
@@ -41,8 +42,7 @@ def main():
         game.check(game.snapshot('autosave.json') == seated and game.slots() == slots,
                    'retired travel does not automatically advance or rewrite slots')
         capture_beat(game, 'rapid-seated', 'ch5_s3_b006')
-        game.click('Save'); game.click('Load'); game.click('Load current manual save')
-        game.check(game.snapshot() == seated, 'rapidly seated state survives exact Save/Load')
+        verify_restore(game, 'ch5_s3_b006', 'ch5_s3_b007')
         game.quit()
     print('PASS normal rapid keyboard descent; no animation wait or accidental advance.')
 

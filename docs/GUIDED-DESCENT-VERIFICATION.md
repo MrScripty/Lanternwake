@@ -1,5 +1,11 @@
 # Guided bell descent — 2026-10-06
 
+Historical delivery record for `be3056b`. Independent review found an unreachable
+high guide mark and normal Save/Load assertions that reread the persisted file,
+without comparing restored live state. See the [focused review repair](GUIDED-DESCENT-REVIEW-20261006.md)
+for corrected geometry, full live-state restoration checks and their evidence.
+The original receipts below retain their original scope and source identity.
+
 Separate successor `feat/guided-bell-descent-20261006`, against approved main
 `19495fac93124917d20a1036c6a84d18e01b4f98`. The authored feature milestone
 `cafee825ade83a12b5a7d430f4d306025072c77d` preserves its original `0eebf4e` base.
