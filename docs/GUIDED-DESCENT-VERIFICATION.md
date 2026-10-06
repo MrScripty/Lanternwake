@@ -1,8 +1,11 @@
 # Guided bell descent — 2026-10-06
 
-Separate successor `feat/guided-bell-descent-20261006`, based on frozen composed
-`0eebf4e642485a6e14c62808facbc5c91d6adff7`. The PR13 repair at `fbe51b2` remains
-frozen and separate; its three review repairs are not integrated into this branch.
+Separate successor `feat/guided-bell-descent-20261006`, against approved main
+`19495fac93124917d20a1036c6a84d18e01b4f98`. The authored feature milestone
+`cafee825ade83a12b5a7d430f4d306025072c77d` preserves its original `0eebf4e` base.
+A normal development-branch merge brings in the approved main and its PR13
+repairs; the reviewed `fbe51b2` branch remains unchanged. Parent owns PR/CI/review
+coordination and any future merge/publication.
 
 ## Player experience and authored chronology
 
@@ -68,6 +71,18 @@ attempt did not observe the second advance and is excluded from acceptance.
 The earlier exploratory captures
 preceded some rendered beats and are excluded from acceptance evidence.
 
+The final qualification uses the source composed with approved main `19495fac`.
+The prior feature-only qualifications remain historical evidence for their exact
+source; no old PR13 merge or readiness action is repeated.
+
+The final combined `scripts/verify.sh` exited 0: 4,241 core assertions, 63 structure
+checks, 23 corrected simulated client contracts, 1,439 required native beats,
+24 activity reviews, 28 conversation Return paths and 13 Editor scenes. Native
+descent passes again after Editor at 35/25/20; the retained PR13 family fault and
+preview oracle pass at 82/22 plus the negative launch. Normal motion/reduced-motion
+runs pass 19 checks each; rapid keyboard use passes 12, reaching both subsequent
+beats in 1.224 seconds. All three normal DLL hashes equal the post-Editor DLL.
+
 Combined suite and Editor results and all source/log/DLL identities are recorded
 in [the delivery evidence](evidence/guided-descent-20261006.json).
 Raw evidence stays local under `/workspace/lanternwake-bell-evidence-20261006`;
@@ -81,5 +96,16 @@ The [coverage map](FEATURE-COVERAGE-20261006.md) retains human art/performance,
 score/hearing, editorial and measured duration, accessibility/device/platform
 acceptance. No loaded-model, speech or five-hour median claim is made. Approved
 model/runtime discovery remains blocked and is not retried. Parent owns native
-visual review, successor composition with the separate PR13 repair, PR/CI/review
+visual review, review of this successor against approved main, PR/CI/review
 coordination, merges and publication.
+
+## Commit identity and preserved history
+
+The pre-hold feature commit `cafee825ade83a12b5a7d430f4d306025072c77d` and
+development baseline merge `3f580361b2844075639525b45ca24f08c0a9542a` retain
+their original Jeremy author/committer metadata. They were unpublished when the
+identity hold began and are preserved without amendment, rewrite or force-push.
+After owner authorization, repository-local Git author and committer resolve to
+`MrScripty <TheEnvironmentGuy@protonmail.com>` in all 11 owned worktrees. The
+delivery commit uses that verified identity. The protected global configuration,
+credentials, signing, remotes and authentication are unchanged.

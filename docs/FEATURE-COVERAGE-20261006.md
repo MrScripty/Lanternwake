@@ -2,7 +2,9 @@
 
 This map was used to choose the next bounded feature from frozen composed
 `0eebf4e642485a6e14c62808facbc5c91d6adff7`. PR13 review repairs remain separately
-frozen at `fbe51b204c0fa5dcfca6dece81f000491ff3d356`; parent coordinates integration.
+frozen at `fbe51b204c0fa5dcfca6dece81f000491ff3d356`. The final guided-descent
+successor incorporates approved main `19495fac93124917d20a1036c6a84d18e01b4f98`,
+which contains those repairs; parent coordinates the next PR/review/publication.
 
 | Commitment | Actual existing capability | Remaining work / selected slice |
 | --- | --- | --- |
