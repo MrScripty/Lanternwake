@@ -26,39 +26,43 @@ Evidence at implementation time:
 
 ## Actual upstream API, not an assumed service shape
 
-The following source-owned Pumas routes and records were inspected:
+The current source review uses approved Pumas `95a0baad`. The serving handler,
+serving/runtime records, and inference gateway are byte-identical to historical
+`e37bbf4`; the HTTP router/admission changes were reviewed separately. Current
+checks and their limits are in [PUMAS95-CONTRACT-VERIFICATION.md](PUMAS95-CONTRACT-VERIFICATION.md).
+The following source-owned routes and records were inspected:
 
-- [RPC server router](https://github.com/MrScripty/Pumas-Library/blob/e37bbf4b964a0e2aadf25f80ab71edd8fa6b3eb3/rust/crates/pumas-rpc/src/server.rs):
+- [RPC server router](https://github.com/MrScripty/Pumas-Library/blob/95a0baad2d0aea4650fc36ad4afd969ac9391bf5/rust/crates/pumas-rpc/src/server.rs):
   `POST /rpc` and, only with `inference-plugins`, `POST /v1/chat/completions`.
-- [Serving handler](https://github.com/MrScripty/Pumas-Library/blob/e37bbf4b964a0e2aadf25f80ab71edd8fa6b3eb3/rust/crates/pumas-rpc/src/handlers/serving.rs):
+- [Serving handler](https://github.com/MrScripty/Pumas-Library/blob/95a0baad2d0aea4650fc36ad4afd969ac9391bf5/rust/crates/pumas-rpc/src/handlers/serving.rs):
   JSON-RPC `get_serving_status`, `validate_model_serving_config`, `serve_model`.
-- [Serving records](https://github.com/MrScripty/Pumas-Library/blob/e37bbf4b964a0e2aadf25f80ab71edd8fa6b3eb3/rust/crates/pumas-core/src/models/serving.rs):
+- [Serving records](https://github.com/MrScripty/Pumas-Library/blob/95a0baad2d0aea4650fc36ad4afd969ac9391bf5/rust/crates/pumas-core/src/models/serving.rs):
   response `result.success`, `result.snapshot.schema_version = 1`,
   `served_models`, `router_profiles`.
-- [Runtime records](https://github.com/MrScripty/Pumas-Library/blob/e37bbf4b964a0e2aadf25f80ab71edd8fa6b3eb3/rust/crates/pumas-core/src/models/runtime_profile.rs):
+- [Runtime records](https://github.com/MrScripty/Pumas-Library/blob/95a0baad2d0aea4650fc36ad4afd969ac9391bf5/rust/crates/pumas-core/src/models/runtime_profile.rs):
   provider `LlamaCpp` serializes as **`llama_cpp`**. The version-manager app ID
   is **`llama-cpp`**; these identifiers are not interchangeable.
-- [Pumas inference gateway](https://github.com/MrScripty/Pumas-Library/blob/e37bbf4b964a0e2aadf25f80ab71edd8fa6b3eb3/rust/crates/pumas-rpc/src/handlers/openai_gateway.rs):
+- [Pumas inference gateway](https://github.com/MrScripty/Pumas-Library/blob/95a0baad2d0aea4650fc36ad4afd969ac9391bf5/rust/crates/pumas-rpc/src/handlers/openai_gateway.rs):
   resolves served model ID/alias, rewrites the provider model identity, and
   proxies to the Pumas-owned runtime. Its OpenAI-compatible path is an actual
   Pumas API. Lanternwake does not contact OpenAI or bypass Pumas for llama.cpp.
 
-Every conversation first calls `get_serving_status`. It requires one loaded,
-unambiguous match for the configured model ID or alias, provider `llama_cpp`,
+Every conversation first calls `get_serving_status`. It follows Pumas alias-first routing: one current loaded alias wins before a
+base model ID is considered. The selected match must be unambiguous, provider `llama_cpp`,
 a runtime profile, and a current router observation if one is present. Unknown
 schema versions, stale routers, mismatched response IDs, missing models, and
 other providers fail before generation. Pumas independently checks routing
 again at generation admission, so its later rejection is preserved.
 
 Generation uses `stream: false`, `max_tokens: 220`, `temperature: 0.7`, and one
-system/user message pair. Only one nonempty string at
+system/user message pair. Only one nonempty string in an assistant-role
 `choices[0].message.content` is accepted. Extra Pumas fields are forward-
 compatible only when they do not change the consumed projection; duplicate
 JSON properties are rejected. No output is parsed as a game instruction.
 
 ## Required runtime and setup
 
-1. Supply an **inference-enabled** `pumas-rpc`. The full official v0.7.0 Linux package sidecar was exercised successfully; see `LIVE-QUALIFICATION.md` for its exact artifact/hash. New source builds use the approved setup pin below and require separate Lanternwake wire qualification.
+1. Supply an **inference-enabled** `pumas-rpc`. The full official v0.7.0 Linux package sidecar was exercised successfully; see `LIVE-QUALIFICATION.md` for its exact artifact/hash. The approved source pin below now has source-contract and real empty-service checks; loaded-model wire and live dialogue acceptance remain open.
    The audited upstream headless release archive is explicitly built with
    `--no-default-features` and cannot generate dialogue. A GUI-less process
    and an inference-disabled build are different choices.
@@ -75,11 +79,12 @@ JSON properties are rejected. No output is parsed as a game instruction.
 
 For new source builds, use the approved Pumas revision
 [`95a0baad2d0aea4650fc36ad4afd969ac9391bf5`](https://github.com/MrScripty/Pumas-Library/commit/95a0baad2d0aea4650fc36ad4afd969ac9391bf5)
-after its prerequisites are provisioned. This is a setup pin, not a fresh
-Lanternwake wire or live-inference qualification; the historical evidence above
-remains tied to `e37bbf4` and the exact artifacts in `LIVE-QUALIFICATION.md`.
-Requalify the consumed wire contract and live dialogue before claiming acceptance
-on the new pin. Build/start commands:
+after its prerequisites are provisioned. The default RPC release build, current
+source projection, empty serving response, production-client unavailable result,
+and normal Godot fallback were checked on this pin. **Loaded-model responses and
+real dialogue inference on this pin remain unqualified.** The historical live
+evidence remains tied to the exact artifacts in `LIVE-QUALIFICATION.md`; it is
+not reused as a successful `95a0baad` inference run. Build/start commands:
 
 ```sh
 cargo build --locked --manifest-path rust/Cargo.toml -p pumas-rpc --release
