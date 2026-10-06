@@ -5,11 +5,23 @@ import json
 from pathlib import Path
 import threading
 import time
+import subprocess
+from PIL import Image
 
 from normal_player import NormalPlayer, digest, normalized
 
 
 class SetupPlayer(NormalPlayer):
+    def visible(self):
+        visible = super().visible()
+        # The full-page OCR sometimes drops the first letter of the embedded
+        # window title. Read its inspected normal-session region separately.
+        title = self.output / 'setup-title-ocr.png'
+        Image.open(self.output / 'current.png').crop((296, 153, 1143, 185)).save(title)
+        text = subprocess.check_output(['tesseract', str(title), 'stdout', '--psm', '7'],
+                                       stderr=subprocess.DEVNULL, text=True, timeout=15)
+        return visible + ' ' + normalized(text)
+
     def words(self, path=None):
         # Keep OCR bounding boxes while allowing repo/quant punctuation to form
         # multiple normalized words within a single OCR token.
