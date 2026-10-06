@@ -1,0 +1,161 @@
+{
+  "composedQualifiedCommit": "2f138e6540f61804fe65d4b3412fc9e2b7e6e14e",
+  "composedQualifiedTree": "524ebdb723b8385669789e7a4f1a4ac1fcce724b",
+  "authoredMilestone": "9999f25f23853243d3d70559ed49f3c197113713",
+  "preservedAncestors": [
+    "c8b86bcf71a0f698ae6c84ce3df7a1eddd79cc35",
+    "5fdf0b179f7bec1efbc6b19612bba3202aa60bfb",
+    "04b4e3de2182aa7ae88d7a0ee9d025cef1775705"
+  ],
+  "normalMergeCommits": [
+    "54010f50bfb92d4327f417f4282ed71b87804ce9",
+    "2f138e6540f61804fe65d4b3412fc9e2b7e6e14e"
+  ],
+  "sourceSha256": {
+    "Scripts/Core/CharacterProfileEdit.cs": "082152851f5b178ad68e8f41fecd5f9a83b8b4e2e7eff63da591fe2889bd2d4c",
+    "Scripts/Core/StorySession.cs": "c91afaa44baa012d29b24be024248373aee541efe1d9fe7493d28ff9b47dcc26",
+    "Scripts/Core/SaveStore.cs": "0a8ade2c5f0eee61103340e6c1bfe6ba5fe177c09150e174ec55ed2e12334403",
+    "Scripts/Core/StoryAuthoringIndex.cs": "e92b68d3a683d874c3c057ff07b6f21ad28076dcc19abe0c20cc8a30e2bb3272",
+    "Scripts/Core/SessionStorage.cs": "48a756322a9b09db8f0b3c2974c6c5b7c2710b2f14aa6b1a9fbf4de283cdc1f4",
+    "Scripts/Core/OwnedOperations.cs": "394e55879035bad54b174ac2dc632d5a1f72db7ab19904c83d031ce6397682d8",
+    "Scripts/Core/StoryTextEdit.cs": "10eae4fe7767acc240cf063a2825c18f0e651f4f551de79cc79030393e69e94d",
+    "Scripts/Core/StoryContextPreview.cs": "6f587eddb4112578895424f750afe09768089c8ff819d340f6773a2a55b38aa7",
+    "Scripts/Core/Story.cs": "38f99ee751522c0688099cabf63bde705711592c3898d4a894b38ee24ea9060f",
+    "Scripts/Core/SessionLaunch.cs": "8b0deca629b061fa01c1a273310d7586f995ffdc7c21379fbffaa541c792313f",
+    "Scripts/Core/SaveRecovery.cs": "bc022a337d4aa5c1d45c0f9299b7a826cf59f2d603b47c40c5a8e88ed8d196e4",
+    "Scripts/Presentation/GameView.ReadingSizeSmoke.cs": "526757d32f0db3e94bd08df3497d1c0d128bb28bcb9f696f698bdc871d68b395",
+    "Scripts/Presentation/GameView.ReadingSettings.cs": "d2423c6c313d2061e5a995ca7ba71cc01424b22d19f8d07eca662973f8665f1f",
+    "Scripts/Presentation/StageDirector.cs": "9453ea6350b7ce124170d9b979c232d4c82d00fe705cd14bbb7fc54748dffe7e",
+    "Scripts/Presentation/GameView.ActivityReview.cs": "3a4aed467385c4f1c9f337ca00c0d8857e67fe563e02136ba744a7064b2e0ba9",
+    "Scripts/Presentation/GameView.Completion.cs": "8b7548efff6ecabc6bdf565e66a7fb24e0ffb948de06bc167e97a00bae82fa69",
+    "Scripts/Presentation/GameView.StorageSmoke.cs": "19b0d5258c102db03df9d544d75cc4c1d2fe609b4bddc652f05287b8ec515333",
+    "Scripts/Presentation/GameView.Audio.cs": "14c96067babe39501b8ee7c99db6d5a977f8836fbd40e3ec4e5bd0bab09cb343",
+    "Scripts/Presentation/StageCharacter.cs": "70872b23defdf91ffee782c38dd96533232572a88f828d9622684332b4fa5be6",
+    "Scripts/Presentation/GameView.cs": "ccc69436377cab363b8a9c528fd1ae54f924d8082bf5ff602ff00cd564ab91ef",
+    "Scripts/Presentation/GameView.AuthoredExchange.cs": "53626f3d8e8410f530512f44b6f25ac1ce7b5adb24b1079c4901137aab001056",
+    "Scripts/Presentation/GameView.PreviewSmoke.cs": "8a2ef11e5b77861b7bf4faf75f08b306c64d5a19f66915fda0119855530ed91e",
+    "Scripts/Presentation/AudioDirector.cs": "36f006f6003d3fe61218acbf1f9e57521dde3f735c1809bc03b0faa70062f8c9",
+    "Scripts/Presentation/AuthoringSmoke.cs": "581faead69335b9570eded59aa66e877cacb315233e8ca0a6d38a99034c61c07",
+    "Scripts/Presentation/StageScene.cs": "c63821a8cacb3b52e5ef75d90f4c53826da96395186a374d0ae76a5a356b43be",
+    "Scripts/Presentation/StageMotion.cs": "e2a5c10c18e5f2aaca778540412a09c2a272fa5d99452c25d425d3666904d955",
+    "Scripts/Presentation/GameView.AudioSmoke.cs": "cea281ae44f32b0521d7cad68e9aef59e24d40741f495799622c512dfc2898de",
+    "Scripts/Presentation/GameView.ContentNote.cs": "009c8982f24e095f0af1e1a488b1fa49bf338c3254fbbb52c63892eaa9fa6a91",
+    "Scripts/Presentation/GameView.ConversationReturn.cs": "dac8d4693efb632949cbd12ab5ae3449837fe708a24c4b7c16088fd9f510e0c7",
+    "Scripts/Presentation/ReadingTextStyle.cs": "814e4fc0919619f56899489c2732605a2da44928d31b5d519f74c7f245a5f4c4",
+    "Scripts/Conversation/PumasSpeechTranscriber.cs": "a6ae25d4bb9915eb6e6c6227d8b73f84634f8d3bf78b9721f745c38180bbf0ac",
+    "Scripts/Conversation/SpeechRecorder.cs": "6c0c43f6eba1b76fd979562179f4088710689aac0f3908457e3de008618b865a",
+    "Scripts/Conversation/PumasClient.cs": "bec88d3e5dd72c362510a562ea9b1918e75267c4d9b766006f041d665655733a",
+    "Content/story.json": "171dd89cc80a4e0de7a452216b5eb5eff0f2908746aee5fc4501db22dfc87c02",
+    "integration/pumas/ClientTests/Program.cs": "a7014a346bbf172ddbc28c6d888946ac3858d2141b83ad35b3313f8fb161b95b",
+    "integration/qa/family_exchange.py": "74bd2a8cda0f31343ea17f23d09cdea1802813d4e9bf10069bdc34bb52ec42cf",
+    "qualification/FamilyExchangeQualification.cs": "e32ccb66ce7b82ce8ced70247909b0af2f6c4386c4ec656b812580024c5ca3d9",
+    "integration/qa/route_feedback_input.py": "defd0dbb96f1c39114efcd5064dbb764ee9544e9ac1bc2f1bfabbfa42c7b31d5"
+  },
+  "finalAfterEditorNativeDllSha256": "d94a7dae1654f3244684e126b413ac068367b6709f1a1c9b4ed096f951eba73a",
+  "metrics": {
+    "authoredMainPathWords": 35456,
+    "chapters": 5,
+    "scenes": 41,
+    "beats": 1439,
+    "activities": 24,
+    "conversations": 28,
+    "authoredExchanges": 1,
+    "readingMinutesAt150Wpm": 236.4,
+    "readingMinutesAt180Wpm": 197.0,
+    "readingMinutesAt220Wpm": 161.2,
+    "playtested": false
+  },
+  "specificFeedbackActivities": 3,
+  "genericRetryActivities": 21,
+  "saveVersion": 2,
+  "tests": {
+    "combinedFullVerifyExit": 0,
+    "coreAssertions": 4241,
+    "structureChecks": 63,
+    "correctedSimulatedContracts": 22,
+    "nativeBeats": 1439,
+    "questionReviewChecks": 2606,
+    "activitiesReviewed": 24,
+    "conversationReturns": 28,
+    "editorScenes": 13,
+    "postEditorFamilyPlayerChecks": 71,
+    "postEditorFamilyPreviewChecks": 21,
+    "postEditorNegativeMode": "expected failure before slot writes, no success marker, all owned JSON slot bytes preserved"
+  },
+  "normalSessions": {
+    "normal-125": {
+      "checks": 17,
+      "receiptSha256": "8d87e52846a8fa5755d8e04cbee8ea78e43e412bf3ab84f0d02c931880e5417a",
+      "controllerSha256": "defd0dbb96f1c39114efcd5064dbb764ee9544e9ac1bc2f1bfabbfa42c7b31d5",
+      "nativeDllSha256": "513bc8b5fe378d79623f72617f5a4ee7ed72280be6d9fa0f60700867558837d2",
+      "seed": {
+        "path": "/workspace/lanternwake-route-evidence-20261006/v1-target.json",
+        "sha256": "be812ccd2390b43cd3e1e88711d1dcaf1219f2b0f21f198f2f90f491a961f417",
+        "beatId": "ch2_s3a_evidence"
+      },
+      "images": {
+        "current.png": "993a4165c110906bdd8ed4e5c70b20af087c361e0950f6bc9f57115dd7c187c1",
+        "title.png": "2ad3206df5d59ae6ec3e6070eca6adc8eaead8781d73192914f63a31363fe716",
+        "question.png": "8de846697c6e5749b0f2aa9323cf380280eb8725e8b07336df9129190a53340f",
+        "wrong-0.png": "e11f6581ee6c612904aef21a7973b97ba8d44800b49344c5c65c5eac0b4f0564",
+        "wrong-2.png": "216c54469275e8c986057ed72d1726e14f1f288abd292946a6e23e0fa91326dd",
+        "successor.png": "ab5d8537018737b2a7fe5034f2f73b15f53f2969b1d2315eb85da62e1659c871"
+      }
+    },
+    "normal-150": {
+      "checks": 17,
+      "receiptSha256": "f4f8b7d468a38ac79f3f4263c5522d51a16a7fe211a8d752ecb33856f3f577f2",
+      "controllerSha256": "defd0dbb96f1c39114efcd5064dbb764ee9544e9ac1bc2f1bfabbfa42c7b31d5",
+      "nativeDllSha256": "513bc8b5fe378d79623f72617f5a4ee7ed72280be6d9fa0f60700867558837d2",
+      "seed": {
+        "path": "/workspace/lanternwake-route-evidence-20261006/v2-target.json",
+        "sha256": "da719539a90fa3afae1abf4fb63d2b0879bf55c2a46971f23ed18ff2541394de",
+        "beatId": "ch2_s3a_evidence"
+      },
+      "images": {
+        "current.png": "fecbc33ec053676455b07519de41ba74e7248180391faf12f106161575b3e20e",
+        "title.png": "665450076098de0e46d1a39b009b3a8434bc6d9d2f90e65cebffef2f76fad90f",
+        "question.png": "39d6463cc25ff00148b7fbf0419440a4b88763a37ae2d86e696670604357f855",
+        "wrong-0.png": "ea66350aa5fa3994ad4832f275c09a4c73686276494c7132ff2285441a7d2746",
+        "wrong-2.png": "508ffc3f0559ac70362f5044c70d4d81d7846808e577cfcbee77e929c0836de5",
+        "successor.png": "7121c538100538d8b19cb00c0eba6162629d584d55223152b4b3c5b94ddbeefc"
+      }
+    }
+  },
+  "localEvidenceSha256": {
+    "core.log": "f20759f9766a2cad2c28330cc71bd518ff9a7c92ebebe6ba420860bd8a2ecc8a",
+    "structure.log": "3f0d2df3250500810b659874a3c31acd967641c1a253a3114df38df243a42150",
+    "contracts.log": "c780f58fee235d485d8a7b34c8354d4a010b0cfd2e04df782b206bfe801aaff0",
+    "build.log": "b550eaf17938a9b1200d3274c071da224e7e064ff588bc9040fe21fb7e6057f9",
+    "import.log": "0003a294b4815505117f9243a98364264c746e4065bf8078477a80591400dae4",
+    "activity-review-controller.log": "8b2593abd8b5ea4b7764936dfadd5a091b84650f9c54f4d30a0ad97f4950dc2a",
+    "combined-verify.log": "34fece9ea7e8b5b4016a34bbb48ad6177cc529f45ccdc71cc8ecc77af8bb757a",
+    "post-editor-family-oracle.log": "526b779526e46bc749aa2ae09837c9d7f73d3ee1812b3b7f405259f4359fe6f7",
+    "post-editor-family-player.log": "5e02ca7c029634548b257820f736ef4b22147ecb2199ff6460a2c9514ed29e53",
+    "post-editor-family-preview.log": "663f12b280df9408df32c1b851562b1b1fbbb139650eb1f5c6a5527f48639b5e",
+    "post-editor-family-preview-mode-mismatch.log": "14a35500a604deece15cf091d0197ca6ce195701f0a6726d1fa67ebf22b80aa9",
+    "canon-preservation.json": "c72485f5153806dc994f72fb6d27ac48a188e7e2d5a1a1930b59fe19d0125cab",
+    "metrics.json": "f61b211f08615e5a6206aee54a75b9cb62692bbce38e57af42c4fd5ffc42b1ca",
+    "v1-fixtures.log": "929546a7c439e4a4f9e8efc6cadab24318e367b098ea720e52752e250a6065a3",
+    "v2-fixtures.log": "c81884527712a71f6f74a4c240fac82066105b899b209281ecd9f30856daad1b"
+  },
+  "legacyFixtureSha256": {
+    "v1-target.json": "be812ccd2390b43cd3e1e88711d1dcaf1219f2b0f21f198f2f90f491a961f417",
+    "v1-solved.json": "762a736043457368ab75638e210cdc298f607458567f542604e347f577cae0b4",
+    "v1-after.json": "9e56f3b184853683e25a66643b3f708226f725bac73cbf00457e1b63cbcde18d",
+    "v1-completed.json": "e891217aab3bfb4160d445b0b1530a60ce1378c18a2c52ae6a050172e3945c90",
+    "v2-target.json": "da719539a90fa3afae1abf4fb63d2b0879bf55c2a46971f23ed18ff2541394de",
+    "v2-solved.json": "86ee5d884608f54ad470bcf0adf2c88a1bdb01fa775e5e45f7fd0fa149b96a53",
+    "v2-after.json": "d906ffec867521ac387cd4e58c0ac19ecee9ae86f642d439e9a960c077454847",
+    "v2-completed.json": "172019506cb854b9f9c6173f467de5ff422c578c85ac0acbd125392bd6494932",
+    "legacy-fixtures/Program.cs": "e0025aa2193a8f3beb4108ae3e916fe10177c634cd0ec5d9038aba167750fd1a",
+    "legacy-fixtures/Fixture.csproj": "22559175b670e7796758ff6170069c14d6445abfdfa8ec248787b700005cfc01"
+  },
+  "limits": [
+    "Only route optionFeedback added to story; all previous authored values preserved, including family exchange.",
+    "Normal runs before qualification-only oracle merge bind their own DLL; final after-Editor family checks bind rebuilt DLL.",
+    "No live-model, microphone/hearing, physical-device/accessibility-tool or human editorial/duration claim.",
+    "No blocked acquisition or Library retry; raw evidence stays local.",
+    "Parent owns main/PR/review/merge/publication."
+  ]
+}
