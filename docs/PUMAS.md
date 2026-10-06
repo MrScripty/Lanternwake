@@ -47,8 +47,9 @@ The following source-owned routes and records were inspected:
   proxies to the Pumas-owned runtime. Its OpenAI-compatible path is an actual
   Pumas API. Lanternwake does not contact OpenAI or bypass Pumas for llama.cpp.
 
-Every conversation first calls `get_serving_status`. It follows Pumas alias-first routing: one current loaded alias wins before a
-base model ID is considered. The selected match must be unambiguous, provider `llama_cpp`,
+Every conversation first calls `get_serving_status`. It follows Pumas alias-first
+routing: one current loaded alias wins before a base model ID is considered.
+The match must be unambiguous. Its instance must have provider `llama_cpp`,
 a runtime profile, and a current router observation if one is present. Unknown
 schema versions, stale routers, mismatched response IDs, missing models, and
 other providers fail before generation. Pumas independently checks routing
