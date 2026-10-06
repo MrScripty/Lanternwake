@@ -24,7 +24,7 @@ var before = JsonSerializer.Serialize(session.Snapshot(), Story.Json);
 using var client = new PumasClient();
 using var cancellation = new CancellationTokenSource(TimeSpan.FromSeconds(50));
 var clock = Stopwatch.StartNew();
-var result = await client.GenerateAsync(character.Name, context,
+var result = await client.GenerateAsync(conversation.CharacterId, context,
     args.Length > 2 ? args[2] : conversation.Suggestions[0], cancellation.Token);
 var unchanged = before == JsonSerializer.Serialize(session.Snapshot(), Story.Json);
 Console.WriteLine(JsonSerializer.Serialize(new

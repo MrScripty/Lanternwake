@@ -34,7 +34,9 @@ public partial class GameView
             var actions = exchange.Options.Select((option, index) => (option.Label, (Action)(() =>
             {
                 if (!Current() || !session.RecordExchange(index)) return;
-                CloseModal(); Save(true); ShowAuthoredExchange(reading);
+                CloseModal();
+                if (!Save(true)) reading = reading with { Status = _status.Text };
+                ShowAuthoredExchange(reading);
             }))).ToArray();
             ShowWindow("With " + name, exchange.Prompt, actions, Finish);
         }

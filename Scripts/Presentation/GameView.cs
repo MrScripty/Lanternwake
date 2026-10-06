@@ -286,12 +286,12 @@ public partial class GameView : Node
         catch (Exception error) { if (generation == _generation) _status.Text = error.Message; }
         finally { if (generation == _generation) { _busy = false; _mic.Disabled = false; _mic.Text = "Use voice"; _send.Disabled = false; _entry.Editable = true; } }
     }
-    private void Save(bool auto)
+    private bool Save(bool auto)
     {
-        if (!_started) return;
-        if (!_storage!.CanUseSaves) { if (!auto) _status.Text = "AUTHOR PREVIEW · saving and loading player slots is disabled."; return; }
-        try { _storage.Write(auto, _session.Snapshot()); if (!auto) _status.Text = "Saved on this device."; }
-        catch (Exception error) { _status.Text = "Could not save: " + error.Message; }
+        if (!_started) return false;
+        if (!_storage!.CanUseSaves) { if (!auto) _status.Text = "AUTHOR PREVIEW · saving and loading player slots is disabled."; return auto; }
+        try { _storage.Write(auto, _session.Snapshot()); if (!auto) _status.Text = "Saved on this device."; return true; }
+        catch (Exception error) { _status.Text = "Could not save: " + error.Message; return false; }
     }
     private void ShowLoad()
     {
