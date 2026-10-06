@@ -1,0 +1,4 @@
+<Project Sdk="Godot.NET.Sdk/4.6.3">
+  <PropertyGroup><TargetFramework>net8.0</TargetFramework><EnableDynamicLoading>true</EnableDynamicLoading><Nullable>enable</Nullable><ImplicitUsings>enable</ImplicitUsings><RootNamespace>Lanternwake</RootNamespace></PropertyGroup>
+  <ItemGroup><Compile Remove="tests/**/*.cs" /><Compile Remove="integration/**/*.cs" /></ItemGroup>
+</Project>

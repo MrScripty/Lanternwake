@@ -1,0 +1,85 @@
+# ch2
+## ch2_s4a | A Familiar Hand | keeper_house | afternoon | ada,tomas
+narrator: While Sera finishes in the lower works, you and Tomas compare the first strip with letters you wrote to Ivo over the years. You have permission to read your own letters, which is a welcome island of simplicity in the estate's complicated correspondence. You choose three from different periods and record their dates before laying them beside the photograph.
+ada: At seventeen I thought making every capital enormous would make the rest of the sentence look confident.
+tomas: Did it work?
+ada: It made envelopes difficult.
+narrator: The resemblance is strongest in the newest letter. Your handwriting has changed less in the last decade than you expected. The late cross, the upright final s, the pinched middle of a double o. Some features occur in the strip; others are hard to compare because a mechanical stylus produces different pressure than an ordinary pen.
+tomas: We can say resembles. We can't identify a hand scientifically from enthusiasm and three envelopes.
+ada: I know. But recognizing my own mistakes is a very persuasive sensation.
+tomas: Sensation gets a note. Identification gets a qualification.
+narrator: You inspect the strip's lettering for repetitions. If someone had copied individual letters from a sample and assembled the sentence, identical forms might appear. The photograph is not detailed enough to settle that. You record the question rather than enlarging the image until pixels begin pretending to be evidence.
+ada: I could have written those words for him years ago and forgotten.
+tomas: Possible. Can you think of a reason?
+ada: A handwriting exercise. A joke. Some device demonstration. Not that exact sentence, though. I didn't know the blue cup existed until yesterday.
+tomas: A reason we can't imagine isn't proof no reason existed. But the explanation needs more support than 'memory is imperfect.'
+narrator: You read the oldest letter. Most concerns a course you were taking and a disagreement with a supervisor. Ivo has underlined a paragraph in which you describe being told to remove uncertainty from a display caption because visitors prefer confident language. In the margin, he wrote: Visitors deserve the truth at a usable size.
+ada: That's infuriatingly good advice.
+tomas: It is.
+ada: I want him to have been consistently worse at this. It would make being disappointed simpler.
+tomas: He doesn't become less responsible because he understood the principle. Sometimes that makes the failure more specific.
+narrator: You fold the letter back along its existing crease. The paper remembers the fold more obediently than a person remembers advice. There is something almost enviable about that, until you imagine being unable to unfold yourself differently.
+ada: If someone copied my handwriting, why choose me? Why not his own?
+tomas: To make you pay attention. To make the message seem personal. To point to a source we haven't identified. Those are possible motives. None establishes that copying occurred.
+ada: You're going to get very tired of saying that to me.
+tomas: You can say it to me when I start treating a label mismatch as a confession.
+narrator: The reciprocity helps. You are not the frightened novice being managed by a calm expert. You have different vulnerable points, and a shared method for catching them before they turn into conclusions.
+narrator: On the back of one envelope is a drawing of a gull made from three quick strokes. You drew it during a phone call, then used the envelope without noticing. Ivo circled it and wrote correct number of legs. You laugh at the smallness of his praise. Tomas asks whether the drawing belongs in the public material. You say no, not because it is secret, but because it is irrelevant to the inquiry and yours to keep.
+tomas: Good. An archive can respect a boundary without requiring a dramatic reason for it.
+narrator: You place the personal letters back in their original bundle. The comparison photographs go into a restricted working folder, not the eventual public evidence packet. The strip's claim can be described without displaying every private sentence you ever sent your uncle.
+ada: When I began this work, I thought everything properly catalogued became less vulnerable.
+tomas: Sometimes being findable makes a thing more vulnerable. Depends who can find it and what they think access permits.
+ada: So the catalogue needs boundaries as well as names.
+tomas: Yes. Otherwise preservation turns into a very organized form of taking.
+narrator: A pressure knock sounds faintly beneath the floor. The blue cup trembles without moving. You both look toward it, then away. Waiting has begun making the kitchen into a stage. You decide to prepare the room so the anticipated event, if it occurs, will be a documented break rather than an improvised emergency.
+narrator: You clear the table edge, move the chair out of the likely fall area, and find a shallow conservation box for any fragments. Tomas positions the camera so the clock and cup can be seen together without anyone holding it. You mark the tripod's place with a small piece of removable tape.
+ada: We aren't making it break by preparing for it.
+tomas: Correct. Preparation is not a confession of belief.
+ada: And if it doesn't break, this won't have been wasted.
+tomas: We'll have a tidy table and a useful negative result. Science has endured worse afternoons.
+narrator: You notice the cup's repair more clearly now. The adhesive line follows an old break around the handle's upper attachment. A slight discoloration suggests age or a previous unsuitable material. You do not poke it. The test is about the documented claim, not your ability to force the predicted outcome.
+narrator: On a separate sheet, you write a simple stop condition: if anyone enters the fall area or the setup appears unsafe, stop observing and make the room safe. The sentence seems almost comically unnecessary. You have spent enough of the day with the old records to know that writing an obvious limit can be worth the ink.
+ada: I keep thinking of the note as a dare.
+tomas: Then let's refuse the dare and keep the observation.
+narrator: That is the phrase you needed. You copy it in your private notebook, not the formal record. The table is ready. The letters are put away. The cup remains an old cup with a repaired handle, even though every minute now arriving has made it harder to look at anything else.
+# ch3
+## ch3_s2a | The Cost of Keeping | archive | early evening | ada,tomas,sera
+narrator: Sera brings the reservoir trend to the table before anyone begins the next reel. She has plotted the readings against the maintenance limit and marked the forecast storm range separately. The two lines are not the same sort of information. One describes measurements already taken. The other describes a bounded expectation of what may arrive.
+sera: I want the shutdown discussion to happen before we are rushed. The apparatus is becoming less safe as the differential rises. The gravity bypass is the designed relief route, subject to the inspection already under way. If it works as drawn, equalizing the load is likely to destroy the resonant state.
+ada: How likely?
+sera: The inclusion is already microfractured. Its stress history and the old maintenance warnings both point that way. I can't give a responsible percentage from the available evidence. I can say preserving operation would require accepting additional unquantified risk.
+tomas: Could we reduce the pressure without losing the effect?
+sera: Perhaps under a controlled study, in a different setting, with time to test. Tonight we have a storm, aged hardware, and people nearby. A desirable research question is not an alternative safety plan.
+narrator: Tomas leans back. He is not arguing for danger. He is allowing himself to feel the magnitude of what may be lost. You appreciate that Sera does not dismiss the feeling as irrational. Unique things can matter, even when they cannot be allowed to dictate the decision.
+ada: If we preserve the housing, drawings, traces, and data, we still preserve something extraordinary.
+sera: Yes. We preserve what we actually know. We may lose the ability to repeat it here.
+tomas: Which means people may always argue about whether it happened.
+sera: They may. Operating a hazardous system to prevent skepticism is not an acceptable safety objective.
+narrator: The sentence costs her more than her even voice suggests. She rests a finger on the trend line, then removes it as though she has been caught trying to hold the measurement down.
+ada: You would like independent observers here before the release.
+sera: Desperately. I would like a laboratory, a grant, six months of baseline data, and a world considerate enough to schedule its impossible phenomena during settled weather.
+tomas: We can offer a kettle and a man with two spare memory cards.
+sera: Then we use those resources well.
+narrator: You list what can be preserved safely before any operation: calibrated photographs of the apparatus, original diagrams, raw sensor readings, synchronized timestamps, unedited video, source hashes, and a clear account of every intervention. You list what cannot be promised: a complete theory, unrestricted repeatability, survival of the active effect, universal agreement.
+ada: Do we need to keep the receiving paper in the tower while the input operates?
+sera: The apparatus uses its own paper path. We can photograph it in place and preserve the original after shutdown if access is safe. We should not dismantle part of a coupled mechanism merely to make a nicer exhibit before we finish operating it.
+tomas: So observation copies first, originals when safe.
+sera: Yes. The same conservation principle as a fire-damaged building. Nobody enters a dangerous structure because the object inside is unique.
+narrator: You think of the box of cup fragments. They are easy to preserve because nothing depends on the cup continuing to hold pencils. The chronograph is more difficult because its function is part of what makes it significant. Yet function is not an entitlement. A device can become an artifact when continuing to use it costs too much.
+ada: Ivo may have believed keeping it working was the same as keeping the truth alive.
+tomas: Or that its usefulness would eventually outweigh what he did. We need evidence before deciding which story he told himself.
+sera: Either way, we should not inherit the decision by default.
+narrator: You draw a line through the phrase save the machine in your notes and replace it with preserve evidence; make installation safe. The revised objectives can be achieved together. The original phrase had concealed a conflict inside a single attractive verb.
+narrator: Tomas asks whether dismantling the active effect will make the historical investigation harder. Sera explains that the 1998 operational findings rest on logs, charts, and ordinary recordings, not on a modern demonstration of the time effect. Establishing the old staff's belief in the instrument may matter to context; their handling of instructions can be evaluated from ordinary records.
+ada: So no one can reasonably say that destroying the resonator destroys the case about the wrong rescue route.
+tomas: They could say it. We can show why the sources don't depend on it.
+sera: Exactly. We don't need everyone to be reasonable before making the record robust.
+narrator: Sera marks an uncertainty on the mechanical diagram: a corroded fastener near the gate linkage. The inspection crew is checking it now. If it fails, the release procedure changes. The team has a written fallback involving isolation and a controlled manual gate operation from a protected access point. It would require qualified crew and a larger evacuation perimeter, not improvisation by the three of you.
+ada: We don't need to understand that whole procedure to know when to stop ours.
+sera: Correct. Our decision boundary is the verified checklist. A failed prerequisite sends the job back to the people qualified for the alternative. It does not invite us to become more heroic.
+narrator: Tomas copies that sentence into the operations notes. You can imagine it becoming a line people quote later. You can also imagine the more important possibility: nobody quotes it because the procedure simply works.
+sera: There is one more thing. After shutdown, no secret attempt to restart it. Not by me, not by a visiting team, not by somebody who thinks a final message might be waiting.
+ada: Agreed.
+tomas: Agreed. If we need a policy for access, we write one with the owner and the harbor.
+narrator: You make the agreement explicit in the site handover notes. The damaged pressure path will remain isolated until qualified assessment and authorization. You are preserving a question without preserving the right of any curious person to put others at risk in pursuit of it.
+narrator: Outside, the light over the harbor has begun to flatten into the silver that precedes heavy rain. The apparatus may be the only one of its kind. The people moving along the quay are also the only people of their particular kinds. The comparison is sentimental if left there, so you return to the numbers, the checks, and the list of work that can actually protect them.

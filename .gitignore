@@ -1,0 +1,14 @@
+.godot/
+**/bin/
+**/obj/
+.toolchain/
+artifacts/
+*.user
+*.log
+integration/pumas/.venv/
+__pycache__/
+
+.qualification/
+
+# Only reproducible generated audio. Hand-authored WAVs elsewhere stay visible.
+/Assets/Audio/*.wav

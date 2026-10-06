@@ -1,0 +1,36 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Scripts/Presentation/AudioDirector.cs" id="1"]
+[ext_resource type="AudioStream" path="res://Assets/Audio/harbor.wav" id="2"]
+[ext_resource type="AudioStream" path="res://Assets/Audio/keeper_house.wav" id="3"]
+[ext_resource type="AudioStream" path="res://Assets/Audio/archive.wav" id="4"]
+[ext_resource type="AudioStream" path="res://Assets/Audio/lantern_room.wav" id="5"]
+[ext_resource type="AudioStream" path="res://Assets/Audio/tide_cave.wav" id="6"]
+[ext_resource type="AudioStream" path="res://Assets/Audio/watch_theme.wav" id="7"]
+[ext_resource type="AudioStream" path="res://Assets/Audio/bell_release.wav" id="8"]
+
+[node name="AudioDirector" type="Node" node_paths=PackedStringArray("AmbienceA", "AmbienceB", "Music", "Effects")]
+script = ExtResource("1")
+AmbienceA = NodePath("AmbienceA")
+AmbienceB = NodePath("AmbienceB")
+Music = NodePath("Music")
+Effects = NodePath("Effects")
+Harbor = ExtResource("2")
+KeeperHouse = ExtResource("3")
+Archive = ExtResource("4")
+LanternRoom = ExtResource("5")
+TideCave = ExtResource("6")
+
+[node name="AmbienceA" type="AudioStreamPlayer" parent="."]
+bus = &"Ambience"
+
+[node name="AmbienceB" type="AudioStreamPlayer" parent="."]
+bus = &"Ambience"
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7")
+bus = &"Music"
+
+[node name="Effects" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8")
+bus = &"Effects"

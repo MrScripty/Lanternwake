@@ -1,0 +1,98 @@
+# ch4
+## ch4_s1a | Six Working Lives | archive | evening | ada,tomas,nessa
+narrator: While Sera compares the deposition's timestamps with the engineering log, Tomas takes a flat folder from a shelf above his desk. It contains copies of six employment records, photographs supplied by families, and a list of permissions. He places the permissions on top before opening the photographs.
+tomas: These were gathered for an exhibit that never happened. We can look at the material marked for public use. The private letters stay in their sleeves.
+ada: You don't need to show us anything to justify caring about them.
+tomas: I know. This is not a justification. I want the next account to have enough room for who was actually there.
+narrator: Ewan's photograph shows him kneeling beside an open engine housing, holding a bolt between his teeth. Someone has written remove bolt before conversation on the back. The handwriting belongs to his wife, according to the source note. Tomas smiles before he reads the attribution. The joke has outlived the immediate scene that made it funny.
+tomas: He repaired things in the order people needed them, not the order people asked. This made him popular with some of the town and permanently in dispute with the rest.
+nessa: He put the bakery fan ahead of the council office heater once. Said bread had a narrower operating temperature than councillors.
+ada: Did he write that down?
+tomas: Sadly, no. We have to rely on several delighted witnesses.
+narrator: Leila Fen's record lists navigation and stores. Her photograph is a formal portrait in which she looks mildly impatient with the camera. An authorized family note says she grew roses in tubs because the soil behind her house was too shallow. She labeled each variety on pieces cut from old aluminum tins.
+nessa: She hated being called meticulous as if it meant she had no imagination. The roses were arranged so the colors changed as you walked through the yard. I didn't understand she was composing a view until someone explained it.
+ada: The same habit can serve a stores list and a garden.
+tomas: That's why job titles aren't enough. Also why a memorial shouldn't pretend every habit was secretly preparation for the last day.
+narrator: Ruth Merrin trained new maintenance staff. A class photograph shows her standing at the edge of a workshop, not in its center. Beside it is a safety checklist she rewrote so trainees could use it with wet gloves. The text is larger, the pages shorter, the blank acknowledgment boxes spaced farther apart.
+ada: Somebody could call this a formatting change.
+nessa: Somebody who had never tried to read a dense page with rain in their eyes.
+tomas: Her family asked that we include this if there was ever an exhibit. She was proud of making difficult work less difficult for the next person.
+narrator: Oren Pike handled the outer station's electrical systems. The public collection includes a photograph of him beside an elaborate homemade kite. He and his partner built kites that flew badly and looked magnificent. One is shaped like a squid with too many arms. Tomas explains that an extra arm was added each time it failed to lift, in an attempt to improve morale rather than aerodynamics.
+ada: I like that the archive can record a deliberately unhelpful repair.
+tomas: Engineering needs a leisure department.
+narrator: Hester Cole's image is a contact sheet rather than a portrait. She photographed doorways around the island, recording changes in paint and hardware. The pictures seemed repetitive to people who wanted sunsets. After her death, they became an accidental record of buildings altered or demolished. She had not made them for that future purpose. She simply liked doors.
+nessa: She asked to photograph the harbor office when I was an apprentice. I cleaned it first. She was annoyed because she wanted it as it was used.
+ada: Did she take the photograph anyway?
+nessa: Yes. Then came back a week later and got the mess. She had a very patient definition of winning.
+narrator: Dev Malik was the workboat's deck supervisor. His authorized photograph shows him at an adult amateur theatre rehearsal, wearing a crown made from a cereal carton. The role was a king who lost every argument with his servants. A program lists him as responsible for the set as well as acting, an arrangement Tomas describes as suspiciously convenient whenever the king needed a larger chair.
+ada: These are good photographs.
+tomas: They are the ones the families chose for public use. There are others that matter more privately. A public record does not become more honest by taking everything.
+narrator: You arrange the six folders in alphabetical order, then ask whether Tomas prefers that order to the order on the memorial. He considers it seriously. The memorial follows their positions in a crew photograph. The employment file follows staff numbers. Neither order is morally correct. Both tell a small story about where the list came from.
+tomas: Alphabetical for the catalogue. Crew order if we reproduce that photograph. Say which we're using.
+ada: Good.
+narrator: For several minutes, you work on descriptions that avoid turning each person into a single exemplary trait. Leila was not merely organized. Ruth was not merely kind. Dev was not simply cheerful. The permitted source material supports particular actions, jokes, preferences, and skills. You keep those particulars rather than manufacturing six inspirational biographies.
+nessa: Do we include the disagreements people remember?
+tomas: If relevant, supported, and appropriate to the permission. We don't need to make them flawless. We also don't need to collect every old irritation to prove they're human.
+ada: Enough complexity to prevent sainthood, not an inventory of gossip.
+narrator: Nessa nods and closes a folder whose contents have not been cleared for public use. She has learned something by looking at the permission sheet first. So have you: care is not only adding information. Sometimes it is preserving a boundary while keeping the important public evidence available.
+tomas: I used to think getting the official account corrected would tell me how to remember my father. It won't. It changes what strangers can responsibly say about the crew. My memories were never waiting for the council's authorization.
+ada: But being contradicted publicly still hurts.
+tomas: Yes. Both. I wish people would stop making me choose between 'the record matters' and 'the record can't bring him back.' I know the second one. It doesn't cancel the first.
+nessa: We can say that clearly when the review begins.
+narrator: Outside the archive door, someone calls Nessa's name. She checks the update, gives an answer, and returns. The interruption has become part of the room's rhythm: history, present conditions, history again. None of you can stay entirely inside either one.
+narrator: Tomas places the folder back on its shelf, separate from the operational evidence. It will travel to the hall in a waterproof box, but not be bundled indiscriminately into the public release. The distinction feels like a small repair to a long habit of treating families as sources before treating them as people.
+ada: When the exhibit happens, I'd like to come on an ordinary day. With people arguing about where the captions should go and whether the lights are too bright.
+tomas: You are describing my dream of a successful memorial.
+nessa: I'll complain about the chairs.
+tomas: As long as you attend.
+narrator: Sera calls you back to the table. The timestamps align. There is more evidence to reconcile, and then a statement to prepare. The six folders stay where they are, containing working lives that do not end at the beginning of an inquiry transcript.
+## ch4_s2a | Who Gets to Speak | archive | evening | ada,tomas,nessa,sera
+narrator: Before the statement leaves the room, you ask who should read it. The question seems administrative until everybody answers at once. Nessa says the harbor. Tomas says the families should be informed first. Sera says the technical claims need review. You say the estate documents need clear attribution. Then all four of you stop, hearing how easily necessary concerns can become competing claims to a microphone.
+nessa: Let's separate the jobs.
+ada: Public operational authority, family notification, technical accuracy, source ownership.
+tomas: And nobody can perform all four merely because their voice carries.
+narrator: You draw four columns. Nessa can speak for current harbor operations and lodge municipal records. Tomas can describe his own work and his relationship to Ewan, but cannot speak for every family. Sera can state what the physical evidence supports, not announce a complete scientific theory. You can authorize the relevant estate material and describe its provenance, not decide the community's response to it.
+sera: A good boundary is sometimes a list of things you don't represent.
+ada: We should put that where the audience can see it.
+tomas: Without making the statement so cautious it says nothing.
+nessa: It can say the concrete thing plainly. The public claim of a vessel hold is contradicted by original evidence. No throat-clearing needed before that.
+narrator: You read the draft aloud. Hearing it exposes a sentence that looked responsible on the page but sounds evasive: errors appear to have occurred. Tomas makes a face. You replace it with the supported sequence of actions and the names established by the records.
+ada: 'The coordinator issued the obsolete east route. Ivo sent the west correction on the measurement channel, recognized there was no repeat-back, and did not use the direct line in the remaining interval.'
+sera: Better. It names actions without pretending this room has determined every legal conclusion.
+tomas: And the concealment?
+ada: 'The later summary substituted a water-level measurement for a vessel instruction, and the corrected chart was knowingly excluded from the published exhibit.'
+nessa: Attribute what we know about knowingly to Ivo's note and testimony. We can't attach his state of mind to every person involved in publication.
+narrator: You make the attribution explicit. The paragraph becomes longer and more honest. It still fits on a page. You are beginning to understand how much damage a very short summary can do when its economy is borrowed from somebody else's missing qualification.
+narrator: Tomas calls the family contacts who agreed to receive archive updates. He does not perform these calls on speaker. You work quietly while he speaks at the far end of the room. After each call, he records whether the person received the information, wanted a copy now, or preferred contact after the storm. Declining an immediate conversation does not make anyone less entitled to the later record.
+ada: Are they all reachable?
+tomas: Not all immediately. I've left neutral callback requests where appropriate. We can publish the operational finding without claiming every family has endorsed our wording. Those are different permissions.
+nessa: We also won't postpone correcting a public falsehood indefinitely because a notification chain takes time. We document who was reached and keep trying responsibly.
+narrator: One relative sends a photograph of an old letter and asks Tomas to publish it alongside the statement. He reads enough to identify it, then replies that the document needs separate review and provenance before it becomes part of the collection. He looks unhappy at delaying something offered so urgently.
+tomas: Grief can make speed feel like respect.
+ada: Sometimes respect is telling someone what you can actually verify today.
+sera: And preserving the offered original so tomorrow remains possible.
+narrator: A second complication arrives from the council office: a request to see the wording before public release. Nessa reads it twice. It contains no emergency order, no privacy issue, and no identification of a specific error. It asks for time to consider reputational implications.
+nessa: We'll send the source list and the draft as notice. The operational records are public. The estate has authorized the relevant documents. They can identify an error, and we will correct one. A general wish to consider how this looks is not grounds to conceal it tonight.
+ada: We should include the response in the publication history.
+nessa: Yes. Fairly. They are allowed to be surprised. They are not allowed to make surprise everybody else's waiting room.
+narrator: You make a versioned statement, record the time, and retain the previous draft. It feels excessive until you remember the selected inquiry summary. The difference between a correction and an invisible substitution begins with keeping a record of the change.
+sera: Include a contact route for corrections, and distinguish it from the emergency phone. We don't want the safety line occupied by someone debating a transcript comma.
+tomas: Although some of the commas are doing quite a lot.
+nessa: They can do it on the archive line.
+narrator: The room laughs, briefly. Then Tomas asks for one more change. The statement should not call the crew vindicated as if their lives had been a court case awaiting a satisfying final word. It should state the corrected facts. He wants people to know what was false, not only that someone has won an argument.
+ada: What word would you use?
+tomas: Named. Heard. Accurately described. Any of those, in the right sentence.
+narrator: You remove vindicated from a proposed heading. The replacement reads ORIGINAL RECORDS OF WEST QUAY RESPONSE, 1998. Less dramatic. More durable. It will make sense after the emotional temperature of tonight has changed.
+narrator: Sera checks the technical appendix. She strikes out one phrase describing the chronograph as a machine that predicts the future. The observed effect concerns a fixed backward trace. Prediction is one possible use of information received early, not a complete account of the mechanism. The distinction matters both scientifically and politically.
+sera: If we say it predicted the flood, readers may imagine it supplied a perfect safety plan. The record shows the opposite problem. Information arrived, and the human response mishandled it.
+ada: The title should not recreate the mistake the evidence reveals.
+tomas: There is a whole career in that sentence.
+narrator: You keep the extraordinary instrument in a separate technical note rather than allowing it to swallow the operational finding. The crew did not need time travel to deserve a valid rescue instruction. Their families do not have to persuade the world that a strange machine worked before the corrected channel log can matter.
+nessa: That's important. People can question the physical explanation and still read the ordinary records correctly.
+sera: They should. Independent claims need independent support.
+narrator: By the time the final draft is ready, it has become less elegant and more useful. It names sources, actions, limits, permissions, and the route for future correction. It contains no demand that anyone feel closure. It fits within the existing emergency communication plan and leaves the safety channel clear.
+ada: I used to think a good public statement was one nobody could misunderstand.
+tomas: An ambitious genre.
+ada: Now I'd settle for one that gives a reasonable reader enough to check us.
+nessa: That is a much better job description.
+narrator: Tomas takes the printed page. Nessa takes the radio. Sera takes the measured conditions. You take the source register. No one carries the whole account alone when you leave the archive.

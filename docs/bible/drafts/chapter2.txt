@@ -1,0 +1,159 @@
+# ch2 | The Wrong Channel
+## ch2_s1 | A Label Is a Claim | archive | morning | ada,tomas
+narrator: In daylight, the archive is less a cave than a room that has been asked to remember too much. Tomas has cleared a space along the central table. Three boxes wait in a row: the public inquiry transcript, the harbor's operational records, and Ivo's private tapes. He has put blank cards between them like small fences.
+tomas: Three sources. None gets to borrow authority from the others until we know why.
+ada: You sound as though you've had this argument before.
+tomas: With myself, mostly. I'm the easiest person here for me to fool.
+narrator: You put on clean nitrile gloves to inspect the corroded canisters, then take them off again for the clean paper. Tomas notices and does not comment. The first comfortable silence between you lasts through the opening of a box.
+ada: Tell me how the flood is usually described.
+tomas: Exceptional storm. Failure of a west floodgate. Six people aboard a maintenance vessel departed against instructions and were lost. An inquiry found procedural confusion but no individual grounds for prosecution. There is a plaque. You saw it.
+ada: And the short version that isn't official?
+tomas: Depends who is telling it. Some say Ivo saw the flood coming and nobody listened. Some say he saw it and chose who to warn. Both versions make him the only person in the room. I distrust that.
+narrator: The public transcript has the smooth, slightly gray appearance of a copy made from a copy. At its front sits a summary, followed by selected testimony. The word selected is not concealed. It is simply printed in a place where readers have learned to stop looking.
+ada: This isn't a full transcript.
+tomas: No. I requested one. The council says the complete recording was transferred to the inquiry contractor. The contractor dissolved. The contractor's archive says its retention period expired. An exceptionally tidy little journey into nowhere.
+ada: But Ivo had a copy.
+tomas: Ivo had something. That is still the right tense for our certainty.
+narrator: You find reel fourteen in a box marked WEATHER, MARCH–JUNE. Its leader has a handwritten date in November. The reel itself bears a yellow dot. Across the room, the public inquiry folder has the same yellow dot on its spine.
+ada: The label puts it in the wrong season.
+tomas: A mistake, a concealment, or a reused box. We keep all three until one stops working.
+ada: Could he have intended you to find it?
+tomas: Yes. Could he have intended me never to find it? Also yes. That's the trouble with someone leaving a trail after years of not answering a direct question.
+narrator: You slide the reel into a clean sleeve and record its former location before moving it. On the bottom of the box is a faint rectangle of cleaner cardboard, shaped like a second reel. Whatever once sat there was removed after enough years to leave a shadow.
+?tomas|Choose the terms of the investigation.|Let's distinguish what we know from what the labels suggest.~Do you want me to handle the family material?~What would a fair conclusion look like to you?|A fair conclusion says which source supports which claim, including the claims we dislike. You can help most by catching me when I skip that step.|f_inventory,f_future_note,f_bell_warning,f_tomas_loss
+narrator: Tomas tests the recorder with a spare reel. The machine's reels begin turning with a low, almost domestic sound. He points to the two narrow tracks in the recording diagram, then to a switch marked A and B. The public transcript repeatedly refers to Channel A. The handwritten operational log uses two different letters.
+ada: Were these radio frequencies?
+tomas: In the equipment, yes. But on this recorder they're archive inputs. A carried measurement reports. B carried spoken harbor instructions. They could be monitored together, recorded separately, or copied together badly. Which is why people who say 'the recording' make my teeth hurt.
+ada: What does the summary say was heard?
+tomas: An instruction to hold the west vessel. At 21:04.
+narrator: You find 21:04 in the log. Beside it, the operator has written A: WEST LEVEL HOLDING. On the next line: B: AWAIT HARBOR. It is possible to see the mistake immediately. It is also possible to understand how somebody tired, hurried, or motivated could have made it.
+!f_wrong_channel|i_channel_log
+ada: Holding water level became holding a boat.
+tomas: It may have. We need the sound. But yes. That's the shape of it.
+narrator: You copy both lines exactly. Then, on a separate card, you write an interpretation. You do not let the interpretation touch the quotation.
+## ch2_s2 | What Holding Means | archive | late morning | ada,tomas,sera
+narrator: Dr Sera Wynn arrives carrying a hard case and a bag of oranges. She sets the oranges beside the kettle and the case on the floor, which establishes her priorities more clearly than an introduction would. Her raincoat is buttoned one hole wrong. She corrects it while Tomas explains the log.
+sera: Sera Wynn. Coastal systems. I was supposed to be looking at the tower's pressure lines this morning. Then Nessa said someone had found a sentence coming out of them.
+ada: Two sentences. And a date.
+sera: Thank you. Precision already improves the problem.
+narrator: You show her the photographs. She studies the machine in the background longer than the words themselves. When she reaches the photograph of the bell warning, she leans back from the table.
+sera: We should inspect that shaft before anyone does anything dramatic in it.
+ada: Nessa already sent a rigger.
+sera: Excellent. We can afford to be interested, then.
+tomas: Can you help with this first? Is 'west level holding' standard enough to distinguish it from a movement order?
+sera: In a water-level log, entirely. Holding means the reading is approximately stable. It does not mean the water is safe. It does not mean somebody should remain where they are. Even if the words sound similar, they answer different questions.
+narrator: Tomas plays a short passage from a damaged copy. A voice reads measurements over a wash of hiss. You hear 'west,' then a burst of distortion, then 'holding.' The next voice is too faint to understand. Tomas stops before any of you can begin filling the gap with what you want to hear.
+ada: Could enhancement recover it?
+tomas: It could make some frequencies easier to hear. It can't invent a voice that wasn't captured. If I give you a version that sounds cleaner, I also give you this one. Otherwise I become another editor with a preferred story.
+sera: Has anyone compared the instrument legend from that year?
+narrator: The legend is folded into the operational log. Channel A: hydrographic measurements and station telemetry. Channel B: vessel movement and rescue coordination. Below those printed headings, a red stamp reads TEMPORARY ROUTING DURING TRIAL. Someone has underlined temporary twice, with different pens.
+ada: A trial of what?
+sera: I haven't inspected the lower chamber yet. The plans call it a phase-pressure forecast installation. I would like to see the apparatus before I attach meaning to the title.
+tomas: That's a very Sera way of saying the title sounds ridiculous.
+sera: It's a very me way of saying I have made mistakes with confident nouns.
+narrator: You lay out the records in three columns: measurement, instruction, later description. The first column says a level held. The second contains a gap. The third says a boat was told to hold. A whole public account balances on the space between those columns.
+ada: We haven't proved the opposite account.
+sera: Correct.
+ada: But the summary doesn't prove its own account either.
+sera: Also correct. Those statements can coexist without cancelling each other.
+?sera|Ask how to test the channel discrepancy fairly.|What observation would change your mind?~How do we stop a plausible story becoming a conclusion?~Can the pressure equipment explain the paper yet?|First identify the channels from contemporary documentation. Then compare the original sources. The chronograph is a separate claim until we have a physical link, even if the stories eventually meet.|f_inventory,f_future_note,f_bell_warning,f_tomas_loss,f_wrong_channel
+narrator: Sera peels an orange in one continuous strip while you take notes. She offers half to Tomas without looking up. He takes it. Their familiarity has none of the polish of a practiced friendship; it is a collection of small logistical accommodations.
+ada: How long have you two worked together?
+tomas: We haven't, officially.
+sera: He once sent me nine minutes of pipe noise and asked whether a building was singing.
+tomas: You sent back fourteen pages.
+sera: It was an interesting building.
+narrator: For a moment the room contains work rather than a tragedy. Three people, a table, a question that can be broken into smaller questions. Then the tape turns once more, and the thin voice from 1998 reminds you that clarity is not the same thing as distance.
+narrator: Before Sera leaves for the lower chamber, she asks to see your phone's clock against the archive's radio-controlled one. They agree to the second. She writes the result on the photograph sheet.
+sera: If the machine makes another claim about time, I want us to know whose time we mean.
+## ch2_s3 | The Official Way Across | harbor | midday | ada,nessa
+narrator: Nessa is supervising the movement of a fuel drum when you find her. She points you behind a painted line, finishes the operation, checks the brake on the trolley herself, then comes over. The small sequence reminds you that asking somebody a serious question does not make the physical world stop needing their attention.
+nessa: If you've come to tell me a tape sounds guilty, start again.
+ada: I've come to ask which map you use for an evacuation.
+nessa: Better question.
+narrator: She takes you to the harbor office, where today's working chart covers a wall. Routes have been marked in erasable pen. The public visitor map hangs beside it, framed and much smaller. On the visitor map, the west quay is a single stroke of black. On the working chart, it is a complicated approach with a shallow shelf, two mooring points, and a passage behind the tide wall.
+ada: Why leave this passage off the public map?
+nessa: It's not navigable at every tide. And a visitor map tells you where to buy lunch. The problem starts when somebody photocopies it and calls it an emergency plan.
+ada: Is that what happened in 1998?
+nessa: Part of what happened.
+narrator: She opens a drawer and takes out an older chart protected between boards. Its fold lines have almost separated. In the west margin, a handwritten correction shows the sheltered route past the workboat mooring. The printed evacuation plan from the same year sends rescue craft around the eastern wall.
+nessa: I was nineteen. Old enough to be useful, not experienced enough to know when somebody saying 'it's all covered' had checked. I carried photocopies from the council office to the landing crews. This is one of the things I remember exactly: the copies were warm.
+ada: You didn't choose the route.
+nessa: No. And saying that doesn't make me stop remembering the warmth.
+ada: I won't try to make one sentence fix it.
+nessa: Good.
+narrator: Through the office window, a group of volunteers checks lifejackets at a folding table. They inflate one, mark a number on a list, deflate it, and begin again. None of it looks like courage from a distance. All of it becomes courage when you imagine having to depend on the list.
+ada: Tomas thinks a measurement became an instruction.
+nessa: I remember that argument. Ivo said the people listening should have known the difference. Then he stopped saying much of anything.
+ada: Did he know they hadn't?
+nessa: Ask the records. I don't trust the part of my memory that has had twenty-eight years to practice being right.
+?nessa|Talk about responsibility without turning it into absolution.|What did you change when you became harbor master?~I won't confuse being there with causing it.~Is there something practical I can do today?|You can help compare the old route with the working chart and write down the differences. Today, we use named routes and repeat-back. Nobody gets told to go 'the usual way.'|f_inventory,f_future_note,f_bell_warning,f_tomas_loss,f_wrong_channel
+narrator: She shows you the present protocol. Instructions use a vessel name, route name, and destination. The receiver repeats all three. If a channel fails, the fallback is written beside it. At the bottom, in bold capitals, stands a sentence you wish could be printed on every piece of paper in the archive: FORECASTS INFORM DECISIONS; THEY DO NOT ISSUE ORDERS.
+ada: Did you write that?
+nessa: I typed it. More than one person earned it.
+narrator: You copy the old chart's correction and the modern protocol. Before you leave, Nessa holds the door but does not step aside.
+nessa: The rigger checked the bell. Supports sound for now. The shaft is a moving-load hazard, as it has always been. I've locked its access gate. If a note tells you to climb in there, the answer is no.
+ada: Even if it says no one will drown?
+nessa: Especially then. Reassurance is not a load calculation.
+narrator: You promise. It is the first promise you have made on the island that feels small enough to keep.
+## ch2_s4 | The Missing Margin | keeper_house | early afternoon | ada,tomas
+narrator: Back at the keeper's house, Tomas sits opposite you while you compare the chart copies. He has brought a scanner small enough to fit in a satchel and large enough to make every fold awkward. You photograph the fragile pages instead. The scanner becomes a weight holding down a clean sheet, an undignified but useful career change.
+tomas: Nobody tell the manufacturer.
+ada: It has found honest work.
+narrator: The corrected west passage exists in the operational chart, dated two months before the flood. It is absent from the map attached to the public inquiry summary. That could still be an oversight. Then you find Ivo's copy of the inquiry draft, with the west passage circled and a note in his hand: OMIT FROM EXHIBIT C. USE ISSUED VERSION.
+ada: That's not a copying accident.
+tomas: No.
+narrator: His answer is quiet enough that you have to look at him to know whether he spoke. You wait. Outside, the wind moves through the grass in long sections, one darker band following another.
+!f_west_omission|i_chart
+ada: He knew the corrected chart existed. He told them to use the older one.
+tomas: That is what this supports. It doesn't tell us who else knew, or what reason he gave.
+ada: You don't have to soften it for me.
+tomas: I'm not softening it. I'm keeping it exact so nobody can take it away from us later.
+narrator: On the reverse of the draft is a domestic list: flour, batteries, order green felt. You hate it for a moment. You want the back of a consequential document to understand what the front has done. Instead, it contains the ingredients of an ordinary Tuesday.
+ada: When I was ten, he taught me to repair a broken book hinge. He said a repair should remain visible, so the next person knew what had happened.
+tomas: People can teach the principle they fail at.
+ada: I know. I wish knowing made it less ugly.
+narrator: You scan the document, record the source, and make two copies to separate storage devices. Tomas asks before taking one. You say yes to preserving the evidence and make a note of that permission. It feels strange to enact ordinary professional safeguards in the middle of a family disappointment. It also feels necessary.
+tomas: I won't release it without context. Not because it deserves hiding. Because a photograph of one sentence will become whatever caption travels fastest.
+ada: We need the testimony that goes with it.
+tomas: Yes.
+?tomas|Choose how to handle evidence involving Ada's uncle.|Keep his note in the catalogue exactly as written.~Let's document what this proves and what it doesn't.~I'm angry, but I don't want anger doing the editing.|Then we preserve the whole page, both sides, with its source and date. The omission matters. So do the limits of what we can infer from it.|f_inventory,f_future_note,f_bell_warning,f_tomas_loss,f_wrong_channel,f_west_omission
+narrator: Under the drawer liner, you find a strip of green felt like the square in Ivo's letter. Beneath it lies a flat brass rubbing: three concentric arcs, a vertical stroke, and the number 23.17. There is no unit. Tomas photographs it in place.
+ada: A setting?
+tomas: Possibly. A date in a very unpopular calendar. A workshop measurement. We're collecting good questions today.
+ada: And a few bad answers.
+tomas: That's still progress if we label them.
+narrator: You return the rubbing to its sleeve rather than moving it to the dramatic center of the table. The unglamorous documents deserve that space. A machine that seems to know tomorrow has not made yesterday less important.
+narrator: At 15:54, you notice the blue cup. It stands where it stood yesterday, pencils angled toward the window. Its repaired handle faces away from you. You have eighteen minutes to decide what it means to test a sentence that has already made you afraid of a kitchen object.
+## ch2_s5 | Sixteen Twelve | keeper_house | late afternoon | ada,tomas,sera
+narrator: Sera arrives with damp knees and a notebook covered in neat arrows. You tell her about the cup. She sets the notebook down and asks three questions: Where was it when the strip appeared? Has anybody moved it since? Is anybody at risk if it breaks? Only after you answer does she ask to inspect the repair.
+sera: The handle has an old adhesive joint. I can see a dark line. If the cup breaks, that may be ordinary failure under ordinary load. The interesting claim is the timing, not the possibility of a broken cup.
+ada: We could put it on the floor.
+sera: We could. Then we would learn what happens when we put it on the floor. We should not confuse intervention with a moral test.
+tomas: Or with being braver than a piece of paper.
+narrator: You agree on a modest procedure. Nobody touches the cup for the next few minutes. Nobody stands in the likely fall area. The phone records the table and a clock. If something unsafe happens, you stop the test. A note has made a prediction; it has not earned the right to command anyone's hands.
+ada: I keep feeling as if moving it would be cheating.
+sera: That's an important feeling to notice. It is not a rule of physics.
+narrator: At 16:09, a delivery van rattles past the lane below. The pencils tremble but do not fall. At 16:10, Tomas sneezes and apologizes to the entire room. At 16:11, the kettle clicks off. Each ordinary noise acquires a significance it cannot possibly deserve. You wonder how many omens are created by people waiting beside clocks.
+ada: What if nothing happens?
+tomas: We preserve the recording of nothing happening. A sadly underappreciated genre.
+narrator: The first seconds of 16:12 pass quietly. Then the pressure line beneath the floor knocks once. The table shivers. The repaired handle separates from the cup with a sound no louder than a snapped pencil lead. The cup tips against its own shifted weight, strikes the edge, and falls. Blue pieces scatter inside the empty area you have cleared.
+!f_cup_prediction|i_blue_handle
+narrator: The handle lands beneath the table. It does not roll. On the recording, the clock reads 16:12:08. Nobody speaks until the fragments stop moving.
+ada: I don't want you to tell me that's impossible.
+sera: I won't. I want to tell you exactly what we observed.
+tomas: The cup broke within the stated minute. We took precautions. The line was printed yesterday. We have witnesses and images for both.
+sera: And we still have ordinary mechanisms for a fragile cup breaking. What we do not yet have is an ordinary explanation for the advance information.
+narrator: You kneel outside the marked fall area. Beneath the table, just beyond the handle, something catches the light. A brass calibration plate is screwed to the underside of the crossbar. You would never have looked from this angle without following the broken piece.
+ada: There's a plate here.
+sera: Don't reach through the shards. I'll bring the torch.
+narrator: The plate bears the same arcs as the rubbing in Ivo's drawer. Beside them are small letters: TRANSMIT ADVANCE—ONE CYCLE. The lower edge has been obscured by a repair bracket. The handle rests exactly below it, a blue crescent holding your eye in the right place.
+ada: 'Leave the handle where it falls.' The line wasn't just telling us what happened.
+tomas: It could be pointing us toward something.
+sera: That is a plausible interpretation. Let's photograph the plate before we promote it to fact.
+?sera|Discuss the witnessed prediction without treating it as authority.|What do we know now that we didn't know this morning?~Can we test the timing without putting anyone at risk?~If this is real, how do we keep it from making decisions for us?|We know a documented advance description matched an observed event. Next we investigate a repeatable mechanism with harmless marks and clocks. A forecast still cannot choose what people should value.|f_inventory,f_future_note,f_bell_warning,f_tomas_loss,f_wrong_channel,f_west_omission,f_cup_prediction
+narrator: Tomas picks up the cup fragments only after you have photographed their positions. He places them in a shallow box with tissue between them. The handle remains where it fell until Sera finishes measuring the plate. Obeying the sentence and documenting a sensible procedure have briefly produced the same behavior. You do not mistake that coincidence for permission to stop judging.
+ada: I don't want to spend the rest of my life wondering whether every broken thing was arranged to teach me something.
+tomas: Then don't. Most things break because they're tired.
+sera: Including institutions. Though they tend to charge more for the repair.
+narrator: Your laughter arrives late and lasts longer than the joke. When it ends, the fear has not gone. It has acquired edges. You can name the observations. You can name the questions. And this evening, under a tower built before any of you were born, you can examine the machinery that seems to be turning one into the other.

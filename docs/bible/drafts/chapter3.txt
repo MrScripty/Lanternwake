@@ -1,0 +1,158 @@
+# ch3 | What the Water Kept
+## ch3_s1 | Beneath the Postcard | tide_cave | late afternoon | ada,sera,nessa
+narrator: The path to the lower works begins behind a locked gate and follows the cliff on the landward side of a steel rail. Nessa checks the tide mark before unlocking it. Sera checks the forecast. You check the soles of the boots Nessa lent you. None of the precautions makes the descent feel adventurous, which is probably the point.
+nessa: We have forty minutes in the chamber before this path becomes a bad choice. We leave earlier if the gauge reaches yellow. Nobody negotiates with yellow.
+sera: I have set a timer for thirty. Ten minutes of margin is not ten minutes to spend.
+ada: Understood.
+narrator: The tide chamber is a natural hollow enlarged by human impatience. Rough basalt gives way to poured concrete halfway along its floor. Pipes run into the rock as if the cliff has been fitted with plumbing. Through a thick green inspection window, a column of water stands higher than the sea outside. It trembles at the top without spilling.
+ada: How is it holding that height?
+sera: Pressure difference. An upper reservoir, a lower sea inlet, and a narrow return. Most of what you're looking at is ordinary engineering. The part in the middle is why I'm here.
+narrator: She directs a torch at a dark annulus surrounding the inspection window. It looks like glass until the light passes across it. Then layers appear inside, repeating at angles that refuse to settle into a single reflection.
+sera: A naturally occurring resonant inclusion in the basalt. The surveyors named it phase glass. That is a historical label, not a claim that it is literally glass. The builders arranged the water path around it instead of breaking through it.
+ada: Why?
+sera: According to the proposal, it produced pressure responses before the measured input. At first they thought there was an error in the instruments. That was a sensible place to begin.
+nessa: Then somebody wanted to sell early flood warnings.
+sera: Yes. Another sensible ambition. It doesn't excuse the jump from an ambition to a reliable service.
+!f_pressure_engine|i_caliper
+narrator: Sera sets a caliper across two exposed reference bolts and compares the distance with the maintenance sheet. She reads the number twice. Nessa writes it down once, then repeats it back. The little ritual from the harbor office has followed you underground.
+sera: The pressure path is coupled to the tower's chronograph. A stylus can receive motion from this loop. There is also an input platen upstairs, where a person can drive a stylus manually. The plans are specific about what travels: a trace, not an object. Not a mind. Not a spoken voice.
+ada: Handwriting, if somebody moves the input stylus by hand.
+sera: Exactly. No scanning software needed. A mechanical signal can be as individual as the movement producing it.
+nessa: And the bell?
+narrator: Sera points to a heavy rod running up through the roof. A diagram beside it shows the tower bell counterweight, an arresting cradle, and a gate in the bypass pipe. On the diagram the motion is simple: counterweight descends, gate rises. In the chamber, the gate's rusted housing looks less willing to be simple.
+sera: Emergency gravity release. Lower the counterweight into its cradle, open the bypass, equalize the pressure. It was designed to be operated from the tower with nobody in this chamber. It also looks as though it has not completed a full cycle in years.
+nessa: So we inspect before we consider using it.
+sera: Yes. A historical drawing is not a certificate for today's hardware.
+?sera|Ask what the machine can and cannot transmit.|Could it send a person or change somebody's memory?~What makes handwriting possible here?~What is the safest thing we can test?|The documented path carries stylus motion through pressure coupling. We have no evidence for people, memories, or voices crossing it. We can test a short pattern with clocks and an empty exclusion zone.|f_inventory,f_future_note,f_bell_warning,f_tomas_loss,f_wrong_channel,f_west_omission,f_cup_prediction,f_pressure_engine
+narrator: The green column rises by the width of a coin. Nessa taps the gauge with one finger, not to change its reading but to direct your attention. Still below yellow. Sera photographs the position and ends the inspection four minutes before her timer would have sounded.
+ada: You've still got time.
+sera: We've got what we came to measure. Staying because we budgeted longer would be a strange kind of thrift.
+narrator: On the way out, you notice a small carved boat set in a crevice above the reach of ordinary spray. Its paint has worn away except for one blue patch. Nessa pauses when she sees you looking.
+nessa: Ewan made those. Left one in every station he serviced. Said machinery deserved a mascot.
+ada: Does Tomas know this one is here?
+nessa: Yes. He asked us to leave it where his father put it.
+narrator: You leave it. Not every object that matters needs to come upstairs with a catalogue number.
+## ch3_s2 | Two Kinds of Keeping | archive | early evening | ada,tomas,sera
+narrator: Tomas has prepared the original reel while you were below. A printed card beside the recorder reads SOURCE, COPY, INTERPRETATION. Under source lies the reel. Under copy lies a storage drive. Under interpretation lies nothing yet. The blank space feels less alarming than the blank chronograph strip. It means someone is waiting to know enough.
+tomas: Before we listen, I need to say something obvious because the tower is making obvious things feel uncertain. This tape does not come from the future. It is a physical magnetic recording made in 1998. Its manufacture, leader, and recorded time announcement all fit that. The extraordinary device is not an excuse to stop dating ordinary objects.
+!f_ordinary_tape|i_tape
+ada: So if we hear Ivo describing that night, he was describing it then or in a later recording. Not calling back from tomorrow.
+tomas: Correct. And if a later voice edited it, we should be able to look for a splice or discontinuity. Not perfectly, but usefully.
+sera: Two mechanisms, two sets of claims.
+narrator: He plays the leader announcement. An operator names the station, date, and channels. There is a brief calibration tone that feels unpleasant without being loud; Tomas lowers it immediately. Then the voices begin. The recording is not theatrical. People wait for replies. Someone asks for a repetition. Someone coughs through a measurement.
+ivo: West reading stable at this observation. That is not a vessel hold. Repeat: level stable. Harbor movement remains Channel B.
+operator: Received, station. Level stable. Harbor movement B.
+narrator: Tomas stops the tape. In the silence, the fluorescent light above the door hums at a different pitch from the recorder's motor.
+ada: He said it explicitly.
+tomas: At this point, yes. This is before the recorded instruction goes missing from the public copy.
+sera: We should note both. He understood the distinction. That may matter to what he accepted later.
+narrator: The next segment contains a discussion about a forecast marker. A man identified in the log as Councillor Pell asks whether it is operational. Ivo answers that the predicted pressure rise has appeared three times. Sera lifts a hand. Tomas pauses.
+sera: Repeating an observation three times is useful. It is not the same as proving the whole alarm system is ready. The route from measurement to warning can fail even if the instrument is right.
+ada: That's what the temporary routing stamp was about.
+sera: Probably. We need the signoff to say for certain.
+narrator: You find it in the engineering packet. A page titled TRIAL ACCEPTANCE AND HANDOVER bears Ivo's signature under SYSTEM READY FOR SUPERVISED USE. In the margin, another hand has written ALARM CHANNEL CROSS-TALK UNRESOLVED. The word supervised has been circled. Nobody has signed beside the unresolved item to show that it was cleared.
+!f_ivo_signature|
+ada: He signed it anyway.
+sera: He signed for supervised use with a known unresolved problem. We must keep the qualification. We must also ask what supervision actually existed when the storm arrived.
+tomas: I don't want the qualification to become a pillow people put over the rest.
+sera: Neither do I. Exact language can expose a failure more sharply than an accusation.
+?tomas|Respond to evidence of Ivo's involvement.|His signature belongs in the public account.~What else do we need before describing his responsibility?~I can be his family and still help document this.|We need the operating conditions and the unedited instructions. His signature matters now; the remaining evidence will tell us how it mattered that night.|f_inventory,f_future_note,f_bell_warning,f_tomas_loss,f_wrong_channel,f_west_omission,f_cup_prediction,f_pressure_engine,f_ordinary_tape,f_ivo_signature
+narrator: You remember Ivo teaching you to use a ruler without letting its damaged end define zero. Start at a clean mark, he said. Subtract the distance. A small lesson in correcting for a tool's imperfection. He knew so many small lessons. You want to ask the voice on the reel how many were needed before a person became good at the large ones.
+ada: I don't think I knew him.
+tomas: You knew a person who was real. This part is real too. It doesn't have to erase the book repairs to change what they mean to you.
+narrator: For the first time, you are grateful that Tomas does not dislike your uncle cleanly. It would be easier for him and less useful to you. He has preserved the man's voice with more care than the man preserved the people in his report.
+sera: There is another issue. The upper reservoir is climbing faster than the maintenance model allows. The forecast instrument may be interesting. The pressure vessel is becoming a current engineering problem.
+ada: Can we shut it down?
+sera: Not by closing the inlet blindly. That could trap the load. Nessa is getting the maintenance crew to inspect the gravity release and the downstream route. We have time to act carefully. That is a resource, not reassurance.
+## ch3_s3 | Repeat Back | harbor | early evening | ada,nessa,tomas
+narrator: At the harbor, the storm preparations have become visible without becoming frantic. Extra lines hold the workboats. Portable radios charge in numbered slots. On the board, tonight's ferry has been replaced by a single handwritten word: CANCELLED. Underneath, in smaller writing, Nessa has listed where stranded passengers can sleep.
+ada: You could have led with the cancellation when you called.
+nessa: You were in the archive. The cancellation changed your travel plan. The inspection changed whether you needed to leave the archive. Different urgency.
+tomas: That's going on your retirement plaque.
+nessa: If you put a paragraph on my plaque, I'll come back and shorten it.
+narrator: Tomas carries a copy of the signoff in a protective sleeve. He does not immediately offer it to Nessa. She notices, waits until a volunteer has finished repeating a berth assignment, then leads you both away from the radio desk.
+tomas: Ivo signed the trial acceptance with cross-talk unresolved.
+nessa: I thought he had. I didn't know.
+tomas: You could have said that.
+nessa: I could have told you what I suspected. It wouldn't have been evidence.
+tomas: It would have told me I wasn't the only person asking.
+narrator: Nessa looks at the sleeve rather than away from him. Her hands remain still against the edge of the table.
+nessa: You're right about that. I thought keeping the work clean meant keeping my guesses to myself. Sometimes it meant leaving you alone with a question everybody else had made uncomfortable.
+tomas: I didn't need you to agree with me. I needed somebody to admit it was a question.
+nessa: I can admit that now. Late.
+ada: Is there a way to make the next part less lonely without pretending the delay didn't happen?
+narrator: Tomas presses the corner of the sleeve flat. When he answers, he is looking at Nessa again.
+tomas: Tell me before the council sees it. Not because I get to approve the evidence. Because I don't want to meet my father in a statement somebody else prepared for the press.
+nessa: Yes. You see anything we plan to publish about this record before it goes out. And the publication keeps the source material available, not just the summary.
+ada: I can help make the source list readable.
+nessa: Good. People shouldn't need to trust our adjectives to inspect our evidence.
+?nessa|Help set terms for a responsible public account.|Let's publish the source list alongside any statement.~Tomas should not learn the next development through a headline.~What can be shared now, and what needs verification first?|We can share verified records with provenance and make clear what remains unresolved. We will not turn a private suspicion into a public allegation, and we will not hide a supported fact because it is awkward.|f_inventory,f_future_note,f_bell_warning,f_tomas_loss,f_wrong_channel,f_west_omission,f_cup_prediction,f_pressure_engine,f_ordinary_tape,f_ivo_signature
+narrator: Nessa unfolds today's evacuation board. The higher school hall has heat, bedding, a first-aid station, and enough food for everybody currently on the island. The school is closed for a staff day; the people on this evening's island roll are all adults. She points to the households still to contact and the crew assigned to each route.
+nessa: Nobody's being moved because of a prophecy. We have a storm warning, an untested pressure system, and a safe place to wait. That is a complete sentence without the machine.
+ada: What if the strip is accurate about the bell?
+nessa: Then I would prefer to earn the reassuring part.
+narrator: You take a short list of names and walk with a harbor volunteer to confirm three nearby households have received the notice. You do not improvise instructions. You repeat the agreed route, the departure time, and the place to report. One resident complains about leaving a pot of stock. Another asks whether the hall kettle works. Ordinary objections make the work feel more important, not less. People are being asked to interrupt real evenings.
+narrator: When you return, Tomas is helping label the radio chargers. Nessa is showing him where the spare batteries are kept. They have not solved the old hurt. They have found a task large enough for both of them to stand beside it.
+tomas: Two radios missing from the return sheet.
+nessa: One at the lower path gate. One with the rigger. Names?
+tomas: Already written down.
+narrator: The answer is small. The difference it makes is not.
+## ch3_s4 | Twenty-Three Hours, Seventeen Minutes | lantern_room | evening | ada,sera,tomas
+narrator: In the tower, Sera has exposed the input platen without disturbing the receiving paper. It is a shallow brass board with a freely moving stylus, rather like an old drafting instrument. Its linkage runs into a sealed housing. A second dial, hidden under a service flap, marks an offset in hours and minutes.
+sera: The rubbing wasn't a code. It was a setting copied from this dial: twenty-three hours, seventeen minutes. The archive plans give the same interval at this pressure configuration.
+ada: An advance setting.
+sera: Yes. A trace entered now should arrive at the receiving stylus twenty-three hours and seventeen minutes earlier. That is the claim. We need to distinguish reading a dial from establishing what it does.
+narrator: On a fresh part of the receiver strip, above your arrival notes, lie three short strokes and a circle with one side flattened. Tomas recorded them forming yesterday at 18:35 while documenting the paper feed, before Ada reached the tower. His short video includes an independently checked clock. He brings it up beside today's live view.
+tomas: I called these a calibration scribble. Excellent technical term. No assumption smuggled in there.
+sera: We can reproduce them at the input, but that would demonstrate a consistent match, not unrestricted choice. We already know the earlier marks. A genuinely blind repeatable experiment would need a more careful design than we have time for tonight.
+ada: So we shouldn't pretend the test proves more than it does.
+sera: Exactly. We can still check the linkage, pressure response, and time relation safely.
+narrator: You compare the yesterday calibration video's clock with the present one. The corresponding input time is today at 17:52. There are four minutes until the measured offset closes. Sera verifies that the input mechanism moves freely, then isolates the harmless test section from the bell release. Nessa's lock remains on the shaft gate. Nothing in the test asks anyone to enter the moving-load area.
+ada: Why do you look disappointed?
+sera: Because if this works, the world has become more interesting than my equipment can responsibly measure tonight. That is not entirely a pleasant professional experience.
+tomas: I can offer a recorder with one unreliable stop button.
+sera: A generous contribution to a revolution in physics.
+narrator: At the scheduled second, Sera guides three strokes and a slightly flattened circle across the platen. The input arm moves. A pressure indicator dips and rises. The receiver does not produce a new mark in the present. The earlier photograph already contains the pattern.
+!f_interval|i_test_strip
+sera: Mechanical correspondence, pressure response, and the configured interval all agree. We have a self-consistent trace separated by twenty-three hours and seventeen minutes. We do not have a license to claim any larger power.
+ada: Could we send a warning to 1998?
+sera: Not with this apparatus. The interval is fixed by this installation. Nothing we've found supports choosing an arbitrary date. Those old recordings are the only route we have to that night.
+tomas: Which is enough to tell the truth about it. It doesn't have to be enough to save it.
+?sera|Ask about the time loop's limits.|Can this reach any earlier time we choose?~Does knowing a future trace tell us what we ought to do?~How do we describe this without claiming we've proved everything?|This installation supports a fixed twenty-three-hour, seventeen-minute trace interval, with substantial experimental limits. It does not provide moral instructions or a way to select another year.|f_inventory,f_future_note,f_bell_warning,f_tomas_loss,f_wrong_channel,f_west_omission,f_cup_prediction,f_pressure_engine,f_ordinary_tape,f_ivo_signature,f_interval
+narrator: Sera asks you to write your name on ordinary paper, then on the disconnected test platen. The second surface changes the drag of the pen. Your usual late cross on the t has no reason to appear in your name, so she asks for a sentence containing one. You choose: The table needs a new cup.
+ada: That feels unnecessarily personal.
+sera: You can choose another.
+ada: No. Let it be a useful record of my priorities.
+narrator: Tomas places the sentence photograph beside the first strip. There it is: the late cross, the compressed round letters, the slight lift before a capital. The platen adds a tiny hook at every hard stop. The same hook appears in the mysterious writing.
+!f_script_match|
+tomas: Your hand, on this mechanism, makes the same distinctive stops.
+ada: Or someone very good at imitating it.
+sera: We keep that possibility. We also stop pretending the direct explanation isn't getting stronger.
+narrator: The first message waits beneath the glass. The blue cup is already broken. The handle has already pointed you toward the calibration plate. Somewhere in the next hour is a possible action whose trace may already be lying in front of you. You feel a strange pressure to hurry, then a stronger need to sit down.
+sera: We don't have to make a philosophical decision while standing on stairs.
+narrator: You sit on the broad landing. Tomas sits two steps below, leaving you room. For once, the tower seems willing to contain people rather than a problem.
+## ch3_s5 | The Difference Between Given and Chosen | keeper_house | evening | ada,tomas,sera,nessa
+narrator: All four of you end up around the keeper's table because it is the only place nearby with enough chairs. The broken cup has become a shallow box of fragments. Nessa sets a plain steel mug where it used to stand. No one remarks on the substitution, but you are grateful for it.
+nessa: The bypass crew found the downstream route clear. The cradle is sound. The release needs a supervised load test before we use it under storm pressure. They're setting that up now, remotely from above.
+sera: Good. If the forecast holds, the upper reservoir will exceed its safe working limit tonight. The bypass can prevent that. Leaving it shut because the apparatus is unique would be a dangerous preference disguised as conservation.
+tomas: Can we preserve the instrument after equalizing it?
+sera: Some of it. The resonant inclusion is carrying the differential stress. Equalization will probably fracture it. The chronograph's housing may survive. The capability will not.
+ada: So we can keep the thing, or keep it working, but maybe not both.
+sera: We can prioritize people and records. Anything beyond that is uncertain.
+narrator: You look at the cabinet where Ivo kept his postcards. A room full of preserved things has begun to feel less like a refuge than a question about what people are willing to risk in order not to lose them.
+ada: If I write the notes, am I choosing anything? Or just doing what already happened?
+nessa: I don't know. I know I can ask you why you would write them.
+ada: To bring us to the evidence. To make us inspect the release. To say the thing I hope we can make true.
+nessa: Then those are reasons. A strip of paper doesn't make them better or worse.
+sera: Our records are consistent with one history. We have not observed a branch or a changed past. That doesn't give me a measurement of whether your choice is meaningful. Physics is allowed to leave a question outside its scope.
+tomas: My father made boats out of offcuts because he liked giving people something useless and kind. If a perfect forecast had predicted every boat, I don't think I'd love them less.
+narrator: There is no grand answer. The room does not brighten. You find you prefer the incomplete answer offered by people willing to sit with you over the complete one you might have invented alone.
+?nessa|Talk about choosing responsibly when some outcomes seem known.|What can we still take responsibility for?~I need my reasons to belong to me.~Let's make the safe plan first and read the notes second.|We can take responsibility for our checks, our warnings, and the way we treat each other. Make the plan from the conditions we can verify. If the words fit later, they fit.|f_inventory,f_future_note,f_bell_warning,f_tomas_loss,f_wrong_channel,f_west_omission,f_cup_prediction,f_pressure_engine,f_ordinary_tape,f_ivo_signature,f_interval,f_script_match
+narrator: Tomas places an unopened envelope on the table. It came from the back of reel fourteen's case. Written on it are the words COMPLETE TESTIMONY, NOT FOR SUMMARY. Beneath that, in Ivo's hand, is a second instruction: ADA MAY DECIDE. You feel your jaw tighten before you touch it.
+ada: No. He doesn't get to turn a public record into my private test of loyalty.
+tomas: Agreed.
+nessa: What's inside?
+ada: Let's find out together.
+narrator: Before you open the envelope, Sera's radio crackles. The rigger reports the load test complete: travel clear, cradle engaged correctly, brake release reliable from the tower controls. The emergency mechanism has passed a specific test under a specific load. Nessa makes him repeat the load and the result, then writes both down.
+narrator: You cut the envelope along its edge. Inside is a transcript with handwritten amendments and a small reel in a cardboard sleeve. The first line of the transcript is a question: At what point did you understand that the west crew had not received a valid evacuation instruction?
+narrator: You turn the page. The answer begins with your uncle's name.

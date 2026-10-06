@@ -1,0 +1,72 @@
+# ch4
+## ch4_s3a | Every Name Has a Door | harbor | dusk | ada,nessa,tomas
+narrator: Before returning to the tower, Nessa asks you to help reconcile the evacuation list with the hall's arrivals. The work is not glamorous enough to appear in a story about a prophetic machine. That makes you suspect it is precisely where the story should spend some time.
+nessa: Read the household code, not people's private details. Tomas checks the departure list. I confirm with the hall. Any mismatch gets a named follow-up, not a hopeful tick.
+narrator: The first six entries agree. The seventh shows two people contacted but only one arrival recorded. Nessa does not assume the second person refused to leave. She asks the assigned volunteer for an update. The missing arrival is already at the hall, helping unload bedding, but entered through the service door without checking in. A person is safe before the list knows it. The gap still matters.
+ada: If the list is wrong in a reassuring direction, we look complete too soon. If it's wrong the other way, someone may go out searching unnecessarily.
+nessa: Exactly. Headcounts are not just totals. They connect particular people to a place and a time.
+narrator: You correct the entry with the source of confirmation. Nobody scolds the volunteer over an open channel. Nessa adds service-door check-in to the immediate briefing and reserves the broader process discussion for the debrief. A preventable mistake has become useful information before it becomes a public humiliation.
+narrator: The next household has declined the shared transport because one resident needs a slower pace on the steps. Nessa has already assigned the inland vehicle route. The details of the person's needs remain on a private logistics sheet. The radio instruction names only the route, pickup code, and required vehicle.
+tomas: It is possible to explain what the driver needs to do without broadcasting why someone needs it.
+ada: We should preserve that distinction in the public operations log too.
+nessa: Yes. Accountability needs to show that the assistance was provided. It doesn't need to turn a resident's body into an exhibit.
+narrator: A man returns to the office because he has forgotten a bag. Nessa asks where, whether it contains anything immediately necessary, and whether retrieving it would place anyone on a closed route. The bag contains clothes and a book. The route is already clear of people and due to close. She tells him the bag will wait.
+nessa: We can find you dry clothes at the hall. I understand wanting your own things. We don't send someone back through a closing area for them.
+narrator: He is unhappy but not shamed. Tomas walks him to the transport and helps explain what he needs on arrival. You realize how often effective safety depends on offering a tolerable alternative rather than merely saying no with more authority.
+narrator: On the board, one name appears twice under slightly different spellings. You almost delete the second entry, then compare the household codes. They are two different adults with similar names, visiting different people. The error was in your expectation, not the list. You mark both clearly and tell Nessa what nearly happened.
+nessa: Good catch.
+ada: I nearly made the total simpler in exactly the wrong way.
+nessa: And you checked. The point of a second identifier is that the first impression can be wrong.
+narrator: The work takes longer than adding a column of numbers. It feels less satisfying than watching a total reach its target. It is also the only way the target can mean what everybody wants it to mean.
+narrator: A radio battery fails mid-report. The operator moves to the listed spare, repeats the full message, and receives acknowledgment. Nobody reconstructs the missing half from context. Tomas notes the failed unit's number and puts it in the out-of-service box instead of placing it back on a charger where another person might mistake it for ready.
+ada: Your father would have liked that box.
+tomas: He would have asked why it was so small.
+narrator: At the harbor's edge, the maintenance crew checks the bypass outflow exclusion. A barrier is locked, signs are visible, and an assigned observer confirms the area is empty before leaving by the inland route. The report includes the time. Nessa asks for the observer's arrival at the hall, not just the departure from the gate.
+nessa: A person doesn't disappear from responsibility because they finished the risky bit.
+narrator: You think of every story that ends when somebody pulls a lever. There is still a path to walk afterward, a wet coat, a list waiting to know who came back. A safe operation includes the return.
+narrator: Tomas brings a waterproof box from the archive transport. It holds the original reel and the source register. Mara Ellis signs for it at the hall checkpoint, confirms the seal number by radio, and places it in the designated dry cupboard. You hear the acknowledgment over Nessa's shoulder. The evidence has not simply been moved out of sight. Its custody has changed in a recorded way.
+ada: That makes it real in a different way than the upload did.
+tomas: Different failure modes. Good to have more than one.
+narrator: Nessa reviews the remaining four names: hers, yours, Tomas's, Sera's. Your tower assignment is recorded separately from the general evacuation total. She refuses the deputy's shorthand that everybody is in, because the four of you are not yet in. The deputy corrects it to all general evacuees accounted for; release team remains at assigned station.
+ada: Four people in the wrong sentence could disappear very easily.
+nessa: That's why we make the sentence longer.
+narrator: Tomas checks the time. You still have enough margin to reach the high landing, review the operation, and step away if a prerequisite fails. Nobody suggests hurrying the checks because the mysterious paper has an appointment to keep. The clock is information, not authority.
+narrator: As you leave the office, the man who retrieved the wrong bag earlier calls out that someone found him a dry sweater. It is too large, he says, but warm. Nessa raises a hand. There will be plenty to discuss tomorrow about communication, transport, and the way the service door bypassed check-in. Tonight, a person is warm, a record is corrected, and the route ahead is clear.
+narrator: You climb toward the tower carrying no heroic feeling at all. You carry a verified list. It is enough.
+# ch5
+## ch5_s4b | The Song Without a Clue | keeper_house | midday | ada,tomas
+narrator: Tomas arrives at the keeper's house with the title of the song from the house recording. He has not solved it through some remarkable audio technique. He asked a local musician who recognized the fragment immediately and was mildly offended that it had been allowed to become a mystery.
+tomas: 'A Little Room in the Weather.' An island song, written for an adult winter concert in the eighties. There are about twelve versions. None agrees entirely on the second verse.
+ada: I thought my mother had borrowed it from somewhere famous.
+tomas: Fame is unevenly distributed. Apparently it was extremely popular at the hall for six months.
+narrator: He gives you a copy of a program with the song's title and credited writers. The permission note permits a short private reference copy of the old performance. Nothing in the document concerns the inquiry, the chronograph, or the flood. The song is allowed to have a history that never intersects the mystery.
+ada: I needed something like this.
+tomas: A solvable small question?
+ada: A thing that belongs to him without being evidence against him or a defense of him.
+narrator: You sit at the kitchen table. Tomas plays a short authorized extract. Adult voices sing about a harbor room where the lamp remains lit until the last person comes in. The melody is plain enough to remember after one hearing, shaped for people whose pleasure in singing exceeds their confidence.
+narrator: The words are simple: Keep a place beside the window. Let the wet coats find the chair. There is room enough for weather. There is room enough for air. No verse promises the sea will be kind. The song's comfort is smaller: somebody can make a room ready.
+ada: That's what she used to sing. I remember the chair line.
+tomas: There's a version where the chair becomes a stair. Nobody could explain why. Oral tradition is an energetic editor.
+narrator: The extract ends. You can hear the performers laughing at a false start before the recording stops. The laughter is not a clue. It is the sound of adults attempting a thing together and getting another chance.
+narrator: You show Tomas the bird book with your childhood annotation. He asks whether you want help holding it while you assess the hinge. You say yes. The repair itself can wait until you have the appropriate materials, but identifying what it needs is safe. He supports the cover without forcing it flat while you inspect the sewing.
+ada: It's a straightforward repair. More fragile at the first gathering than I thought, but nothing dramatic.
+tomas: We should celebrate that category of sentence more often.
+narrator: You make a materials list. Tomas writes down the song source on a separate card. The table fills with ordinary future tasks: buy suitable tissue, check adhesive compatibility, request a better copy of the program, ask your mother about the verse she remembered differently. None of them needs to be completed before the ferry.
+ada: My mother is going to ask why I didn't call sooner.
+tomas: What will you say?
+ada: That I arrived, found more than I expected, got busy, and should have sent a better update. Not a speech about how complicated everything was. She knows complicated. She'll want to know whether I ate.
+tomas: Did you?
+ada: Nessa made it difficult not to.
+narrator: Your phone rings before you can call. Your sister's name appears on the screen. Tomas stands to give you space, but you tell him he can keep looking at the book while you take the call in the passage. You do not need to make privacy into exile.
+narrator: The conversation is ordinary and difficult in ways the chronograph could not have helped with. You say the house is full of useful things and unfinished conversations. You say the public records need correcting, that you will explain the evidence carefully, and that Ivo's death itself was exactly what the certificate said. You do not make your family learn the hardest facts from an island headline.
+narrator: Your sister listens, asks two practical questions, and then says she is glad someone else was there with you. You nearly answer with a summary of the team's work. Instead, you say you are glad too.
+ada: I don't know how I'll feel when I'm home.
+narrator: You hear the response through the phone, familiar and unadorned: you can come home before you know. The permission contains no mystery, and you trust it immediately.
+narrator: When you return to the kitchen, Tomas has found a loose photograph inside the book. He has left it exactly where it slipped free and called you over rather than reading the note on its back. It shows Ivo and your mother standing beside a train, both young adults, looking irritated at whoever took the picture. You identify the location from a station sign.
+ada: They went to visit an aunt. Apparently they missed the first train because Ivo insisted the timetable was wrong.
+tomas: Was it?
+ada: I don't know. The family account has not enjoyed independent review.
+narrator: You both laugh. You record the photograph as associated material, put it in a suitable sleeve, and return it with the book. There is no final revelation on the reverse. Just a date and your grandmother's instruction to stand still next time.
+narrator: Tomas asks whether you want the song played again. You do. This time, you hum the part you remember. Your voice is rusty and uncertain. He does not join in until he knows the tune. The room is too small for a performance and exactly large enough for two people finding a melody.
+narrator: Afterward, you thank him for identifying it. He thanks you for helping with the archive. Both thank-yous are inadequate to everything that happened, but they are accurate to something real. You no longer need a single sentence to carry the entire day.
+narrator: Tomas packs the speaker away. The book remains on the table with its repair list. The song's title is entered on a card. You have preserved a small piece of ordinary life without making it earn its place by explaining a tragedy. It feels like work worth returning for.

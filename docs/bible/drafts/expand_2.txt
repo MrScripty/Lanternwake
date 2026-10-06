@@ -1,0 +1,95 @@
+# ch2
+## ch2_s2a | The Copy Between Us | archive | late morning | ada,tomas,sera
+narrator: Before anyone leaves the archive, you ask Tomas to show you how the public copy was made. It is not the most exciting available question. That is part of why you trust it. The difference between a source and its descendant can contain more history than the words on either one.
+tomas: We can't reconstruct every generation. We can identify at least three. Original reel, working cassette, later digital transfer. The inquiry summary appears to have used the cassette, perhaps a second copy of it. Every stage made choices about what to preserve.
+ada: And some choices can look like damage afterward.
+tomas: Exactly. A cut might be deliberate editing or an attempt to remove a damaged section. A channel mixed too low could be incompetence or a limitation of the machine. Motive doesn't leave a reliable waveform.
+narrator: He places a schematic of the recorder beside the transcript. Two inputs become two magnetic tracks. The working cassette combines them into a single track. A later transfer applies automatic level control, making the louder input more dominant whenever both speak together. What sounded like an authoritative single voice is partly an artifact of how the copy was made.
+sera: The measurement voice is louder because the station fed it directly. The harbor instruction came through a radio speaker into a microphone. Different signal paths, not necessarily different importance.
+ada: So the copy encourages a reader to treat what survives most clearly as what mattered most.
+tomas: Yes. Then the transcript makes the encouragement invisible. Words look equally solid on a page.
+narrator: You read a paragraph from the public transcript without hearing the audio. It seems decisive. Then Tomas plays the corresponding passage. There are pauses, overlapping voices, an interrupted name, and a question the transcript has rendered as a statement. The text is not wholly false. It is more confident than the sound.
+ada: The punctuation is doing work nobody acknowledges.
+tomas: It often does. I can transcribe a rising intonation as a question, but if the speaker's accent rises habitually, I may be inventing uncertainty. That's why a transcript needs conventions and a source link, not just clean sentences.
+narrator: He shows you the notation he uses: brackets for uncertain words, timestamps for omissions, an explicit marker for overlapping speech. An unreadable word stays unreadable. A later explanation belongs in a note, not in the mouth of the original speaker.
+sera: Could the phrase 'west level holding' have been reduced without deliberate malice?
+tomas: Easily. Could someone later notice the difference and choose not to correct it? Also easily. The technical history doesn't answer the ethical history by itself.
+ada: We need both the original and the paperwork that explains how the public version was approved.
+narrator: You create a source-family diagram on a large sheet. The original reel sits at the top. Copies descend below it, each connected by a line labeled with what you know and, where necessary, a question mark. The public summary sits at the bottom with a date, editor, and a list of sources it claims to use. There is no line yet proving that it used the original.
+tomas: That is a less emotionally satisfying picture than a conspiracy board.
+ada: We could add more red string.
+sera: Red string has poor uncertainty notation.
+narrator: The joke gives you permission to stand back from the table. You have all been leaning too close. Sera opens a window a few centimeters despite the painted glass, letting in a blade of salt air and the sound of somebody moving a bin outside. The archive is part of a working street. The tragedy is not sealed away from Tuesday.
+ada: What would make you abandon the wrong-channel theory?
+tomas: A clear, authenticated instruction on B telling the west crew to hold, with evidence it reached them. Or a source showing the operational log has the wrong timestamp. Or a corrected transcript explaining a different context. I don't expect those things, but expectation isn't a search method.
+sera: Good. What would make the extraordinary paper less extraordinary?
+ada: A demonstrated trace mechanism without time displacement. A hidden recording reproducing a prearranged sequence. Evidence that the dates or our clocks are wrong.
+sera: And a motive for a trick would be insufficient without a way to perform it. People often mistake a story about why for evidence of how.
+narrator: Tomas makes a new card headed ALTERNATIVE EXPLANATIONS. It contains no dismissive language. Fraud, mistaken dating, instrument lag, staged coincidence, and genuine advance transmission each receive the same three subheadings: supporting observations, contrary observations, untested predictions. The empty columns are not a verdict. They are work.
+ada: I worry that taking a fraud hypothesis seriously would feel like accusing somebody here.
+tomas: Then phrase it as a mechanism to rule out. Who had access, what could they alter, when was the strip first witnessed? If the answer points to a person, we deal with that later. We don't begin by choosing a face that looks suspicious.
+sera: Nor do we exclude a mechanism because it would upset someone. Equal respect for people does not require equal confidence in every claim.
+narrator: You inspect the edge of the receiving-paper photograph for an ordinary printer feed. The machine's marks have variable pressure and continuous tool movement rather than deposited dots. That supports mechanical tracing. It does not establish when the movement originated. You add exactly that, refusing the tempting larger sentence.
+ada: This is slower than deciding what happened.
+tomas: Much slower than deciding. Sometimes faster than deciding wrongly and spending twenty-eight years defending it.
+narrator: The phrase settles between you. Tomas does not apologize for it. You do not ask him to. Working carefully does not require everyone to pretend the stakes are abstract.
+narrator: In the next box, you find a bundle of duplicate transcripts with handwritten corrections by three different people. Some concern spelling. One changes a vessel number. Another marks a pause omitted from a quotation. You catalog each hand separately rather than treating all pencil as a single later intervention.
+ada: These corrections show the public copy wasn't simply issued untouched. People reviewed details.
+sera: That will matter to the history of approval. It still doesn't tell us whether a particular person saw the disputed line.
+tomas: We can trace the circulation list. It may survive with the cover memo.
+narrator: You find the cover memo clipped to a budget statement. Administrative paper has survived where the full sound record did not. The memo requests comments on the summary within seven days and says silence will be taken as acceptance. There are five distribution names. Ivo's is one. You photograph the entire page.
+ada: Silence has a very busy career in this file.
+tomas: People keep promoting it to agreement.
+sera: Sometimes because a deadline is necessary. Sometimes because asking what silence means would complicate the desired result. The procedure needs an exception for people who haven't actually been reached.
+narrator: Sera points to the modern harbor protocol Nessa sent over. It requires positive acknowledgment. The contrast is not proof that everyone in the present is wiser. It is a specific institutional memory made operational: a person must say they heard.
+?tomas|Choose how to preserve uncertainty in the transcript.|Mark uncertain words instead of smoothing them over.~Keep every edited copy linked to its source.~What would disprove our current interpretation?|A clear authenticated vessel instruction, a corrected timestamp, or another original source could change the account. We keep those possibilities open and make our own transcription choices visible.|f_inventory,f_future_note,f_bell_warning,f_tomas_loss,f_wrong_channel
+narrator: By the end of the session, you have fewer complete stories and a much better set of sources. The public summary can no longer borrow the original reel's authority without showing its route back to it. The extraordinary strip can no longer borrow your fear as evidence for its power. Both remain interesting. Neither is allowed to become more certain merely because uncertainty is uncomfortable.
+narrator: Sera closes her case. Tomas puts the working copy away in a different drawer from the source. You label the new diagram PROVISIONAL and date it. The word does not diminish the work. It tells the next person where to put a correction.
+## ch2_s3a | A Route Made of Names | harbor | early afternoon | ada,nessa,tomas
+narrator: Tomas joins you at the harbor with two copies of the old route diagram and a box of small wooden blocks. Nessa looks at the blocks, looks at him, and moves three mugs off the harbor office's largest table.
+nessa: If this becomes a model railway, I want it known I objected early.
+tomas: Boats. A wholly different respectable obsession.
+ada: We need to compare the routes without asking memory to supply the geography.
+nessa: Then use the working chart and keep the scale honest.
+narrator: The blocks are leftovers from an adult repair workshop, not replicas of particular vessels. You label them west workboat, rescue one, rescue two, and maintenance station. Nessa marks the tide wall, the shallow shelf, and the sheltered passage. Tomas places the workboat at its documented mooring position. Nobody moves it until the log gives a reason.
+ada: This is before the storm's peak. The crew have completed the outer-station pickup and returned to the west quay to unload equipment. That's in the work record.
+nessa: Yes. Their presence wasn't an excursion. They were on duty.
+tomas: The public summary begins after that and calls their position an unauthorized departure. It makes the scene start in the middle of an accusation.
+narrator: You write the workboat's documented task beside the block. The correction feels almost too small to carry the weight placed on it. Six people were doing a job. The fact should have been uncontroversial. Instead, it has spent decades underneath a more convenient opening sentence.
+nessa: Now show the issued rescue route.
+narrator: Tomas moves rescue one around the east side. Nessa stops him where the chart shows the exposed turn. In high water and strong onshore wind, the route becomes longer and more difficult. The sheltered west approach would have avoided that turn, provided crews had the corrected depth information and the passage remained open.
+ada: So the older route isn't always wrong. It's wrong for those conditions and that destination.
+nessa: Exactly. We don't need to pretend the chart was useless in order to show it was the wrong one to issue that night.
+narrator: You run the sequence twice. First with the obsolete issued route, then with the corrected approach. Nessa marks where a timely direct instruction could have changed the rescue craft's movement. She does not mark a point at which you can confidently claim everyone would have survived. The record cannot bear that precision.
+tomas: It is tempting to say 'if they'd turned here, my father comes home.'
+nessa: I know.
+tomas: I don't know that, though. I know they lost time and used the wrong approach. I know an opportunity existed that the official account doesn't mention. That's enough to matter without pretending we own the other ending.
+ada: We can document a lost chance without inventing its guaranteed result.
+narrator: Tomas nods. He leaves the rescue block at the decision point rather than carrying it all the way to an imagined safe harbor. It is a restraint that costs him something. You understand why he wants other people to see the evidence before he has to explain the cost again.
+narrator: A radio call interrupts. Nessa takes it immediately. A volunteer asks whether to move a storage trailer up the inland road before the afternoon delivery. Nessa checks the schedule, names the passing place, and asks for confirmation that the trailer is secured. The present has no obligation to wait for your careful reconstruction of the past.
+ada: Do you find it difficult to work here with the memorial outside?
+nessa: Some days. Mostly the harbor is a harbor. People need diesel, a clear berth, the right weather report. Remembering doesn't have to mean thinking about one night every minute. It can mean doing today's instruction properly.
+tomas: I used to think people had forgotten whenever they looked ordinary near it.
+nessa: I used to think you wanted us to look guilty all the time.
+tomas: I wanted somebody to stop saying the inquiry had settled it. I probably wasn't always clear about the difference.
+narrator: Neither turns the admission into an exchange of equal fault. Nessa did not lose a father in the same way Tomas did. Tomas did not carry the same office responsibilities. They are describing how they misread each other, which is not the same as balancing a ledger.
+ada: Could the exhibit show this route comparison as a tool rather than a conclusion? Let people move through the logged positions themselves.
+tomas: With uncertainty marked. We don't animate the fatal moment. We don't turn six deaths into the exciting part of an interactive display.
+nessa: And we include the modern procedure. People should leave knowing how the response changed, not just who to blame in a vanished room.
+narrator: You record those conditions in the project notes. The proposed exhibit remains a proposal. Personal material will require families' agreement; the public operational records can be made readable now. You separate those permissions instead of letting urgency blur them together.
+narrator: Nessa suggests walking to the end of the public quay so you can see the two approaches from a safe distance. Outside, the model becomes geography. The eastern wall looks substantial and reassuring. The sheltered passage is a narrow dark gap almost invisible from the harbor's main entrance. You understand how a visitor map could omit it and how catastrophic it could be to mistake a visitor's perspective for an operator's.
+ada: From here, east looks like the obvious way.
+nessa: Obvious to whom? In what water? With what load? Those are the questions a map can't ask for you.
+tomas: Ewan used to say the safest-looking route was often the one most people had photographed.
+narrator: Tomas leans on the rail and points to a low workshop beyond the west wall. His father repaired the roof there one summer and spent the rest of the year complaining that the new roof meant nobody had an excuse to come over to help. It is the first story you have heard about Ewan that has no evidentiary purpose.
+ada: Was he good at asking people to stay?
+tomas: Terrible. He'd invent another job. Sand this. Hold that. Taste the soup and tell me whether I ruined it. I learned later that other families sometimes just said they wanted company.
+nessa: The soup was usually good.
+tomas: You remember it?
+nessa: He fed the whole shift after a winter pump failure. I was an apprentice. He pretended there was too much to fit in his fridge.
+narrator: Tomas looks across the water for several seconds. The information is small and unrecoverable from the official record. Nessa has carried it all this time, not concealed, merely never finding the right place to offer it. You understand that an archive needs more than disclosure. Sometimes it needs an invitation specific enough for a person to recognize that an ordinary memory belongs.
+ada: Would you write that down sometime? For Tomas first. Not automatically for the public collection.
+nessa: Yes. I can do that.
+tomas: I'd like it.
+narrator: On the way back, Tomas picks up a loose cable tie from the quay and puts it in a bin. Nessa notices a worn section of handrail and sends a photograph to the maintenance list. You record the exact viewpoint from which the sheltered approach disappears. Each of you has a habit of attention. For a few minutes, they fit together without competition.
+narrator: Back at the table, you photograph the route model in each supported position, then dismantle it. The wooden blocks go back into their box. No boat remains eternally poised at the point where you wish history could have chosen differently. The record remains, and the living harbor needs its table.

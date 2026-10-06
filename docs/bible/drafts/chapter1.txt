@@ -1,0 +1,150 @@
+# ch1 | The Inventory
+## ch1_s1 | A Shore That Keeps Its Own Time | harbor | afternoon | ada,nessa
+narrator: The ferry leaves you beside a coil of wet rope and an announcement board with no announcements on it. Out beyond the breakwater, a narrow island rises in three layers: black landing stones, white houses, then grass flattened by a wind you have not yet learned to lean into. The lighthouse stands on the northern height. Its windows are dark, although it is only three in the afternoon. You have seen it in photographs all your life. In photographs, it has always looked farther away.
+ada: Ada Vale. I wrote about the lighthouse inventory.
+nessa: I know. You hold your bag like Ivo did. As if it owes you money.
+narrator: The woman taking your suitcase wears an orange harbor coat with the cuffs repaired in navy cloth. She waits until you release the handle before she lifts it. There is a small courtesy in that pause which makes the rest of her seem less abrupt.
+nessa: Nessa Ward. Harbor master when there's a harbor to master. You've got the wrong shoes, but we can fix that.
+ada: They were waterproof when I packed them.
+nessa: Good. Then they've had a full life.
+narrator: She sets the suitcase on a handcart. Nothing about her voice asks you to find this funny. When you laugh anyway, her shoulders ease. Across the harbor, a crane makes a slow quarter turn with nothing on its hook. The noise arrives twice: once as a metal complaint, then as a thin answer from the northern cliff.
+ada: Does everything echo here?
+nessa: Only the things people think are finished.
+!f_inventory|i_inventory
+narrator: Your appointment is simple on paper. Record the contents of the keeper's residence. Separate personal property from municipal equipment. Deliver the catalogue to the estate solicitor. Ivo Vale, your mother's older brother, died six weeks ago of a cardiac arrhythmia while making tea. There was a medical examination, a certificate, and no uncertainty about how he died. The uncertainty belongs to everything he did before that.
+ada: I should have come for the funeral.
+nessa: It was a Thursday. The sea was ugly. People who live here didn't all make it.
+ada: That's kind of you. It's not quite what I meant.
+nessa: I know. But you don't owe me the other bit on a landing stage.
+narrator: On the board beside the steps hangs a tide table, a yellow evacuation map, and a photograph of six men and women standing in front of a workboat. All of them are adults. The photograph is old enough for its blue sky to have faded green. A small brass plate says WEST QUAY CREW, 1998. Someone has polished the names without polishing the screws.
+ada: Was that the flood?
+nessa: Yes.
+ada: My uncle never told us much about it.
+nessa: He wasn't alone in that.
+?nessa|Ask Nessa about arriving, the inventory, or the harbor.|What would help you most while I'm here?~Did you know Ivo well?~I'd like to take this one step at a time.|Start with the inventory. If something looks like town equipment, label it before you move it. And eat before you try to make sense of him.|f_inventory
+narrator: Nessa puts a key on your palm. Its tag is a strip cut from an old chart, laminated around the words KEEPER HOUSE. The key has been polished almost smooth on one side by a thumb. You press your own thumb against that patch and feel ridiculous for expecting a fit.
+nessa: You can stay through the weekend. Storm due tomorrow night, ferry uncertain after that. Not a reason to worry. A reason to buy bread today.
+ada: Are you the person who tells me when it becomes a reason to worry?
+nessa: Yes. Try not to make me climb the hill twice.
+narrator: Halfway up the steps, you turn. The ferry has become a white dash beyond the harbor wall. The island has not grown quieter without it. You can hear ropes touching masts, someone washing a pan through an open window, and a bell from the hill. One single note. Nessa stops walking.
+ada: I thought the lighthouse was closed.
+nessa: It is. Wind catches the bell sometimes.
+narrator: She starts the cart again before you can decide whether she believes that.
+## ch1_s2 | Things That Are Not Evidence Yet | keeper_house | late afternoon | ada,nessa
+narrator: The keeper's house smells of cold plaster, tea leaves, and furniture polish that has had time to become part of the furniture. An ordinary room is waiting where you expected a memorial. Two mugs dry beside the sink. A supermarket receipt is caught under the foot of a chair. On the table, a blue cup holds pencils with their points up. Ivo has left so many ways to return that his absence feels, at first, like bad manners.
+nessa: Power's on. Water takes a moment. Bedroom's upstairs. Don't open the south sash unless you want to meet it in the garden.
+ada: Has anyone moved anything?
+nessa: I washed what was in the sink. Took the milk out. Tomas boxed some tapes because the roof had started dripping. There's a list.
+narrator: A sheet on the refrigerator records each intervention in black ink, dated and initialed. Nessa has written REMOVED MILK, 18 AUG, then added SPOILED, as if defending herself to a court. You feel a brief, painful affection for this person you have only just met.
+ada: Thank you for the list.
+nessa: I didn't want you arriving and wondering.
+narrator: You begin with the table because beginning with a person is impossible. Object one: ceramic cup, blue glaze, repaired handle. Object two: six pencils, five ordinary, one carpenter's pencil shortened to the width of two fingers. Object three: folding knife with no blade, used as a paperweight. Each description is true. None explains why Ivo kept it.
+ada: He used to send me postcards with corrections on the backs. Not to my letters. To the postcards. Wrong species of gull. Wrong date for a shipwreck. Wrong name for a bay.
+nessa: Once made the council reprint a hundred visitor leaflets because they'd put the sunset on the east side.
+ada: Did they?
+nessa: Charged him for half. He paid in coins.
+narrator: At the bottom of the kitchen drawer, underneath rubber bands and a warranty for a kettle that is no longer here, you find your own name. It is written on a cream envelope. ADA, IF YOU COME. The second half of the sentence hurts more than the first.
+ada: Would you mind giving me a minute?
+nessa: Of course. I'll check the outside drain.
+narrator: Nessa leaves without making a ceremony of leaving. You break the envelope with the blunt knife. Inside is a short letter and a square of dark green cloth.
+ivo: Ada. This is not an apology in advance. I dislike that trick. A letter cannot make a demand of someone simply by outliving its writer. The cloth belongs to the lens cover. The catalogue belongs to you. If the work stops being work and becomes something else, you may leave. Ask Tomas about the tapes. Ask Nessa what the map leaves out. Do not assume I have given either of them the whole of anything. I.
+ada: You couldn't even write a normal difficult letter.
+narrator: You read it again, this time resisting the urge to treat its omissions as a puzzle he meant you to solve. A person can be secretive without being wise. A dead person can still waste your time. You put the letter in an acid-free sleeve anyway, because being angry is not a preservation method.
+!|i_ivo_letter
+?nessa|Decide how to talk about Ivo while his belongings are still around you.|Tell me what he was like here.~I need to be angry with him for a minute.~Can we keep working while we talk?|We can work. You don't have to settle how you feel about him before you label a drawer.|f_inventory
+narrator: When Nessa comes back, her coat is wet at the elbows. You show her the line about the map. She reads only that line, although the rest is visible. Another small courtesy.
+nessa: He should have told you himself.
+ada: Told me what?
+nessa: I don't know what he intended. I know he liked leaving the last difficult sentence for somebody else.
+ada: I'd rather you were unfair to him than careful around me.
+nessa: That's useful to know. But I can be both.
+narrator: Outside, the bell sounds again. This time you feel its note through the table before you hear it. One pencil rolls a few millimeters toward the edge. Nessa steadies the blue cup with two fingers.
+nessa: Don't put anything heavy in the tower tonight. The engineer's coming tomorrow to look at the lower works.
+ada: What lower works?
+nessa: The part they don't put on postcards.
+## ch1_s3 | The Instrument Under the Stairs | lantern_room | dusk | ada,tomas
+narrator: The tower door opens inward against a crescent of salt. Beyond it, the stair makes a slow spiral around a central shaft. A brass bell counterweight hangs in that shaft like an enormous plumb bob. Red paint marks the lowest two meters of its travel. Beside the red line, a notice in fresh lettering says KEEP SHAFT CLEAR. The paper is new. The bolts holding it are not.
+ada: Hello?
+tomas: If you're the electrician, everything that's supposed to be off is off. If you're Ada, I'm sorry about the floor.
+narrator: A man kneels beside an opened equipment case, laying soft cloth beneath lengths of magnetic tape. He has arranged the screws from its lid in a paper boat. A pair of headphones hangs around his neck with one earpad replaced in a different shade of brown.
+tomas: Tomas Rook. Audio conservation, occasional leaks, poor timing. Your uncle asked me to sort his recordings. Your appointment arrived before mine was finished.
+ada: Mine may finish after yours.
+tomas: Then we can take turns being in the way.
+narrator: He shows you where the step has sunk, where the floorboards will take your weight, and where a tray catches water that once ran directly into the case. His competence is quiet and specific. He never says the recordings are safe. He says which ones are dry.
+tomas: Don't touch the paper under the brass roller. I haven't identified the coating. The tapes are tapes. That thing is somebody else's religion.
+narrator: Beneath the stairs sits a machine about the size of an upright piano. A brass cylinder holds a roll of narrow cream paper. A fine stylus rests above it on a hinged arm. Three glass manometers rise behind a panel labeled INLET, RETURN, and DIFFERENTIAL. No cable connects it to the wall. A pipe disappears down through the floor.
+ada: A tide recorder?
+tomas: Part of one. Ivo called it the chronograph. Which is an excellent way to avoid answering a question.
+ada: Is it running?
+tomas: The paper moved twice while I was here. The clock on the face doesn't. Make of that what you like.
+narrator: As you bend close, the paper begins to move. A new line forms under the stylus. It is not a graph. It is handwriting, scored in dark strokes by the stylus. You recognize the way the t crosses late, as if the writer remembered the rest of the word after finishing it.
+!f_future_note|i_first_strip
+narrator: TOMORROW. AT 16:12 THE BLUE CUP WILL BREAK. LEAVE THE HANDLE WHERE IT FALLS. Your phone reads 19:58 as the line finishes. Beneath the words sits a date: tomorrow's date. The strokes look like yours. Not similar to yours in the way a stranger's face resembles a friend at a distance. Yours in the embarrassing particulars: the cramped second o, the upright final s, the little pause inside a capital B.
+ada: Did Ivo have samples of my handwriting?
+tomas: Letters, presumably. Why?
+ada: This is mine.
+tomas: That gives us one interesting question and several ordinary ones. Could he have traced it? Could the paper be older than the date? Could somebody else have been here?
+ada: You don't look surprised enough.
+tomas: I work with dead people's voices. I ration surprise until I've checked the label.
+?tomas|Ask about the chronograph or how Tomas checks extraordinary claims.|How would we tell a trace from something new?~Has anyone else had access to this room?~I don't want a comforting explanation. I want a good one.|Photograph it in place, note the time, and keep a second person in the record. Then we check ordinary explanations before giving the extraordinary one a name.|f_inventory,f_future_note
+narrator: Together you photograph the strip without moving it. Tomas places a ruler alongside the paper. You record the time on your phone and in the inventory. He writes his name beneath yours as a witness. The simple act of making a record reduces the room to human scale again.
+tomas: For what it's worth, the outer door was locked when I arrived. Nessa has a key. So did Ivo. I've got a temporary one. There may be another in the estate papers. That isn't a sealed-room mystery. It's a small town with uneven key management.
+ada: I'd like to put that on the official report.
+tomas: Please do. It deserves a heading.
+narrator: Somewhere below the floor, water fills a pipe with a hollow, rising note. The stylus lifts. Both of you stop moving. A new line scratches across the paper so slowly that you can read it before it is finished.
+!f_bell_warning|i_bell_strip
+narrator: WHEN THE BELL FALLS, NO ONE WILL DROWN.
+ada: Tomas.
+tomas: I see it.
+narrator: Neither of you says anything for several seconds. Then Tomas places the second ruler beside the new line. His hand shakes once, briefly, before he holds it still.
+## ch1_s4 | A Voice With Ordinary Dust | archive | evening | ada,tomas
+narrator: The archive occupies the old wireless station halfway down the hill. Its windows have been painted white from the inside to keep light off the shelves. Tomas turns on a desk lamp rather than the ceiling lights, and islands of cardboard emerge from the room's dark. A kettle sits on a metal trolley beside a fire blanket. Someone has drawn a tiny crown on the label marked KETTLE, CURRENT.
+tomas: If you hear a dead man tonight, I want the first one to be boring.
+ada: Is that a professional recommendation?
+tomas: Very strongly. Extraordinary equipment makes people careless with ordinary evidence.
+narrator: He chooses a cassette labeled HOUSE LOG, APRIL. Before pressing play, he photographs both sides, reads the serial number aloud, and checks the tape path. The recording begins with thirty seconds of a chair scraping, then your uncle swearing at an appliance.
+ivo: House log. Nineteenth of April. The kettle has developed the habit of stopping short of boiling. Nessa says I should buy a new one. Nessa regards the continued existence of a thing as a weak argument for its continued employment. She may be right. South window still sticks. Ordered the wrong size seal. Must tell Tomas that reel fourteen is not part of the weather series, whatever the box says.
+narrator: You have forgotten the soft catch in Ivo's breath before he begins a new sentence. Hearing it does not bring him back. It brings back the person you were when the breath still meant another sentence was coming. You put both hands around the mug Tomas has given you, although the tea is too hot to drink.
+ivo: Ada wrote. Working in a museum store now. Says she likes an object that can be described without anybody arguing. I ought to tell her that's a temporary condition. Not tonight.
+ada: Stop it a moment.
+narrator: Tomas stops the tape. He does not ask whether you are all right. He waits until you can decide what sort of question you can bear.
+ada: He never answered that letter.
+tomas: The recording can't tell us why.
+ada: I know.
+tomas: I meant it for me too. It's easy to mistake hearing someone for understanding them.
+!f_tomas_loss|
+narrator: On the desk is a photograph of the six West Quay workers. A younger Tomas stands beside one of them in a second photograph, taken years before the flood. Tomas follows your glance.
+tomas: My father. Ewan Rook. He was the workboat's mechanic. The official account calls them an unauthorized departure. Makes it sound like they took a day off with the wrong weather.
+ada: What were they doing?
+tomas: Bringing people back from the outer maintenance station. All adults, all employees, all on a list. That part is in the harbor records. The argument is about what happened after.
+ada: And you think the tapes can settle it.
+tomas: Some of it. Not whether he was a good father. Not whether I have grieved correctly. Whether a rescue instruction was sent on the wrong channel. A small enough question to answer honestly.
+?tomas|Respond to Tomas without promising what the archive will prove.|Tell me what evidence you still need.~We can keep the facts separate from what we hope.~I'd like to hear about Ewan, if you want to tell me.|I need the original channel log and the unedited recording. After that, we can say what they support. My father doesn't become more real if we overstate the evidence.|f_inventory,f_future_note,f_bell_warning,f_tomas_loss
+narrator: You listen to another two minutes. Ivo lists lamp oil, a cracked saucer, a gull trapped briefly in the coal store. There is no prophecy in any of it. The recording has hiss and a drop in pitch where the battery weakened. Tomas identifies the defects without erasing them. You realize he is showing you a form of care: keeping the damage audible so nobody mistakes repair for perfection.
+ada: He asked me to ask you about the tapes.
+tomas: Then I wish he'd let me finish while he was alive.
+ada: He also asked me to ask Nessa what the map leaves out.
+narrator: Tomas looks at a shelf behind you. A long flat box lies there with a string tied around it.
+tomas: Tomorrow, we start with the map.
+## ch1_s5 | A Blank Strip | keeper_house | night | ada,nessa
+narrator: By the time you reach the keeper's house, the kitchen window is the only lit rectangle on the hill. Nessa has left bread, soup, and a note saying NO NEED TO ANSWER. The note makes answering feel possible. You call her from the old landline because your phone keeps choosing between one bar and none.
+ada: I found something in the tower.
+nessa: Tomas called. Said you had photographs and no injuries. In that order.
+ada: Does the chronograph write things by itself?
+nessa: It records things. That much I know.
+ada: These were sentences.
+nessa: Then that's more than I know.
+narrator: You tell her about the cup and the bell. You do not soften the strange part because you are afraid of sounding foolish. Nessa lets you finish. At the other end of the line, you hear a drawer close, then the clean click of a pen.
+nessa: I'm writing that down. The exact words, please.
+ada: You believe me?
+nessa: I believe you're telling me what you saw. That's enough to put someone on checking the bell. It isn't enough to make the bell a plan.
+ada: It says no one will drown.
+nessa: Good. We'll still check the boats.
+?nessa|Discuss what to do with the warning tonight.|What can we verify before morning?~I don't want people frightened by a claim we can't explain.~Please don't let me treat this as an instruction.|We verify the bell supports and the storm preparations. Keep the original strip and the photographs. We don't need to solve its origin before doing sensible things.|f_inventory,f_future_note,f_bell_warning,f_tomas_loss
+narrator: When the call ends, the room returns to its small noises. You eat the soup standing up, then sit down halfway through because standing has started to feel like a defense. In the inventory, beside the blue cup, you add NO DAMAGE AT TIME OF INSPECTION. You dislike the sentence. You leave it there.
+narrator: In your suitcase is an old postcard from Ivo, brought for no reason you admitted while packing. Its picture shows the lighthouse at dusk. On the back he has corrected the printer's caption: the tower was completed in 1906, not 1905. Below that correction, squeezed against the stamp, he wrote, When you visit, I will show you the part that works.
+ada: You had time.
+narrator: You say it to the room without expecting the room to forgive him. Then you turn the card over. The printed tower is white, immaculate, absent of pipes and patched railings. It is a building with none of the obligations of being a building.
+narrator: Before bed, you return to the tower door. You do not open it. Through the narrow glass pane you can see the chronograph beneath its small service lamp. Beyond the two written lines, the paper hangs blank. There is enough blank paper to contain any number of possible endings, which is another way of saying it contains none.
+narrator: You make three notes for morning: Find the original channel log. Compare the public map with the working chart. Ask the engineer what a pressure pipe can record. Then, beneath them, a fourth: Do not let somebody else's certainty become your reason.
+narrator: The lighthouse beam no longer turns. Out at sea, modern navigation lights continue their patient work. The island is not waiting for you to rescue it from darkness. But somewhere below the tower, in a chamber you have not seen, a column of water is rising toward a mark scratched in brass.

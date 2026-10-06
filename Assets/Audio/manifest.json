@@ -1,0 +1,58 @@
+{
+  "harbor": {
+    "sha256": "8c5fced1a5452a9d71e09f470c4e5ce55003edb54575430603f390dee2438577",
+    "frames": 384000,
+    "sample_rate": 24000,
+    "peak": 0.03985595703125,
+    "loop": true,
+    "seam_step": 0.000946044921875
+  },
+  "keeper_house": {
+    "sha256": "282a7873d6556cce45c9e03299a536cafdaa4c82cb6b9511bf1f79b2c43dacf8",
+    "frames": 384000,
+    "sample_rate": 24000,
+    "peak": 0.01422119140625,
+    "loop": true,
+    "seam_step": 0.00030517578125
+  },
+  "archive": {
+    "sha256": "d569a63f2694c7b07367a6be715103c4cd708c2169aafbdce38aeeb4132bfc34",
+    "frames": 384000,
+    "sample_rate": 24000,
+    "peak": 0.0145263671875,
+    "loop": true,
+    "seam_step": 0.0001220703125
+  },
+  "lantern_room": {
+    "sha256": "5a6deb93e691460c81d034172b3edaf97451c604cf8c18b1812d8387bd85825c",
+    "frames": 384000,
+    "sample_rate": 24000,
+    "peak": 0.026397705078125,
+    "loop": true,
+    "seam_step": 0.000640869140625
+  },
+  "tide_cave": {
+    "sha256": "9d2e3387d37bdf552611ba3f7d044259ab3bed86293a48d758bbdaa3ae2410f3",
+    "frames": 384000,
+    "sample_rate": 24000,
+    "peak": 0.041412353515625,
+    "loop": true,
+    "seam_step": 0.00054931640625
+  },
+  "watch_theme": {
+    "sha256": "45cbd9c3cdbe1f28fbde56cb9f1ef785303ddf11fcaf1bad3d77d9630c6f37f8",
+    "frames": 384000,
+    "sample_rate": 24000,
+    "peak": 0.031097412109375,
+    "loop": true,
+    "seam_step": 0.00128173828125
+  },
+  "bell_release": {
+    "sha256": "fd16e43f75b2bb4ba26529064673911689b16f21bf179938eab9c577a71dbae7",
+    "frames": 120000,
+    "sample_rate": 24000,
+    "peak": 0.094451904296875,
+    "loop": false,
+    "seam_step": 0.0
+  }
+}
