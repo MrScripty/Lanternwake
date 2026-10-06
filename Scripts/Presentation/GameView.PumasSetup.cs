@@ -12,7 +12,8 @@ public partial class GameView
     private void ShowPumasSetup()
     {
         if (_busy || _closing) return;
-        ShowWindow("Local conversation setup", "The story is fully playable without a model.\n\nSearch asks your local Pumas service for Hugging Face metadata. Pumas owns the external requests. You can inspect an option before explicitly asking Pumas to download it.\n\nPumas also manages verification and runtimes. After acquisition, configure and load a llama.cpp profile in Pumas, then start Lanternwake with its served alias in LANTERNWAKE_PUMAS_MODEL. A download request does not enable conversation.");
+        ShowWindow("Local conversation setup", "The story is fully playable without a model.\n\nSearch asks your local Pumas service for Hugging Face metadata. Pumas owns the external requests. You can inspect an option before explicitly asking Pumas to download it.\n\nPumas also manages verification and runtimes. After acquisition, configure and load a llama.cpp profile in Pumas, then start Lanternwake with its served alias in LANTERNWAKE_PUMAS_MODEL. A download request does not enable conversation.",
+            [("View Pumas download activity", ShowPumasDownloads)]);
         var window = _modal!;
         var controls = PumasSearchControlsScene.Instantiate<VBoxContainer>();
         var rows = window.GetNode<VBoxContainer>("%ModalActions");
@@ -78,25 +79,25 @@ public partial class GameView
                         if (!result.Success) { ShowPumasFailure(result.ErrorCode, result.Message, true); return; }
                         var receipt = result.Value!;
                         ShowWindow("Pumas accepted the request", $"Download ID: {receipt.DownloadId}\nArtifact ID: {receipt.SelectedArtifactId ?? "not returned"}\n\nThis is an acceptance receipt, not proof of installation, verification or readiness. Check acquisition progress and the stored upstream_revision in Pumas. Then configure and load the model there. Lanternwake will use its explicitly configured served alias.",
-                            [("Back to setup", ShowPumasSetup)]);
+                            [("View this request", () => RefreshPumasDownload(receipt.DownloadId)), ("Back to setup", ShowPumasSetup)]);
                     }, true);
             }), ("Back to setup", ShowPumasSetup)]);
     }
 
     private void StartPumasSetup<T>(Window window, string pending, Func<CancellationToken, Task<PumasResult<T>>> request,
-        Action<PumasResult<T>> render, bool acquisition)
+        Action<PumasResult<T>> render, bool acquisition, string? pendingAdvice = null)
     {
         if (_closing || _modal != window || _setupRequest is not null) return;
-        _operations.Track(RunPumasSetupAsync(window, pending, request, render, acquisition));
+        _operations.Track(RunPumasSetupAsync(window, pending, request, render, acquisition, pendingAdvice));
     }
 
     private async Task RunPumasSetupAsync<T>(Window window, string pending, Func<CancellationToken, Task<PumasResult<T>>> request,
-        Action<PumasResult<T>> render, bool acquisition)
+        Action<PumasResult<T>> render, bool acquisition, string? pendingAdvice)
     {
         using var cancellation = new CancellationTokenSource();
         _setupRequest = cancellation;
         window.GetNode<RichTextLabel>("%ModalText").Text = pending +
-            (acquisition ? "\n\nClosing cancels waiting here. Pumas may already have accepted the request; check Pumas before requesting again." : "\n\nClose or Escape cancels this lookup.");
+            (pendingAdvice ?? (acquisition ? "\n\nClosing cancels waiting here. Pumas may already have accepted the request; check Pumas before requesting again." : "\n\nClose or Escape cancels this lookup."));
         foreach (var control in DescendantControls(window.GetNode<VBoxContainer>("%ModalActions")))
         {
             if (control is BaseButton button) button.Disabled = true;
