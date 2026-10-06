@@ -1,0 +1,218 @@
+{
+  "schemaVersion": 1,
+  "recordedDateUTC": "2026-10-06",
+  "outcome": "blocked-before-provisioning",
+  "lanternwakeFrozenBase": "bfa952c460c913c163d92a016d5b3eb35589c955",
+  "recoveryBranch": "feat/pumas95-live-20261006",
+  "pumasSource": "95a0baad2d0aea4650fc36ad4afd969ac9391bf5",
+  "pumasSourceTree": "3ee66988eb1668188011b2124890b10031403ebd",
+  "pumasBinarySha256": "8dfdc80458ef59659cf512cb7d2e798fa7375a47a08cdceee3bdf5a30992240f",
+  "runtimeDiscoveryRequest": {
+    "jsonrpc": "2.0",
+    "id": "runtime-versions",
+    "method": "get_available_versions",
+    "params": {
+      "app_id": "llama-cpp"
+    }
+  },
+  "runtimeDiscoveryResponse": {
+    "jsonrpc": "2.0",
+    "error": {
+      "code": -32000,
+      "message": "A required operation is currently unavailable.",
+      "data": {
+        "class": "unavailable"
+      }
+    },
+    "id": "runtime-versions"
+  },
+  "pumasBuiltinGitHubAttempts": 3,
+  "hfObservation": {
+    "method": "GET",
+    "url": "https://huggingface.co/api/models/Qwen/Qwen2.5-0.5B-Instruct-GGUF?blobs=true",
+    "outcome": "Tunnel connection failed: 403 Forbidden",
+    "modelStepStopped": true,
+    "evidenceKind": "derived transcript observation; no returned HF API payload",
+    "exceptionTypes": [
+      "OSError",
+      "urllib.error.URLError"
+    ]
+  },
+  "inventories": {
+    "get_installed_versions": {
+      "jsonrpc": "2.0",
+      "result": {
+        "success": true,
+        "versions": []
+      },
+      "id": "get_installed_versions"
+    },
+    "get_active_version": {
+      "jsonrpc": "2.0",
+      "result": {
+        "success": true,
+        "version": ""
+      },
+      "id": "get_active_version"
+    },
+    "get_models": {
+      "jsonrpc": "2.0",
+      "result": {
+        "models": {},
+        "success": true
+      },
+      "id": "get_models"
+    },
+    "get_serving_status": {
+      "jsonrpc": "2.0",
+      "result": {
+        "snapshot": {
+          "cursor": "serving:0",
+          "endpoint": {
+            "endpoint_mode": "not_configured",
+            "message": "Serving endpoint is not configured",
+            "model_count": 0
+          },
+          "last_errors": [],
+          "router_profiles": [],
+          "schema_version": 1,
+          "served_models": []
+        },
+        "success": true
+      },
+      "id": "get_serving_status"
+    },
+    "list_model_downloads": {
+      "jsonrpc": "2.0",
+      "result": {
+        "downloads": [],
+        "success": true
+      },
+      "id": "list_model_downloads"
+    }
+  },
+  "candidateSources": {
+    "model": {
+      "repo": "Qwen/Qwen2.5-0.5B-Instruct-GGUF",
+      "quant": "Q4_K_M",
+      "publicPage": "https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF",
+      "license": "Apache-2.0",
+      "licensePage": "https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF/blob/main/LICENSE",
+      "licenseReadVia": "browser primary publisher page",
+      "currentRevisionVerified": false,
+      "currentFileDigestVerified": false,
+      "downloaded": false
+    },
+    "runtime": {
+      "repo": "ggml-org/llama.cpp",
+      "license": "MIT",
+      "licensePageRead": "https://github.com/ggml-org/llama.cpp/blob/b11352/LICENSE",
+      "selectedRelease": null,
+      "selectedAsset": null,
+      "currentAssetDigestVerified": false,
+      "installed": false
+    }
+  },
+  "limits": {
+    "runtimeInstallAttempted": false,
+    "modelDownloadAttempted": false,
+    "realGenerationAttempted": false,
+    "normalGodotGenerationAcceptance": "not run; prerequisites absent",
+    "tinyModelPurpose": "protocol smoke only; narrative quality remains separate",
+    "ownedServiceStopped": true,
+    "securityProxyCredentialSettingsChanged": false,
+    "mainPRMergePublicationChanged": false,
+    "frozenBranchChanged": false,
+    "libraryRetriedOrUploaded": false
+  },
+  "rawEvidenceRoot": "/workspace/lanternwake-pumas95-live-evidence-20261006",
+  "rawEvidence": [
+    {
+      "path": "pumas.log",
+      "bytes": 2941,
+      "sha256": "8fff36cbf360aa17583785d7b84b0f6279a6632a13f307cff44b6043f094b238",
+      "kind": "actual process output or RPC response"
+    },
+    {
+      "path": "available-versions.json",
+      "bytes": 155,
+      "sha256": "e3150bb1a0d3800c8a9a96d89135f14c6122b4b1ed288eb08ef0a805f18fff4f",
+      "kind": "actual process output or RPC response"
+    },
+    {
+      "path": "get_installed_versions.json",
+      "bytes": 87,
+      "sha256": "0d88d808a5a661713111c7472d57f6e1857faae13bb85f40c5e9d30c86a33718",
+      "kind": "actual process output or RPC response"
+    },
+    {
+      "path": "get_active_version.json",
+      "bytes": 82,
+      "sha256": "81d9056e917da24e8c6392d9872e37721644fde03a587420d0d99d67bf7bd84f",
+      "kind": "actual process output or RPC response"
+    },
+    {
+      "path": "get_models.json",
+      "bytes": 73,
+      "sha256": "cf38f91f1ec9ed9fbe282f7016766b615444f215493d9b08f634bd4b80a030c2",
+      "kind": "actual process output or RPC response"
+    },
+    {
+      "path": "get_serving_status.json",
+      "bytes": 288,
+      "sha256": "84fb195d89e42927351859d6e94c3700dffa865c1c703f8b96aef375529d3cbc",
+      "kind": "actual process output or RPC response"
+    },
+    {
+      "path": "list_model_downloads.json",
+      "bytes": 86,
+      "sha256": "648c0fa57b677880c7b5a0ee717680350af1188eeb6f8aeab1bc0f9b03558bb1",
+      "kind": "actual process output or RPC response"
+    },
+    {
+      "path": "blocker.json",
+      "bytes": 2023,
+      "sha256": "3c660684a4ae6636a35119f59db765e14175a7331e52e967d5f455b2d25831d8",
+      "kind": "derived observation receipt"
+    }
+  ],
+  "reviewedSourceFiles": [
+    {
+      "path": "rust/crates/pumas-rpc/src/contract.rs",
+      "sha256": "0fa11cc965ddec2c8c11a1164745005f31145366eae7f30e098a7792548561a3"
+    },
+    {
+      "path": "rust/crates/pumas-rpc/src/handlers/versions/release.rs",
+      "sha256": "fba89e2318b0dc5c53f6675cc57a0f45435ae8e043eda0390570943e27d0f1cd"
+    },
+    {
+      "path": "rust/crates/pumas-rpc/src/handlers/versions/lifecycle.rs",
+      "sha256": "30877f0802ebd94e9a614ccfaed3582adcc21c559249a94422d1c12c57b0f2a7"
+    },
+    {
+      "path": "rust/crates/pumas-rpc/src/handlers/models/downloads.rs",
+      "sha256": "0c93fe82026fe4575ecd48fb27207dd86edc65b49f1e78ac8a7142d8c3837b14"
+    },
+    {
+      "path": "rust/crates/pumas-app-manager/src/version_manager/mod.rs",
+      "sha256": "0983334ef6f121bfcd0fee40820f9f3d7b6b03111ca87e83371d350d7fe8b469"
+    },
+    {
+      "path": "rust/crates/pumas-app-manager/src/version_manager/installer.rs",
+      "sha256": "4c2ed18d55f8465100e7f29481ee6d9c7f038e397a119d853aa4f5c62e56324a"
+    },
+    {
+      "path": "rust/crates/pumas-core/src/acquisition/github_release.rs",
+      "sha256": "8c480514dc07408eae9540c18ed7699764968d0e6d50d96ab251f6fd8e6805b5"
+    },
+    {
+      "path": "rust/crates/pumas-core/src/api/hf.rs",
+      "sha256": "a69f2fe3dc191bb042518cedc308c1f2ccfb7ee1979f3dfcfe70aa65472998c6"
+    },
+    {
+      "path": "rust/crates/pumas-core/src/model_library/hf/metadata.rs",
+      "sha256": "0a872d3a6ebba4ef7de990237e57a3c4e4395ab8bee6607e993bb0d8c50ebb9a"
+    }
+  ],
+  "remainingPrerequisite": "Platform-approved working network route for normal Pumas GitHub and HF acquisition; no bypass or configuration changes attempted."
+}
