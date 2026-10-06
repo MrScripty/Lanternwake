@@ -55,6 +55,7 @@ public partial class FamilyExchangeQualification : Node
                 Passage.VisibleCharacters = 5;
                 typeof(GameView).GetField("_characters", BindingFlags.NonPublic | BindingFlags.Instance)!.SetValue(_game, 5d);
                 var text = Passage.Text; var state = Snapshot(); var files = Files();
+                var status = Observe<Label>("_status").Text;
                 Press("TalkButton");
                 Check(Modal is not null && Choices.Select(b => b.Text).SequenceEqual(exchange.Options.Select(o => o.Label)), "exact authored options in order");
                 Check(Choices[0].HasFocus(), "first intention has keyboard focus without selection");
@@ -81,6 +82,7 @@ public partial class FamilyExchangeQualification : Node
                 else Check(JsonSerializer.Serialize(Observe<SessionStorage>("_storage").Read(true), Story.Json) == Snapshot(), "authored pair autosaved");
                 var chosen = Snapshot(); Action("Back to story");
                 Check(Modal is null && Passage.Text == text && Passage.VisibleCharacters == 5 && Snapshot() == chosen, "Return restores exact passage without advance");
+                Check(Observe<Label>("_status").Text == status, "successful exchange restores original reading status");
                 Press("TalkButton"); Check(Choices.Length == 1 && Choices[0].Text == "Back to story", "chosen exchange reopens read only");
                 var saved = Files(); Action("Back to story"); Check(Snapshot() == chosen, "review does not repeat pair"); SameFiles(saved);
                 if (!preview)
@@ -93,6 +95,32 @@ public partial class FamilyExchangeQualification : Node
             }
             if (!preview)
             {
+                LoadTarget(); Passage.VisibleCharacters = 5;
+                typeof(GameView).GetField("_characters", BindingFlags.NonPublic | BindingFlags.Instance)!.SetValue(_game, 5d);
+                var text = Passage.Text; var faultState = Snapshot();
+                var autosave = Path.Combine(ProjectSettings.GlobalizePath("user://"), "autosave.json");
+                var autoBytes = File.Exists(autosave) ? File.ReadAllBytes(autosave) : null;
+                var manualPath = Path.Combine(ProjectSettings.GlobalizePath("user://"), "save.json");
+                var manualBytes = File.ReadAllBytes(manualPath);
+                File.Delete(autosave); Directory.CreateDirectory(autosave);
+                try
+                {
+                    var faultFiles = Files(); Press("TalkButton"); Action(exchange.Options[0].Label);
+                    var warning = Observe<Label>("_status").Text;
+                    Check(warning.StartsWith("Could not save: ", StringComparison.Ordinal), "actual filesystem failure reports save warning");
+                    Check(Session.ChosenExchangeIndex == 0 && Session.History.Count == JsonSerializer.Deserialize<SaveData>(faultState, Story.Json)!.History.Count + 2, "failed autosave retains selected pair in memory");
+                    var chosen = Snapshot(); Action("Back to story");
+                    Check(Modal is null && Passage.Text == text && Passage.VisibleCharacters == 5 && Snapshot() == chosen, "failed save Return restores paused passage and exact memory state");
+                    await Frame(); await Frame();
+                    Check(Observe<Label>("_status").Text == warning, "failed autosave warning survives Return and process frames");
+                    Press("TalkButton"); Modal!.EmitSignal(Window.SignalName.CloseRequested);
+                    Check(Observe<Label>("_status").Text == warning && Snapshot() == chosen, "warning survives read-only reopening and Escape"); SameFiles(faultFiles);
+                }
+                finally { Directory.Delete(autosave); if (autoBytes is not null) File.WriteAllBytes(autosave, autoBytes); }
+                Press("SaveButton");
+                Check(Observe<Label>("_status").Text == "Saved on this device." && JsonSerializer.Serialize(Observe<SessionStorage>("_storage").Read(false), Story.Json) == Snapshot(), "successful manual retry clears warning and persists selected pair");
+                // Restore the legacy fixture before existing stale-control checks.
+                File.WriteAllBytes(manualPath, manualBytes);
                 LoadTarget(); Press("TalkButton"); var stale = Choices[0];
                 Press("LoadButton"); Action("Load current manual save · ch4_s1a_b035"); var state = Snapshot(); var files = Files();
                 stale.EmitSignal(BaseButton.SignalName.Pressed);

@@ -5,8 +5,43 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Lanternwake.Conversation;
+using Lanternwake.Core;
+using System.Diagnostics;
 
 var passed = 0;
+await Check("LiveSmoke uses production character identity and exact wire context", async () =>
+{
+    var root = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../../../"));
+    var gameSource = File.ReadAllText(Path.Combine(root, "Scripts/Presentation/GameView.cs"));
+    Require(gameSource.Contains("_pumas.GenerateAsync(chat.CharacterId, _session.ConversationContext(), input,"), "production identity/context call");
+    var storyPath = Path.Combine(root, "Content/story.json");
+    var story = Story.Parse(File.ReadAllText(storyPath));
+    var session = new StorySession(story);
+    while (session.Beat.Conversation is null)
+    {
+        if (session.Beat.Activity is { } activity) session.AnswerActivity(activity.CorrectIndex);
+        Require(session.Advance(), "conversation reached");
+    }
+    var chat = session.Beat.Conversation!;
+    Require(story.Characters.Single(c => c.Id == chat.CharacterId).Name != chat.CharacterId, "fixture distinguishes display name from ID");
+    await using var production = new FakePumas();
+    using var client = new PumasClient(production.Uri, "game-dialogue");
+    Require((await client.GenerateAsync(chat.CharacterId, session.ConversationContext(), chat.Suggestions[0])).Success, "production-equivalent request");
+    await using var smoke = new FakePumas();
+    var start = new ProcessStartInfo("dotnet") { RedirectStandardOutput = true, RedirectStandardError = true, WorkingDirectory = root };
+    start.ArgumentList.Add("run"); start.ArgumentList.Add("--project"); start.ArgumentList.Add("integration/pumas/LiveSmoke/LiveSmoke.csproj");
+    start.ArgumentList.Add("--no-build"); start.ArgumentList.Add("--"); start.ArgumentList.Add(storyPath); start.ArgumentList.Add(session.Beat.Id); start.ArgumentList.Add(chat.Suggestions[0]);
+    start.Environment["LANTERNWAKE_PUMAS_URL"] = smoke.Uri.AbsoluteUri;
+    start.Environment["LANTERNWAKE_PUMAS_MODEL"] = "game-dialogue";
+    using var process = Process.Start(start)!;
+    var stdout = process.StandardOutput.ReadToEndAsync(); var stderr = process.StandardError.ReadToEndAsync();
+    try { await process.WaitForExitAsync().WaitAsync(TimeSpan.FromSeconds(30)); }
+    finally { if (!process.HasExited) process.Kill(entireProcessTree: true); }
+    Require(process.ExitCode == 0, "LiveSmoke succeeds: " + await stderr);
+    using var receipt = JsonDocument.Parse(await stdout);
+    Require(receipt.RootElement.GetProperty("canonicalUnchanged").GetBoolean(), "helper preserves canonical session");
+    Require(smoke.Paths.SequenceEqual(production.Paths) && smoke.Bodies.SequenceEqual(production.Bodies), "identical serialized identity, context and user turn");
+});
 await Check("direct Pumas status and generation", async () =>
 {
     await using var server = new FakePumas();
