@@ -61,3 +61,15 @@ retain their identities and failures. See [the integration report](GUIDED-DESCEN
 for tested source/binary/evidence identities and scope. Final-head hosted CI and
 parent-owned PR/review/readiness/merge remain pending; human/device/provider/voice
 and measured-duration acceptance are unchanged.
+
+## Character performance integrated qualification, 2026-10-06
+
+The distinct successor combines merged guided-descent main `c42e45fb` with frozen
+character `44f944b8`, preserving both histories and Pumas ownership. Fresh combined
+aggregate/Editor/native checks, nine rendered cases, normal Save/Load/recovery and
+150% reduced-motion acceptance pass. See [the integration report](CHARACTER-PERFORMANCE-INTEGRATION-20261006.md)
+for source/binary/evidence identities and retained failures. Two optional graphical
+Editor startup attempts were rejected for Vulkan surface/readiness failures;
+native Editor roundtrip/build and game renders passed. Independent/external review,
+final-head CI, human Editor/performance/composition, physical/assistive input,
+hearing, voice/model/platform and measured five-hour duration gates remain open.
