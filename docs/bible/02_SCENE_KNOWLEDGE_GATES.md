@@ -377,6 +377,10 @@ Forbidden future confirmations after this scene: f_authorship, f_loop_completed,
 - Conversation `ch4_s2_b020` with Dr Sera Wynn: Discuss how to communicate the findings.
   - Exact allowed facts: f_inventory, f_future_note, f_bell_warning, f_tomas_loss, f_wrong_channel, f_west_omission, f_cup_prediction, f_pressure_engine, f_ordinary_tape, f_ivo_signature, f_interval, f_script_match, f_full_testimony.
   - Authored offline fallback: Release the source copies with provenance, readable transcripts, and explicit limits. Preserve independent copies away from the tower. Let a qualified review determine conclusions these records alone cannot support.
+- Required source reconstruction `ch4_s2_reconstruction_evidence`: Which correction is supported by these sources?
+  - Supported answer: Ivo withheld the corrected chart; the false vessel-hold claim remained in the public summary.
+  - Explanation: The omission note, published summary, measurement log and deposition support distinct acts. What every editor knew remains for independent review.
+  - Wrong options receive distinct source-grounded feedback, with retry and no penalty. The checked correction rejoins Tomas's existing reading of the two headings.
 - Required evidence activity `ch4_s2_evidence`: Why can the team prioritize the pressure shutdown without losing the evidence?
   - Supported answer: Verified copies exist at independent off-island archives.
   - Explanation: Copies with provenance and checksums are acknowledged elsewhere, while originals remain safeguarded.

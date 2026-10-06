@@ -1,12 +1,12 @@
 {
-  "authoredMainPathWords": 35408,
+  "authoredMainPathWords": 35456,
   "chapters": 5,
   "scenes": 41,
-  "beats": 1438,
-  "activities": 23,
+  "beats": 1439,
+  "activities": 24,
   "conversations": 28,
-  "readingMinutesAt150Wpm": 236.1,
-  "readingMinutesAt180Wpm": 196.7,
-  "readingMinutesAt220Wpm": 160.9,
+  "readingMinutesAt150Wpm": 236.4,
+  "readingMinutesAt180Wpm": 197.0,
+  "readingMinutesAt220Wpm": 161.2,
   "playtested": false
 }

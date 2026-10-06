@@ -6320,6 +6320,26 @@
               "text": "Then leave that question open for review. We don't need to invent another confession to say the crew didn't disobey an order that wasn't there."
             },
             {
+              "id": "ch4_s2_reconstruction_evidence",
+              "speaker": "narrator",
+              "text": "Tomas puts a blank correction card beside the four sources. Before this wording enters the deposit, he asks you to check it against both the chart instruction and the published summary. Which account preserves what Ivo kept out of the record and what he let remain in it?",
+              "activity": {
+                "prompt": "Which correction is supported by these sources?",
+                "options": [
+                  "Ivo withheld the corrected chart; the false vessel-hold claim remained in the public summary.",
+                  "Ivo withheld both the corrected chart and the false vessel-hold claim.",
+                  "The summary proves every editor knowingly concealed the correction."
+                ],
+                "correctIndex": 0,
+                "explanation": "The omission note supports withholding the corrected chart. The published summary contains the false hold claim, contradicted by the Channel A measurement log and the deposition. What each editor knew remains a question for independent review.",
+                "optionFeedback": [
+                  "",
+                  "Tomas turns the summary toward you. 'The hold claim is printed here. Keeping it out would have left a different public record.' The omission note concerns the corrected chart. Compare what was withheld with what readers were left to believe.",
+                  "Sera taps the source references. 'We can show what the exhibit used and what the summary said. That does not establish what every editor knew.' Preserve those questions for independent review; the crew's correction does not depend on inventing another person's confession."
+                ]
+              }
+            },
+            {
               "id": "ch4_s2_reconstruction_014",
               "speaker": "narrator",
               "text": "Tomas catches your pencil before it rolls into the chart's curled edge. He sets it beside the source register, then asks you to read the two headings once more. This time he does not correct either. You keep the crossed-out arrow visible in the working notes. It records a mistake you made and checked, rather than one a later reader must unknowingly inherit."

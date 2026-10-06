@@ -4,6 +4,11 @@ public sealed record TranscriptLine(string Speaker, string Text, bool Generated 
 public sealed record SaveData(int Version, string StoryTitle, string BeatId, List<TranscriptLine> History, HashSet<string> SolvedActivities);
 public sealed class StorySession
 {
+    public const int CurrentSaveVersion = 2;
+    // Only this successor's added gate is grandfathered for v1 saves already past it.
+    // Never waive an original gate or a gate in a save produced by this runtime.
+    private const string ReconstructionGate = "ch4_s2_reconstruction_evidence";
+    public static bool SupportsSaveVersion(int version) => version is 1 or CurrentSaveVersion;
     private readonly Story _story;
     private readonly (Chapter Chapter, Scene Scene, Beat Beat)[] _timeline;
     private int _index;
@@ -74,10 +79,10 @@ public sealed class StorySession
         SolvedActivities.Add(Beat.Id);
         return true;
     }
-    public SaveData Snapshot() => new(1, _story.Title, Beat.Id, [.. History], new(SolvedActivities));
+    public SaveData Snapshot() => new(CurrentSaveVersion, _story.Title, Beat.Id, [.. History], new(SolvedActivities));
     public void Restore(SaveData save)
     {
-        if (save.Version != 1 || save.StoryTitle != _story.Title) throw new InvalidDataException("This save is for an unsupported story/version.");
+        if (!SupportsSaveVersion(save.Version) || save.StoryTitle != _story.Title) throw new InvalidDataException("This save is for an unsupported story/version.");
         var index = Array.FindIndex(_timeline, t => t.Beat.Id == save.BeatId);
         if (index < 0 || save.History is null || save.History.Count > 50000 || save.SolvedActivities is null || save.SolvedActivities.Any(id => !_timeline.Take(index + 1).Any(t => t.Beat.Id == id && t.Beat.Activity is not null))) throw new InvalidDataException("Save contains invalid state.");
         if (save.History.Any(line => line is null || line.Text is null || line.Text.Length > 20000 || line.Speaker is null || (line.Speaker != "narrator" && line.Speaker != "you" && !_story.Characters.Any(c => c.Id == line.Speaker)))) throw new InvalidDataException("Save contains invalid transcript.");
@@ -87,7 +92,11 @@ public sealed class StorySession
             if (entry.Beat is null) throw new InvalidDataException("Transcript references a later or unknown beat.");
             if (line.ConversationCharacterId is not null && (line.SceneId != entry.Scene.Id || line.ConversationCharacterId != entry.Beat.Conversation?.CharacterId)) throw new InvalidDataException("Transcript conversation scope is invalid.");
         }
-        if (_timeline.Take(index).Any(t => t.Beat.Activity is not null && !save.SolvedActivities.Contains(t.Beat.Id))) throw new InvalidDataException("Save skips an unsolved activity.");
+        var solved = new HashSet<string>(save.SolvedActivities, StringComparer.Ordinal);
+        if (save.Version == 1 && !save.History.Any(line => line.BeatId == ReconstructionGate) &&
+            _timeline.Take(index).Any(t => t.Beat.Id == ReconstructionGate && t.Beat.Activity is not null))
+            solved.Add(ReconstructionGate);
+        if (_timeline.Take(index).Any(t => t.Beat.Activity is not null && !solved.Contains(t.Beat.Id))) throw new InvalidDataException("Save skips an unsolved activity.");
         // Derived unlocks are replayed from authored beats, not trusted save/model data.
         _index = index; _facts.Clear(); _items.Clear();
         foreach (var beat in _timeline.Take(index + 1).Select(t => t.Beat))
@@ -96,6 +105,6 @@ public sealed class StorySession
             foreach (var i in beat.UnlockItems ?? []) _items.Add(i);
         }
         History.Clear(); History.AddRange(save.History);
-        SolvedActivities.Clear(); SolvedActivities.UnionWith(save.SolvedActivities);
+        SolvedActivities.Clear(); SolvedActivities.UnionWith(solved);
     }
 }

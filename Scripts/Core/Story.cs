@@ -8,7 +8,7 @@ public sealed record Character(string Id, string Name, string Role, string Voice
 public sealed record Fact(string Id, string Text);
 public sealed record Item(string Id, string Name, string Description);
 public sealed record Conversation(string CharacterId, string Prompt, string[] Suggestions, string Fallback, string[] AllowedFacts);
-public sealed record EvidenceActivity(string Prompt, string[] Options, int CorrectIndex, string Explanation);
+public sealed record EvidenceActivity(string Prompt, string[] Options, int CorrectIndex, string Explanation, string[]? OptionFeedback = null);
 public sealed record Beat(string Id, string Speaker, string Text, string[]? UnlockFacts = null, string[]? UnlockItems = null, Conversation? Conversation = null, EvidenceActivity? Activity = null, string? StageCue = null);
 public sealed record Scene(string Id, string Title, string Location, string TimeOfDay, string[] CharacterIds, Beat[] Beats);
 public sealed record Chapter(string Id, string Title, Scene[] Scenes);
@@ -62,6 +62,14 @@ public sealed record Story(int SchemaVersion, string Title, Character[] Characte
                             throw new InvalidDataException($"Beat {beat.Id}: missing activity.options.");
                         for (var index = 0; index < activity.Options.Length; index++)
                             RequireText(activity.Options[index], $"activity.options[{index}]", $"Beat {beat.Id}");
+                        if (activity.OptionFeedback is { } feedback)
+                        {
+                            if (feedback.Length != activity.Options.Length)
+                                throw new InvalidDataException($"Beat {beat.Id}: activity.optionFeedback must match activity.options length.");
+                            for (var index = 0; index < feedback.Length; index++)
+                                if (index != activity.CorrectIndex)
+                                    RequireText(feedback[index], $"activity.optionFeedback[{index}]", $"Beat {beat.Id}");
+                        }
                     }
                     if (beat.Conversation is { } chat)
                     {

@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "storyTitle": "Lanternwake",
+  "beatId": "ch5_s5_evidence",
+  "history": [
+    {
+      "speaker": "ada",
+      "text": "Shouldn\u0027t you keep this?",
+      "generated": false,
+      "beatId": "ch5_s5_b021",
+      "sceneId": null,
+      "conversationCharacterId": null
+    },
+    {
+      "speaker": "nessa",
+      "text": "There\u0027s a spare in the office. We finally made a list.",
+      "generated": false,
+      "beatId": "ch5_s5_b022",
+      "sceneId": null,
+      "conversationCharacterId": null
+    },
+    {
+      "speaker": "narrator",
+      "text": "You lock the house behind you. In the tower, the old paper stays blank. On the harbor board, the ferry time is an estimate with a named source. In your bag, the catalogue has room for corrections. You have learned something about the future, but it is smaller and more useful than the thing you thought you came to learn.",
+      "generated": false,
+      "beatId": "ch5_s5_b023",
+      "sceneId": null,
+      "conversationCharacterId": null
+    },
+    {
+      "speaker": "ada",
+      "text": "It doesn\u0027t have to tell me what to do.",
+      "generated": false,
+      "beatId": "ch5_s5_b024",
+      "sceneId": null,
+      "conversationCharacterId": null
+    },
+    {
+      "speaker": "narrator",
+      "text": "The island offers no answer. It has people for that now. You walk down toward them, carrying the record of what happened and leaving enough empty paper for what happens next.",
+      "generated": false,
+      "beatId": "ch5_s5_b025",
+      "sceneId": null,
+      "conversationCharacterId": null
+    },
+    {
+      "speaker": "narrator",
+      "text": "Review the evidence before continuing.",
+      "generated": false,
+      "beatId": "ch5_s5_evidence",
+      "sceneId": null,
+      "conversationCharacterId": null
+    }
+  ],
+  "solvedActivities": [
+    "ch1_s1a_evidence",
+    "ch1_s2_evidence",
+    "ch1_s2a_evidence",
+    "ch1_s3_evidence",
+    "ch1_s3a_evidence",
+    "ch2_s1_evidence",
+    "ch2_s2a_evidence",
+    "ch2_s3_evidence",
+    "ch2_s3a_evidence",
+    "ch2_s5_evidence",
+    "ch3_s1_evidence",
+    "ch3_s2_evidence",
+    "ch3_s2a_evidence",
+    "ch3_s4_evidence",
+    "ch4_s1_evidence",
+    "ch4_s2_evidence",
+    "ch4_s2a_evidence",
+    "ch4_s3a_evidence",
+    "ch4_s4_evidence",
+    "ch5_s2_evidence",
+    "ch5_s3_evidence",
+    "ch5_s4a_evidence",
+    "ch5_s5_evidence"
+  ]
+}

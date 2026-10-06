@@ -1,0 +1,22 @@
+{
+  "sourceCommit": "bfa952c460c913c163d92a016d5b3eb35589c955",
+  "sourceStorySha256": "3f99fd17a1c405b87588619fcbb3fb09b9145e096199d4618c180fa311bc752e",
+  "generation": "Actual frozen v1 StorySession traversal; required old gates solved in order. Compact fixtures retain last six history entries and are independently accepted by the frozen core. Full untrimmed snapshots retained locally.",
+  "snapshots": {
+    "before": {
+      "beatId": "ch4_s2_reconstruction_013",
+      "compactSha256": "b2968a7adc063ddc2cc6997c4c8bac000523affdedf2b2ccc0c088a3ad101cb1",
+      "fullRawSha256": "1a78ce1a3e5ba0a06e7808856ea324bc67d9425e9be79f1ee74880f229c75574"
+    },
+    "after": {
+      "beatId": "ch4_s2_reconstruction_014",
+      "compactSha256": "0195b81818ca09291f0327d314597e1ab1c1956da486f19caabaeed8203f1fee",
+      "fullRawSha256": "f7a26b0deab7509c640eaba3abde5ff0b4cc359f2f0ca8cd06fc309f2e8c485b"
+    },
+    "completed": {
+      "beatId": "ch5_s5_evidence",
+      "compactSha256": "0ca07fd6676d11f20c9aea583d004f954cdee5bb1ca0ad283136d1ba229b9b8c",
+      "fullRawSha256": "e891217aab3bfb4160d445b0b1530a60ce1378c18a2c52ae6a050172e3945c90"
+    }
+  }
+}

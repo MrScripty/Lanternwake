@@ -41,6 +41,10 @@ Use **Search story** to find beats across all chapters by line text, speaker, sc
 
 The read-only **Author context** panel shows the scene/cast, stable beat ID, fact/item unlocks, stage cue, mandatory evidence answer/explanation and optional conversation prompt, allowed facts, suggestions and authored fallback. It contains spoilers for authors, not player-visible knowledge. Editing a beat still changes only its speaker and text. Successful reloads retain the selected stable beat ID when it still exists; a failed reload keeps the last valid selection and unsaved draft intact.
 
+Activities may also include `optionFeedback` in JSON. The Author context exposes
+each saved rationale and story search includes it. The dock preserves these
+fields while editing beat text; it does not edit the option rationales itself.
+
 The dock refuses to save if another editor changed the file since loading. Use one writer at a time; it is not a collaborative document service. A successful save uses same-directory staged replacement. Do not edit the same file concurrently in another application. Scene/resource changes use normal Godot Save; the Story Text dock's Save beat is separate.
 
 For larger structural edits, use a text editor on the same JSON. Keep existing chapter, scene, beat and activity IDs stable for save compatibility. Do not renumber existing beats just because you insert a line. Facts must be unlocked before a conversation uses them and must belong to its character's knowledge. Mandatory activities retain their options, valid correct answer and explanation. Story state and gates remain deterministic; generated dialogue cannot rewrite them.

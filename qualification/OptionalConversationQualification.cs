@@ -196,7 +196,7 @@ public partial class OptionalConversationQualification : Node
     private void Finish()
     {
         var before = Session.Snapshot();
-        Check(Session.IsEnding && Session.CanAdvance && Session.SolvedActivities.Count == 23, "full story remains completable with optional replies");
+        Check(Session.IsEnding && Session.CanAdvance && Session.SolvedActivities.Count == _story.Chapters.SelectMany(c => c.Scenes).SelectMany(s => s.Beats).Count(b => b.Activity is not null), "full story remains completable with optional replies");
         Press("AdvanceButton"); Check(Modal.Title == "The light remains", "actual ending route remains available"); Close();
         Check(Snapshot(Session.Snapshot()) == Snapshot(before), "Finish appends no duplicate story or chat events");
     }
