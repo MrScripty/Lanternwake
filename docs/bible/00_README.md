@@ -7,7 +7,7 @@ This is an original adult-cast mystery, not an adaptation. The story has a compl
 ## What is actually authored
 
 - Five chapters and 41 staged scenes
-- 35,456 main-path words by `scripts/story_metrics.py`, including short conversation invitations and activity transitions; count excludes optional LLM output, fallback replies, suggested player lines, authored exchange labels/replies, item descriptions, and this bible
+- 35,456 main-path words by `scripts/story_metrics.py`, including short conversation invitations and activity transitions; count excludes optional LLM output, fallback replies, suggested player lines, authored exchange prompts/labels/replies, item descriptions, and this bible
 - 1,439 sequential authored beats, 28 optional model conversation points, one optional authored exchange, and 24 implemented objective evidence activities
 - Seven named voice IDs: four living adults, plus Ivo, the inquiry clerk, and a station operator heard only in archival recordings
 - Five reusable 3D locations; the final bell state is an authored stage cue
