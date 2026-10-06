@@ -9,7 +9,7 @@ world context, and player text, and returns only `PumasReply(Success, Text,
 ErrorCode)`. It has no game-state reference, save-file access, tool execution, or
 quest/inventory mutation surface.
 
-This integration was source-qualified against Pumas commit
+This integration was historically source-qualified against Pumas commit
 [`e37bbf4b964a0e2aadf25f80ab71edd8fa6b3eb3`](https://github.com/MrScripty/Pumas-Library/commit/e37bbf4b964a0e2aadf25f80ab71edd8fa6b3eb3),
 whose Cargo package version is **0.7.0** and Git description is
 **v0.7.0-117-ge37bbf4b**. It is not a claim of binary compatibility with every
@@ -58,7 +58,7 @@ JSON properties are rejected. No output is parsed as a game instruction.
 
 ## Required runtime and setup
 
-1. Supply an **inference-enabled** `pumas-rpc`. The full official v0.7.0 Linux package sidecar was exercised successfully; see `LIVE-QUALIFICATION.md` for its exact artifact/hash. Building the qualified source is another route when sufficient memory is available.
+1. Supply an **inference-enabled** `pumas-rpc`. The full official v0.7.0 Linux package sidecar was exercised successfully; see `LIVE-QUALIFICATION.md` for its exact artifact/hash. New source builds use the approved setup pin below and require separate Lanternwake wire qualification.
    The audited upstream headless release archive is explicitly built with
    `--no-default-features` and cannot generate dialogue. A GUI-less process
    and an inference-disabled build are different choices.
@@ -73,19 +73,29 @@ JSON properties are rejected. No output is parsed as a game instruction.
    need measurement. Use a unique alias such as `lanternwake-dialogue`.
 5. Start the game with the exact URL and alias below.
 
-Source build/start commands, run in the qualified Pumas checkout after its
-prerequisites are provisioned:
+For new source builds, use the approved Pumas revision
+[`95a0baad2d0aea4650fc36ad4afd969ac9391bf5`](https://github.com/MrScripty/Pumas-Library/commit/95a0baad2d0aea4650fc36ad4afd969ac9391bf5)
+after its prerequisites are provisioned. This is a setup pin, not a fresh
+Lanternwake wire or live-inference qualification; the historical evidence above
+remains tied to `e37bbf4` and the exact artifacts in `LIVE-QUALIFICATION.md`.
+Requalify the consumed wire contract and live dialogue before claiming acceptance
+on the new pin. Build/start commands:
 
 ```sh
 cargo build --locked --manifest-path rust/Cargo.toml -p pumas-rpc --release
 ./rust/target/release/pumas-rpc --host 127.0.0.1 --port 8080 --launcher-root /absolute/pumas-root
 ```
 
-The source pins Rust **1.92.0**. Default inference features also enable ONNX
-Runtime (`ort 2.0.0-rc.12`, including native binary download/copy features),
-process management and GPU monitoring even if this game uses only llama.cpp.
-Account for native dependencies, compiler cache, and runtime/model storage.
-Do not assume that an inference-disabled build proves this build works.
+The source pins Rust **1.92.0**. At the approved setup pin, Cargo does not
+download ONNX Runtime: `ort` defaults and download/copy features are disabled.
+The normal default-feature build above needs no ORT environment variables or
+download-suppression flags. ONNX execution loads a separately provisioned native
+library at runtime: set `ORT_DYLIB_PATH` to an absolute library **file**
+(`.so`/`.dylib`/`.dll`), or place the platform-named library beside the executable.
+A missing or invalid runtime returns a typed `runtime_library` backend error when
+ONNX execution is requested. Build success alone does not qualify ONNX execution
+or Lanternwake dialogue. Account for compiler cache and runtime/model storage;
+process management and GPU monitoring remain default inference dependencies.
 
 To create a dedicated CPU profile through the actual headless RPC after the
 runtime and model have been provisioned:

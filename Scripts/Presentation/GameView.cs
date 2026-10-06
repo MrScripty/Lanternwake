@@ -96,6 +96,7 @@ public partial class GameView : Node
         _titleContentNote = InterfaceRoot.GetNode<Button>("%ContentNoteButton");
         _titleContentNote.Pressed += ShowTitleContentNote;
         _readingText.Register(_dialogue); _readingText.Register(_entry);
+        EnableKeyboardReading(_dialogue);
         InterfaceRoot.GetNode<Button>("%EvidenceButton").Pressed += ShowEvidence;
         InterfaceRoot.GetNode<Button>("%HistoryButton").Pressed += ShowHistory;
         InterfaceRoot.GetNode<Button>("%SaveButton").Pressed += () => Save(false);

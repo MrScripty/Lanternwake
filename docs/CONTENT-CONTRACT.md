@@ -15,10 +15,14 @@ Root: `schemaVersion:1`, `title`, `characters`, `facts`, `items`, `chapters`.
 - Conversation: `characterId`, `prompt`, `suggestions` (editable strings), `fallback` (authored response), `allowedFacts` (fact IDs). Available facts are further intersected with current unlocks and character knowledge before prompt assembly.
 - Activity: `prompt` (nonblank text), `options` (at least 2, each nonblank text), `correctIndex` (zero-based), `explanation`. Correct selection unlocks advance; incorrect selection gives retry feedback without penalty.
 
-Required text is rejected when missing, null, empty or entirely whitespace. Valid
-text is retained exactly, including Unicode and surrounding whitespace; validation
-does not invent replacement labels or normalize authored prose. Diagnostics identify
-the chapter, scene or beat ID and the invalid field (including an option's zero-based index).
+Validation rejects missing, null, empty or whitespace-only chapter titles, scene
+`timeOfDay`, activity prompts and activity options, with diagnostics naming the
+owner ID and field (including an option's zero-based index). Beat text, activity
+explanations and conversation fallbacks also require nonblank text, with generic
+beat/activity/conversation diagnostics. Other authored strings, including scene
+titles and fact text, are not covered by a universal nonblank validator. Valid text
+is retained exactly, including Unicode and surrounding whitespace; validation
+does not invent replacement labels or normalize authored prose.
 
 Locations: `harbor`, `keeper_house`, `archive`, `lantern_room`, `tide_cave`.
 
