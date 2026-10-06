@@ -62,7 +62,7 @@ public static class SaveRecovery
         {
             var file = ReadSnapshot(path);
             var save = Decode(file.Bytes);
-            if (save.Version != 1) return Unavailable(SaveAvailability.UnsupportedVersion, "unsupported save version " + save.Version);
+            if (!StorySession.SupportsSaveVersion(save.Version)) return Unavailable(SaveAvailability.UnsupportedVersion, "unsupported save version " + save.Version);
             try { Validate(story, save); }
             catch (InvalidDataException error) { return Unavailable(SaveAvailability.Incompatible, "not valid for the current story: " + error.Message); }
             var position = story.Chapters.SelectMany(c => c.Scenes.SelectMany(s => s.Beats.Select(b => (Chapter: c, Scene: s, Beat: b))))

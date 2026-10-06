@@ -7,8 +7,8 @@ This is an original adult-cast mystery, not an adaptation. The story has a compl
 ## What is actually authored
 
 - Five chapters and 41 staged scenes
-- 34,937 main-path words by the compiler's regex count, including short conversation invitations and activity transitions; count excludes optional LLM output, fallback replies, suggested player lines, item descriptions, and this bible
-- 1,424 sequential authored beats, 28 optional conversation points, and 23 implemented objective evidence activities
+- 35,456 main-path words by `scripts/story_metrics.py`, including short conversation invitations and activity transitions; count excludes optional LLM output, fallback replies, suggested player lines, authored exchange prompts/labels/replies, item descriptions, and this bible
+- 1,439 sequential authored beats, 28 optional model conversation points, one optional authored exchange, and 24 implemented objective evidence activities
 - Seven named voice IDs: four living adults, plus Ivo, the inquiry clerk, and a station operator heard only in archival recordings
 - Five reusable 3D locations; the final bell state is an authored stage cue
 - All essential clues and the complete solution on the authored main path, independently of model availability
@@ -17,7 +17,7 @@ Exact machine-readable measurements are in `content_metrics.json`. These counts 
 
 ## Duration honestly stated
 
-**Design target: approximately five hours for a reflective first playthrough. No five-hour playtest has been completed.** At 150 words/minute, the current main text takes about 233 minutes to read; at 180, about 194; at 220, about 159. The 23 actual evidence activities add decision/review time, and scene changes, UI progression, and contemplation add time that must be measured rather than assumed. A reasonable pre-test planning envelope is roughly 3.25–5 hours depending on reading and investigation pace. Optional model conversation is additional and is never counted as required padding. Do not advertise a guaranteed five hours or report this as playtested.
+**Design target: approximately five hours for a reflective first playthrough. No five-hour playtest has been completed.** At 150 words/minute, the current main text takes about 236 minutes to read; at 180, about 197; at 220, about 161. The 24 actual evidence activities add decision/review time, and scene changes, UI progression, and contemplation add time that must be measured rather than assumed. A reasonable pre-test planning envelope is roughly 3.25–5 hours depending on reading and investigation pace. Optional model conversation is additional and is never counted as required padding. Do not advertise a guaranteed five hours or report this as playtested.
 
 A five-hour median requires validation and may require additional meaningful investigation content after reader testing. The expansion priorities and stop conditions are in `05_PACING_ACCESSIBILITY_QA.md`; do not lengthen the game with forced waits or repeated prose.
 

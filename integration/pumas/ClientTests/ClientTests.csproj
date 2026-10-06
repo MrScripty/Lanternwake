@@ -4,4 +4,9 @@
     <ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup><Compile Include="../../../Scripts/Conversation/PumasClient.cs" Link="PumasClient.cs" /></ItemGroup>
+  <ItemGroup>
+    <Compile Include="../../../Scripts/Core/*.cs" Link="Core/%(Filename)%(Extension)" />
+    <ProjectReference Include="../LiveSmoke/LiveSmoke.csproj" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+  <ItemGroup><None Update="Fixtures/*.json" CopyToOutputDirectory="PreserveNewest" /></ItemGroup>
 </Project>

@@ -365,7 +365,7 @@ Entry-known facts: f_bell_warning, f_cup_prediction, f_full_testimony, f_future_
 Required new facts: none; this scene deepens existing context without a new secret.
 Forbidden future confirmations after this scene: f_authorship, f_evidence_preserved, f_loop_completed, f_release_safe.
 
-No optional model conversation is enabled in this scene.
+No optional model conversation is enabled in this scene. Optional authored exchange `ch4_s1a_b035` offers Tomas practical help with permission labels, respect for private family material, or an evidentiary question about photographs. All three retain distinct authored replies in the record; leaving the moment unspoken also advances normally. This exchange grants no fact/item/gate and makes no new family permission or future preservation claim.
 ### ch4_s2 — No Single Keeper
 Location: `archive`; time: evening; living stage participants: Ada Vale, Tomas Rook, Nessa Ward, Dr Sera Wynn.
 
@@ -377,6 +377,10 @@ Forbidden future confirmations after this scene: f_authorship, f_loop_completed,
 - Conversation `ch4_s2_b020` with Dr Sera Wynn: Discuss how to communicate the findings.
   - Exact allowed facts: f_inventory, f_future_note, f_bell_warning, f_tomas_loss, f_wrong_channel, f_west_omission, f_cup_prediction, f_pressure_engine, f_ordinary_tape, f_ivo_signature, f_interval, f_script_match, f_full_testimony.
   - Authored offline fallback: Release the source copies with provenance, readable transcripts, and explicit limits. Preserve independent copies away from the tower. Let a qualified review determine conclusions these records alone cannot support.
+- Required source reconstruction `ch4_s2_reconstruction_evidence`: Which correction is supported by these sources?
+  - Supported answer: Ivo withheld the corrected chart; the false vessel-hold claim remained in the public summary.
+  - Explanation: The omission note, published summary, measurement log and deposition support distinct acts. What every editor knew remains for independent review.
+  - Wrong options receive distinct source-grounded feedback, with retry and no penalty. The checked correction rejoins Tomas's existing reading of the two headings.
 - Required evidence activity `ch4_s2_evidence`: Why can the team prioritize the pressure shutdown without losing the evidence?
   - Supported answer: Verified copies exist at independent off-island archives.
   - Explanation: Copies with provenance and checksums are acknowledged elsewhere, while originals remain safeguarded.
@@ -414,6 +418,7 @@ Forbidden future confirmations after this scene: f_authorship, f_loop_completed,
 - Required evidence activity `ch4_s3a_evidence`: Two similar names appear on different household codes. What should the team do?
   - Supported answer: Treat them as distinct until identities and locations are checked.
   - Explanation: The second identifier prevents a false duplicate and an inaccurate headcount.
+  - Wrong options receive specific Nessa/Tomas feedback: neither deleting a row nor assuming an identity verifies a person's arrival. Retry preserves the list and original gate.
 No optional model conversation is enabled in this scene.
 ### ch4_s4 — The Hand at the Other End
 Location: `lantern_room`; time: dusk; living stage participants: Ada Vale, Dr Sera Wynn, Tomas Rook, Nessa Ward.

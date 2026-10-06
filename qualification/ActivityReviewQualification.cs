@@ -108,9 +108,29 @@ public partial class ActivityReviewQualification : Node
         Check(Modal is null && _game.InterfaceRoot.GetNode<Button>("%AdvanceButton").HasFocus(), "cancelling question returns to same beat with Continue focus");
         beforeCancel.EmitSignal(BaseButton.SignalName.Pressed); Unchanged(state, files);
         Press("AdvanceButton");
-        Action(activity.Options.First(option => option != activity.Options[activity.CorrectIndex]));
-        Check(Modal is null && _game.InterfaceRoot.GetNode<Label>("%StatusLabel").Text.Contains("does not fit"), "wrong answer retains ordinary retry feedback");
-        Unchanged(state, files); Press("AdvanceButton");
+        if (activity.OptionFeedback is { } feedback)
+        {
+            for (var wrong = 0; wrong < activity.Options.Length; wrong++)
+            {
+                if (wrong == activity.CorrectIndex) continue;
+                var retiredQuestion = Modal;
+                var retiredAnswer = ActionButton(activity.Options[activity.CorrectIndex]);
+                Action(activity.Options[wrong]);
+                Check(Modal?.Title == "Check the source" && Modal.GetNode<RichTextLabel>("%ModalText").Text == feedback[wrong], "wrong option shows its exact authored explanation in the keyboard reader");
+                var feedbackWindow = Modal;
+                retiredAnswer.EmitSignal(BaseButton.SignalName.Pressed);
+                retiredQuestion!.EmitSignal(Window.SignalName.CloseRequested);
+                Check(Modal == feedbackWindow, "retired question cannot solve or close feedback"); Unchanged(state, files);
+                Action("Back to question"); Question(activity);
+                Check(ActionButton(activity.Options[wrong]).HasFocus(), "retry returns focus to the originating option without selecting it");
+            }
+        }
+        else
+        {
+            Action(activity.Options.First(option => option != activity.Options[activity.CorrectIndex]));
+            Check(Modal is null && _game.InterfaceRoot.GetNode<Label>("%StatusLabel").Text.Contains("does not fit"), "wrong answer retains ordinary retry feedback");
+            Unchanged(state, files); Press("AdvanceButton");
+        }
 
         if (!preview)
         {
@@ -188,8 +208,8 @@ public partial class ActivityReviewQualification : Node
                 _afterAdvance?.Invoke(); _afterAdvance = null; await Frame();
                 Check(Session.Beat.Id != before, "actual Continue advances canonical beat after explicit answer");
             }
-            Check(_activities == (preview ? 1 : 23), "all expected authored evidence activities independently reviewed");
-            Check(_beats == (preview ? 1 : 1424), "all expected authored beats reached through native controls");
+            Check(_activities == (preview ? 1 : _story.Chapters.SelectMany(c => c.Scenes).SelectMany(s => s.Beats).Count(b => b.Activity is not null)), "all expected authored evidence activities independently reviewed");
+            Check(_beats == (preview ? 1 : _story.Chapters.Sum(c => c.Scenes.Sum(s => s.Beats.Length))), "all expected authored beats reached through native controls");
             GD.Print("LANTERNWAKE_ACTIVITY_REVIEW_OK " + JsonSerializer.Serialize(new { preview, checks = _checks, activities = _activities, nativeBeats = _beats }));
             Press("AdvanceButton"); Action("Quit game");
         }

@@ -40,6 +40,11 @@ public partial class GameView
             }
             else
             {
+                if (activity.OptionFeedback is { } feedback)
+                {
+                    Review("Check the source", feedback[index], option);
+                    return;
+                }
                 _status.Text = "That does not fit the evidence yet. Check your catalogue and try again.";
                 CloseModal();
             }

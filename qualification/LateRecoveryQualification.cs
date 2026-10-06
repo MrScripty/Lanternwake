@@ -122,7 +122,7 @@ public partial class LateRecoveryQualification : Node
             if (session.Beat.Activity is { } activity) Check(session.AnswerActivity(activity.CorrectIndex), "fixture setup solves only actual prior gates");
             Check(session.Advance(), "fixture setup follows production domain timeline");
         }
-        Check(_late.History.Count == 1424 && !_late.SolvedActivities.Contains(_late.BeatId), "late checkpoint retains final unsolved gate");
+        Check(_late.History.Count == _ordered.Length && !_late.SolvedActivities.Contains(_late.BeatId), "late checkpoint retains final unsolved gate");
     }
 
     private async Task Prepare()

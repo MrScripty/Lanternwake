@@ -3267,7 +3267,12 @@
                   "The visitor map predicts the tide."
                 ],
                 "correctIndex": 1,
-                "explanation": "It documents a lost opportunity without claiming certainty about an outcome that was never observed."
+                "explanation": "It documents a lost opportunity without claiming certainty about an outcome that was never observed.",
+                "optionFeedback": [
+                  "Tomas: I want that ending, but we didn't observe it. Nessa marked where a timely direct instruction could have changed the rescue craft's movement. The blocks show lost time and a documented opportunity, not proof that everyone would have reached safety.",
+                  "It documents a lost opportunity without claiming certainty about an outcome that was never observed.",
+                  "Nessa: A visitor map shows what a visitor can see. It doesn't report the water level. We used the working chart, the logged positions, and the conditions on that night. That's why the sheltered approach matters; the model isn't a tide prediction."
+                ]
               }
             }
           ]
@@ -6153,7 +6158,25 @@
             {
               "id": "ch4_s1a_b035",
               "speaker": "narrator",
-              "text": "Nessa nods and closes a folder whose contents have not been cleared for public use. She has learned something by looking at the permission sheet first. So have you: care is not only adding information. Sometimes it is preserving a boundary while keeping the important public evidence available."
+              "text": "Nessa nods and closes a folder whose contents have not been cleared for public use. She has learned something by looking at the permission sheet first. So have you: care is not only adding information. Sometimes it is preserving a boundary while keeping the important public evidence available.",
+              "exchange": {
+                "characterId": "tomas",
+                "prompt": "The private folder is closed. Decide how to support Tomas while keeping the public record clear. You can also leave this moment unspoken.",
+                "options": [
+                  {
+                    "label": "I can help check the permission labels.",
+                    "reply": "Thank you. Keep the permission sheet with the captions, and keep each permission specific. Ruth's family asked for her checklist to be included; that doesn't open every letter in the folder. Being able to hand the next person a clear boundary is useful work."
+                  },
+                  {
+                    "label": "You don't have to share anything private for this record to matter.",
+                    "reply": "I appreciate that. Sometimes I feel expected to produce a more painful photograph before people believe the work matters. These are the ones the families chose for public use. The rest can remain theirs. I can want the account corrected without offering strangers every memory of my father."
+                  },
+                  {
+                    "label": "Could the correction stand without the family photographs?",
+                    "reply": "Yes. The channel log and the deposition support the correction. The photographs help people meet the crew as people; they aren't the proof of a vessel order that never existed. We can make the public finding checkable and let the families decide how much of their ordinary lives they want shown."
+                  }
+                ]
+              }
             },
             {
               "id": "ch4_s1a_b036",
@@ -6253,6 +6276,96 @@
               "id": "ch4_s2_b006",
               "speaker": "sera",
               "text": "Exactly. The measurement could be accurate while the response was wrong. A forecast of water is not a command to send a boat east."
+            },
+            {
+              "id": "ch4_s2_reconstruction_001",
+              "speaker": "narrator",
+              "text": "You bring the public summary back to the table. Beside it you put the Channel A log, the corrected chart, and the photograph of Ivo's instruction to use the issued version. Four sources, each with its own reference. You have been looking at them for hours. Now you need to see whether you can explain their relation without borrowing certainty from his voice."
+            },
+            {
+              "id": "ch4_s2_reconstruction_002",
+              "speaker": "ada",
+              "text": "The summary says the west vessel was told to hold at 21:04. The log says WEST LEVEL HOLDING. We've established that those are different statements."
+            },
+            {
+              "id": "ch4_s2_reconstruction_003",
+              "speaker": "tomas",
+              "text": "Keep the channel letter with the words. Someone reading the summary alone doesn't get that distinction."
+            },
+            {
+              "id": "ch4_s2_reconstruction_004",
+              "speaker": "narrator",
+              "text": "You copy A beside the measurement. Then you read the next entry, B: AWAIT HARBOR. You leave that line intact too. It records what was awaited; it does not supply a vessel order hidden between the words."
+            },
+            {
+              "id": "ch4_s2_reconstruction_005",
+              "speaker": "ada",
+              "text": "Could the wrong instruction have come from a chart error? If they thought the west approach wasn't there—"
+            },
+            {
+              "id": "ch4_s2_reconstruction_006",
+              "speaker": "nessa",
+              "text": "That's the issued route problem. The corrected chart gives them a sheltered approach to consider. It doesn't turn a water reading into an instruction. We need to show both failures."
+            },
+            {
+              "id": "ch4_s2_reconstruction_007",
+              "speaker": "narrator",
+              "text": "You have drawn one arrow between the summary and the missing chart. You rub it out. In its place you write two headings: what the crew were told, and what the public were later told about the crew. The page looks messier. Nessa rotates it so she can read the small lettering."
+            },
+            {
+              "id": "ch4_s2_reconstruction_008",
+              "speaker": "ada",
+              "text": "Ivo suppressed the corrected chart. He allowed the false hold claim to stand. Saying he suppressed both would get the direction of the second act wrong."
+            },
+            {
+              "id": "ch4_s2_reconstruction_009",
+              "speaker": "tomas",
+              "text": "And make it sound as though the falsehood was something he kept out of print. It was what people were left to read."
+            },
+            {
+              "id": "ch4_s2_reconstruction_010",
+              "speaker": "narrator",
+              "text": "You check the omission note against the chart heading and retain its exact wording beneath the first claim. Under the second you cite the public summary, the channel log, and the point in the complete deposition where Ivo says there was no vessel hold. The same testimony can support a correction without becoming the only source for it."
+            },
+            {
+              "id": "ch4_s2_reconstruction_011",
+              "speaker": "sera",
+              "text": "What can this page say about the editor?"
+            },
+            {
+              "id": "ch4_s2_reconstruction_012",
+              "speaker": "ada",
+              "text": "That the published exhibit used the issued version and the summary carried the false claim. Not that we've established what every person handling those pages knew."
+            },
+            {
+              "id": "ch4_s2_reconstruction_013",
+              "speaker": "tomas",
+              "text": "Then leave that question open for review. We don't need to invent another confession to say the crew didn't disobey an order that wasn't there."
+            },
+            {
+              "id": "ch4_s2_reconstruction_evidence",
+              "speaker": "narrator",
+              "text": "Tomas puts a blank correction card beside the four sources. Before this wording enters the deposit, he asks you to check it against both the chart instruction and the published summary. Which account preserves what Ivo kept out of the record and what he let remain in it?",
+              "activity": {
+                "prompt": "Which correction is supported by these sources?",
+                "options": [
+                  "Ivo withheld the corrected chart; the false vessel-hold claim remained in the public summary.",
+                  "Ivo withheld both the corrected chart and the false vessel-hold claim.",
+                  "The summary proves every editor knowingly concealed the correction."
+                ],
+                "correctIndex": 0,
+                "explanation": "The omission note supports withholding the corrected chart. The published summary contains the false hold claim, contradicted by the Channel A measurement log and the deposition. What each editor knew remains a question for independent review.",
+                "optionFeedback": [
+                  "",
+                  "Tomas turns the summary toward you. 'The hold claim is printed here. Keeping it out would have left a different public record.' The omission note concerns the corrected chart. Compare what was withheld with what readers were left to believe.",
+                  "Sera taps the source references. 'We can show what the exhibit used and what the summary said. That does not establish what every editor knew.' Preserve those questions for independent review; the crew's correction does not depend on inventing another person's confession."
+                ]
+              }
+            },
+            {
+              "id": "ch4_s2_reconstruction_014",
+              "speaker": "narrator",
+              "text": "Tomas catches your pencil before it rolls into the chart's curled edge. He sets it beside the source register, then asks you to read the two headings once more. This time he does not correct either. You keep the crossed-out arrow visible in the working notes. It records a mistake you made and checked, rather than one a later reader must unknowingly inherit."
             },
             {
               "id": "ch4_s2_b007",
@@ -6999,7 +7112,7 @@
             {
               "id": "ch4_s3a_b032",
               "speaker": "narrator",
-              "text": "As you leave the office, the man who retrieved the wrong bag earlier calls out that someone found him a dry sweater. It is too large, he says, but warm. Nessa raises a hand. There will be plenty to discuss tomorrow about communication, transport, and the way the service door bypassed check-in. Tonight, a person is warm, a record is corrected, and the route ahead is clear."
+              "text": "As you leave the office, the man who left his bag behind earlier calls out that someone found him a dry sweater. It is too large, he says, but warm. Nessa raises a hand. There will be plenty to discuss tomorrow about communication, transport, and the way the service door bypassed check-in. Tonight, a person is warm, a record is corrected, and the route ahead is clear."
             },
             {
               "id": "ch4_s3a_b033",
@@ -7018,7 +7131,12 @@
                   "Assume both names refer to the same person."
                 ],
                 "correctIndex": 1,
-                "explanation": "The second identifier prevents a false duplicate and an inaccurate headcount."
+                "explanation": "The second identifier prevents a false duplicate and an inaccurate headcount.",
+                "optionFeedback": [
+                  "Nessa leaves both rows visible. 'A cleaner total is not a checked arrival.' Deleting a row before comparing the household codes could remove a different adult from the follow-up list. Keep both entries while identities and current locations are confirmed.",
+                  "",
+                  "Tomas points to the two household codes. 'The names resemble each other. These references don't.' Similar spelling does not establish one identity or put either person at the hall. Check each person and their arrival before treating the list as complete."
+                ]
               }
             }
           ]

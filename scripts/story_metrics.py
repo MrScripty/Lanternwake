@@ -13,6 +13,7 @@ report = {
     "authoredMainPathWords": words, "chapters": len(chapters), "scenes": len(scenes),
     "beats": len(beats), "activities": sum("activity" in b for b in beats),
     "conversations": sum("conversation" in b for b in beats),
+    "authoredExchanges": sum("exchange" in b for b in beats),
     "readingMinutesAt150Wpm": round(words / 150, 1),
     "readingMinutesAt180Wpm": round(words / 180, 1),
     "readingMinutesAt220Wpm": round(words / 220, 1), "playtested": False,
