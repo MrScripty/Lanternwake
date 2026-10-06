@@ -188,8 +188,11 @@ def main():
             fixture.released.set()
             time.sleep(.8)
             game.check('pumas search results' not in game.visible(), 'late lookup cannot reopen a dismissed setup window')
+            game.check(game.slots() == before, 'accepted, rejected and cancelled setup paths leave player slots untouched')
             game.click('Save')
-            game.check(game.slots() == before, 'accepted, rejected and cancelled setup paths leave story, transcript and save slots unchanged')
+            saved = game.slots()
+            game.check(saved['save.json'] == before['save.json'] and saved['save.previous.json'] == before['save.json'],
+                       'explicit Save preserves exact story and transcript bytes and rotates the expected identical backup')
             game.check(len(fixture.requests) == 7, 'cancelled lookup does not replay or acquire')
             game.quit()
     finally:
