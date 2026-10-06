@@ -945,12 +945,13 @@ size = Vector3(0.09, 3.8, 0.12)
 [sub_resource type="BoxMesh" id="BoxMesh_bell_mark"]
 size = Vector3(0.3, 0.055, 0.15)
 
-[node name="LanternRoom" type="Node3D" unique_id=791372443 node_paths=PackedStringArray("StoryCamera", "Atmosphere", "KeyLight", "CastOrigin", "BellBody", "BellReleaseCamera", "BellSuspension")]
+[node name="LanternRoom" type="Node3D" unique_id=791372443 node_paths=PackedStringArray("StoryCamera", "Atmosphere", "KeyLight", "CastOrigin", "PerformanceFocus", "BellBody", "BellReleaseCamera", "BellSuspension")]
 script = ExtResource("1_ntfim")
 StoryCamera = NodePath("StoryCamera")
 Atmosphere = NodePath("IslandAtmosphere")
 KeyLight = NodePath("Moonlight")
 CastOrigin = NodePath("CastOrigin")
+PerformanceFocus = NodePath("Scenery/CounterweightInstallation")
 BellBody = NodePath("Scenery/CounterweightInstallation/CounterweightBell")
 BellDescentStartBeatId = "ch5_s3_b004"
 BellDescentFlowBeatId = "ch5_s3_b005"

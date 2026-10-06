@@ -12,6 +12,7 @@ public partial class StageScene : Node3D
     [Export] public WorldEnvironment Atmosphere { get; set; } = null!;
     [Export] public DirectionalLight3D KeyLight { get; set; } = null!;
     [Export] public Node3D CastOrigin { get; set; } = null!;
+    [Export] public Node3D? PerformanceFocus { get; set; }
     [Export] public Node3D? BellBody { get; set; }
     [Export] public Vector3 BellLoweredOffset { get; set; } = new(0, -2.1f, 0);
 

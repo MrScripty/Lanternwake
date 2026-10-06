@@ -19,6 +19,8 @@ public partial class StageDirector : Node3D
     [Export] public PackedScene Nessa { get; set; } = null!;
     [Export] public PackedScene Tomas { get; set; } = null!;
     [Export] public PackedScene Sera { get; set; } = null!;
+    [ExportGroup("Authored performance")]
+    [Export] public PerformanceDirection? Performance { get; set; }
 
     private readonly List<Node3D> _actors = new();
     private StageScene? _stage;
@@ -101,6 +103,38 @@ public partial class StageDirector : Node3D
     {
         ArgumentNullException.ThrowIfNull(cues);
         _stage?.ApplyAuthoredCues(cues, currentCue, currentBeatId, playTransition);
+    }
+
+    public void ApplyPerformance(string sceneId, string beatId, string speakerId)
+    {
+        var actors = _actors.OfType<StageCharacter>().ToArray();
+        var directed = Performance?.SceneIds.Contains(sceneId) == true;
+        var resting = Performance?.RestingSceneIds.Contains(sceneId) == true;
+        var still = Performance?.StillSceneIds.Contains(sceneId) == true;
+        string? workerId = null;
+        if (directed) Performance!.WorkingBeatActors.TryGetValue(beatId, out workerId);
+        var speaker = actors.FirstOrDefault(actor => actor.CharacterId == speakerId);
+        var worker = actors.FirstOrDefault(actor => actor.CharacterId == workerId);
+        var focus = worker ?? speaker;
+        foreach (var actor in actors)
+        {
+            StageCharacter.PoseFamily? family = !directed ? null : actor == worker || (!resting && actor == speaker)
+                ? StageCharacter.PoseFamily.Working : resting ? StageCharacter.PoseFamily.Resting : StageCharacter.PoseFamily.Listening;
+            float turn = 0;
+            if (directed)
+            {
+                // Listener attention belongs to a living speaker/worker; recorded
+                // voices and object work use the authored fixed focus instead.
+                var target = focus != null && focus != actor ? focus.GlobalPosition : _stage?.PerformanceFocus?.GlobalPosition;
+                if (target is { } position)
+                {
+                    var direction = actor.GlobalBasis.Inverse() * (position - actor.GlobalPosition);
+                    if (new Vector2(direction.X, direction.Z).LengthSquared() > .001f)
+                        turn = Mathf.RadToDeg(Mathf.Atan2(direction.X, direction.Z));
+                }
+            }
+            actor.ApplyPose(family, turn, still);
+        }
     }
 
     private void ClearActors()

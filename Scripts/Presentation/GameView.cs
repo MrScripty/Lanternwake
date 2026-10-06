@@ -143,6 +143,7 @@ public partial class GameView : Node
         Audio.ApplyBeatCue(_session.Beat.Id, _session.Beat.StageCue, playAudioCue);
         if (_lastScene != scene.Id) { _stage.ShowLocation(scene.Location, scene.TimeOfDay, scene.CharacterIds); _lastScene = scene.Id; }
         _stage.ApplyAuthoredCues(_session.ActiveStageCues, _session.Beat.StageCue, _session.Beat.Id, playAudioCue);
+        _stage.ApplyPerformance(scene.Id, _session.Beat.Id, _session.Beat.Speaker);
         _chapter.Text = (_previewMode ? "AUTHOR PREVIEW · " : "") + _session.Chapter.Title.ToUpperInvariant();
         _place.Text = scene.Title + "  ·  " + scene.TimeOfDay.Replace('_', ' ');
         _speaker.Text = DisplayName(_session.Beat.Speaker);
