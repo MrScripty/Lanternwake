@@ -41,6 +41,8 @@ public partial class FamilyExchangeQualification : Node
             Check(ProjectSettings.GlobalizePath("user://").StartsWith(root + Path.DirectorySeparatorChar, StringComparison.Ordinal), "owned save boundary");
             _game = GD.Load<PackedScene>("res://Scenes/Main.tscn").Instantiate<GameView>(); AddChild(_game); await Frame();
             var preview = Observe<SessionStorage>("_storage").Mode == SessionMode.AuthorPreview;
+            var expected = System.Environment.GetEnvironmentVariable("LANTERNWAKE_FAMILY_EXCHANGE_EXPECTED_MODE");
+            Check(expected is "player" or "preview" && preview == (expected == "preview"), "Family exchange launch mode does not match the expected test mode.");
             if (!preview) LoadTarget();
             Check(Session.Beat.Id == "ch4_s1a_b035", "target reached through Load or isolated author preview");
             Press("SettingsButton"); Action("Larger reading text"); Action("Larger reading text");
