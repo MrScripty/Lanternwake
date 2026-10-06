@@ -6255,6 +6255,76 @@
               "text": "Exactly. The measurement could be accurate while the response was wrong. A forecast of water is not a command to send a boat east."
             },
             {
+              "id": "ch4_s2_reconstruction_001",
+              "speaker": "narrator",
+              "text": "You bring the public summary back to the table. Beside it you put the Channel A log, the corrected chart, and the photograph of Ivo's instruction to use the issued version. Four sources, each with its own reference. You have been looking at them for hours. Now you need to see whether you can explain their relation without borrowing certainty from his voice."
+            },
+            {
+              "id": "ch4_s2_reconstruction_002",
+              "speaker": "ada",
+              "text": "The summary says the west vessel was told to hold at 21:04. The log says WEST LEVEL HOLDING. We've established that those are different statements."
+            },
+            {
+              "id": "ch4_s2_reconstruction_003",
+              "speaker": "tomas",
+              "text": "Keep the channel letter with the words. Someone reading the summary alone doesn't get that distinction."
+            },
+            {
+              "id": "ch4_s2_reconstruction_004",
+              "speaker": "narrator",
+              "text": "You copy A beside the measurement. Then you read the next entry, B: AWAIT HARBOR. You leave that line intact too. It records what was awaited; it does not supply a vessel order hidden between the words."
+            },
+            {
+              "id": "ch4_s2_reconstruction_005",
+              "speaker": "ada",
+              "text": "Could the wrong instruction have come from a chart error? If they thought the west approach wasn't there—"
+            },
+            {
+              "id": "ch4_s2_reconstruction_006",
+              "speaker": "nessa",
+              "text": "That's the issued route problem. The corrected chart gives them a sheltered approach to consider. It doesn't turn a water reading into an instruction. We need to show both failures."
+            },
+            {
+              "id": "ch4_s2_reconstruction_007",
+              "speaker": "narrator",
+              "text": "You have drawn one arrow between the summary and the missing chart. You rub it out. In its place you write two headings: what the crew were told, and what the public were later told about the crew. The page looks messier. Nessa rotates it so she can read the small lettering."
+            },
+            {
+              "id": "ch4_s2_reconstruction_008",
+              "speaker": "ada",
+              "text": "Ivo suppressed the corrected chart. He allowed the false hold claim to stand. Saying he suppressed both would get the direction of the second act wrong."
+            },
+            {
+              "id": "ch4_s2_reconstruction_009",
+              "speaker": "tomas",
+              "text": "And make it sound as though the falsehood was something he kept out of print. It was what people were left to read."
+            },
+            {
+              "id": "ch4_s2_reconstruction_010",
+              "speaker": "narrator",
+              "text": "You check the omission note against the chart heading and retain its exact wording beneath the first claim. Under the second you cite the public summary, the channel log, and the point in the complete deposition where Ivo says there was no vessel hold. The same testimony can support a correction without becoming the only source for it."
+            },
+            {
+              "id": "ch4_s2_reconstruction_011",
+              "speaker": "sera",
+              "text": "What can this page say about the editor?"
+            },
+            {
+              "id": "ch4_s2_reconstruction_012",
+              "speaker": "ada",
+              "text": "That the published exhibit used the issued version and the summary carried the false claim. Not that we've established what every person handling those pages knew."
+            },
+            {
+              "id": "ch4_s2_reconstruction_013",
+              "speaker": "tomas",
+              "text": "Then leave that question open for review. We don't need to invent another confession to say the crew didn't disobey an order that wasn't there."
+            },
+            {
+              "id": "ch4_s2_reconstruction_014",
+              "speaker": "narrator",
+              "text": "Tomas catches your pencil before it rolls into the chart's curled edge. He sets it beside the source register, then asks you to read the two headings once more. This time he does not correct either. You keep the crossed-out arrow visible in the working notes. It records a mistake you made and checked, rather than one a later reader must unknowingly inherit."
+            },
+            {
               "id": "ch4_s2_b007",
               "speaker": "narrator",
               "text": "Nessa lays the modern repeat-back protocol beside the old handover. On one page, named people acknowledge specific instructions. On the other, responsibility sits in the passive voice: the warning will be relayed, the channel will be monitored, the route will be confirmed. No sentence says by whom."
@@ -6999,7 +7069,7 @@
             {
               "id": "ch4_s3a_b032",
               "speaker": "narrator",
-              "text": "As you leave the office, the man who retrieved the wrong bag earlier calls out that someone found him a dry sweater. It is too large, he says, but warm. Nessa raises a hand. There will be plenty to discuss tomorrow about communication, transport, and the way the service door bypassed check-in. Tonight, a person is warm, a record is corrected, and the route ahead is clear."
+              "text": "As you leave the office, the man who left his bag behind earlier calls out that someone found him a dry sweater. It is too large, he says, but warm. Nessa raises a hand. There will be plenty to discuss tomorrow about communication, transport, and the way the service door bypassed check-in. Tonight, a person is warm, a record is corrected, and the route ahead is clear."
             },
             {
               "id": "ch4_s3a_b033",

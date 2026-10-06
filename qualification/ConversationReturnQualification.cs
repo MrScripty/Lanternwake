@@ -190,7 +190,7 @@ public partial class ConversationReturnQualification : Node
                 Check(Session.Beat.Id != before, "actual Continue advances required plot");
             }
             Check(closedOnly || _conversations == (preview ? 1 : 28), "all expected authored conversation points qualified");
-            Check(preview || closedOnly || _beats == 1424, "entire required story reached via controls");
+            Check(preview || closedOnly || _beats == Observe<Story>("_story").Chapters.Sum(c => c.Scenes.Sum(s => s.Beats.Length)), "entire required story reached via controls");
             GD.Print("LANTERNWAKE_CONVERSATION_RETURN_OK " + JsonSerializer.Serialize(new { preview, closedOnly, checks = _checks, conversations = _conversations, nativeBeats = _beats }));
             Press("SettingsButton"); Action("Quit game");
         }

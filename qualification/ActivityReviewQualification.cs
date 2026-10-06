@@ -189,7 +189,7 @@ public partial class ActivityReviewQualification : Node
                 Check(Session.Beat.Id != before, "actual Continue advances canonical beat after explicit answer");
             }
             Check(_activities == (preview ? 1 : 23), "all expected authored evidence activities independently reviewed");
-            Check(_beats == (preview ? 1 : 1424), "all expected authored beats reached through native controls");
+            Check(_beats == (preview ? 1 : _story.Chapters.Sum(c => c.Scenes.Sum(s => s.Beats.Length))), "all expected authored beats reached through native controls");
             GD.Print("LANTERNWAKE_ACTIVITY_REVIEW_OK " + JsonSerializer.Serialize(new { preview, checks = _checks, activities = _activities, nativeBeats = _beats }));
             Press("AdvanceButton"); Action("Quit game");
         }
