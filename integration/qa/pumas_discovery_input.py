@@ -6,8 +6,27 @@ from pathlib import Path
 import threading
 import time
 
-from normal_player import digest, normalized
-from pumas_unavailable_input import SettledPlayer
+from normal_player import NormalPlayer, digest, normalized
+
+
+class SetupPlayer(NormalPlayer):
+    def words(self, path=None):
+        # Keep OCR bounding boxes while allowing repo/quant punctuation to form
+        # multiple normalized words within a single OCR token.
+        return [[dict(row, text=word) for row in group for word in normalized(row['text']).split()]
+                for group in super().words(path)]
+
+    def click(self, caption):
+        deadline = time.monotonic() + 2
+        while True:
+            try:
+                super().click(caption)
+                time.sleep(.5)
+                return
+            except RuntimeError as error:
+                if 'OCR control' not in str(error) or time.monotonic() >= deadline:
+                    raise
+                time.sleep(.2)
 
 
 class Fixture:
@@ -66,7 +85,8 @@ class Fixture:
 def reach(game, caption):
     for _ in range(18):
         try:
-            game.click(caption)
+            NormalPlayer.click(game, caption)
+            time.sleep(.5)
             return
         except RuntimeError as error:
             if 'OCR control' not in str(error):
@@ -103,7 +123,7 @@ def main():
     parser.add_argument('--percent', choices=[100, 150], type=int, required=True)
     args = parser.parse_args()
     fixture = Fixture()
-    game = SettledPlayer(args.display_state, args.fixture, args.output)
+    game = SetupPlayer(args.display_state, args.fixture, args.output)
     game.env['LANTERNWAKE_PUMAS_URL'] = fixture.url
     game.result['controllerSha256'] = digest(__file__)
     game.result['limits'] = ['Controlled source-derived Pumas RPC fixture; no live Pumas acquisition/inference, HF request, downloaded model/runtime, physical input or human-duration acceptance.']
