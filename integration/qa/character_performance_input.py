@@ -48,6 +48,7 @@ def main():
         capture_settled(game, 'recovered-working', beat)
         if not catalogue:
             game.key('Return'); runtime_state(game, next_beat)
+            capture_settled(game, 'ada-speaking-nessa-listening', next_beat)
             game.key('Return'); runtime_state(game, following)
             capture_settled(game, 'nessa-speaking-ada-listening', following)
         game.quit()
