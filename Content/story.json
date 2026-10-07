@@ -2370,7 +2370,12 @@
                   "The published inquiry summary."
                 ],
                 "correctIndex": 0,
-                "explanation": "Channel A records hydrographic measurements; Channel B carries harbor instructions."
+                "explanation": "Channel A records hydrographic measurements; Channel B carries harbor instructions.",
+                "optionFeedback": [
+                  "Ada: Tomas described A as measurement reports, and the log records WEST LEVEL HOLDING under A. That is a water-level entry, separate from the spoken harbor instructions on B.",
+                  "Ada: Tomas put spoken harbor instructions on B. The log places WEST LEVEL HOLDING under A; treating that measurement as a vessel order would mix the two sources.",
+                  "Ada: The inquiry summary is a later written account. Tomas described A as a measurement input; a summary about the recording is separate from what that input carried."
+                ]
               }
             }
           ]
@@ -2840,7 +2845,12 @@
                   "Transcription can hide overlap, uncertain words, and editorial choices."
                 ],
                 "correctIndex": 2,
-                "explanation": "Source links and explicit conventions let another reader check those choices."
+                "explanation": "Source links and explicit conventions let another reader check those choices.",
+                "optionFeedback": [
+                  "Ada: We compared the written paragraph with the recorded passage. The text was not wholly false; keeping the sound lets us check where overlap and punctuation made it too confident.",
+                  "Ada: The recording still has overlap and uncertain words. Tomas marks those gaps rather than supplying a later explanation as the speaker's words; keeping the source does not settle every interpretation.",
+                  "Ada: Tomas marks uncertain words, omissions and overlap, and keeps a source link. Those conventions let another reader check what the transcript chose to represent."
+                ]
               }
             }
           ]
@@ -3029,7 +3039,12 @@
                   "It predicts tomorrow's wind."
                 ],
                 "correctIndex": 1,
-                "explanation": "The correction changes route information available to operators. It is not a forecast."
+                "explanation": "The correction changes route information available to operators. It is not a forecast.",
+                "optionFeedback": [
+                  "Ada: The old chart marks a sheltered west approach that the printed evacuation plan omits. Those route details matter to the comparison, rather than the appearance of the coastline.",
+                  "Ada: The old chart marks a sheltered west route past the workboat mooring. The issued evacuation plan sends craft around the eastern wall; that difference matters to the route information available to operators.",
+                  "Ada: The chart records an approach, not tomorrow's wind. Nessa keeps forecasts separate from orders, and she has told us the passage is not navigable at every tide."
+                ]
               }
             }
           ]
@@ -3895,7 +3910,12 @@
                   "Nobody can ever move a cup."
                 ],
                 "correctIndex": 0,
-                "explanation": "The match is evidence to investigate. It creates no rule against intervention and no moral command."
+                "explanation": "The match is evidence to investigate. It creates no rule against intervention and no moral command.",
+                "optionFeedback": [
+                  "Ada: The line was printed yesterday, and the recording shows the cup breaking within the stated minute. That match is documented; how the advance information arrived is still a question.",
+                  "Ada: We set a stop condition before observing. A prediction matching this break has not earned the right to command our hands; it remains evidence to investigate.",
+                  "Ada: Sera said we could put the cup on the floor and observe that intervention. We chose a guarded observation, with a stop condition for danger. That procedure creates no rule that a cup cannot be moved."
+                ]
               }
             }
           ]
