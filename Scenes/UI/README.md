@@ -9,6 +9,9 @@ under `Main.tscn > Interface`; the `Lanternwake` root's Inspector holds its
   panel backgrounds and button states. The HUD and modal shell share it.
 - Edit `ModalWindow.tscn` for history, catalogue, settings, load and evidence
   dialog layout. Its content and available actions are supplied at runtime.
+  Its hidden `HistoryTools` contains the editable search, latest-entry, chapter
+  and reached-count rows; only the History reader shows it. Chapter entries come
+  from authoritative metadata for the currently recorded transcript.
 - Edit `ChoiceButton.tscn` for suggested replies and evidence/action rows.
   Only their count, text and callbacks are generated from current story data.
 - Edit `MicrophoneConsent.tscn` for the existing local-recording confirmation.

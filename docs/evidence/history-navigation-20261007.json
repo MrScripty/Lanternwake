@@ -1,0 +1,55 @@
+{
+  "baseCommit": "f5d50d5ed16f02978faa1cf521c7fcd888f369df",
+  "verifiedSourceCommit": "fa65570eeebf18df3ed285e9ffe6103896f8d391",
+  "branch": "feat/history-navigation-f5d50d5",
+  "scope": "Reached/restored History only: literal case-insensitive text/speaker search, latest entry and authoritative reached chapter jumps.",
+  "core": {
+    "assertions": 4552,
+    "authoredBeats": 1439,
+    "chapters": 5
+  },
+  "aggregate": {
+    "command": "bash scripts/verify.sh",
+    "exitCode": 0,
+    "log": "/workspace/history-navigation-aggregate-candidate.log",
+    "sha256": "b0a13282187b7216273254cb9af6e528406723466eeac597c12fff0bc0b0a6e4"
+  },
+  "native": {
+    "path": "/workspace/Lanternwake/artifacts/history-navigation/1791375193185376567",
+    "prepareChecks": 112,
+    "freshProcessChecks": 111,
+    "receiptSha256": "784917c7cc1e6e71ce45fb35a99aac418f25a09bf105da78629d90becaf5bd5d",
+    "warnings": 0,
+    "errors": 0
+  },
+  "graphical": {
+    "path": "/workspace/history-navigation-input-evidence12",
+    "receiptSha256": "303d29bc5e6557a19945165b5eae9fcebd506ce5f3350718c0b6936bd360060e",
+    "checks": 48,
+    "events": 296,
+    "images": 41,
+    "exitCode": 0,
+    "sourceUnchanged": true,
+    "allNewSourceBindingsMatch": true,
+    "nativeDllSha256": "08b8b2cec648cd53bd9dd2ad4e150902ed34e9d80d9dcb128fb46453c53179bd",
+    "savedSlotsSha256": {
+      "save.json": "d1e6e233a4efe8b0b4698c96227db423d610793ba67f66ff36666ffb65ea2dd2",
+      "autosave.json": "ce48bd80b1cd3db0ceaf4df58dd7c417a7e7840b3047ec8991e38954b80407b2"
+    }
+  },
+  "unchangedCanonicalStorySha256": "9b54754fb1688d24bf7aa09b5ff43ecf7b9bb95c47c71198be0a437eba6f7e6f",
+  "sourceManifest": "/workspace/history-navigation-source-manifest.json",
+  "independentReview": "/workspace/history-navigation-independent-review.txt",
+  "limits": [
+    "Synthetic X11 and Godot joypad events do not qualify physical devices or controller hardware.",
+    "Software-rendered native layout and headless regressions do not qualify performance, every platform or assistive tools.",
+    "Real model responses, voice/microphone qualification, human editorial and duration acceptance remain separate."
+  ],
+  "publicWrites": false,
+  "exports": false,
+  "modelDownloads": false,
+  "credentialsAccessed": false,
+  "priorEvidence": "Older tracked evidence unchanged; previous attempt logs and captures retained separately.",
+  "independentReviewSha256": "8d3b0ac0d14b002457b085637d52910b4bc08452dedf859a320c8ef7afa460d7",
+  "trackedIndependentReview": "docs/evidence/history-navigation-independent-review-20261007.txt"
+}

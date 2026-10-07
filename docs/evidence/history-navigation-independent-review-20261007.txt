@@ -1,0 +1,174 @@
+Independent History navigation candidate review — 2026-10-07
+
+Current conclusion: no production source blocker found at local commit
+230852478734b28757522320f2dd12b25e62f526. Reviewed final popup-font polish and
+subsequent fixture-only shutdown change. Final complete candidate is
+fa65570eeebf18df3ed285e9ffe6103896f8d391. Final aggregate reaches all success
+markers including 13 Editor roundtrips with no WARNING/ERROR output (parent's
+execution reports exit 0). Strict native artifact 1791375193185376567 passes
+112 preparation / 111 fresh-process checks, both exit 0 and clean logs. Final
+graphical run12 passes 48 checks / 296 events / 41 images, exit 0, unchanged
+sources and exact slot hashes. All 283 manifest source hashes match both the
+run12 receipt and current disk; native DLL hashes match. Final 150% latest and
+scaled chapter-popup images were visually reviewed: readable prose, reachable
+Close, and only restored reached chapters. Software/native-input functional
+acceptance is supported; no review blocker remains. Earlier findings and rejected
+runs below are retained as history. Physical device/controller, real-model,
+voice/hearing, human-duration and editorial acceptance remain separate.
+
+Base reviewed: f5d50d5ed16f02978faa1cf521c7fcd888f369df.
+Reviewed local working-tree HistoryNavigation.cs, GameView.History.cs,
+activity/completion integration, core tests, native qualification, evidence runner,
+and aggregate integration. No source blocker found for this candidate.
+
+Boundaries and state: Search consumes only actual session.History transcript text
+and displayed speaker names. It does not consume authored future prose or
+unchosen reply text. Chapter navigation maps recorded BeatIds to authoritative
+Story chapter metadata and exposes only chapters represented in the transcript;
+missing metadata does not invent a chapter. Opening builds a fresh read-only
+projection, so an earlier restore replaces the visible latest/chapter boundary.
+No choice, inventory, facts, save/load format, or story advancement mutation was
+introduced by the reader. The qualification checks exact snapshot/unlock and
+save-file byte preservation.
+
+Lifecycle: Window ownership, validity, queued deletion and shutdown are checked
+before async jump completion. Render revisions retire jumps when search changes.
+Tests cover close/reopen, earlier load, competing search, and shutdown while a
+jump is pending. The completion qualification now exercises the renamed Close
+return control; the aggregate includes the new History runner. Unique timestamped
+fixture directories preserve earlier evidence on repeated runs.
+
+Focus/layout: Reviewed actual Window.PushInput Tab/Shift-Tab and joypad assertions
+for latest -> chapters -> reading scrollbar -> Close, no-results skipping the
+hidden scrollbar, returned story focus, and 640x480 geometry at 100%/150% reading
+size. Scrollbar Up/Down retains reading behavior; Right reaches Close.
+
+Evidence independently read:
+  artifacts/history-navigation/1791373834485992949/prepare.log
+    LANTERNWAKE_HISTORY_NAVIGATION_OK checks=106 prepare=1
+  artifacts/history-navigation/1791373834485992949/fresh-process.log
+    LANTERNWAKE_HISTORY_NAVIGATION_OK checks=105 prepare=0
+  Both logs show Godot 4.6.3 official .NET and no ERROR output; receipt exit codes 0.
+Independent core execution (official local .NET, activated environment):
+  dotnet run --no-build --project tests/Lanternwake.Tests.csproj -- Content/story.json
+  PASS 4552 assertions; 1439 authored beats, 5 chapters.
+git diff --check passed.
+
+Limits at review time: Full aggregate and external X11 graphical normal-player
+100%/150% observations are still pending. Window.PushInput tests exercise native
+Godot GUI handling but are not physical controller/device acceptance. No model,
+voice, or human editorial acceptance is established. Prior guided-descent tests
+and retained evidence do not implement or establish acceptance of this new
+History feature. No public writes performed by reviewer.
+
+Final scene-binding addendum:
+Reviewed editor-authored HistoryTools/Search/Latest/Chapter/Count nodes in
+Scenes/UI/ModalWindow.tscn and updated scene-unique bindings in
+GameView.History.cs. Names/types match, HistoryTools is hidden by default for
+other modal uses, and the reader reveals that container and registers each
+text control with the existing reading-size style. Each opening still creates
+a fresh modal, so chapter items and callbacks do not accumulate across readers.
+Empty transcripts now focus Search when Latest is disabled. No new state,
+spoiler, lifecycle, or scene-binding blocker found. git diff --check remains
+clean. Fresh native/aggregate reruns and external X11 graphical observations
+are underway and are not established by this addendum.
+
+Final native evidence addendum:
+Re-read unchanged production source and new empty-transcript checks. Reviewed
+artifacts/history-navigation/1791374360813715882 and the final aggregate's
+feature subsection artifacts/history-navigation/1791374604132856941. Both
+receipts record exit 0 and 108 preparation / 107 fresh-process checks, including
+disabled Latest/chapter navigation with safe Search focus and no fabricated
+history for an empty restored transcript. These supersede the earlier feature
+check counts. Core coverage includes selected exchange/optional transcript
+search; the early native chapter-2 seed is not claimed to contain the later
+family exchange.
+
+Raw-log caveat: ObjectDB instances leaked at exit WARNING appears in both logs
+of the targeted 1791374360813715882 run and in the aggregate feature
+1791374604132856941/fresh-process.log. Assertions and exit statuses pass, and no
+ERROR lines appear, but these logs are not warning-free. Transient native input
+event ownership at immediate qualification exit is a candidate for investigation;
+the leak's cause has not been established by this review. Full aggregate and
+X11 graphical acceptance remain pending. No additional production blocker found.
+
+Production-commit and shutdown addendum:
+OptionButton's separate native PopupMenu now receives a proportional font-size
+override at non-default reading size. Fresh modal creation prevents cumulative
+scaling, and new native checks assert popup row font sizes at 100%/150%. No
+story/search/chapter boundary changes accompany this presentation correction.
+
+The intermittent prior warning was diagnosed in the retained verbose fixture
+log history-navigation-leak-diagnostic-prepare.log as AudioStreamWAV and
+AudioStreamPlaybackWAV references. The qualification now exits through actual
+Settings -> Quit game, which invokes the existing operation/audio drain rather
+than abrupt GetTree.Quit. Failure cleanup also retires audio. Test-owned input
+events are explicitly disposed. The strict runner rejects both WARNING and
+ERROR lines. Final targeted 1791374955492698528 logs are clean; earlier warning
+evidence remains intact and is not relabeled clean.
+
+Reviewed /workspace/history-navigation-input-evidence9/receipt.json: passed true,
+exitCode 0, sourceUnchanged true, 48 checks, 295 events, 41 images, exact manual
+and automatic slot hashes. Viewed history-150-0-latest.png and
+history-150-0-chapters.png: toolbar/prose/Close fit and selector shows only
+The Inventory / The Wrong Channel. This run precedes popup-row font polish;
+post-polish graphical run10 remains the final binding check. Run9's source map
+does not include the then-untracked new GameView.History.cs file, although its
+native DLL hash binds the tested binary. Post-commit run10 should bind all new
+tracked source files. Prior aggregate logs reach all final Editor success markers;
+parent reports both exit 0. A final aggregate on updated fixture shutdown remains
+pending. No public writes performed by reviewer.
+
+External-observer addendum:
+Reviewed commit a9047f0b0af7bdc48aab3ca62c9b8d2d762c12a1, which changes only
+desktop observation. Production/fixture source is a3e6d08c1a2158608fbb460390d37c4b41aec0b3;
+production remains the reviewed 2308524 implementation. wait_reader_text polls
+the cropped native record body for the same expected restored transcript text,
+with a bounded deadline and retained settling images. It does not alter gameplay
+or weaken the expected-text assertion. This matches Jump's actual asynchronous
+frame-based completion more faithfully than a fixed 0.4-second screenshot delay
+under contended software rendering. No new blocker found in observer change.
+
+Graphical run10 is retained rejected: early capture preceded Jump settlement and
+the source guard also rejected concurrent fixture changes. It does not establish
+post-polish acceptance. Stable post-commit graphical run11 is underway, and its
+tracked source map should now include all new History source/scene/test files,
+including GameView.History.cs and the committed observer. That source map and
+the final strict aggregate must be checked before claiming final acceptance.
+
+Latest observer addendum:
+Reviewed fa65570eeebf18df3ed285e9ffe6103896f8d391: extends the same bounded
+actual-pixel polling to search reader reflow, chapter popup appearance, and first
+chapter jump settlement. No input is retried, no content is synthesized, and all
+positive reached-text and negative future-chapter expectations remain identical.
+The popup loop retains each attempt's capture and checks its deadline; failure
+still reaches the unchanged assertion. No new blocker found. Production source
+remains 230852478734b28757522320f2dd12b25e62f526, C# fixture remains
+a3e6d08c1a2158608fbb460390d37c4b41aec0b3. Run11 is retained without acceptance;
+stable-source graphical run12 now supplies the pending final source/binary/image
+binding. Aggregate candidate feature receipt 1791375193185376567 independently
+read: strict native 112/111 checks, both exit 0. Final aggregate completion and
+run12 acceptance remain pending.
+
+Final acceptance evidence (supersedes earlier pending statements):
+Independently read /workspace/history-navigation-aggregate-candidate.log in full
+for WARNING/ERROR counts (both zero) and final Editor success marker scenes=13.
+The parent reports the aggregate process exited 0. Strict feature preparation
+and fresh-process logs at 1791375193185376567 are clean and pass 112/111 checks.
+Read /workspace/history-navigation-input-evidence12/receipt.json: passed=true,
+exitCode=0, sourceUnchanged=true, baseCommit=fa65570eeebf18df3ed285e9ffe6103896f8d391,
+48 checks, 296 events, 41 images. Compared all 283 tracked source hashes against
+/workspace/history-navigation-source-manifest.json and disk: no mismatches;
+receipt and manifest nativeDllSha256 both equal
+08b8b2cec648cd53bd9dd2ad4e150902ed34e9d80d9dcb128fb46453c53179bd.
+Final exact save hashes remain:
+  save.json d1e6e233a4efe8b0b4698c96227db423d610793ba67f66ff36666ffb65ea2dd2
+  autosave.json ce48bd80b1cd3db0ceaf4df58dd7c417a7e7840b3047ec8991e38954b80407b2
+Visually viewed run12 history-150-1-chapters-0.png and
+history-150-1-latest-settling-0.png. Popup rows now scale with reading size;
+only The Inventory/The Wrong Channel appear; latest displays the actual earlier
+restored chapter-2 entry; toolbar/prose/Close remain readable and within modal.
+No blocker remains for the implemented/reviewed scope. This supports synthetic
+native/X11 functional acceptance, not physical-controller/device, model, voice,
+hearing, human-duration or editorial acceptance. Rejected/earlier evidence is
+preserved. Reviewer made no source edits or public writes.
