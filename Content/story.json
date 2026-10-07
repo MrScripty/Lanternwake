@@ -778,12 +778,12 @@
                   "Whichever path looks shortest."
                 ],
                 "correctIndex": 1,
-                "explanation": "Nessa identifies the inland road; conditions still require current checks.",
-                "optionFeedback": [
-                  "Nessa: The cliff steps are for maintenance access and stay locked to visitors. They aren't our agreed route to the house in bad weather.",
-                  "Nessa: The inland road stays above the storm surge. That's the route we agreed on, unless current conditions change.",
-                  "Nessa: The steep path is quicker, but distance isn't the check we're making. The inland road stays above the storm surge; we still check current conditions."
-                ]
+        "explanation": "Nessa identifies the inland road; conditions still require current checks.",
+        "optionFeedback": [
+          "Nessa: The cliff steps are for maintenance access and stay locked to visitors. They aren't our agreed route to the house in bad weather.",
+          "Nessa: The inland road stays above the storm surge. That's the route we agreed on, unless current conditions change.",
+          "Nessa: The steep path is quicker, but distance isn't the check we're making. The inland road stays above the storm surge; we still check current conditions."
+        ]
               }
             }
           ]
@@ -6035,11 +6035,11 @@
                 ],
                 "correctIndex": 2,
                 "explanation": "His own account establishes that specific failure, alongside the coordinator's obsolete route and later concealment.",
-                "optionFeedback": [
-                  "Ada: In the deposition, Ivo says he did not call directly when the harbor repeated the east route. He knew at 21:09 that there was no repeat-back, but kept trying to restore the routing instead.",
-                  "Ada: Ivo explicitly says there was no vessel hold at 21:04; that line was a water-level report. The crew were doing their required work. His account contradicts the summary’s claim that they disobeyed a hold.",
-                  "Ada: Ivo says he knew at 21:09 that nobody had repeated the west correction. He still had time to call directly, but spent it repairing the apparatus. That specific admission belongs beside the coordinator’s obsolete route and the later concealment."
-                ]
+            "optionFeedback": [
+              "Ada: In the deposition, Ivo says he did not call directly when the harbor repeated the east route. He knew at 21:09 that there was no repeat-back, but kept trying to restore the routing instead.",
+              "Ada: Ivo explicitly says there was no vessel hold at 21:04; that line was a water-level report. The crew were doing their required work. His account contradicts the summary’s claim that they disobeyed a hold.",
+              "Ada: Ivo says he knew at 21:09 that nobody had repeated the west correction. He still had time to call directly, but spent it repairing the apparatus. That specific admission belongs beside the coordinator’s obsolete route and the later concealment."
+            ]
               }
             }
           ]
@@ -6586,11 +6586,11 @@
                 ],
                 "correctIndex": 0,
                 "explanation": "Copies with provenance and checksums are acknowledged elsewhere, while originals remain safeguarded.",
-                "optionFeedback": [
-                  "Ada: Two off-island archives acknowledged complete copies with hashes and page counts, and Sera checked them against the local checksums. Both packets include the signed source register. The pressure machine is no longer the only place the evidence survives.",
-                  "Ada: Sera verified source copies at two off-island archives, rather than relying on the pressure machine to retain them. Those copies include provenance and checksums. Nothing in that verification says the machine will remember everything forever.",
-                  "Ada: The copies let us stop depending on the tower, not discard the originals. Sera included the signed source register in both packets and named a storage copy to go with the original reel to the hall. Preservation still matters."
-                ]
+            "optionFeedback": [
+              "Ada: Two off-island archives acknowledged complete copies with hashes and page counts, and Sera checked them against the local checksums. Both packets include the signed source register. The pressure machine is no longer the only place the evidence survives.",
+              "Ada: Sera verified source copies at two off-island archives, rather than relying on the pressure machine to retain them. Those copies include provenance and checksums. Nothing in that verification says the machine will remember everything forever.",
+              "Ada: The copies let us stop depending on the tower, not discard the originals. Sera included the signed source register in both packets and named a storage copy to go with the original reel to the hall. Preservation still matters."
+            ]
               }
             }
           ]
@@ -6865,11 +6865,11 @@
                 ],
                 "correctIndex": 2,
                 "explanation": "Relevant expertise or personal loss does not confer permission to represent every other person.",
-                "optionFeedback": [
-                  "Ada: Tomas can speak about his work and his father, but our list does not make him every family’s representative. Not all contacts were immediately reachable, and he explicitly separated publishing the operational finding from claiming their endorsement.",
-                  "Ada: The statement includes people’s work and experience, not only the instrument. Our list gives Tomas his own archival work and relationship to Ewan to describe. That is a supported role; it still does not authorize speaking for every family.",
-                  "Ada: Our four-column list gives Tomas his own archival work and relationship to Ewan to describe. It does not let him represent every family. The contacts we reached could choose copies or later contact; receiving a call is not endorsing our wording."
-                ]
+            "optionFeedback": [
+              "Ada: Tomas can speak about his work and his father, but our list does not make him every family’s representative. Not all contacts were immediately reachable, and he explicitly separated publishing the operational finding from claiming their endorsement.",
+              "Ada: The statement includes people’s work and experience, not only the instrument. Our list gives Tomas his own archival work and relationship to Ewan to describe. That is a supported role; it still does not authorize speaking for every family.",
+              "Ada: Our four-column list gives Tomas his own archival work and relationship to Ewan to describe. It does not let him represent every family. The contacts we reached could choose copies or later contact; receiving a call is not endorsing our wording."
+            ]
               }
             }
           ]
@@ -7407,11 +7407,11 @@
                 ],
                 "correctIndex": 1,
                 "explanation": "Absence of a trace is not a prediction of death, safety, or any other outcome.",
-                "optionFeedback": [
-                  "Ada: Sera said the receiver has no trace on that part of the strip. We cannot infer a death, catastrophe or instruction from absent writing. Blank paper does not tell me I must die before writing again.",
-                  "Ada: There is no recorded signal on that part of the receiving strip. Sera and Tomas kept the claim at that observation. It does not establish an outcome or add an instruction to the release checklist.",
-                  "Ada: An unmarked strip records no signal; it does not forecast harmless weather. Nessa still reads the checklist: the catch-basin is empty and isolated, the shaft gate is locked, and the remaining crew have checked in. Those checks come from current conditions, not blank paper."
-                ]
+            "optionFeedback": [
+              "Ada: Sera said the receiver has no trace on that part of the strip. We cannot infer a death, catastrophe or instruction from absent writing. Blank paper does not tell me I must die before writing again.",
+              "Ada: There is no recorded signal on that part of the receiving strip. Sera and Tomas kept the claim at that observation. It does not establish an outcome or add an instruction to the release checklist.",
+              "Ada: An unmarked strip records no signal; it does not forecast harmless weather. Nessa still reads the checklist: the catch-basin is empty and isolated, the shaft gate is locked, and the remaining crew have checked in. Those checks come from current conditions, not blank paper."
+            ]
               }
             }
           ]
