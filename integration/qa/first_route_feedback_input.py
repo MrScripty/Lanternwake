@@ -54,7 +54,7 @@ def main():
     for name in ['display-state', 'fixture', 'output', 'seed']:
         parser.add_argument('--' + name, type=Path, required=True)
     parser.add_argument('--percent', type=int, choices=[100, 125, 150], required=True)
-    parser.add_argument('--gate', choices=['ch1_s1a_evidence', 'ch1_s2_evidence', 'ch1_s2a_evidence', 'ch1_s3_evidence', 'ch1_s3a_evidence', 'ch2_s1_evidence', 'ch2_s2a_evidence', 'ch2_s3_evidence'],
+    parser.add_argument('--gate', choices=['ch1_s1a_evidence', 'ch1_s2_evidence', 'ch1_s2a_evidence', 'ch1_s3_evidence', 'ch1_s3a_evidence', 'ch2_s1_evidence', 'ch2_s2a_evidence', 'ch2_s3_evidence', 'ch2_s5_evidence'],
                         default='ch1_s1a_evidence')
     args = parser.parse_args()
     player = observe_player(FirstRoutePlayer(args.display_state, args.fixture, args.output, args.seed))

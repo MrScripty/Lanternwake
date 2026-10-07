@@ -13,7 +13,8 @@ internal static class FirstRouteFeedbackTests
             + RunCase(story, json, "ch1_s3a_evidence", "ch1_s4_b001", ["ch1_s3_evidence", "ch1_s3a_evidence"])
             + RunCase(story, json, "ch2_s1_evidence", "ch2_s2_b001", ["ch2_s1_evidence", "ch2_s2a_evidence", "ch2_s3_evidence"])
             + RunCase(story, json, "ch2_s2a_evidence", "ch2_s3_b001", ["ch2_s1_evidence", "ch2_s2a_evidence", "ch2_s3_evidence"])
-            + RunCase(story, json, "ch2_s3_evidence", "ch2_s3a_b001", ["ch2_s1_evidence", "ch2_s2a_evidence", "ch2_s3_evidence"]);
+            + RunCase(story, json, "ch2_s3_evidence", "ch2_s3a_b001", ["ch2_s1_evidence", "ch2_s2a_evidence", "ch2_s3_evidence"])
+            + RunCase(story, json, "ch2_s5_evidence", "ch3_s1_b001", ["ch2_s5_evidence"]);
     }
 
     private static int RunCase(Story story, string json, string gate, string successor, string[] previousFeedback)

@@ -3910,7 +3910,12 @@
                   "Nobody can ever move a cup."
                 ],
                 "correctIndex": 0,
-                "explanation": "The match is evidence to investigate. It creates no rule against intervention and no moral command."
+                "explanation": "The match is evidence to investigate. It creates no rule against intervention and no moral command.",
+                "optionFeedback": [
+                  "Ada: The line was printed yesterday, and the recording shows the cup breaking within the stated minute. That match is documented; how the advance information arrived is still a question.",
+                  "Ada: We set a stop condition before observing. A prediction matching this break has not earned the right to command our hands; it remains evidence to investigate.",
+                  "Ada: Sera said we could put the cup on the floor and observe that intervention. We chose a guarded observation, with a stop condition for danger. That procedure creates no rule that a cup cannot be moved."
+                ]
               }
             }
           ]
