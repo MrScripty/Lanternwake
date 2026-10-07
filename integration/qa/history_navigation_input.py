@@ -73,11 +73,21 @@ def main():
             game.result['images'][crop.name] = digest(crop)
             return normalized(' '.join(word['text'] for group in game.words(crop) for word in group))
 
+        def wait_reader_text(label, expected):
+            deadline = time.monotonic() + 12
+            attempt = 0
+            while time.monotonic() < deadline:
+                if normalized(expected) in reader_text(label + '-settling-' + str(attempt)):
+                    return True
+                attempt += 1
+                time.sleep(.3)
+            return False
+
         load(True); game.key('h'); game.wait_visible('The record')
         game.key('Return')
         time.sleep(.4)
         last = ' '.join(later['history'][-1]['text'].split()[:8])
-        game.check(normalized(last) in reader_text('later-latest'), 'latest shows the actual later-slot reached entry in the record')
+        game.check(wait_reader_text('later-latest', last), 'latest shows the actual later-slot reached entry in the record')
         game.key('Escape'); game.wait_visible('The record', False); time.sleep(.5); load(False)
         for percent in [100, 150]:
             if percent == 150:
@@ -94,7 +104,7 @@ def main():
                 game.check('in daylight' in reader_text(prefix + '-search'), 'typing filters to actually restored reached prose')
                 game.key('Tab'); game.key('Return'); time.sleep(.4)
                 last = ' '.join(early['history'][-1]['text'].split()[:8])
-                game.check(normalized(last) in reader_text(prefix + '-latest'), 'keyboard latest clears search and shows exact earlier-restored final entry')
+                game.check(wait_reader_text(prefix + '-latest', last), 'keyboard latest clears search and shows exact earlier-restored final entry')
                 # Reading focus returns to chapter, whose popup contains only reached titles.
                 game.key('Shift_L', True); game.key('Tab'); game.key('Shift_L', False)
                 game.key('Return'); time.sleep(.3)
