@@ -12,7 +12,7 @@ public partial class GameView
         Window? completion = null;
         var actions = new List<(string Text, Action Action)>
         {
-            ("Read the record", () => ShowWindow("The record", HistoryText(), [("Back to ending", () => ShowCompletion())])),
+            ("Read the record", () => ShowHistoryReader(() => ShowCompletion(), "Back to ending")),
             ("Review evidence", () => ShowWindow("Your catalogue", EvidenceText(), [("Back to ending", () => ShowCompletion())]))
         };
         if (_storage!.CanUseSaves)

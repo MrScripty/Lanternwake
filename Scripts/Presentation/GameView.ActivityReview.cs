@@ -22,10 +22,11 @@ public partial class GameView
             {
                 if (Current(review)) ShowActivity(origin);
             }
-            ShowWindow(title, text, [("Back to question", Return)], Return);
+            if (title == "The record") ShowHistoryReader(Return, "Back to question");
+            else ShowWindow(title, text, [("Back to question", Return)], Return);
             review = _modal;
             if (review is not null) review.GetNode<Button>("%ModalCloseButton").Text = "Back to question";
-            review?.GetNode<VBoxContainer>("%ModalActions").GetChild<Button>(0).GrabFocus();
+            if (title != "The record") review?.GetNode<VBoxContainer>("%ModalActions").GetChild<Button>(0).GrabFocus();
         }
 
         var actions = activity.Options.Select((option, index) => (option, (Action)(() =>

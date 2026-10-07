@@ -24,6 +24,30 @@ theme_override_constants/margin_bottom = 24
 [node name="Stack" type="VBoxContainer" parent="Margin"]
 layout_mode = 2
 
+[node name="HistoryTools" type="VBoxContainer" parent="Margin/Stack"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="HistorySearch" type="LineEdit" parent="Margin/Stack/HistoryTools"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Search reached history"
+clear_button_enabled = true
+
+[node name="HistoryLatest" type="Button" parent="Margin/Stack/HistoryTools"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Jump to latest reached entry"
+
+[node name="HistoryChapter" type="OptionButton" parent="Margin/Stack/HistoryTools"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="HistoryCount" type="Label" parent="Margin/Stack/HistoryTools"]
+unique_name_in_owner = true
+layout_mode = 2
+
 [node name="ModalText" type="RichTextLabel" parent="Margin/Stack"]
 unique_name_in_owner = true
 layout_mode = 2

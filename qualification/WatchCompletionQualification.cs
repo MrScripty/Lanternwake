@@ -85,7 +85,7 @@ public partial class WatchCompletionQualification : Node
         Action("Read the record");
         var text = Modal!.GetNode<RichTextLabel>("%ModalText").Text;
         Check(text.Contains(_story.Chapters[0].Scenes[0].Beats[0].Text) && text.Contains(Session.Beat.Text), "ending record contains first and final authored lines");
-        Action("Back to ending"); Action("Review evidence");
+        Close(); Action("Review evidence");
         text = Modal!.GetNode<RichTextLabel>("%ModalText").Text;
         Check(Session.KnownFacts.All(f => text.Contains(f.Text)) && Session.Inventory.All(i => text.Contains(i.Description)), "ending catalogue preserves all established evidence");
         Action("Back to ending");

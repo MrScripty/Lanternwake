@@ -41,6 +41,7 @@ for mode in smoke ui-smoke save-isolation-smoke audio-smoke; do
 done
 python3 integration/qa/watch_completion.py
 python3 integration/qa/activity_review.py
+python3 integration/qa/history_navigation.py
 python3 integration/qa/conversation_return.py
 python3 integration/qa/content_note.py
 python3 integration/qa/cup_states.py

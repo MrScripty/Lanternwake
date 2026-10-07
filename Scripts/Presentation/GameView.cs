@@ -324,7 +324,6 @@ public partial class GameView : Node
 
     private string HistoryText() => string.Join("\n\n", _session.History.Select(h => (DisplayName(h.Speaker) is { Length: > 0 } name ? name + (h.Generated ? " [optional local dialogue]" : "") + ":\n" : "") + h.Text));
     private string EvidenceText() => "OBJECTS\n\n" + string.Join("\n\n", _session.Inventory.Select(i => i.Name + "\n" + i.Description)) + "\n\nESTABLISHED FACTS\n\n" + string.Join("\n\n", _session.KnownFacts.Select(f => f.Text));
-    private void ShowHistory() => ShowWindow("The record", HistoryText());
     private void ShowEvidence() => ShowWindow("Your catalogue", EvidenceText());
     private void ShowWindow(string title, string text, (string Text, Action Action)[]? actions = null, Action? dismiss = null)
     {
