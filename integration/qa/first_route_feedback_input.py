@@ -1,12 +1,35 @@
 """Real Main, external input: first-route retries, focus and exact live/slot state."""
 import argparse
 from pathlib import Path
+import subprocess
 import time
 
-from normal_player import digest
+from PIL import Image
+
+from normal_player import digest, normalized
 from pumas_unavailable_input import SettledPlayer
 from source_reconstruction_input import tabs
 from bell_restore_observation import observe_player, runtime_state
+
+
+class FirstRoutePlayer(SettledPlayer):
+    def wait_visible(self, caption, present=True):
+        if caption != 'Check the source':
+            return super().wait_visible(caption, present)
+        # Full-page OCR omits some embedded-window titles. Inspect the same
+        # observed title region used by NormalPlayer's other modal checks.
+        deadline = time.monotonic() + 5
+        while time.monotonic() < deadline:
+            frame = self.root_capture('current')
+            title = self.output / 'feedback-title-ocr.png'
+            Image.open(frame).crop((296, 153, 1143, 185)).save(title)
+            text = subprocess.check_output(['tesseract', str(title), 'stdout', '--psm', '7'],
+                                           stderr=subprocess.DEVNULL, text=True, timeout=15)
+            if (normalized(caption) in normalized(text)) == present:
+                self.check(True, 'visible feedback title: ' + caption)
+                return
+            time.sleep(.1)
+        self.check(False, 'Feedback title did not settle: ' + caption)
 
 
 def main():
@@ -15,7 +38,7 @@ def main():
         parser.add_argument('--' + name, type=Path, required=True)
     parser.add_argument('--percent', type=int, choices=[100, 125, 150], required=True)
     args = parser.parse_args()
-    player = observe_player(SettledPlayer(args.display_state, args.fixture, args.output, args.seed))
+    player = observe_player(FirstRoutePlayer(args.display_state, args.fixture, args.output, args.seed))
     # Populate all four ordinary slots before launch. Input never edits slots.
     for name in ['save.previous.json', 'autosave.json', 'autosave.previous.json']:
         (player.saves / name).write_bytes(args.seed.read_bytes())
@@ -42,7 +65,9 @@ def main():
             game.root_capture('wrong-' + str(wrong))
             game.check(runtime_state(game, gate) == original and game.slots() == slots,
                        'wrong answer preserves full live state and all slot bytes: ' + str(wrong))
-            game.click('Back to question'); game.wait_visible(prompt)
+            # The action already owns keyboard focus. Both visible Back
+            # controls share a caption, so avoid an ambiguous OCR click.
+            game.key('Return'); game.wait_visible(prompt)
             game.root_capture('back-' + str(wrong))
             # Immediate Enter must reactivate the same wrong option: observe
             # actual originating keyboard focus instead of inferring it from Tab counts.
