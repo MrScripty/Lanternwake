@@ -87,7 +87,12 @@ def main():
             cue = ' '.join(activity['optionFeedback'][wrong].split()[2:8])
             tabs(game, abs(focused - wrong), wrong < focused); game.key('Return')
             game.wait_visible('Check the source'); game.wait_visible(cue)
-            game.wait_visible(' '.join(activity['optionFeedback'][wrong].split()[-6:]))
+            tail = activity['optionFeedback'][wrong].split()[-6:]
+            # Like the opening cue above, avoid an isolated initial I that
+            # OCR reads as a vertical stroke; retain the observed final words.
+            if tail[0] == 'I':
+                tail = tail[1:]
+            game.wait_visible(' '.join(tail))
             game.root_capture('wrong-' + str(wrong))
             game.check(runtime_state(game, gate) == original and game.slots() == slots,
                        'wrong answer preserves full live state and all slot bytes: ' + str(wrong))
