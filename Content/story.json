@@ -778,7 +778,12 @@
                   "Whichever path looks shortest."
                 ],
                 "correctIndex": 1,
-                "explanation": "Nessa identifies the inland road; conditions still require current checks."
+        "explanation": "Nessa identifies the inland road; conditions still require current checks.",
+        "optionFeedback": [
+          "Nessa: The cliff steps are for maintenance access and stay locked to visitors. They aren't our agreed route to the house in bad weather.",
+          "Nessa: The inland road stays above the storm surge. That's the route we agreed on, unless current conditions change.",
+          "Nessa: The steep path is quicker, but distance isn't the check we're making. The inland road stays above the storm surge; we still check current conditions."
+        ]
               }
             }
           ]
