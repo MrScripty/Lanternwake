@@ -4130,7 +4130,12 @@
                   "The counterweight descends into its clear cradle and lifts the gate."
                 ],
                 "correctIndex": 2,
-                "explanation": "The gravity linkage is physical. It must be inspected and operated with the shaft clear."
+                "explanation": "The gravity linkage is physical. It must be inspected and operated with the shaft clear.",
+                "optionFeedback": [
+                  "Ada: The plans describe the stylus carrying a trace. The bypass diagram instead shows a physical linkage: counterweight down, gate up. A password is not the documented release.",
+                  "Ada: Nessa called the shaft a moving-load hazard and locked its access gate. Sera described lowering the counterweight into its cradle from the tower with nobody in the chamber. Inspection comes before considering use.",
+                  "Ada: The diagram shows counterweight down, gate up. Sera named that the emergency gravity release, opening the bypass to equalize pressure. Nessa and Sera still require inspection; the old drawing does not certify today’s hardware."
+                ]
               }
             }
           ]
@@ -4662,7 +4667,12 @@
                   "The broken cup handle."
                 ],
                 "correctIndex": 1,
-                "explanation": "The historical audio is a magnetic recording, not a message from a different year through the apparatus."
+                "explanation": "The historical audio is a magnetic recording, not a message from a different year through the apparatus.",
+                "optionFeedback": [
+                  "Ada: Sera described the apparatus as carrying a trace, not a spoken voice. Tomas prepared the dated magnetic reel before we listened; blank chronograph paper is not the source of that historical audio.",
+                  "Ada: Tomas identified the reel as a physical magnetic recording made in 1998, with manufacture, leader and time announcement that fit. The historical voices we heard came from that recording.",
+                  "Ada: We documented the handle as part of the cup event. Tomas prepared and dated a magnetic reel for the historical voices; the handle is not that recording."
+                ]
               }
             }
           ]
@@ -4885,7 +4895,12 @@
                   "Restart damaged equipment in secret."
                 ],
                 "correctIndex": 0,
-                "explanation": "Records can be preserved independently; scientific curiosity does not authorize additional unsafe operation."
+                "explanation": "Records can be preserved independently; scientific curiosity does not authorize additional unsafe operation.",
+                "optionFeedback": [
+                  "Ada: We listed photographs, drawings, readings, timestamps and video that can be preserved safely. Sera warned that keeping the apparatus operating adds unquantified risk. Preserving that record and making the installation safe are our revised objectives.",
+                  "Ada: Sera said operating a hazardous system to prevent skepticism is not an acceptable safety objective. We can preserve what we observed without promising universal agreement or keeping the active effect running.",
+                  "Ada: We agreed there would be no secret restart. The damaged pressure path is to remain isolated until qualified assessment and authorization; curiosity does not replace that boundary."
+                ]
               }
             }
           ]
