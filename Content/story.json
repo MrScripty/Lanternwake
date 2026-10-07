@@ -5656,7 +5656,12 @@
                   "One hour forward."
                 ],
                 "correctIndex": 1,
-                "explanation": "The dial, plans, clock comparison, and matched trace support one fixed interval only."
+                "explanation": "The dial, plans, clock comparison, and matched trace support one fixed interval only.",
+                "optionFeedback": [
+                  "Ada: Sera said this installation’s interval is fixed. The dial and archive plans give twenty-three hours and seventeen minutes, and nothing we found supports choosing an arbitrary date or sending a warning to 1998.",
+                  "Ada: The dial and plans give twenty-three hours and seventeen minutes. The checked clocks, mechanical correspondence and matching trace agree with that backward interval. Sera called it self-consistent; the known earlier marks do not establish unrestricted choice.",
+                  "Ada: Sera described a trace received earlier. The checked clocks pair yesterday’s 18:35 record with today’s 17:52 input, twenty-three hours and seventeen minutes apart. That is the backward interval we compared, not one hour forward."
+                ]
               }
             }
           ]
