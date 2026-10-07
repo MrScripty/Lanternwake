@@ -131,9 +131,15 @@ public partial class HistoryNavigationQualification : Node
             Close(); await Frames();
             Session.Restore(JsonSerializer.Deserialize<SaveData>(state, Story.Json)!);
             GD.Print($"LANTERNWAKE_HISTORY_NAVIGATION_OK checks={_checks} prepare={System.Environment.GetEnvironmentVariable("LANTERNWAKE_HISTORY_PREPARE")} earlier-restore fresh-process search latest chapter lifecycle focus 100/150 layout state/save bytes");
-            GetTree().Quit();
+            // Use the player's shutdown path so native audio releases before engine exit.
+            Press("SettingsButton"); Action("Quit game");
         }
-        catch (Exception error) { GD.PushError(error.ToString()); GetTree().Quit(1); }
+        catch (Exception error)
+        {
+            GD.PushError(error.ToString());
+            if (_game?.Audio is { } audio) await audio.StopAndRetireAsync();
+            GetTree().Quit(1);
+        }
     }
 }
 #endif
