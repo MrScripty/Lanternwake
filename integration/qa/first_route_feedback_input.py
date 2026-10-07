@@ -13,6 +13,16 @@ from bell_restore_observation import observe_player, runtime_state
 
 
 class FirstRoutePlayer(SettledPlayer):
+    def visible(self):
+        visible = super().visible()
+        # Full-page layout segmentation can also omit the question/prose.
+        # Read its observed region as text; never infer it from saved state.
+        prose = self.output / 'feedback-prose-ocr.png'
+        Image.open(self.output / 'current.png').crop((310, 190, 1135, 425)).save(prose)
+        text = subprocess.check_output(['tesseract', str(prose), 'stdout', '--psm', '6'],
+                                       stderr=subprocess.DEVNULL, text=True, timeout=15)
+        return visible + ' ' + normalized(text)
+
     def wait_visible(self, caption, present=True):
         if caption != 'Check the source':
             return super().wait_visible(caption, present)
