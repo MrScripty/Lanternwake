@@ -22,10 +22,14 @@ internal static class FirstRouteFeedbackTests
             + RunCase(story, json, "ch4_s1_evidence", "ch4_s1a_b001", ["ch4_s1_evidence", "ch4_s2_evidence", "ch4_s2a_evidence", "ch4_s4_evidence"])
             + RunCase(story, json, "ch4_s2_evidence", "ch4_s2a_b001", ["ch4_s1_evidence", "ch4_s2_evidence", "ch4_s2a_evidence", "ch4_s4_evidence"])
             + RunCase(story, json, "ch4_s2a_evidence", "ch4_s3_b001", ["ch4_s1_evidence", "ch4_s2_evidence", "ch4_s2a_evidence", "ch4_s4_evidence"])
-            + RunCase(story, json, "ch4_s4_evidence", "ch4_s5_b001", ["ch4_s1_evidence", "ch4_s2_evidence", "ch4_s2a_evidence", "ch4_s4_evidence"]);
+            + RunCase(story, json, "ch4_s4_evidence", "ch4_s5_b001", ["ch4_s1_evidence", "ch4_s2_evidence", "ch4_s2a_evidence", "ch4_s4_evidence"])
+            + RunCase(story, json, "ch5_s2_evidence", "ch5_s3_b001", ["ch5_s2_evidence", "ch5_s3_evidence", "ch5_s4a_evidence", "ch5_s5_evidence"])
+            + RunCase(story, json, "ch5_s3_evidence", "ch5_s3a_b001", ["ch5_s2_evidence", "ch5_s3_evidence", "ch5_s4a_evidence", "ch5_s5_evidence"])
+            + RunCase(story, json, "ch5_s4a_evidence", "ch5_s4b_b001", ["ch5_s2_evidence", "ch5_s3_evidence", "ch5_s4a_evidence", "ch5_s5_evidence"])
+            + RunCase(story, json, "ch5_s5_evidence", null, ["ch5_s2_evidence", "ch5_s3_evidence", "ch5_s4a_evidence", "ch5_s5_evidence"]);
     }
 
-    private static int RunCase(Story story, string json, string gate, string successor, string[] previousFeedback)
+    private static int RunCase(Story story, string json, string gate, string? successor, string[] previousFeedback)
     {
         var count = 0;
         void Check(bool value, string claim) { if (!value) throw new Exception(gate + ": " + claim); count++; }
@@ -61,12 +65,19 @@ internal static class FirstRouteFeedbackTests
             Check(State() == unanswered, "Wrong answer preserves the complete snapshot and derived facts, items, cues and progress");
         }
         Check(game.AnswerActivity(activity.CorrectIndex) && game.CanAdvance && game.Beat.Id == gate,
-            "Correct answer unlocks Continue without automatically advancing");
+            "Correct answer unlocks Continue or Finish without automatically advancing");
         Check(game.History.SequenceEqual(saved.History) && game.SolvedActivities.SetEquals(saved.SolvedActivities.Concat([gate])),
             "Correct answer changes only the current solved gate, preserving the record");
         var restored = new StorySession(story); restored.Restore(game.Snapshot());
         Check(restored.CanAdvance && restored.History.SequenceEqual(saved.History), "Solved gate and exact record survive save restoration");
-        Check(game.Advance() && game.Beat.Id == successor, "Explicit Continue rejoins the original successor");
+        if (successor is null)
+        {
+            var solved = State();
+            Check(game.IsEnding && game.CanAdvance && !game.Advance() && State() == solved,
+                "Solved terminal question stays at the original ending for Finish without changing state");
+        }
+        else
+            Check(game.Advance() && game.Beat.Id == successor, "Explicit Continue rejoins the original successor");
         var author = new StoryAuthoringIndex(story).Entries.Single(e => e.Beat.Id == gate);
         Check(activity.OptionFeedback!.All(author.Context.Contains), "Author context exposes every saved route rationale");
         var edited = StoryTextEdit.Apply(json, json, gate, "narrator", "Edited question introduction.");
