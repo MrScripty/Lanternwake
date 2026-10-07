@@ -39,6 +39,14 @@ for mode in smoke ui-smoke save-isolation-smoke audio-smoke; do
   rm -f "$log"
   trap - EXIT
 done
+log="$(mktemp)"
+trap 'rm -f "$log"' EXIT
+timeout 30 "$GODOT_MONO" --headless --path . res://qualification/audio-lifecycle.tscn 2>&1 | tee "$log"
+if grep -Eq 'ERROR:|SCRIPT ERROR:|WARNING:' "$log" || ! grep -q 'LANTERNWAKE_AUDIO_LIFECYCLE_OK' "$log"; then
+  echo 'Native audio lifecycle regression did not pass cleanly.' >&2; exit 1
+fi
+rm -f "$log"
+trap - EXIT
 python3 integration/qa/watch_completion.py
 python3 integration/qa/activity_review.py
 python3 integration/qa/conversation_return.py

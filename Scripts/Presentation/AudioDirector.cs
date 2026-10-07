@@ -36,14 +36,21 @@ public partial class AudioDirector : Node
             throw new InvalidOperationException("Assign AudioDirector's four authored players in the Inspector.");
         foreach (var name in new[] { "Master", "Music", "Ambience", "Effects" }) _ = Bus(name);
         if (Music.Stream is AudioStreamWav theme) Music.Stream = LoopCopy(theme);
-        Music.Play();
-        _playbacks.Add(Music.GetStreamPlayback());
+        PlayAndTrack(Music);
     }
 
     private static int Bus(string name)
     {
         int index = AudioServer.GetBusIndex(name);
         return index >= 0 ? index : throw new InvalidOperationException($"Missing audio bus '{name}'. Restore default_bus_layout.tres.");
+    }
+    private void PlayAndTrack(AudioStreamPlayer player)
+    {
+        player.Play();
+        // Missing streams or failed playback creation leave no handle to own.
+        // GetStreamPlayback also reports an engine error on an inactive player.
+        if (player.HasStreamPlayback() && player.GetStreamPlayback() is { } playback)
+            _playbacks.Add(playback);
     }
     private static AudioStreamWav LoopCopy(AudioStreamWav source)
     {
@@ -64,7 +71,7 @@ public partial class AudioDirector : Node
             "lantern_room" => LanternRoom, "tide_cave" => TideCave,
             _ => throw new ArgumentException("Unknown audio location: " + location, nameof(location))
         };
-        if (stream is null) throw new InvalidOperationException("Assign ambience for " + location + " in the Inspector.");
+        if (stream is null) throw new InvalidOperationException("Assign ambience for " + location + " in the Inspector. For a fresh checkout, run bash scripts/setup.sh (Windows: py -3 scripts/setup_audio.py), then import the project in Godot.");
         _fade?.Kill();
         _fade?.Dispose();
         _fade = null;
@@ -76,8 +83,7 @@ public partial class AudioDirector : Node
         _location = location;
         incoming.Stream = LoopCopy(stream);
         incoming.VolumeLinear = 0;
-        incoming.Play();
-        _playbacks.Add(incoming.GetStreamPlayback());
+        PlayAndTrack(incoming);
         _fade = CreateTween().SetParallel();
         var duration = double.IsFinite(FadeSeconds) ? Math.Clamp(FadeSeconds, .05, 3) : .6;
         _fade.TweenProperty(incoming, "volume_linear", 1.0, duration);
@@ -99,8 +105,7 @@ public partial class AudioDirector : Node
         _lastCueBeat = beatId;
         if (play && cue == "bell_lowered")
         {
-            Effects.Play();
-            _playbacks.Add(Effects.GetStreamPlayback());
+            PlayAndTrack(Effects);
         }
     }
     public void SetMuted(bool value) => AudioServer.SetBusMute(Bus("Master"), value);
