@@ -10,6 +10,7 @@ var session = new StorySession(story);
 var initial = session.Snapshot();
 var ordered = story.Chapters.SelectMany(c => c.Scenes).SelectMany(s => s.Beats).ToArray();
 var originalJson = File.ReadAllText(storyPath);
+count += FirstRouteFeedbackTests.Run(story, originalJson);
 count += CharacterAuthoringTests.Run(story, originalJson);
 count += SessionStorageTests.Run(story);
 count += SessionLaunchTests.Run(story);
