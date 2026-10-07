@@ -54,7 +54,7 @@ def main():
     for name in ['display-state', 'fixture', 'output', 'seed']:
         parser.add_argument('--' + name, type=Path, required=True)
     parser.add_argument('--percent', type=int, choices=[100, 125, 150], required=True)
-    parser.add_argument('--gate', choices=['ch1_s1a_evidence', 'ch1_s2_evidence', 'ch1_s2a_evidence', 'ch1_s3_evidence', 'ch1_s3a_evidence', 'ch2_s1_evidence', 'ch2_s2a_evidence', 'ch2_s3_evidence', 'ch2_s5_evidence', 'ch3_s1_evidence', 'ch3_s2_evidence', 'ch3_s2a_evidence', 'ch3_s4_evidence'],
+    parser.add_argument('--gate', choices=['ch1_s1a_evidence', 'ch1_s2_evidence', 'ch1_s2a_evidence', 'ch1_s3_evidence', 'ch1_s3a_evidence', 'ch2_s1_evidence', 'ch2_s2a_evidence', 'ch2_s3_evidence', 'ch2_s5_evidence', 'ch3_s1_evidence', 'ch3_s2_evidence', 'ch3_s2a_evidence', 'ch3_s4_evidence', 'ch4_s1_evidence', 'ch4_s2_evidence', 'ch4_s2a_evidence', 'ch4_s4_evidence'],
                         default='ch1_s1a_evidence')
     args = parser.parse_args()
     player = observe_player(FirstRoutePlayer(args.display_state, args.fixture, args.output, args.seed))
@@ -87,7 +87,12 @@ def main():
             cue = ' '.join(activity['optionFeedback'][wrong].split()[2:8])
             tabs(game, abs(focused - wrong), wrong < focused); game.key('Return')
             game.wait_visible('Check the source'); game.wait_visible(cue)
-            game.wait_visible(' '.join(activity['optionFeedback'][wrong].split()[-6:]))
+            tail = activity['optionFeedback'][wrong].split()[-6:]
+            # Like the opening cue above, avoid an isolated initial I that
+            # OCR reads as a vertical stroke; retain the observed final words.
+            if tail[0] == 'I':
+                tail = tail[1:]
+            game.wait_visible(' '.join(tail))
             game.root_capture('wrong-' + str(wrong))
             game.check(runtime_state(game, gate) == original and game.slots() == slots,
                        'wrong answer preserves full live state and all slot bytes: ' + str(wrong))

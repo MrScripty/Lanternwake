@@ -18,7 +18,11 @@ internal static class FirstRouteFeedbackTests
             + RunCase(story, json, "ch3_s1_evidence", "ch3_s1a_b001", ["ch3_s1_evidence", "ch3_s2_evidence", "ch3_s2a_evidence"])
             + RunCase(story, json, "ch3_s2_evidence", "ch3_s2a_b001", ["ch3_s1_evidence", "ch3_s2_evidence", "ch3_s2a_evidence"])
             + RunCase(story, json, "ch3_s2a_evidence", "ch3_s3_b001", ["ch3_s1_evidence", "ch3_s2_evidence", "ch3_s2a_evidence"])
-            + RunCase(story, json, "ch3_s4_evidence", "ch3_s5_b001", ["ch3_s4_evidence"]);
+            + RunCase(story, json, "ch3_s4_evidence", "ch3_s5_b001", ["ch3_s4_evidence"])
+            + RunCase(story, json, "ch4_s1_evidence", "ch4_s1a_b001", ["ch4_s1_evidence", "ch4_s2_evidence", "ch4_s2a_evidence", "ch4_s4_evidence"])
+            + RunCase(story, json, "ch4_s2_evidence", "ch4_s2a_b001", ["ch4_s1_evidence", "ch4_s2_evidence", "ch4_s2a_evidence", "ch4_s4_evidence"])
+            + RunCase(story, json, "ch4_s2a_evidence", "ch4_s3_b001", ["ch4_s1_evidence", "ch4_s2_evidence", "ch4_s2a_evidence", "ch4_s4_evidence"])
+            + RunCase(story, json, "ch4_s4_evidence", "ch4_s5_b001", ["ch4_s1_evidence", "ch4_s2_evidence", "ch4_s2a_evidence", "ch4_s4_evidence"]);
     }
 
     private static int RunCase(Story story, string json, string gate, string successor, string[] previousFeedback)
