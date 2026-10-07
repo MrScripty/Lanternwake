@@ -81,7 +81,10 @@ def main():
         for wrong in range(len(activity['options'])):
             if wrong == activity['correctIndex']:
                 continue
-            cue = ' '.join(activity['optionFeedback'][wrong].split()[:8])
+            # OCR often reads the isolated pronoun I as a vertical stroke.
+            # Use a distinctive authored excerpt after the speaker/opening;
+            # exact full feedback is independently checked by native review.
+            cue = ' '.join(activity['optionFeedback'][wrong].split()[2:8])
             tabs(game, abs(focused - wrong), wrong < focused); game.key('Return')
             game.wait_visible('Check the source'); game.wait_visible(cue)
             game.wait_visible(' '.join(activity['optionFeedback'][wrong].split()[-6:]))
