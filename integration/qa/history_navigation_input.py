@@ -101,22 +101,29 @@ def main():
                 game.type_text('zzqqxx'); game.wait_visible('No reached entries match your search')
                 game.root_capture(prefix + '-no-results')
                 game.type_text('daylight'); time.sleep(.3)
-                game.check('in daylight' in reader_text(prefix + '-search'), 'typing filters to actually restored reached prose')
+                game.check(wait_reader_text(prefix + '-search', 'in daylight'), 'typing filters to actually restored reached prose')
                 game.key('Tab'); game.key('Return'); time.sleep(.4)
                 last = ' '.join(early['history'][-1]['text'].split()[:8])
                 game.check(wait_reader_text(prefix + '-latest', last), 'keyboard latest clears search and shows exact earlier-restored final entry')
                 # Reading focus returns to chapter, whose popup contains only reached titles.
                 game.key('Shift_L', True); game.key('Tab'); game.key('Shift_L', False)
                 game.key('Return'); time.sleep(.3)
-                popup = game.output / (prefix + '-popup.png')
-                Image.open(game.root_capture(prefix + '-chapters')).crop((324, 300, 1118, 550)).save(popup)
-                game.result['images'][popup.name] = digest(popup)
-                visible = normalized(subprocess.check_output(['tesseract', str(popup), 'stdout', '--psm', '6'],
-                                     stderr=subprocess.DEVNULL, text=True, timeout=15))
+                deadline = time.monotonic() + 12
+                attempt = 0
+                while True:
+                    popup = game.output / (prefix + '-popup-' + str(attempt) + '.png')
+                    Image.open(game.root_capture(prefix + '-chapters-' + str(attempt))).crop((324, 300, 1118, 550)).save(popup)
+                    game.result['images'][popup.name] = digest(popup)
+                    visible = normalized(subprocess.check_output(['tesseract', str(popup), 'stdout', '--psm', '6'],
+                                         stderr=subprocess.DEVNULL, text=True, timeout=15))
+                    if 'the inventory' in visible and 'the wrong channel' in visible or time.monotonic() >= deadline:
+                        break
+                    attempt += 1
+                    time.sleep(.3)
                 game.check('the inventory' in visible and 'the wrong channel' in visible, 'authoritative reached chapters appear in native selector')
                 game.check('what the water kept' not in visible and 'the night ledger' not in visible and 'an open horizon' not in visible, 'selector after earlier Load excludes later chapters')
                 game.key('Home'); game.key('Down'); game.key('Return'); time.sleep(.3)
-                game.check('the ferry leaves you' in reader_text(prefix + '-first-chapter'), 'keyboard chapter jump reaches first recorded entry')
+                game.check(wait_reader_text(prefix + '-first-chapter', 'the ferry leaves you'), 'keyboard chapter jump reaches first recorded entry')
                 game.key('Escape'); game.wait_visible('The record', False)
                 game.check(game.slots() == stable, 'search/jumps/repeated close preserve all manual and automatic bytes')
         game.check(game.snapshot() == early and game.snapshot('autosave.json') == later, 'normal fresh process retains both exact reached snapshots')
