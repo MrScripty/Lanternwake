@@ -31,7 +31,7 @@ class FirstRoutePlayer(SettledPlayer):
         return visible + ' ' + normalized(text)
 
     def wait_visible(self, caption, present=True):
-        if caption != 'Check the source':
+        if caption not in ['Check the source', 'The light remains']:
             return super().wait_visible(caption, present)
         # Full-page OCR omits some embedded-window titles. Inspect the same
         # observed title region used by NormalPlayer's other modal checks.
@@ -43,7 +43,7 @@ class FirstRoutePlayer(SettledPlayer):
             text = subprocess.check_output(['tesseract', str(title), 'stdout', '--psm', '7'],
                                            stderr=subprocess.DEVNULL, text=True, timeout=15)
             if (normalized(caption) in normalized(text)) == present:
-                self.check(True, 'visible feedback title: ' + caption)
+                self.check(True, ('visible feedback title: ' if present else 'closed: ') + caption)
                 return
             time.sleep(.1)
         self.check(False, 'Feedback title did not settle: ' + caption)
@@ -54,7 +54,7 @@ def main():
     for name in ['display-state', 'fixture', 'output', 'seed']:
         parser.add_argument('--' + name, type=Path, required=True)
     parser.add_argument('--percent', type=int, choices=[100, 125, 150], required=True)
-    parser.add_argument('--gate', choices=['ch1_s1a_evidence', 'ch1_s2_evidence', 'ch1_s2a_evidence', 'ch1_s3_evidence', 'ch1_s3a_evidence', 'ch2_s1_evidence', 'ch2_s2a_evidence', 'ch2_s3_evidence', 'ch2_s5_evidence', 'ch3_s1_evidence', 'ch3_s2_evidence', 'ch3_s2a_evidence', 'ch3_s4_evidence', 'ch4_s1_evidence', 'ch4_s2_evidence', 'ch4_s2a_evidence', 'ch4_s4_evidence'],
+    parser.add_argument('--gate', choices=['ch1_s1a_evidence', 'ch1_s2_evidence', 'ch1_s2a_evidence', 'ch1_s3_evidence', 'ch1_s3a_evidence', 'ch2_s1_evidence', 'ch2_s2a_evidence', 'ch2_s3_evidence', 'ch2_s5_evidence', 'ch3_s1_evidence', 'ch3_s2_evidence', 'ch3_s2a_evidence', 'ch3_s4_evidence', 'ch4_s1_evidence', 'ch4_s2_evidence', 'ch4_s2a_evidence', 'ch4_s4_evidence', 'ch5_s2_evidence', 'ch5_s3_evidence', 'ch5_s4a_evidence', 'ch5_s5_evidence'],
                         default='ch1_s1a_evidence')
     args = parser.parse_args()
     player = observe_player(FirstRoutePlayer(args.display_state, args.fixture, args.output, args.seed))
@@ -120,15 +120,34 @@ def main():
         game.check((game.saves / 'save.json').read_bytes() == slots['save.json'] and
                    (game.saves / 'save.previous.json').read_bytes() == slots['save.previous.json'],
                    'correct answer leaves both explicit manual checkpoints untouched')
-        game.wait_visible('Continue'); game.root_capture('solved')
+        terminal = game.beats[-1]['id'] == gate
+        game.check(solved['isEnding'] == terminal, 'correct answer retains the original terminal status')
+        game.wait_visible('Finish' if terminal else 'Continue'); game.root_capture('solved')
         game.click('Save'); game.click('Load'); game.click('Load current manual save')
         game.check(runtime_state(game, gate) == solved, 'actual Save/Load restores solved full live state without duplicating the record')
-        next_beat = game.beats[game.beats.index(next(b for b in game.beats if b['id'] == gate)) + 1]
-        game.click('Continue'); successor = runtime_state(game, next_beat['id'])
-        game.check(successor['snapshot']['beatId'] == next_beat['id'], 'explicit Continue reaches the original successor')
-        game.wait_visible(' '.join(next_beat['text'].split()[:8]))
-        game.root_capture('successor')
-        game.result['liveStates'] = dict(unanswered=original, solved=solved, successor=successor)
+        if terminal:
+            slots = game.slots()
+            game.click('Finish'); game.wait_visible('The light remains')
+            game.check(runtime_state(game, gate) == solved and game.slots() == slots,
+                       'actual Finish opens the existing ending without changing full live state or save bytes')
+            game.root_capture('completion')
+            game.key('Escape'); game.wait_visible('The light remains', False); game.wait_visible('Finish')
+            game.check(runtime_state(game, gate) == solved and game.slots() == slots,
+                       'closing the ending preserves the original solved terminal question and save bytes')
+            game.root_capture('completion-closed')
+            game.click('Finish'); game.wait_visible('The light remains')
+            game.check(runtime_state(game, gate) == solved and game.slots() == slots,
+                       'repeated Finish remains inert with the same terminal state and four save slots')
+            game.root_capture('completion-repeat')
+            game.result['liveStates'] = dict(unanswered=original, solved=solved, completion=runtime_state(game, gate))
+            game.key('Escape'); game.wait_visible('The light remains', False)
+        else:
+            next_beat = game.beats[game.beats.index(next(b for b in game.beats if b['id'] == gate)) + 1]
+            game.click('Continue'); successor = runtime_state(game, next_beat['id'])
+            game.check(successor['snapshot']['beatId'] == next_beat['id'], 'explicit Continue reaches the original successor')
+            game.wait_visible(' '.join(next_beat['text'].split()[:8]))
+            game.root_capture('successor')
+            game.result['liveStates'] = dict(unanswered=original, solved=solved, successor=successor)
         game.quit()
     print('PASS normal authored feedback, exact state/save preservation and keyboard focus:', args.gate, args.percent)
 

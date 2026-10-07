@@ -7843,7 +7843,12 @@
                   "Verified evacuation, clear zones, tested mechanism, and current safe pressure conditions."
                 ],
                 "correctIndex": 2,
-                "explanation": "The team acts on a checked procedure and stops if conditions change. The note overrides nothing."
+                "explanation": "The team acts on a checked procedure and stops if conditions change. The note overrides nothing.",
+                "optionFeedback": [
+                  "Ada: The hall's headcount was read back and confirmed; our four names are listed separately. The lower path, shaft enclosure and outflow zone are clear. Nessa says anyone must call stop if a condition changes. The reassuring line does not replace those checks.",
+                  "Ada: Ivo's reputation is not a readiness check. Sera reports pressure below the emergency limit, tested bypass travel and an empty cradle. Nessa will release only on the measured condition and will stop if conditions change. We proceed from current checks, not his standing.",
+                  "Ada: The headcount and clear zones are verified, the bypass travel is tested, and current pressure is within the prepared procedure. Nessa still waits for Sera's measured release condition. Anyone can call stop if a condition changes; the note overrides none of that."
+                ]
               }
             }
           ]
@@ -8023,7 +8028,12 @@
                   "Destroy the surviving archive."
                 ],
                 "correctIndex": 1,
-                "explanation": "Safe isolation and independent verification protect people and evidence."
+                "explanation": "Safe isolation and independent verification protect people and evidence.",
+                "optionFeedback": [
+                  "Ada: Sera says the pressure state that supported the effect is gone, the inclusion has fractured, and there is no current receiving response. She calls for daylight verification, not a restart. A damaged pressure system is not an acceptable way to satisfy curiosity.",
+                  "Ada: Pressure has equalized, the bypass flow is stable, and the headcount is confirmed. Sera still calls for daylight verification. We keep the damaged path isolated and preserve the instrument and records; an observed safe release does not remove the need for those checks.",
+                  "Ada: The off-island copies are acknowledged, and Tomas confirmed the original reel and estate records are at the hall with Mara Ellis. The two traces also remain under glass. Losing the active pressure state is no reason to destroy the evidence that survives independently of it."
+                ]
               }
             }
           ]
@@ -8664,7 +8674,12 @@
                   "Retain it as a historical document with prominent correction and source links."
                 ],
                 "correctIndex": 2,
-                "explanation": "The correction must preserve what was published while making the evidence against it clear."
+                "explanation": "The correction must preserve what was published while making the evidence against it clear.",
+                "optionFeedback": [
+                  "Ada: The old summary remains accessible, with its catalogue entry pointing prominently to the original log, complete deposition and identified contradictions. Quietly replacing it would hide what was published and why the families challenged it. The correction must remain visible beside that history.",
+                  "Ada: The catalogue entry now links the original log, complete deposition and identified contradictions. Leaving the misleading summary unqualified would keep presenting the false account without that correction. Retaining a historical document does not mean continuing to endorse its claims.",
+                  "Ada: We retain the old summary as something that was published, while making the correction and source links prominent. That lets a reader inspect both the misleading account and the evidence against it. The record preserves publication history without treating the old claims as sound."
+                ]
               }
             }
           ]
@@ -9034,7 +9049,12 @@
                   "Paper containing an invisible final instruction."
                 ],
                 "correctIndex": 0,
-                "explanation": "The catalogue distinguishes observation from speculation, even at the ending."
+                "explanation": "The catalogue distinguishes observation from speculation, even at the ending.",
+                "optionFeedback": [
+                  "Ada: Tomas named it unmarked receiving paper, retained. The chronograph entry separates observed facts from an unresolved physical explanation and records no evidence of a message after shutdown. The catalogue can describe blank paper without assigning it a promise or an instruction.",
+                  "Ada: Unmarked paper records no signal; it does not prove that nothing bad can ever happen. The safe release was established by measurements and headcounts, and the morning readings confirmed isolation. Those observations belong in the record, but they are not a universal guarantee.",
+                  "Ada: The entry records no evidence of a message after the final shutdown. Tomas describes unmarked receiving paper, and the strip stays blank when I leave. An invisible final instruction would add a claim none of those observations supports."
+                ]
               }
             }
           ]
