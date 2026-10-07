@@ -43,7 +43,7 @@ class FirstRoutePlayer(SettledPlayer):
             text = subprocess.check_output(['tesseract', str(title), 'stdout', '--psm', '7'],
                                            stderr=subprocess.DEVNULL, text=True, timeout=15)
             if (normalized(caption) in normalized(text)) == present:
-                self.check(True, 'visible feedback title: ' + caption)
+                self.check(True, ('visible feedback title: ' if present else 'closed: ') + caption)
                 return
             time.sleep(.1)
         self.check(False, 'Feedback title did not settle: ' + caption)
@@ -131,15 +131,16 @@ def main():
             game.check(runtime_state(game, gate) == solved and game.slots() == slots,
                        'actual Finish opens the existing ending without changing full live state or save bytes')
             game.root_capture('completion')
-            game.key('Escape'); game.wait_visible('Finish')
+            game.key('Escape'); game.wait_visible('The light remains', False); game.wait_visible('Finish')
             game.check(runtime_state(game, gate) == solved and game.slots() == slots,
                        'closing the ending preserves the original solved terminal question and save bytes')
+            game.root_capture('completion-closed')
             game.click('Finish'); game.wait_visible('The light remains')
             game.check(runtime_state(game, gate) == solved and game.slots() == slots,
                        'repeated Finish remains inert with the same terminal state and four save slots')
             game.root_capture('completion-repeat')
             game.result['liveStates'] = dict(unanswered=original, solved=solved, completion=runtime_state(game, gate))
-            game.key('Escape')
+            game.key('Escape'); game.wait_visible('The light remains', False)
         else:
             next_beat = game.beats[game.beats.index(next(b for b in game.beats if b['id'] == gate)) + 1]
             game.click('Continue'); successor = runtime_state(game, next_beat['id'])
