@@ -1,5 +1,6 @@
 """Launcher admission and failure custody; no tools, network or assets downloaded."""
 import contextlib
+import errno
 import io
 from pathlib import Path
 import sys
@@ -144,13 +145,40 @@ class SourceLauncherTests(unittest.TestCase):
         with contextlib.redirect_stdout(io.StringIO()), self.assertRaisesRegex(launch.LaunchError, 'timed out'):
             launch.run_step('Orphan-output setup fixture', [sys.executable, '-c', command, str(pid_file)], timeout=.5)
         pid = int(pid_file.read_text())
+        self.assert_process_stopped(pid)
+
+    def assert_process_stopped(self, pid):
         status = Path(f'/proc/{pid}/stat')
         try:
             observed = status.read_text()
-        except FileNotFoundError:
+        except (FileNotFoundError, ProcessLookupError):
+            # Reaping can remove the entry before open (ENOENT) or during read (ESRCH).
             pass
         else:
             self.assertRegex(observed, r'^\d+ \(.+\) Z ')
+
+    def test_stopped_process_can_disappear_during_stat_read(self):
+        for error in [FileNotFoundError(errno.ENOENT, 'No such file'),
+                      ProcessLookupError(errno.ESRCH, 'No such process')]:
+            with self.subTest(error=type(error).__name__), patch.object(Path, 'open') as open_stat:
+                read = open_stat.return_value.__enter__.return_value.read
+                read.side_effect = error
+                self.assert_process_stopped(123)
+                read.assert_called_once_with()
+
+    def test_stopped_process_requires_zombie_if_stat_remains(self):
+        for state in ['Z', 'R', 'S', 'D', 'T']:
+            with self.subTest(state=state), patch.object(Path, 'read_text', return_value=f'123 (child) {state} 1'):
+                if state == 'Z':
+                    self.assert_process_stopped(123)
+                else:
+                    with self.assertRaises(self.failureException):
+                        self.assert_process_stopped(123)
+
+    def test_stopped_process_preserves_unrelated_stat_errors(self):
+        with patch.object(Path, 'read_text', side_effect=PermissionError(errno.EACCES, 'Permission denied')):
+            with self.assertRaises(PermissionError):
+                self.assert_process_stopped(123)
 
     def test_setup_interrupt_reaps_child(self):
         processes = []
