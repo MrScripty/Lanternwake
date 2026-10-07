@@ -1386,7 +1386,12 @@
                   "Two people documented a dated trace whose origin is unknown."
                 ],
                 "correctIndex": 2,
-                "explanation": "Witnesses and photographs establish the observation, not its mechanism or authority."
+                "explanation": "Witnesses and photographs establish the observation, not its mechanism or authority.",
+                "optionFeedback": [
+                  "Ada: The bell sentence is on the paper. Tomas and I witnessed it forming, but its wording does not establish that the machine can guarantee safety.",
+                  "Ada: The strokes resemble my handwriting. Tomas raised tracing and earlier access as possibilities; we have not established who made the words or how they reached the paper.",
+                  "Ada: Tomas and I photographed the strip in place, recorded the time and added a witness. That documents the trace while leaving its origin unknown."
+                ]
               }
             }
           ]
@@ -1638,7 +1643,12 @@
                   "Assume a hidden author has guaranteed safety."
                 ],
                 "correctIndex": 1,
-                "explanation": "The witnessed wording justifies investigation; it does not replace an inspection."
+                "explanation": "The witnessed wording justifies investigation; it does not replace an inspection.",
+                "optionFeedback": [
+                  "Ada: The release is tagged as isolated pending inspection. Nessa told us not to operate anything before the rigger checks it; the trace does not replace that inspection.",
+                  "Ada: Nessa has arranged a rigger to inspect the supports and shaft mechanism. We can keep the shaft clear and leave the controls alone while that check is pending.",
+                  "Ada: Neither line names its author. We have witnessed the words, but that does not give an unknown writer authority to guarantee the shaft is safe."
+                ]
               }
             }
           ]
