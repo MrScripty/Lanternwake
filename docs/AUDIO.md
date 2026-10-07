@@ -76,6 +76,15 @@ an error and exits if a backend cannot retire its handles. The native
 queues stop/deletion on the mixer and releases its references during
 main-thread cleanup. Engine upgrades must revalidate this boundary. `scripts/verify.sh` includes this mode.
 
+Playback acquisition first checks that the player has a native playback and
+retains only a non-null handle. Missing streams therefore cannot put null into
+per-frame retirement or tree-exit disposal. This does not replace setup: absent
+location assets still report the Inspector assignment failure, with fresh-checkout
+setup commands for Linux and Windows. The
+native `qualification/audio-lifecycle.tscn` regression covers missing music and
+effects, naturally finished effects, live loop retention, interrupted transitions,
+repeat shutdown and direct tree exit. `scripts/verify.sh` runs it after the audio smoke.
+
 An AudioEffectCapture on the real Master mixer observes nonzero bounded PCM.
 This is native Godot mixing evidence, not proof of physical speaker output,
 subjective sound quality, production voice recognition, model quality, or
