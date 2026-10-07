@@ -4,6 +4,7 @@ import io
 from pathlib import Path
 import sys
 import tempfile
+import time
 import unittest
 from unittest.mock import patch
 import zipfile
@@ -68,9 +69,115 @@ class SourceLauncherTests(unittest.TestCase):
             play.assert_not_called()
 
     def test_setup_only_does_not_start_game(self):
-        with patch.object(launch, 'prerequisites', return_value=(self.godot, self.dotnet, self.feed)), patch.object(launch, 'prepare', return_value={}), patch.object(launch.subprocess, 'call') as play, contextlib.redirect_stdout(io.StringIO()):
+        with patch.object(launch, 'prerequisites', return_value=(self.godot, self.dotnet, self.feed)), patch.object(launch, 'prepare', return_value={}), patch.object(launch.subprocess, 'call') as play, contextlib.redirect_stdout(io.StringIO()) as output:
             self.assertEqual(launch.main(['--setup-only']), 0)
             play.assert_not_called()
+            self.assertIn('with --editor', output.getvalue())
+            self.assertIn('only to processes started by this launcher', output.getvalue())
+
+    def test_editor_inherits_prepared_environment(self):
+        environment = {'DOTNET_ROOT': '/selected/sdk', 'PATH': '/selected/sdk', 'NUGET_PACKAGES': '/project/cache', 'RestoreConfigFile': '/project/config'}
+        with patch.object(launch, 'prerequisites', return_value=(self.godot, self.dotnet, self.feed)), patch.object(launch, 'prepare', return_value=environment), patch.object(launch.subprocess, 'call', return_value=0) as editor, contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(launch.main(['--editor', '--', '--headless', '--build-solutions', '--quit']), 0)
+            editor.assert_called_once_with([str(self.godot), '--path', str(launch.PROJECT), '--editor', '--headless', '--build-solutions', '--quit'], cwd=launch.PROJECT, env=environment)
+
+    def test_offline_configuration_survives_preparation(self):
+        with patch.object(launch, 'PROJECT', self.root), patch.object(launch, 'cache_bundled_sdk', side_effect=lambda _, cache: cache.mkdir(parents=True)), patch.object(launch, 'ensure_assets'), patch.object(launch, 'run_step'):
+            environment = launch.prepare(self.godot, self.dotnet, self.feed)
+        config = Path(environment['RestoreConfigFile'])
+        self.assertTrue(config.is_file())
+        self.assertIn(str(self.feed), config.read_text())
+        self.assertNotIn('nuget.org', config.read_text())
+        self.assertEqual(environment['DOTNET_ROOT'], str(self.dotnet.parent))
+        self.assertEqual(environment['NUGET_PACKAGES'], str(self.root / '.godot/source-launch/nuget'))
+
+    def test_editor_and_setup_only_are_mutually_exclusive(self):
+        with contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+            launch.main(['--editor', '--setup-only'])
+        self.assertEqual(error.exception.code, 2)
+
+    def test_setup_timeout_must_be_positive(self):
+        with contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+            launch.main(['--setup-timeout', '0'])
+        self.assertEqual(error.exception.code, 2)
+
+    def test_selected_timeout_only_applies_to_preparation(self):
+        with patch.object(launch, 'prerequisites', return_value=(self.godot, self.dotnet, self.feed)), patch.object(launch, 'prepare', return_value={}) as prepare, patch.object(launch.subprocess, 'call', return_value=0) as play, contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(launch.main(['--setup-timeout', '900']), 0)
+            prepare.assert_called_once_with(self.godot, self.dotnet, self.feed, 900)
+            self.assertNotIn('timeout', play.call_args.kwargs)
+
+    def test_silent_setup_timeout_reaps_child(self):
+        processes = []
+        original = launch.subprocess.Popen
+
+        def start(*args, **kwargs):
+            process = original(*args, **kwargs)
+            processes.append(process)
+            return process
+
+        began = time.monotonic()
+        with patch.object(launch.subprocess, 'Popen', side_effect=start), contextlib.redirect_stdout(io.StringIO()):
+            with self.assertRaisesRegex(launch.LaunchError, 'increase --setup-timeout'):
+                launch.run_step('Stalled setup fixture', [sys.executable, '-c', 'import time; time.sleep(60)'], timeout=.1)
+        self.assertLess(time.monotonic() - began, 5)
+        self.assertIsNotNone(processes[0].poll())
+
+    def test_setup_exit_is_bounded_after_output_closes(self):
+        processes = []
+        original = launch.subprocess.Popen
+
+        def start(*args, **kwargs):
+            process = original(*args, **kwargs)
+            processes.append(process)
+            return process
+
+        with patch.object(launch.subprocess, 'Popen', side_effect=start), contextlib.redirect_stdout(io.StringIO()):
+            with self.assertRaisesRegex(launch.LaunchError, 'timed out'):
+                launch.run_step('Closed-output setup fixture', [sys.executable, '-c', 'import os,time; os.close(1); os.close(2); time.sleep(60)'], timeout=.1)
+        self.assertIsNotNone(processes[0].poll())
+
+    @unittest.skipUnless(sys.platform.startswith('linux'), 'Linux process-group fixture')
+    def test_timeout_stops_descendant_that_keeps_output_open(self):
+        pid_file = self.root / 'owned-child.pid'
+        command = 'import subprocess,sys; from pathlib import Path; child=subprocess.Popen([sys.executable,"-c","import time; time.sleep(60)"]); Path(sys.argv[1]).write_text(str(child.pid))'
+        with contextlib.redirect_stdout(io.StringIO()), self.assertRaisesRegex(launch.LaunchError, 'timed out'):
+            launch.run_step('Orphan-output setup fixture', [sys.executable, '-c', command, str(pid_file)], timeout=.5)
+        pid = int(pid_file.read_text())
+        status = Path(f'/proc/{pid}/stat')
+        try:
+            observed = status.read_text()
+        except FileNotFoundError:
+            pass
+        else:
+            self.assertRegex(observed, r'^\d+ \(.+\) Z ')
+
+    def test_setup_interrupt_reaps_child(self):
+        processes = []
+        original = launch.subprocess.Popen
+
+        def start(*args, **kwargs):
+            process = original(*args, **kwargs)
+            processes.append(process)
+            return process
+
+        with patch.object(launch.subprocess, 'Popen', side_effect=start), patch.object(launch.queue.Queue, 'get', side_effect=KeyboardInterrupt), contextlib.redirect_stdout(io.StringIO()):
+            with self.assertRaises(KeyboardInterrupt):
+                launch.run_step('Interrupted setup fixture', [sys.executable, '-c', 'import time; time.sleep(60)'])
+        self.assertIsNotNone(processes[0].poll())
+
+    def test_modified_audio_recovery_names_supported_setup_command(self):
+        audio = self.root / 'Assets/Audio'
+        audio.mkdir(parents=True)
+        (audio / 'manifest.json').write_bytes((PROJECT / 'Assets/Audio/manifest.json').read_bytes())
+        custom = audio / 'harbor.wav'
+        custom.write_bytes(b'custom bytes to preserve')
+        with self.assertRaises(ValueError) as error:
+            launch.ensure_assets(audio)
+        self.assertIn('scripts/setup_audio.py --regenerate', str(error.exception))
+        self.assertIn('Preserve custom audio', str(error.exception))
+        self.assertNotIn('run.py --regenerate', str(error.exception))
+        self.assertEqual(custom.read_bytes(), b'custom bytes to preserve')
 
     def test_engine_and_game_arguments_and_exit_code_preserved(self):
         environment = {'fixture': 'owned'}

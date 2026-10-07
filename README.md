@@ -32,7 +32,11 @@ Use your installed executable's path; on Windows choose the `_console.exe` varia
 
 The launcher checks installed prerequisites, generates/verifies the seven original WAVs, restores C# packages from the installed Godot distribution, builds Debug, imports assets and runs the game directly from source. It uses only Python's standard library, installs no prerequisites, and downloads no software, packages, models or export templates. Its local package cache, generated WAVs, imports and builds are ignored by Git. A second run keeps matching WAV bytes and modification times; a modified generated WAV is refused rather than overwritten. Keep custom audio outside `Assets/Audio`. Preparation failures stop before launch and show the next action.
 
-To prepare for editing instead, add `--setup-only`, then open `project.godot` with the .NET editor. Pass optional Godot arguments after `--`; for example, `python3 scripts/run.py -- --headless -- --audio-smoke` runs the native audio check after setup. `bash scripts/setup.sh` (Windows: `py -3 scripts/setup_audio.py`) remains available when you only need to generate audio. No executable export is needed to play from source. The shared launcher has been exercised on Linux; Windows/macOS execution remains unqualified.
+To edit, add `--editor` to the same launcher command. This opens Godot with the selected dotnet path, project-local package cache and offline feed retained for editor builds. `--setup-only` prepares assets/builds and exits; afterward rerun the launcher with `--editor` to edit or without `--setup-only` to play. Opening `project.godot` independently requires configuring your own dotnet and NuGet environment; preparation does not change your shell or global settings.
+
+Restore, build and import each have a five-minute limit; slow machines can increase it with `--setup-timeout SECONDS`. Expiry or Ctrl+C stops the owned preparation process tree. This setting does not time audio generation, game/editor sessions or model requests.
+
+Pass optional Godot arguments after `--`; for example, `python3 scripts/run.py -- --headless -- --audio-smoke` runs the native audio check after setup. `bash scripts/setup.sh` (Windows: `py -3 scripts/setup_audio.py`) remains available when you only need to generate audio. No executable export is needed to play from source. The shared launcher has been exercised on Linux; Windows/macOS execution remains unqualified.
 
 No LLM is required for the authored main story. Local Pumas setup is in `docs/PUMAS.md`; local speech setup is in `docs/SPEECH.md`.
 

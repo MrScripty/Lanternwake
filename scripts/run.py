@@ -6,11 +6,15 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import queue
 import re
 import shutil
+import signal
 import subprocess
 import sys
 import tempfile
+import threading
+import time
 import xml.etree.ElementTree as ET
 import zipfile
 
@@ -75,17 +79,64 @@ def prerequisites(godot_value=None, dotnet_value='dotnet'):
     return godot, dotnet, feed
 
 
-def run_step(label, command, *, environment=None, reject_engine_errors=False):
+def stop_setup_process(child):
+    # Preparation owns this process tree. Stop descendants as well, including
+    # children that could otherwise keep the output pipe open after a timeout.
+    if os.name == 'posix':
+        try:
+            os.killpg(child.pid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
+    elif os.name == 'nt':
+        taskkill = Path(os.environ.get('SystemRoot', r'C:\Windows')) / 'System32/taskkill.exe'
+        try:
+            subprocess.run([str(taskkill), '/PID', str(child.pid), '/T', '/F'],
+                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=5)
+        except (OSError, subprocess.TimeoutExpired):
+            pass
+    if child.poll() is None:
+        child.kill()
+    child.wait(timeout=5)
+
+
+def run_step(label, command, *, environment=None, reject_engine_errors=False, timeout=300):
     print(label, flush=True)
     failed_output = False
     try:
         with subprocess.Popen(command, cwd=PROJECT, env=environment, encoding='utf-8', errors='replace', stdout=subprocess.PIPE,
-                              stderr=subprocess.STDOUT) as child:
-            for line in child.stdout:
-                print(line, end='', flush=True)
-                if reject_engine_errors and re.search(r'\b(?:ERROR:|SCRIPT ERROR:)|Failed to build', line):
-                    failed_output = True
-            code = child.wait()
+                              stderr=subprocess.STDOUT, start_new_session=os.name == 'posix') as child:
+            output = queue.Queue()
+
+            def read_output():
+                try:
+                    for line in child.stdout:
+                        output.put(line)
+                finally:
+                    output.put(None)
+
+            reader = threading.Thread(target=read_output, daemon=True)
+            reader.start()
+            deadline = time.monotonic() + timeout
+            try:
+                while True:
+                    remaining = deadline - time.monotonic()
+                    if remaining <= 0:
+                        raise subprocess.TimeoutExpired(command, timeout)
+                    line = output.get(timeout=remaining)
+                    if line is None:
+                        break
+                    print(line, end='', flush=True)
+                    if reject_engine_errors and re.search(r'\b(?:ERROR:|SCRIPT ERROR:)|Failed to build', line):
+                        failed_output = True
+                code = child.wait(timeout=max(0, deadline - time.monotonic()))
+            except (queue.Empty, subprocess.TimeoutExpired) as error:
+                stop_setup_process(child)
+                raise LaunchError(f'{label} timed out after {timeout:g} seconds. Resolve the stalled tool or increase --setup-timeout, then rerun.') from error
+            except KeyboardInterrupt:
+                stop_setup_process(child)
+                raise
+            finally:
+                reader.join(timeout=1)
     except OSError as error:
         raise LaunchError(f'{label} could not start: {error}') from error
     if code or failed_output:
@@ -116,7 +167,7 @@ def cache_bundled_sdk(feed, packages):
         staging.rename(destination)
 
 
-def prepare(godot, dotnet, feed):
+def prepare(godot, dotnet, feed, timeout=300):
     environment = os.environ.copy()
     # Godot locates hostfxr and invokes dotnet itself when opening its editor.
     # Honor an explicitly selected SDK even when it is outside the user's PATH.
@@ -129,27 +180,42 @@ def prepare(godot, dotnet, feed):
     ensure_assets(PROJECT / 'Assets/Audio')
     # Use only packages already shipped with Godot. Neither remote feeds nor
     # automatic SDK/workload installation belong to a source game launcher.
-    with tempfile.TemporaryDirectory(prefix='lanternwake-nuget-') as temporary:
-        config = Path(temporary) / 'NuGet.Config'
+    config = PROJECT / '.godot/source-launch/NuGet.Config'
+    # Editor-initiated builds must retain the same local feed after preparation.
+    # This MSBuild property is inherited by dotnet processes spawned by Godot.
+    environment['RestoreConfigFile'] = str(config)
+    with tempfile.TemporaryDirectory(prefix='.config-', dir=config.parent) as temporary:
+        candidate = Path(temporary) / 'NuGet.Config'
         root = ET.Element('configuration')
         sources = ET.SubElement(root, 'packageSources')
         ET.SubElement(sources, 'clear')
         ET.SubElement(sources, 'add', key='installed-godot', value=str(feed))
-        ET.ElementTree(root).write(config, encoding='utf-8', xml_declaration=True)
-        run_step('Restoring C# packages from installed Godot (offline)…',
-                 [str(dotnet), 'restore', 'Lanternwake.csproj', '--configfile', str(config)], environment=environment)
-        run_step('Building Lanternwake…',
-                 [str(dotnet), 'build', 'Lanternwake.csproj', '--configuration', 'Debug', '--no-restore'], environment=environment)
+        ET.ElementTree(root).write(candidate, encoding='utf-8', xml_declaration=True)
+        os.replace(candidate, config)
+    run_step('Restoring C# packages from installed Godot (offline)…',
+             [str(dotnet), 'restore', 'Lanternwake.csproj', '--configfile', str(config)], environment=environment, timeout=timeout)
+    run_step('Building Lanternwake…',
+             [str(dotnet), 'build', 'Lanternwake.csproj', '--configuration', 'Debug', '--no-restore'], environment=environment, timeout=timeout)
     run_step('Importing game assets…', [str(godot), '--headless', '--editor', '--path', str(PROJECT), '--import'],
-             environment=environment, reject_engine_errors=True)
+             environment=environment, reject_engine_errors=True, timeout=timeout)
     return environment
+
+
+def setup_seconds(value):
+    seconds = int(value)
+    if seconds < 1:
+        raise argparse.ArgumentTypeError('Use a positive number of seconds for setup stages.')
+    return seconds
 
 
 def main(arguments=None):
     parser = argparse.ArgumentParser(description=__doc__, epilog='Pass Godot arguments after --, for example: -- --headless --quit-after 120. No export templates are needed.')
     parser.add_argument('--godot', help='Path to installed Godot .NET 4.6.3 executable (default: GODOT_MONO or PATH)')
     parser.add_argument('--dotnet', default='dotnet', help='Path to installed dotnet executable (default: PATH)')
-    parser.add_argument('--setup-only', action='store_true', help='Prepare the project without starting the game; then open project.godot in the .NET editor')
+    parser.add_argument('--setup-timeout', type=setup_seconds, default=300, metavar='SECONDS', help='Maximum seconds per restore/build/import process (default: 300)')
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument('--setup-only', action='store_true', help='Prepare assets/builds only; rerun with --editor to edit using the prepared environment')
+    mode.add_argument('--editor', action='store_true', help='Prepare and open the .NET editor with the selected SDK and offline package configuration')
     parser.add_argument('godot_arguments', nargs=argparse.REMAINDER, help='Optional Godot arguments after --')
     options = parser.parse_args(arguments)
     if options.setup_only and options.godot_arguments:
@@ -157,15 +223,15 @@ def main(arguments=None):
     try:
         print('Checking installed Godot .NET and .NET 8 SDK…', flush=True)
         godot, dotnet, feed = prerequisites(options.godot, options.dotnet)
-        environment = prepare(godot, dotnet, feed)
+        environment = prepare(godot, dotnet, feed, options.setup_timeout)
         if options.setup_only:
-            print('Ready. Open project.godot in Godot .NET, or rerun this command without --setup-only to play.')
+            print('Prepared. Rerun this command with --editor to edit, or without --setup-only to play. Tool and package settings apply only to processes started by this launcher.')
             return 0
         extra = options.godot_arguments
         if extra[:1] == ['--']:
             extra = extra[1:]
-        print('Starting Lanternwake from source…', flush=True)
-        return subprocess.call([str(godot), '--path', str(PROJECT), *extra], cwd=PROJECT, env=environment)
+        print('Starting Godot .NET editor…' if options.editor else 'Starting Lanternwake from source…', flush=True)
+        return subprocess.call([str(godot), '--path', str(PROJECT), *(['--editor'] if options.editor else []), *extra], cwd=PROJECT, env=environment)
     except (LaunchError, OSError, ValueError, KeyError, TypeError, zipfile.BadZipFile) as error:
         print(f'Lanternwake launch failed: {error}', file=sys.stderr)
         return 1
