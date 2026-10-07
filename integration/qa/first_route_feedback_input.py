@@ -1,4 +1,4 @@
-"""Real Main, external input: first-route retries, focus and exact live/slot state."""
+"""Real Main, external input: route/inventory retries, focus and exact live/slot state."""
 import argparse
 from pathlib import Path
 import subprocess
@@ -6,13 +6,20 @@ import time
 
 from PIL import Image
 
-from normal_player import digest, normalized
+from normal_player import NormalPlayer, digest, normalized
 from pumas_unavailable_input import SettledPlayer
 from source_reconstruction_input import tabs
 from bell_restore_observation import observe_player, runtime_state
 
 
 class FirstRoutePlayer(SettledPlayer):
+    def click(self, caption):
+        # Quit scans settings by keyboard focus. Inspect each observed frame
+        # once before Tab, rather than waiting eight seconds on a hidden item.
+        if caption == 'Quit game':
+            return NormalPlayer.click(self, caption)
+        return super().click(caption)
+
     def visible(self):
         visible = super().visible()
         # Full-page layout segmentation can also omit the question/prose.
@@ -47,6 +54,8 @@ def main():
     for name in ['display-state', 'fixture', 'output', 'seed']:
         parser.add_argument('--' + name, type=Path, required=True)
     parser.add_argument('--percent', type=int, choices=[100, 125, 150], required=True)
+    parser.add_argument('--gate', choices=['ch1_s1a_evidence', 'ch1_s2_evidence', 'ch1_s2a_evidence'],
+                        default='ch1_s1a_evidence')
     args = parser.parse_args()
     player = observe_player(FirstRoutePlayer(args.display_state, args.fixture, args.output, args.seed))
     # Populate all four ordinary slots before launch. Input never edits slots.
@@ -55,20 +64,24 @@ def main():
     with player as game:
         game.result['controllerSha256'] = digest(__file__)
         game.result['percent'] = args.percent
-        gate = 'ch1_s1a_evidence'
+        gate = args.gate
+        game.result['gate'] = gate
         game.click('Settings'); game.click('Toggle instant text')
         for _ in range((args.percent - 100) // 25):
             game.click('Settings'); game.click('Larger reading text'); game.key('Escape')
         slots = game.slots(); game.click('Load'); game.click('Load current manual save')
         original = runtime_state(game, gate)
         game.check(not original['canAdvance'] and gate not in original['snapshot']['solvedActivities'],
-                   'actual loaded first-route question is unanswered')
+                   'actual loaded authored question is unanswered')
         game.check(game.slots() == slots, 'Load preserves all four seeded save/backup byte sequences')
         activity = next(b['activity'] for b in game.beats if b['id'] == gate)
-        prompt = 'Which route is the agreed bad-weather route'
+        prompt = activity['prompt']
         game.click('Examine evidence'); game.wait_visible(prompt); game.root_capture('question')
         focused = 3  # Existing Review known evidence initial focus.
-        for wrong, cue in [(0, 'maintenance access'), (2, 'distance')]:
+        for wrong in range(len(activity['options'])):
+            if wrong == activity['correctIndex']:
+                continue
+            cue = ' '.join(activity['optionFeedback'][wrong].split()[:8])
             tabs(game, abs(focused - wrong), wrong < focused); game.key('Return')
             game.wait_visible('Check the source'); game.wait_visible(cue)
             game.wait_visible(' '.join(activity['optionFeedback'][wrong].split()[-6:]))
@@ -102,12 +115,14 @@ def main():
         game.wait_visible('Continue'); game.root_capture('solved')
         game.click('Save'); game.click('Load'); game.click('Load current manual save')
         game.check(runtime_state(game, gate) == solved, 'actual Save/Load restores solved full live state without duplicating the record')
-        game.click('Continue'); successor = runtime_state(game, 'ch1_s2_b001')
-        game.check(successor['snapshot']['beatId'] == 'ch1_s2_b001', 'explicit Continue reaches the original inventory scene')
+        next_beat = game.beats[game.beats.index(next(b for b in game.beats if b['id'] == gate)) + 1]
+        game.click('Continue'); successor = runtime_state(game, next_beat['id'])
+        game.check(successor['snapshot']['beatId'] == next_beat['id'], 'explicit Continue reaches the original successor')
+        game.wait_visible(' '.join(next_beat['text'].split()[:8]))
         game.root_capture('successor')
         game.result['liveStates'] = dict(unanswered=original, solved=solved, successor=successor)
         game.quit()
-    print('PASS normal first-route feedback, exact state/save preservation and keyboard focus at', args.percent)
+    print('PASS normal authored feedback, exact state/save preservation and keyboard focus:', args.gate, args.percent)
 
 
 if __name__ == '__main__':
