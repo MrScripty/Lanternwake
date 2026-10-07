@@ -16,13 +16,29 @@ Not yet a release promise: production-qualified model responses, real-device spe
 
 Install Python 3, the official Godot **.NET** 4.6.3 build and .NET 8 SDK. The ordinary non-.NET Godot build cannot compile this project.
 
-```
-bash scripts/setup.sh  # Generate the seven original WAVs before Godot imports them.
-dotnet build Lanternwake.csproj
-godot-mono --path . --editor
+From the checkout, run one command. On Linux/macOS:
+
+```sh
+python3 scripts/run.py --godot "/path/to/the/Godot.NET/executable"
 ```
 
-Run setup before opening `project.godot` with the .NET editor, then run. On Windows without Bash, use `py -3 scripts/setup_audio.py`; on other systems, `python3 scripts/setup_audio.py` is equivalent. Setup requires only the Python standard library, performs no downloads, and safely skips already verified audio. Missing Python stops setup with installation guidance; install it before proceeding. Generated WAVs are intentionally not tracked in Git. No LLM is required for the authored main story. Local Pumas setup is in `docs/PUMAS.md`; local speech setup is in `docs/SPEECH.md`.
+On Windows (PowerShell or Command Prompt, no Bash required):
+
+```powershell
+py -3 scripts/run.py --godot "C:\Tools\Godot\Godot_v4.6.3-stable_mono_win64_console.exe"
+```
+
+Use your installed executable's path; on Windows choose the `_console.exe` variant so preparation errors are visible. You can omit `--godot` when `GODOT_MONO` names it or a Godot .NET executable is on PATH. If dotnet is outside PATH, pass `--dotnet` its executable. If `python3`/`py` is missing, install Python 3 from python.org first.
+
+The launcher checks installed prerequisites, generates/verifies the seven original WAVs, restores C# packages from the installed Godot distribution, builds Debug, imports assets and runs the game directly from source. It uses only Python's standard library, installs no prerequisites, and downloads no software, packages, models or export templates. Its local package cache, generated WAVs, imports and builds are ignored by Git. A second run keeps matching WAV bytes and modification times; a modified generated WAV is refused rather than overwritten. Keep custom audio outside `Assets/Audio`. Preparation failures stop before launch and show the next action.
+
+To edit, add `--editor` to the same launcher command. This opens Godot with the selected dotnet path, project-local package cache and offline feed retained for editor builds. `--setup-only` prepares assets/builds and exits; afterward rerun the launcher with `--editor` to edit or without `--setup-only` to play. Opening `project.godot` independently requires configuring your own dotnet and NuGet environment; preparation does not change your shell or global settings.
+
+Restore, build and import each have a five-minute limit; slow machines can increase it with `--setup-timeout SECONDS`. Expiry or Ctrl+C stops the owned preparation process tree. This setting does not time audio generation, game/editor sessions or model requests.
+
+Pass optional Godot arguments after `--`; for example, `python3 scripts/run.py -- --headless -- --audio-smoke` runs the native audio check after setup. `bash scripts/setup.sh` (Windows: `py -3 scripts/setup_audio.py`) remains available when you only need to generate audio. No executable export is needed to play from source. The shared launcher has been exercised on Linux; Windows/macOS execution remains unqualified.
+
+No LLM is required for the authored main story. Local Pumas setup is in `docs/PUMAS.md`; local speech setup is in `docs/SPEECH.md`.
 
 `Lanternwake.sln` tracks the Godot C# build configurations `Debug`, `ExportDebug` and `ExportRelease`. Executable export also requires the matching official .NET player templates; current partial export evidence and limits are recorded in [export qualification](docs/EXPORT-SOLUTION.md).
 

@@ -26,8 +26,6 @@ jobs:
       - uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4.3.1
         with:
           dotnet-version: '8.0.425'
-      - name: Generate and verify original audio assets
-        run: bash scripts/setup.sh
       - name: Provision pinned official Godot .NET
         shell: bash
         run: |
@@ -38,8 +36,16 @@ jobs:
           unzip -q "$archive" -d "$RUNNER_TEMP/godot"
           root="$RUNNER_TEMP/godot/Godot_v4.6.3-stable_mono_linux_x86_64"
           echo "GODOT_MONO=$root/Godot_v4.6.3-stable_mono_linux.x86_64" >> "$GITHUB_ENV"
-          printf '<configuration><packageSources><clear/><add key="official-godot" value="%s/GodotSharp/Tools/nupkgs"/></packageSources></configuration>\n' "$root" > "$RUNNER_TEMP/Godot.NuGet.Config"
-          dotnet restore Lanternwake.sln --configfile "$RUNNER_TEMP/Godot.NuGet.Config"
+      - name: Verify editor handoff with isolated profile and no network
+        run: python3 integration/launch/editor_handoff.py
+      - name: Prepare and launch from source with missing audio and an empty local package cache
+        run: |
+          test ! -f Assets/Audio/harbor.wav
+          test ! -d .godot/source-launch
+          python3 scripts/run.py -- --headless -- --audio-smoke
+          python3 scripts/run.py --setup-only
+          echo "NUGET_PACKAGES=$PWD/.godot/source-launch/nuget" >> "$GITHUB_ENV"
+          echo "RestoreConfigFile=$PWD/.godot/source-launch/NuGet.Config" >> "$GITHUB_ENV"
       - name: Verify canonical story metrics
         run: |
           python3 scripts/story_metrics.py
