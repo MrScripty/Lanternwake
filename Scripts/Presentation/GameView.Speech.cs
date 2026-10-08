@@ -5,6 +5,12 @@ namespace Lanternwake.Presentation;
 public partial class GameView
 {
     private bool CurrentSpeech(int generation) => generation == _generation && IsInsideTree() && !_closing && _chatPanel.Visible;
+    private void CancelSpeechRequest()
+    {
+        var request = _speechRequest; _speechRequest = null;
+        if (request is null) return;
+        request.Cancel(); request.Dispose();
+    }
     private void CloseMicrophoneConsent()
     {
         var consent = _microphoneConsent; _microphoneConsent = null;
@@ -28,13 +34,13 @@ public partial class GameView
     }
     private void ToggleMicrophone()
     {
-        if (!_busy && !_closing && _chatPanel.Visible && _microphoneConsent is null && !_speech.Pending)
+        if (!_busy && !_closing && !_mic.Disabled && _chatPanel.Visible && _microphoneConsent is null && !_speech.Pending)
             _operations.Track(ToggleMicrophoneAsync());
     }
     private async Task ToggleMicrophoneAsync()
     {
         var generation = _generation;
-        _speechRequest?.Dispose(); _speechRequest = new CancellationTokenSource(TimeSpan.FromSeconds(90));
+        CancelSpeechRequest(); _speechRequest = new CancellationTokenSource(TimeSpan.FromSeconds(90));
         var token = _speechRequest.Token;
         if (!_speech.Recording && !_speech.HasRecording)
         {

@@ -264,7 +264,7 @@ public partial class GameView : Node
         // Load restores the same session object; the saved view also belongs to a beat and generation.
         var restore = _chatPanel.Visible && reading is not null && reading.Session == _session &&
             reading.BeatId == _session.Beat.Id && reading.Generation == _generation && !_closing;
-        _generation++; _request?.Cancel(); _speechRequest?.Cancel(); CloseMicrophoneConsent(); _speech.Discard(); _busy = false; _chatPanel.Visible = false; _mic.Text = "Use voice"; _mic.Disabled = false; _send.Disabled = false; _advance.Disabled = false; _entry.Editable = true; _advance.GrabFocus();
+        _generation++; _request?.Cancel(); CancelSpeechRequest(); CloseMicrophoneConsent(); _speech.Discard(); _busy = false; _chatPanel.Visible = false; _mic.Text = "Use voice"; _mic.Disabled = false; _send.Disabled = false; _advance.Disabled = false; _entry.Editable = true; _advance.GrabFocus();
         if (restore)
         {
             SetSpeakerText(reading!.Speaker); _dialogue.Text = reading.Text;
@@ -611,10 +611,10 @@ public partial class GameView : Node
     {
         if (Engine.IsEditorHint()) return;
         if (what != NotificationWMCloseRequest || _closing) return;
-        _closing = true; _generation++; _request?.Cancel(); _speechRequest?.Cancel(); _speechRequest?.Dispose(); _setupRequest?.Cancel(); CancelAiSetup(); CloseMicrophoneConsent(); _speech.Discard();
+        _closing = true; _generation++; _request?.Cancel(); CancelSpeechRequest(); _setupRequest?.Cancel(); CancelAiSetup(); CloseMicrophoneConsent(); _speech.Discard();
         try { await _operations.DrainAsync(); }
         catch (Exception error) { GD.PushWarning("Shutdown operation: " + error.Message); }
         finally { _setupPumas?.Dispose(); _setupPumas = null; QuitAfterAudio(); }
     }
-    public override void _ExitTree() { if (Engine.IsEditorHint()) return; _generation++; _request?.Cancel(); _request?.Dispose(); _speechRequest?.Cancel(); _speechRequest?.Dispose(); _setupRequest?.Cancel(); CancelAiSetup(); _credentialLifetime.Cancel(); _aiSetupRequest?.Dispose(); _setupPumas?.Dispose(); CloseMicrophoneConsent(); _speech.Dispose(); _storage?.Dispose(); }
+    public override void _ExitTree() { if (Engine.IsEditorHint()) return; _generation++; _request?.Cancel(); _request?.Dispose(); CancelSpeechRequest(); _setupRequest?.Cancel(); CancelAiSetup(); _credentialLifetime.Cancel(); _aiSetupRequest?.Dispose(); _setupPumas?.Dispose(); CloseMicrophoneConsent(); _speech.Dispose(); _storage?.Dispose(); }
 }
