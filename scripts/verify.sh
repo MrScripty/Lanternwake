@@ -58,6 +58,7 @@ fi
 rm -f "$log"
 trap - EXIT
 python3 integration/qa/runtime_lifecycle.py
+python3 integration/qa/speaker_attribution.py
 python3 integration/qa/watch_completion.py
 python3 integration/qa/activity_review.py
 python3 integration/qa/conversation_return.py
