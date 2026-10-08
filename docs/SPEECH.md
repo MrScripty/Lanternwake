@@ -7,7 +7,7 @@ Voice input is temporarily **unsupported**. The requested backend is local Coher
 The retained `SpeechRecorder` now connects explicitly consented Godot capture to the generic
 adapter. Shipping installed-runtime admission remains independently closed;
 capability JSON, saved preferences and the debug fixture cannot authorize a
-microphone. `Use voice` first probes the selected local contract. The existing
+microphone. Once independently admitted, `Use voice` first probes the selected local contract. The existing
 consent dialog wraps inside a 640px viewport and starts capture only after
 `Start recording`. Its second probe must preserve the consent-bound model/profile;
 a changed selection requires fresh consent. There is no background recording,
