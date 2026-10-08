@@ -3429,6 +3429,29 @@
               "text": "Yes."
             },
             {
+              "id": "ch2_s4_b019a",
+              "speaker": "narrator",
+              "text": "The whole page is copied and its source recorded. Before you turn to the next document, Tomas leaves room for you to say what you need from this work.",
+              "exchange": {
+                "characterId": "tomas",
+                "prompt": "How do you want to approach the omission note with Tomas?",
+                "options": [
+                  {
+                    "label": "Keep his note in the catalogue exactly as written.",
+                    "reply": "Exactly as written. We keep both sides and the source and date together. I won't crop his instruction away, or crop away the context around it."
+                  },
+                  {
+                    "label": "Let's document what this proves and what it doesn't.",
+                    "reply": "It proves he directed the corrected passage to be omitted. It doesn't name everyone who knew or give us his reason. The testimony is the next source to find, not something to fill in."
+                  },
+                  {
+                    "label": "I'm angry, but I don't want anger doing the editing.",
+                    "reply": "You can be angry. I won't ask you to forgive him, and you don't have to edit yourself into calmness before we work. We keep the page intact and mark our interpretation separately."
+                  }
+                ]
+              }
+            },
+            {
               "id": "ch2_s4_b020",
               "speaker": "narrator",
               "text": "Choose how to handle evidence involving Ada's uncle.",
