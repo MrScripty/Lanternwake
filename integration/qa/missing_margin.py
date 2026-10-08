@@ -7,6 +7,20 @@ import subprocess
 import tempfile
 
 
+def run_native(command, *, cwd, env):
+    try:
+        return subprocess.run(command, cwd=cwd, env=env, text=True,
+                              stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=45)
+    except subprocess.TimeoutExpired as error:
+        # TimeoutExpired can contain bytes even when the subprocess requested text.
+        for captured in (error.stdout, error.stderr):
+            if captured:
+                print(captured.decode('utf-8', errors='replace') if isinstance(captured, bytes) else captured,
+                      end='', flush=True)
+        print(f'\nNative Missing Margin timed out after {error.timeout} seconds.', flush=True)
+        raise RuntimeError('Native Missing Margin timed out; inspect captured output above.') from error
+
+
 def main():
     project = Path(__file__).resolve().parents[2]
     names = subprocess.check_output(['git', 'ls-files', '-z'], cwd=project).decode().split('\0')
@@ -17,8 +31,8 @@ def main():
         env.update({key: str(root / child) for key, child in [('XDG_DATA_HOME', 'data'), ('XDG_CONFIG_HOME', 'config'), ('XDG_CACHE_HOME', 'cache')]})
         env.update(LANTERNWAKE_MARGIN_FIXTURE=str(root), LANTERNWAKE_PUMAS_MODEL='', DBUS_SESSION_BUS_ADDRESS='unix:path=' + str(root / 'no-keyring'))
         env.pop('OPENROUTER_API_KEY', None)
-        result = subprocess.run([env['GODOT_MONO'], '--headless', '--path', str(project), 'res://qualification/missing-margin.tscn'],
-                                cwd=project, env=env, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=45)
+        result = run_native([env['GODOT_MONO'], '--headless', '--path', str(project), 'res://qualification/missing-margin.tscn'],
+                            cwd=project, env=env)
         print(result.stdout, end='', flush=True)
         if result.returncode or any(marker in result.stdout for marker in ['ERROR:', 'SCRIPT ERROR:', 'WARNING:']) or 'LANTERNWAKE_MISSING_MARGIN_OK' not in result.stdout:
             raise RuntimeError('Native Missing Margin did not pass cleanly.')
