@@ -288,3 +288,14 @@ ended, using reference counts and a bounded two-second deadline. Engine changes
 must revalidate this lifetime boundary. Tests establish engineering behavior;
 physical speaker output, subjective musical quality, final mastering, and
 intelligibility of future real voices require listening review.
+
+Absent optional streams are skipped before playing, and only active, non-null
+playback handles enter retirement ownership. The reported `f5d50d5` startup
+failure came from an absent generated music WAV: an inactive player's null
+playback was stored, then dereferenced by both processing and tree exit. The
+ownership guard landed in `6a5c769` and is already present on main. Native
+`audio-lifecycle.tscn` regression checks cover absent music/effects, natural
+effect/dialogue completion, stream removal, interrupted ambience transitions,
+repeatable shutdown, and tree exit with active or absent streams. Generate the
+checkout's audio with `python3 scripts/run.py --setup-only` before normal play;
+missing required ambience still produces an explicit setup diagnostic.

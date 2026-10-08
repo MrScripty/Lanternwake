@@ -193,6 +193,7 @@ public partial class AudioDirector : Node
     }
     private void PlayAndTrack(AudioStreamPlayer player)
     {
+        if (player.Stream is null) return;
         player.Play();
         // Missing streams or failed playback creation leave no handle to own.
         // GetStreamPlayback also reports an engine error on an inactive player.
