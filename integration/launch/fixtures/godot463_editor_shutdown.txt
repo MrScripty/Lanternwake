@@ -1,0 +1,172 @@
+Checking installed Godot .NET and .NET 8 SDK…
+Audio setup: generated and verified 7 assets.
+Restoring C# packages from installed Godot (offline)…
+  Determining projects to restore...
+  Restored /tmp/lanternwake-editor-handoff-vay9yoxd/checkout/Lanternwake.csproj (in 414 ms).
+Building Lanternwake…
+  Lanternwake -> /tmp/lanternwake-editor-handoff-vay9yoxd/checkout/.godot/mono/temp/bin/Debug/Lanternwake.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:04.70
+Importing game assets…
+Godot Engine v4.6.3.stable.mono.official.7d41c59c4 - https://godotengine.org
+
+[   0% ] first_scan_filesystem | Started Project initialization (5 steps)
+[   0% ] first_scan_filesystem | Scanning file structure...
+[  16% ] first_scan_filesystem | Loading global class names...
+[  33% ] first_scan_filesystem | Verifying GDExtensions...
+[  50% ] first_scan_filesystem | Creating autoload scripts...
+[  66% ] first_scan_filesystem | Initializing plugins...
+[  83% ] first_scan_filesystem | Starting file scan...
+[ DONE ] first_scan_filesystem
+
+[   0% ] update_scripts_classes | Started Registering global classes... (82 steps)
+[   0% ] update_scripts_classes |
+[   1% ] update_scripts_classes |
+[   2% ] update_scripts_classes |
+[   3% ] update_scripts_classes |
+[   4% ] update_scripts_classes |
+[   6% ] update_scripts_classes |
+[   7% ] update_scripts_classes |
+[   8% ] update_scripts_classes |
+[   9% ] update_scripts_classes |
+[  10% ] update_scripts_classes |
+[  12% ] update_scripts_classes |
+[  13% ] update_scripts_classes |
+[  14% ] update_scripts_classes |
+[  15% ] update_scripts_classes |
+[  16% ] update_scripts_classes |
+[  18% ] update_scripts_classes |
+[  19% ] update_scripts_classes |
+[  20% ] update_scripts_classes |
+[  21% ] update_scripts_classes |
+[  22% ] update_scripts_classes |
+[  24% ] update_scripts_classes |
+[  25% ] update_scripts_classes |
+[  26% ] update_scripts_classes |
+[  27% ] update_scripts_classes |
+[  28% ] update_scripts_classes |
+[  30% ] update_scripts_classes |
+[  31% ] update_scripts_classes |
+[  32% ] update_scripts_classes |
+[  33% ] update_scripts_classes |
+[  34% ] update_scripts_classes |
+[  36% ] update_scripts_classes |
+[  37% ] update_scripts_classes |
+[  38% ] update_scripts_classes |
+[  39% ] update_scripts_classes |
+[  40% ] update_scripts_classes |
+[  42% ] update_scripts_classes |
+[  43% ] update_scripts_classes |
+[  44% ] update_scripts_classes |
+[  45% ] update_scripts_classes |
+[  46% ] update_scripts_classes |
+[  48% ] update_scripts_classes |
+[  49% ] update_scripts_classes |
+[  50% ] update_scripts_classes |
+[  51% ] update_scripts_classes |
+[  53% ] update_scripts_classes |
+[  54% ] update_scripts_classes |
+[  55% ] update_scripts_classes |
+[  56% ] update_scripts_classes |
+[  57% ] update_scripts_classes |
+[  59% ] update_scripts_classes |
+[  60% ] update_scripts_classes | AudioDirector
+[  61% ] update_scripts_classes |
+[  62% ] update_scripts_classes | CharacterPose
+[  63% ] update_scripts_classes |
+[  65% ] update_scripts_classes |
+[  66% ] update_scripts_classes |
+[  67% ] update_scripts_classes |
+[  68% ] update_scripts_classes |
+[  69% ] update_scripts_classes |
+[  71% ] update_scripts_classes |
+[  72% ] update_scripts_classes |
+[  73% ] update_scripts_classes |
+[  74% ] update_scripts_classes |
+[  75% ] update_scripts_classes |
+[  77% ] update_scripts_classes |
+[  78% ] update_scripts_classes |
+[  79% ] update_scripts_classes |
+[  80% ] update_scripts_classes | PerformanceDirection
+[  81% ] update_scripts_classes |
+[  83% ] update_scripts_classes | StageCharacter
+[  84% ] update_scripts_classes | StageDirector
+[  85% ] update_scripts_classes | StageMotion
+[  86% ] update_scripts_classes | StageScene
+[  87% ] update_scripts_classes |
+[  89% ] update_scripts_classes |
+[  90% ] update_scripts_classes |
+[  91% ] update_scripts_classes |
+[  92% ] update_scripts_classes |
+[  93% ] update_scripts_classes |
+[  95% ] update_scripts_classes |
+[  96% ] update_scripts_classes |
+[  97% ] update_scripts_classes |
+[ DONE ] update_scripts_classes
+
+[   0% ] _update_scan_actions | Started Scanning actions... (7 steps)
+[   0% ] _update_scan_actions | archive.wav
+[  12% ] _update_scan_actions | bell_release.wav
+[  25% ] _update_scan_actions | harbor.wav
+[  37% ] _update_scan_actions | keeper_house.wav
+[  50% ] _update_scan_actions | lantern_room.wav
+[  62% ] _update_scan_actions | tide_cave.wav
+[  75% ] _update_scan_actions | watch_theme.wav
+[ DONE ] _update_scan_actions
+
+[   0% ] reimport | Started (Re)Importing Assets (7 steps)
+[   0% ] reimport | Preparing files to reimport...
+[  12% ] reimport | Preparing files to reimport...
+[  25% ] reimport | Preparing files to reimport...
+[  37% ] reimport | Preparing files to reimport...
+[  50% ] reimport | Preparing files to reimport...
+[  62% ] reimport | Preparing files to reimport...
+[  75% ] reimport | Preparing files to reimport...
+[   0% ] reimport | Executing pre-reimport operations...
+[   0% ] reimport | archive.wav
+[  12% ] reimport | bell_release.wav
+[  25% ] reimport | harbor.wav
+[  37% ] reimport | keeper_house.wav
+[  50% ] reimport | lantern_room.wav
+[  62% ] reimport | tide_cave.wav
+[  75% ] reimport | watch_theme.wav
+[  87% ] reimport | Finalizing Asset Import...
+[ DONE ] reimport
+
+[   0% ] reimport | Started (Re)Importing Assets (7 steps)
+[   0% ] reimport | Executing post-reimport operations...
+[ DONE ] reimport
+
+[   0% ] loading_editor_layout | Started Loading editor (5 steps)
+[   0% ] loading_editor_layout | Loading editor layout...
+[  16% ] loading_editor_layout | Loading docks...
+[ DONE ] loading_editor_layout
+
+Starting Godot .NET editor…
+Godot Engine v4.6.3.stable.mono.official.7d41c59c4 - https://godotengine.org
+
+[   0% ] first_scan_filesystem | Started Project initialization (5 steps)
+[   0% ] first_scan_filesystem | Scanning file structure...
+[  16% ] first_scan_filesystem | Loading global class names...
+[  33% ] first_scan_filesystem | Verifying GDExtensions...
+[  50% ] first_scan_filesystem | Creating autoload scripts...
+[  66% ] first_scan_filesystem | Initializing plugins...
+[  83% ] first_scan_filesystem | Starting file scan...
+[ DONE ] first_scan_filesystem
+
+[   0% ] dotnet_build_project | Started Building .NET project... (1 steps)
+[   0% ] dotnet_build_project | Building project
+[   0% ] loading_editor_layout | Started Loading editor (5 steps)
+[   0% ] loading_editor_layout | Loading editor layout...
+[  16% ] loading_editor_layout | Loading docks...
+[ DONE ] loading_editor_layout
+
+[ DONE ] dotnet_build_project
+
+ERROR: EditorSettings not instantiated yet when getting setting "export/android/android_sdk_path".
+   at: _EDITOR_GET (editor/settings/editor_settings.cpp:1531)
+LANTERNWAKE_EDITOR_HANDOFF_OK editor rebuilt changed source with selected SDK and offline cache
