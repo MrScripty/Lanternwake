@@ -214,6 +214,8 @@ def main(arguments=None):
     parser = argparse.ArgumentParser(description=__doc__, epilog='Pass Godot arguments after --, for example: -- --headless --quit-after 120. No export templates are needed.')
     parser.add_argument('--godot', help='Path to installed Godot .NET 4.6.3 executable (default: GODOT_MONO or PATH)')
     parser.add_argument('--dotnet', default='dotnet', help='Path to installed dotnet executable (default: PATH)')
+    parser.add_argument('--pumas-library', help='Explicit existing canonical Pumas library folder; used by model setup, never starts Pumas')
+    parser.add_argument('--pumas-observer', help='Absolute installed pumas-rpc executable for authenticated read-only owner discovery')
     parser.add_argument('--setup-timeout', type=setup_seconds, default=300, metavar='SECONDS', help='Maximum seconds per restore/build/import process (default: 300)')
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument('--setup-only', action='store_true', help='Prepare assets/builds only; rerun with --editor to edit using the prepared environment')
@@ -225,7 +227,26 @@ def main(arguments=None):
     try:
         print('Checking installed Godot .NET and .NET 8 SDK…', flush=True)
         godot, dotnet, feed = prerequisites(options.godot, options.dotnet)
+        selection = {}
+        for value, variable, directory in [(options.pumas_library, 'LANTERNWAKE_PUMAS_LIBRARY_ROOT', True), (options.pumas_observer, 'LANTERNWAKE_PUMAS_OBSERVER', False)]:
+            if value is not None:
+                path = Path(value)
+                if not path.is_absolute() or not (path.is_dir() if directory else path.is_file()):
+                    raise LaunchError('Select existing absolute Pumas library and observer paths. No Pumas service was started.')
+                selection[variable] = str(path.resolve())
+        if selection:
+            root_value = selection.get('LANTERNWAKE_PUMAS_LIBRARY_ROOT', os.environ.get('LANTERNWAKE_PUMAS_LIBRARY_ROOT', ''))
+            observer_value = selection.get('LANTERNWAKE_PUMAS_OBSERVER', os.environ.get('LANTERNWAKE_PUMAS_OBSERVER', ''))
+            if not root_value or not observer_value:
+                raise LaunchError('Select both --pumas-library and --pumas-observer, or provide the other path in the environment. No Pumas service was started.')
+            for value, variable, directory in [(root_value, 'LANTERNWAKE_PUMAS_LIBRARY_ROOT', True), (observer_value, 'LANTERNWAKE_PUMAS_OBSERVER', False)]:
+                path = Path(value)
+                if not path.is_absolute() or not (path.is_dir() if directory else path.is_file()):
+                    raise LaunchError('Select existing absolute Pumas library and observer paths. No Pumas service was started.')
+                selection[variable] = str(path.resolve())
+            selection['LANTERNWAKE_PUMAS_SELECTION_OVERRIDE'] = '1'
         environment = prepare(godot, dotnet, feed, options.setup_timeout)
+        environment.update(selection)
         if options.setup_only:
             print('Prepared. Rerun this command with --editor to edit, or without --setup-only to play. Tool and package settings apply only to processes started by this launcher.')
             return 0

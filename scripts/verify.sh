@@ -11,6 +11,7 @@ fi
 python3 -m unittest discover -s integration/audio -v
 python3 -m unittest discover -s integration/launch -v
 python3 -m unittest discover -s integration/qa -p 'test_evidence_runs.py' -v
+python3 -m unittest discover -s integration/qa -p 'test_missing_margin_runner.py' -v
 dotnet run --project tests/Lanternwake.Tests.csproj -- Content/story.json
 dotnet run --project integration/story-validation/StoryValidation.csproj -- Content/story.json
 dotnet run --project integration/pumas/ClientTests/ClientTests.csproj
@@ -18,6 +19,7 @@ dotnet run --project integration/pumas/DiscoveryTests/DiscoveryTests.csproj
 dotnet run --project integration/live-music/LiveMusic.Tests.csproj --configuration Release -- Assets/Music
 dotnet run --project integration/ai-configuration/AiConfiguration.Tests.csproj
 dotnet run --project integration/speech/SpeechSmoke.csproj
+dotnet run --project integration/owner-reuse/OwnerReuse.Tests.csproj
 dotnet build Lanternwake.csproj --no-restore
 "$GODOT_MONO" --headless --editor --path . --import
 for mode in smoke ui-smoke save-isolation-smoke audio-smoke; do
@@ -58,6 +60,10 @@ fi
 rm -f "$log"
 trap - EXIT
 python3 integration/qa/runtime_lifecycle.py
+python3 integration/qa/reduced_range.py
+python3 integration/qa/generator_lifetime.py
+python3 integration/qa/speech_capture.py
+python3 integration/qa/pumas_owner.py
 python3 integration/qa/watch_completion.py
 python3 integration/qa/activity_review.py
 python3 integration/qa/route_model.py
@@ -65,6 +71,8 @@ python3 integration/qa/conversation_return.py
 python3 integration/qa/content_note.py
 python3 integration/qa/cup_states.py
 python3 integration/qa/family_exchange.py
+python3 integration/qa/missing_margin.py
+python3 integration/qa/history_resume.py
 python3 integration/qa/bell_descent.py
 python3 integration/qa/character_performance.py
 log="$(mktemp)"

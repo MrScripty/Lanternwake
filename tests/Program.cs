@@ -19,6 +19,7 @@ count += SaveRecoveryTests.Run(story);
 count += SourceReconstructionTests.Run(story, originalJson, storyPath);
 count += FamilyExchangeTests.Run(story, originalJson, storyPath);
 count += RouteReconstructionTests.Run(story);
+count += MissingMarginTests.Run(story);
 var authoring = new StoryAuthoringIndex(story);
 Assert(authoring.Entries.Length == ordered.Length, "Author index includes every beat");
 Assert(authoring.Entries.Select(e => e.Beat.Id).SequenceEqual(ordered.Select(b => b.Id)), "Author index preserves canonical order");

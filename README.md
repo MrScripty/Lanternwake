@@ -6,11 +6,13 @@ An original stormbound-island mystery built in **Godot 4.6.3 .NET / C#**. A fixe
 
 This is an in-development game, not a shipped five-hour product. Five hours is the main-story target, excluding unlimited optional chat. See `docs/bible` for actual authored content, pacing estimates, visual language and remaining playtest requirements. Build success, smoke success, real Pumas inference and real microphone qualification are separate checks; consult the [playable coverage inventory](docs/PLAYABLE-COVERAGE-INVENTORY.md) for accepted non-audio evidence and remaining gates, and [verification record](docs/VERIFICATION.md) for earlier qualification details.
 
-Implemented source: ordered authored story, five editable 3D sets, reusable stylized adult character scenes, dialogue reveal/advance, mandatory evidence questions, unlocked evidence catalogue, history, manual/autosave/load, keyboard controls, editable suggestions and free text, bounded/cancellable local Pumas calls, microphone/review-before-send UI retained for the requested Pumas-owned Cohere Transcribe integration. Voice capture is temporarily unavailable until Pumas exposes that contract.
+Implemented source: ordered authored story, five editable 3D sets, reusable stylized adult character scenes, dialogue reveal/advance, mandatory evidence questions, unlocked evidence catalogue, history, manual/autosave/load, keyboard controls, editable suggestions and free text, bounded/cancellable local Pumas calls, microphone/review-before-send UI retained for the requested Pumas-owned Cohere Transcribe integration. Voice capture remains unavailable until the installed Pumas audio runtime is independently qualified.
 
-Real local Pumas/llama.cpp dialogue smoke tests passed; see `docs/LIVE-QUALIFICATION.md` for exact artifacts and the observed tiny-model identity failure. Cohere transcription is not yet implemented or qualified. Direct whisper.cpp support has been removed. Physical microphone input remains unqualified.
+Earlier real local Pumas/llama.cpp dialogue smoke tests passed; see `docs/LIVE-QUALIFICATION.md` for their exact source/artifacts and the observed tiny-model identity failure. Those historical runs do not qualify the current selected-owner producer deployment. The generic audio consumer and bounded capture path are implemented with synthetic qualification; installed Cohere transcription and physical microphone behavior remain unqualified, and shipping microphone admission stays closed. Direct whisper.cpp support has been removed. Physical microphone input remains unqualified. See [current player-flow coverage and remaining inputs](docs/CURRENT-FEATURE-COVERAGE-20261008.md) for the reconciled status.
 
-Not yet a release promise: production-qualified model responses, real-device speech, relationship/disclosure progression, full accessibility/performance/platform qualification. Human playtesters own five-hour duration qualification.
+Installed model interoperability, real-device speech, accessibility, performance and target-platform exports require separate acceptance. Representative readers qualify duration and comprehension.
+
+Model setup now requires an explicitly selected existing Pumas library and authenticated owner. See [existing-library reuse](docs/PUMAS-OWNER-REUSE.md) for UI/launcher selection, local-first checks and remaining bootstrap contract gaps. The game never starts Pumas automatically.
 
 ## Run
 
@@ -65,16 +67,17 @@ Set GODOT_MONO to the official .NET executable and use scripts/verify.sh for the
 - Content note: available before Arrival and through Settings during play. Uses the existing bible's note; reading it does not start or advance the story. See [content-note qualification](docs/PLAYER-CONTENT-NOTE.md).
 - Keeper-house cup states follow the existing canonical break, boxing and steel-mug beats, including save/load and replay. See [cup-stage qualification and visual limits](docs/CANONICAL-CUP-STATES.md).
 - Stay and talk: optional conversation panel
+- The Missing Margin: **Speak with Tomas** retains one of three authored approaches to Ivo's omission note. Escape leaves it unspoken; Continue rejoins the original story. See [the local exchange](docs/MISSING-MARGIN-EXCHANGE.md).
 - Suggestions populate editable input; Say this submits
 - Return / Escape from optional conversation resumes the paused authored passage; replies remain in the record. Cancelled or retired conversation controls cannot submit hidden drafts. See [conversation return](docs/CONVERSATION-STORY-RETURN.md).
-- H: history; E: catalogue; Escape: close panel
+- H: History opens at current/recent context while retaining full scrollback; E: catalogue; Escape: close panel. See [History opening](docs/HISTORY-RESUME-CONTEXT.md).
 - Long record/catalogue text: Tab to the gold-outlined scrollbar, Up/Down or Page Up/Down to read, Home/End for the beginning/end; Tab reaches Close or Back to question. See [keyboard reading](docs/KEYBOARD-RECORD-READING.md).
 - Manual Save/Load; separate automatic checkpoint; explicit previous-good recovery choices
 - Finish: review the record/evidence, explicitly save the completed watch, or confirm starting a new watch. Starting again preserves manual saves and session reading/sound preferences; automatic checkpoints update as the new watch progresses.
 - Evidence questions: review known evidence or read the record, then return to the same unanswered question. Review, return and cancellation preserve the current question and save files. See [question review](docs/QUESTION-EVIDENCE-REVIEW.md) for qualification and limits.
 - Chapter 2 route question: explore the labelled route model, compare supported approaches and read their source passages before answering. The optional model stops at documented decision points and preserves the pending question. See [playable route comparison](docs/PLAYABLE-ROUTE-MODEL.md).
 - Reading settings: smaller/larger reading text at 100%, 125% and 150%, reset to 100%, instant text and reduced motion. Reading text size lasts for the current game session; a fresh game starts at 100%. See [reading text size](docs/READING-TEXT-SIZE.md) for the scaled reading/choice surfaces and unchanged navigation/HUD sizes.
-- Sound settings: separate music/ambience/effects levels and master mute
+- Sound settings: independent channel levels, master mute and optional [reduced loud/quiet differences](docs/REDUCED-DYNAMIC-RANGE.md), off in a fresh process.
 - Original MIDI score with environment and character themes, a developing five-chapter journey, live MIDI acoustic layers, speech EQ/ducking, editable location loops and bell-release cue; see [audio authoring](docs/AUDIO.md)
 
 Artwork, story text and MIDI compositions are original project work. The bundled synth and instrument bank retain their separate licences; see [audio provenance](docs/AUDIO.md#provenance-and-verification). Source ownership and technical contracts are documented in `docs/ARCHITECTURE.md`.

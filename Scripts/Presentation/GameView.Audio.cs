@@ -35,6 +35,10 @@ public partial class GameView
         mute.SetPressedNoSignal(Audio.Muted);
         mute.Toggled += Audio.SetMuted;
         _readingText.Register(mute);
+        var reducedRange = controls.GetNode<CheckButton>("ReducedRange");
+        reducedRange.SetPressedNoSignal(Audio.ReducedDynamicRange);
+        reducedRange.Toggled += Audio.SetReducedDynamicRange;
+        _readingText.Register(reducedRange);
         foreach (var channel in new[] { "Music", "Ambience", "Effects", "Dialogue" })
         {
             var slider = controls.GetNode<HSlider>(channel);

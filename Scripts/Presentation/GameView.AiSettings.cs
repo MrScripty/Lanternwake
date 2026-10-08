@@ -21,12 +21,18 @@ public partial class GameView
     {
         _aiSettingsPath = Path.Combine(mode == SessionMode.AutomatedTest ? _storage!.OwnedTestDirectory! :
             ProjectSettings.GlobalizePath("user://"), "ai-settings.json");
-        try { _aiSettings = AiSettings.Load(_aiSettingsPath, AiSettings.FromEnvironment()); }
+        try
+        {
+            _aiSettings = AiSettings.Load(_aiSettingsPath, AiSettings.FromEnvironment());
+            if (System.Environment.GetEnvironmentVariable("LANTERNWAKE_PUMAS_SELECTION_OVERRIDE") == "1")
+                _aiSettings = _aiSettings with { LocalLibrary = PumasLibrarySelection.FromEnvironment().Validate() };
+        }
         catch (Exception error) when (error is IOException or UnauthorizedAccessException or InvalidDataException)
         {
             _aiSettings = new(DialogueProvider.Pumas, false, AiSettings.DefaultEndpoint(DialogueProvider.Pumas), "");
             _aiSettingsLoadError = "AI settings could not be loaded. Open AI setup to configure them again.";
         }
+        _speech.Configure(_aiSettings.Transcription);
         if (mode == SessionMode.Normal)
         {
             _openRouterKey = System.Environment.GetEnvironmentVariable("OPENROUTER_API_KEY") ?? "";
@@ -93,6 +99,9 @@ public partial class GameView
         }
         var provider = dialogue.GetNode<OptionButton>("Provider");
         var endpoint = dialogue.GetNode<LineEdit>("Endpoint");
+        var libraryRoot = dialogue.GetNode<LineEdit>("LibraryRoot");
+        var observer = dialogue.GetNode<LineEdit>("PumasObserver");
+        libraryRoot.Text = _aiSettings.LocalLibrary.Root; observer.Text = _aiSettings.LocalLibrary.ObserverExecutable;
         var enabled = dialogue.GetNode<CheckButton>("DialogueEnabled");
         var key = dialogue.GetNode<LineEdit>("ApiKey");
         var model = dialogue.GetNode<OptionButton>("Model");
@@ -132,6 +141,7 @@ public partial class GameView
         AiSettings Draft(bool requireModel) => new AiSettings((DialogueProvider)provider.GetSelectedId(),
             requireModel && enabled.ButtonPressed, endpoint.Text.Trim(), requireModel ? SelectedModel() : "")
         {
+            LocalLibrary = new(libraryRoot.Text.Trim(), observer.Text.Trim()),
             Transcription = ReadSpeechPreferences(transcription, _aiSettings.Transcription),
             CharacterSpeech = ReadSpeechPreferences(voices, _aiSettings.CharacterSpeech),
             CharacterVoices = ReadSpeechPreferences(voices, _aiSettings.CharacterSpeech).Provider == _aiSettings.CharacterSpeech.Provider
@@ -148,6 +158,7 @@ public partial class GameView
             forget.Disabled = requesting || _previewMode;
             filter.Visible = hosted;
             endpoint.Editable = !requesting && !hosted;
+            libraryRoot.Editable = !requesting; observer.Editable = !requesting;
             dialogue.GetNode<Label>("ProviderNote").Text = hosted
                 ? "OpenRouter sends optional dialogue to a hosted service. Test responses and conversations use your account's credits. Save AI settings to remember your API key in your desktop keyring."
                 : "Pumas supplies the model list. Start Pumas and load a llama.cpp model, then refresh. Model loading is managed in Pumas.";
@@ -260,7 +271,9 @@ public partial class GameView
                     _credentialNotice = enteredKey.Length > 0 ? "Key saved in your desktop keyring." : "No key saved.";
                 }
                 token.ThrowIfCancellationRequested();
-                draft.Save(_aiSettingsPath); _aiSettings = draft; _aiSettingsLoadError = "";
+                draft.Save(_aiSettingsPath); _aiSettings = draft;
+                // Retarget only after an existing setup request settles; its original client remains owned.
+                _setupSelectionChanged = true; _speech.Configure(draft.Transcription); _aiSettingsLoadError = "";
                 if (Active())
                 {
                     credentialStatus.Text = _credentialNotice;

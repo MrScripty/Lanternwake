@@ -42,7 +42,7 @@ public partial class CharacterPerformanceQualification : Node
             _game.Audio.SetMuted(true); Director.MotionEnabled = false;
             var story = Observe<Story>("_story"); var traversal = new StorySession(story); var snapshots = new Dictionary<string, SaveData>();
             do { snapshots[traversal.Beat.Id] = traversal.Snapshot(); if (traversal.Beat.Activity is { } activity) traversal.AnswerActivity(activity.CorrectIndex); } while (traversal.Advance());
-            Check(snapshots.Count == 1439, "fixture traversal uses every unchanged canonical beat; no human-duration claim");
+            Check(snapshots.Count == 1440, "fixture traversal uses every canonical beat including the new optional exchange; no human-duration claim");
             var fixtures = Path.Combine(root, "fixtures"); Directory.CreateDirectory(fixtures);
             foreach (var beat in new[] { "ch1_s2_b002", "ch1_s2_b008", "ch3_s1_b014", "ch3_s2_b001", "ch4_s1_b006", "ch5_s3_b003", "ch5_s3_b004", "ch5_s5_b002" })
                 File.WriteAllText(Path.Combine(fixtures, beat + ".json"), JsonSerializer.Serialize(snapshots[beat], Story.Json));
