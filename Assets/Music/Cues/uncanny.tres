@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="MusicMix" format=3]
+
+[ext_resource type="Script" path="res://Scripts/Presentation/MusicMix.cs" id="1"]
+
+[resource]
+script = ExtResource("1")
+Title = "The receiving stylus"
+Suite = 1
+Ground = 0.65
+Theme = 0.2
+Bowed = 0.4
+Motion = 0.2
+Journey = 0.22
+Environment = 0.35

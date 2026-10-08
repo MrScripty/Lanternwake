@@ -119,6 +119,7 @@ public partial class GameView : Node
         // The title copy and initial HUD state belong to GameInterface.tscn.
         _stage.ShowLocation("harbor", "night", []);
         Audio.ShowLocation("harbor");
+        Audio.ShowTitleMusic();
     }
     private void Advance()
     {
@@ -137,6 +138,7 @@ public partial class GameView : Node
         Audio.ApplyBeatCue(_session.Beat.Id, _session.Beat.StageCue, playAudioCue);
         var beatIndex = Array.FindIndex(scene.Beats, beat => beat.Id == _session.Beat.Id);
         var reachedBeatIds = scene.Beats.Take(beatIndex + 1).Select(beat => beat.Id).ToArray();
+        Audio.ApplyStoryMusic(scene.Id, scene.Location, _session.Chapter.Id, reachedBeatIds);
         _stage.ShowLocation(scene.Location, scene.TimeOfDay, scene.CharacterIds, scene.Id, reachedBeatIds);
         _stage.ApplyAuthoredCues(_session.ActiveStageCues);
         _chapter.Text = (_previewMode ? "AUTHOR PREVIEW · " : "") + _session.Chapter.Title.ToUpperInvariant();

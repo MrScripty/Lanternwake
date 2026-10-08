@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="MusicMix" format=3]
+
+[ext_resource type="Script" path="res://Scripts/Presentation/MusicMix.cs" id="1"]
+
+[resource]
+script = ExtResource("1")
+Title = "What the record cannot restore"
+Suite = 1
+Ground = 0.42
+Theme = 0.18
+Bowed = 0.27
+Motion = 0
+Journey = 0.26
+Environment = 0.35

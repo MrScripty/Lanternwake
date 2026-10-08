@@ -1,4 +1,5 @@
 using Godot;
+using Lanternwake.Audio;
 
 namespace Lanternwake.Presentation;
 
@@ -12,6 +13,18 @@ public partial class AudioDirector : Node
     [Export] public AudioStreamPlayer AmbienceB { get; set; } = null!;
     [Export] public AudioStreamPlayer Music { get; set; } = null!;
     [Export] public AudioStreamPlayer Effects { get; set; } = null!;
+    [Export] public AudioStreamPlayer Dialogue { get; set; } = null!;
+    [ExportGroup("Adaptive score")]
+    [Export] public MusicScore Score { get; set; } = null!;
+    [Export(PropertyHint.File, "*.json")] public string MusicCatalogPath { get; set; } = "res://Assets/Music/catalog.json";
+    [Export(PropertyHint.File, "*.sf2")] public string MusicBankPath { get; set; } = "res://Assets/Music/Source/Saltmere-Acoustic.sf2";
+    [Export(PropertyHint.Range, "0.05,10,0.05")] public double MusicFadeSeconds { get; set; } = 3;
+    [ExportGroup("Speech clarity")]
+    [Export] public bool SpeechDucking { get; set; } = true;
+    [Export(PropertyHint.Range, "0,12,0.1")] public float SpeechMusicDipDb { get; set; } = 3;
+    [Export(PropertyHint.Range, "0,12,0.1")] public float SpeechPresenceDipDb { get; set; } = 3;
+    [Export(PropertyHint.Range, "0.01,1,0.01")] public double SpeechAttackSeconds { get; set; } = .07;
+    [Export(PropertyHint.Range, "0.05,3,0.05")] public double SpeechReleaseSeconds { get; set; } = .65;
     [ExportGroup("Location loops")]
     [Export] public AudioStreamWav Harbor { get; set; } = null!;
     [Export] public AudioStreamWav KeeperHouse { get; set; } = null!;
@@ -26,18 +39,151 @@ public partial class AudioDirector : Node
     private string _location = "";
     private bool _stopped;
     private string _lastCueBeat = "";
+    private BufferedMusicSynth? _musicSynth;
+    private AudioStreamGeneratorPlayback? _musicPlayback;
+    private readonly StereoFrame[] _synthFrames = new StereoFrame[MidiMusicRenderer.BlockFrames];
+    private readonly Vector2[] _nativeFrames = new Vector2[MidiMusicRenderer.BlockFrames];
+    public long MusicFramesRendered => _musicSynth?.FramesRendered ?? 0;
+    public int MusicUnderruns => _musicPlayback?.GetSkips() ?? 0;
+    public bool MusicWorkerRunning => _musicSynth?.WorkerRunning ?? false;
+    private float[] _stemLevels = Array.Empty<float>(), _stemStarts = Array.Empty<float>(), _stemTargets = Array.Empty<float>();
+    private MusicCatalog _catalog = null!;
+    private string _musicLocation = "", _musicChapter = "";
+    public string CurrentCharacterTheme { get; private set; } = "";
+    public string CurrentMusicEnvironment => _musicLocation;
+    public string CurrentMusicChapter => _musicChapter;
+    public int StemCount => _stemLevels.Length;
+    public int GetLayerSlot(string role, string id) => _catalog.Slots(role, id).Single();
+    private double _musicElapsed, _musicDuration;
+    private AudioEffectEQ? _musicEq;
+    private float _eqPresence2k, _eqPresence4k, _musicBaseDb, _speechBlend;
+    private bool _externalDialogueActive;
+    public MusicMix? CurrentMusicMix { get; private set; }
+    public float SpeechBlend => _speechBlend;
+    public float GetStemLevel(int index) => _stemLevels[index];
+    public float GetTargetStemLevel(int index) => _stemTargets[index];
     public bool Muted => AudioServer.IsBusMute(Bus("Master"));
     public string CurrentLocation => _location;
 
     public override void _Ready()
     {
         if (Engine.IsEditorHint()) return;
-        if (AmbienceA is null || AmbienceB is null || Music is null || Effects is null)
-            throw new InvalidOperationException("Assign AudioDirector's four authored players in the Inspector.");
-        foreach (var name in new[] { "Master", "Music", "Ambience", "Effects" }) _ = Bus(name);
-        if (Music.Stream is AudioStreamWav theme) Music.Stream = LoopCopy(theme);
+        if (AmbienceA is null || AmbienceB is null || Music is null || Effects is null || Dialogue is null)
+            throw new InvalidOperationException("Assign AudioDirector's five authored players in the Inspector.");
+        foreach (var name in new[] { "Master", "Music", "Ambience", "Effects", "Dialogue" }) _ = Bus(name);
+        Score.Validate();
+        _catalog = MusicCatalog.Load(MusicCatalogPath);
+        if (Music.Stream is not AudioStreamGenerator authored || authored.MixRate != MidiMusicRenderer.SampleRate)
+            throw new InvalidOperationException("Assign the 32 kHz generator to Music in the Inspector.");
+        _stemLevels = new float[_catalog.Stems.Length]; _stemStarts = new float[_stemLevels.Length]; _stemTargets = new float[_stemLevels.Length];
+        var inputs = new List<MusicVoiceInput>();
+        foreach (var layer in _catalog.Layers)
+        {
+            var midi = ReadMusicFile("res://Assets/Music/Source/" + layer.Midi);
+            foreach (var stem in layer.Stems) inputs.Add(new(stem.Name, stem.Channels, midi));
+        }
+        var renderer = new MidiMusicRenderer(ReadMusicFile(MusicBankPath), inputs);
+        // Own a copy of the authored generator; editor resources remain untouched.
+        Music.Stream = (AudioStreamGenerator)authored.Duplicate();
+        _musicBaseDb = Music.VolumeDb;
+        var musicBus = Bus("Music");
+        for (int i = 0; i < AudioServer.GetBusEffectCount(musicBus); i++)
+            if (AudioServer.GetBusEffect(musicBus, i) is AudioEffectEQ eq && eq.GetBandCount() == 10) { _musicEq = eq; break; }
+        if (_musicEq is not null) { _eqPresence2k = _musicEq.GetBandGainDb(6); _eqPresence4k = _musicEq.GetBandGainDb(7); }
+        ShowTitleMusic(immediate: true);
+        _musicSynth = new BufferedMusicSynth(renderer, _stemLevels);
         Music.Play();
-        _playbacks.Add(Music.GetStreamPlayback());
+        _musicPlayback = (AudioStreamGeneratorPlayback)Music.GetStreamPlayback();
+        _playbacks.Add(_musicPlayback);
+        PumpMusic();
+    }
+    private static byte[] ReadMusicFile(string path)
+    {
+        if (!Godot.FileAccess.FileExists(path)) throw new InvalidDataException("Missing packaged music source: " + path);
+        return Godot.FileAccess.GetFileAsBytes(path);
+    }
+    private void PumpMusic()
+    {
+        if (_stopped || _musicPlayback is null || _musicSynth is null) return;
+        while (_musicPlayback.CanPushBuffer(_nativeFrames.Length) && _musicSynth.TryRead(_synthFrames))
+        {
+            for (int index = 0; index < _nativeFrames.Length; index++)
+                _nativeFrames[index] = new(_synthFrames[index].Left, _synthFrames[index].Right);
+            if (!_musicPlayback.PushBuffer(_nativeFrames)) throw new InvalidOperationException("Music output buffer rejected a complete block.");
+        }
+    }
+    public void ShowTitleMusic(bool immediate = false) => SetMusicMix(Score.TitleMix, "harbor", "ch1", "", immediate);
+    public void ApplyStoryMusic(string sceneId, string location, string chapterId, IReadOnlyList<string> reachedBeatIds)
+    {
+        var focus = Score.ResolveFocus(sceneId, reachedBeatIds);
+        var character = focus == MusicSpot.FocusKind.None ? "" : focus.ToString().ToLowerInvariant();
+        SetMusicMix(Score.Resolve(sceneId, reachedBeatIds), location, chapterId, character);
+    }
+    private void SetMusicMix(MusicMix mix, string location, string chapterId, string character, bool immediate = false)
+    {
+        if (_stopped) return;
+        if (CurrentMusicMix == mix && _musicLocation == location && _musicChapter == chapterId && CurrentCharacterTheme == character && !immediate) return;
+        var levels = mix.Levels();
+        CurrentMusicMix = mix;
+        _musicLocation = location; _musicChapter = chapterId; CurrentCharacterTheme = character;
+        Array.Copy(_stemLevels, _stemStarts, _stemLevels.Length);
+        Array.Clear(_stemTargets);
+        var suiteId = mix.Suite switch { MusicMix.SuiteKind.Saltmere => "saltmere", MusicMix.SuiteKind.Undertow => "undertow", MusicMix.SuiteKind.NightLedger => "night_ledger", _ => "open_horizon" };
+        var moodSlots = _catalog.Slots("mood", suiteId);
+        if (moodSlots.Length != 4) throw new InvalidDataException("Mood arrangements require four stems.");
+        for (int i = 0; i < 4; i++) _stemTargets[moodSlots[i]] = levels[i];
+        if (!mix.SilenceStoryLayers)
+        {
+            if (mix.Environment > 0)
+                foreach (var slot in moodSlots) _stemTargets[slot] *= mix.MoodUnderEnvironment;
+            _stemTargets[GetLayerSlot("environment", location)] = mix.Environment;
+            _stemTargets[GetLayerSlot("journey", chapterId)] = mix.Journey;
+            if (character.Length > 0)
+            {
+                _stemTargets[GetLayerSlot("character", character)] = mix.Character;
+                _stemTargets[moodSlots[1]] *= mix.ThemeUnderCharacter;
+            }
+        }
+        _musicElapsed = 0;
+        _musicDuration = immediate ? 0 : double.IsFinite(MusicFadeSeconds) ? Math.Clamp(MusicFadeSeconds, .05, 10) : 3;
+        if (immediate) UpdateMusic(0);
+    }
+    private void UpdateMusic(double delta)
+    {
+        if (_stopped) return;
+        _musicElapsed += delta;
+        float t = _musicDuration == 0 ? 1 : (float)Math.Clamp(_musicElapsed / _musicDuration, 0, 1);
+        t = t * t * (3 - 2 * t);
+        for (int i = 0; i < _stemLevels.Length; i++)
+        {
+            _stemLevels[i] = Mathf.Lerp(_stemStarts[i], _stemTargets[i], t);
+        }
+        _musicSynth?.SetGains(_stemLevels);
+        bool speaking = SpeechDucking && (_externalDialogueActive || Dialogue.Playing) && !AudioServer.IsBusMute(Bus("Dialogue")) && GetLevel("Dialogue") > 0;
+        double tau = speaking ? SpeechAttackSeconds : SpeechReleaseSeconds;
+        tau = double.IsFinite(tau) ? Math.Clamp(tau, .01, 3) : .65;
+        _speechBlend = Mathf.Lerp(_speechBlend, speaking ? 1 : 0, (float)(1 - Math.Exp(-delta / tau)));
+        float gainDip = float.IsFinite(SpeechMusicDipDb) ? Math.Clamp(SpeechMusicDipDb, 0, 12) : 3;
+        float presenceDip = float.IsFinite(SpeechPresenceDipDb) ? Math.Clamp(SpeechPresenceDipDb, 0, 12) : 3;
+        Music.VolumeDb = _musicBaseDb - gainDip * _speechBlend;
+        _musicEq?.SetBandGainDb(6, _eqPresence2k - presenceDip * _speechBlend);
+        _musicEq?.SetBandGainDb(7, _eqPresence4k - presenceDip * _speechBlend);
+    }
+    // Future voice providers can use this player, or signal an external Dialogue-bus clip.
+    public void SetDialogueActive(bool active) { if (!_stopped) _externalDialogueActive = active; }
+    public void PlayDialogue(AudioStream stream)
+    {
+        if (_stopped) return;
+        StopDialogue();
+        Dialogue.Stream = stream ?? throw new ArgumentNullException(nameof(stream));
+        Dialogue.Play();
+        _playbacks.Add(Dialogue.GetStreamPlayback());
+    }
+    public void StopDialogue()
+    {
+        _externalDialogueActive = false;
+        Dialogue?.Stop();
+        if (Dialogue is not null) Dialogue.Stream = null;
     }
 
     private static int Bus(string name)
@@ -88,6 +234,7 @@ public partial class AudioDirector : Node
     public void ApplyBeatCue(string beatId, string? cue, bool play)
     {
         if (_stopped) return;
+        if (!play || _lastCueBeat != beatId) StopDialogue();
         if (!play)
         {
             // A load/preview is a timeline discontinuity, including the same beat.
@@ -107,7 +254,7 @@ public partial class AudioDirector : Node
     public float GetLevel(string name) => AudioServer.GetBusVolumeLinear(Bus(name));
     public void SetLevel(string name, float level)
     {
-        if (name is not ("Music" or "Ambience" or "Effects")) throw new ArgumentException("Unknown adjustable audio channel.", nameof(name));
+        if (name is not ("Music" or "Ambience" or "Effects" or "Dialogue")) throw new ArgumentException("Unknown adjustable audio channel.", nameof(name));
         if (!float.IsFinite(level)) throw new ArgumentOutOfRangeException(nameof(level));
         int index = Bus(name);
         float bounded = Math.Clamp(level, 0, 1);
@@ -127,7 +274,14 @@ public partial class AudioDirector : Node
         _fade?.Kill();
         _fade?.Dispose();
         _fade = null;
+        _musicSynth?.Dispose(); _musicSynth = null;
         foreach (var player in new[] { AmbienceA, AmbienceB, Music }) if (player is not null) StopLoop(player);
+        _musicPlayback = null;
+        StopDialogue();
+        if (Music is not null) Music.VolumeDb = _musicBaseDb;
+        _musicEq?.SetBandGainDb(6, _eqPresence2k);
+        _musicEq?.SetBandGainDb(7, _eqPresence4k);
+        _speechBlend = 0;
         Effects?.Stop();
     }
     private void RetireReleasedPlaybacks()
@@ -142,7 +296,9 @@ public partial class AudioDirector : Node
     }
     public override void _Process(double delta)
     {
-        if (!Engine.IsEditorHint()) RetireReleasedPlaybacks();
+        if (Engine.IsEditorHint()) return;
+        try { UpdateMusic(delta); PumpMusic(); RetireReleasedPlaybacks(); }
+        catch { StopPlayback(); throw; }
     }
     public async Task<bool> StopAndRetireAsync()
     {

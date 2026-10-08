@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType><TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable>
+    <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
+    <!-- Two nullable warnings in the unmodified upstream dictionary lookups. -->
+    <NoWarn>$(NoWarn);CS8600</NoWarn>
+  </PropertyGroup>
+  <ItemGroup><ProjectReference Include="../../ThirdParty/MeltySynth/MeltySynth.csproj" /></ItemGroup>
+</Project>

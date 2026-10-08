@@ -37,3 +37,14 @@ layout_mode = 2
 max_value = 100.0
 step = 5.0
 custom_minimum_size = Vector2(280, 32)
+
+[node name="DialogueLabel" type="Label" parent="."]
+layout_mode = 2
+text = "Character voices"
+
+[node name="Dialogue" type="HSlider" parent="."]
+layout_mode = 2
+max_value = 100.0
+step = 5.0
+custom_minimum_size = Vector2(280, 32)
+tooltip_text = "Volume for future character voice playback"

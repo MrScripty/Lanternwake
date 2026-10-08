@@ -1,0 +1,445 @@
+{
+  "format": 2,
+  "layers": [
+    {
+      "id": "saltmere",
+      "role": "mood",
+      "title": "Saltmere",
+      "midi": "saltmere_score.mid",
+      "stems": [
+        {
+          "name": "saltmere_ground",
+          "channels": [
+            0,
+            1
+          ]
+        },
+        {
+          "name": "saltmere_theme",
+          "channels": [
+            2,
+            3
+          ]
+        },
+        {
+          "name": "saltmere_bowed",
+          "channels": [
+            4
+          ]
+        },
+        {
+          "name": "saltmere_motion",
+          "channels": [
+            5,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "undertow",
+      "role": "mood",
+      "title": "Undertow",
+      "midi": "undertow_score.mid",
+      "stems": [
+        {
+          "name": "undertow_ground",
+          "channels": [
+            0,
+            1
+          ]
+        },
+        {
+          "name": "undertow_theme",
+          "channels": [
+            2,
+            3
+          ]
+        },
+        {
+          "name": "undertow_bowed",
+          "channels": [
+            4
+          ]
+        },
+        {
+          "name": "undertow_motion",
+          "channels": [
+            5,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "night_ledger",
+      "role": "mood",
+      "title": "The Night Ledger",
+      "midi": "night_ledger_score.mid",
+      "stems": [
+        {
+          "name": "night_ledger_ground",
+          "channels": [
+            0,
+            1
+          ]
+        },
+        {
+          "name": "night_ledger_theme",
+          "channels": [
+            2,
+            3
+          ]
+        },
+        {
+          "name": "night_ledger_bowed",
+          "channels": [
+            4
+          ]
+        },
+        {
+          "name": "night_ledger_motion",
+          "channels": [
+            5,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "open_horizon",
+      "role": "mood",
+      "title": "An Open Horizon",
+      "midi": "open_horizon_score.mid",
+      "stems": [
+        {
+          "name": "open_horizon_ground",
+          "channels": [
+            0,
+            1
+          ]
+        },
+        {
+          "name": "open_horizon_theme",
+          "channels": [
+            2,
+            3
+          ]
+        },
+        {
+          "name": "open_horizon_bowed",
+          "channels": [
+            4
+          ]
+        },
+        {
+          "name": "open_horizon_motion",
+          "channels": [
+            5,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "harbor",
+      "role": "environment",
+      "title": "Ropes and Returning Boats",
+      "midi": "harbor_score.mid",
+      "stems": [
+        {
+          "name": "harbor_place",
+          "channels": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "keeper_house",
+      "role": "environment",
+      "title": "A Room Still Used",
+      "midi": "keeper_house_score.mid",
+      "stems": [
+        {
+          "name": "keeper_house_place",
+          "channels": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "archive",
+      "role": "environment",
+      "title": "Source, Copy, Interpretation",
+      "midi": "archive_score.mid",
+      "stems": [
+        {
+          "name": "archive_place",
+          "channels": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lantern_room",
+      "role": "environment",
+      "title": "The Receiving Stylus",
+      "midi": "lantern_room_score.mid",
+      "stems": [
+        {
+          "name": "lantern_room_place",
+          "channels": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tide_cave",
+      "role": "environment",
+      "title": "Beneath the Postcard",
+      "midi": "tide_cave_score.mid",
+      "stems": [
+        {
+          "name": "tide_cave_place",
+          "channels": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ada",
+      "role": "character",
+      "title": "A Hand of Her Own",
+      "midi": "ada_score.mid",
+      "stems": [
+        {
+          "name": "ada_character",
+          "channels": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nessa",
+      "role": "character",
+      "title": "A Place on the List",
+      "midi": "nessa_score.mid",
+      "stems": [
+        {
+          "name": "nessa_character",
+          "channels": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tomas",
+      "role": "character",
+      "title": "Listening for the Ordinary",
+      "midi": "tomas_score.mid",
+      "stems": [
+        {
+          "name": "tomas_character",
+          "channels": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sera",
+      "role": "character",
+      "title": "A Useful Error",
+      "midi": "sera_score.mid",
+      "stems": [
+        {
+          "name": "sera_character",
+          "channels": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ivo",
+      "role": "character",
+      "title": "Affection and the Missing Margin",
+      "midi": "ivo_score.mid",
+      "stems": [
+        {
+          "name": "ivo_character",
+          "channels": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ch1",
+      "role": "journey",
+      "title": "The Inventory",
+      "midi": "inventory_score.mid",
+      "stems": [
+        {
+          "name": "inventory_journey",
+          "channels": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ch2",
+      "role": "journey",
+      "title": "The Wrong Channel",
+      "midi": "wrong_channel_score.mid",
+      "stems": [
+        {
+          "name": "wrong_channel_journey",
+          "channels": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ch3",
+      "role": "journey",
+      "title": "What the Water Kept",
+      "midi": "water_kept_score.mid",
+      "stems": [
+        {
+          "name": "water_kept_journey",
+          "channels": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ch4",
+      "role": "journey",
+      "title": "The Night Ledger",
+      "midi": "shared_ledger_score.mid",
+      "stems": [
+        {
+          "name": "shared_ledger_journey",
+          "channels": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ch5",
+      "role": "journey",
+      "title": "An Open Horizon",
+      "midi": "chosen_horizon_score.mid",
+      "stems": [
+        {
+          "name": "chosen_horizon_journey",
+          "channels": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        }
+      ]
+    }
+  ]
+}

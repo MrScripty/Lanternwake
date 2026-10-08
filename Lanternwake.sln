@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lanternwake", "Lanternwake.csproj", "{9AC77F1D-66B5-4DB3-8DB9-72BAFA3DC6D3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ThirdParty", "ThirdParty", "{356D9C46-07F5-7F13-4EEF-5DD22B885BE8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeltySynth", "ThirdParty\MeltySynth\MeltySynth.csproj", "{6F061A46-D6C5-42C6-96AE-6EA494D1621F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		ExportDebug|Any CPU = ExportDebug|Any CPU
+		ExportRelease|Any CPU = ExportRelease|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9AC77F1D-66B5-4DB3-8DB9-72BAFA3DC6D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AC77F1D-66B5-4DB3-8DB9-72BAFA3DC6D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AC77F1D-66B5-4DB3-8DB9-72BAFA3DC6D3}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
+		{9AC77F1D-66B5-4DB3-8DB9-72BAFA3DC6D3}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
+		{9AC77F1D-66B5-4DB3-8DB9-72BAFA3DC6D3}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
+		{9AC77F1D-66B5-4DB3-8DB9-72BAFA3DC6D3}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+		{6F061A46-D6C5-42C6-96AE-6EA494D1621F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F061A46-D6C5-42C6-96AE-6EA494D1621F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F061A46-D6C5-42C6-96AE-6EA494D1621F}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
+		{6F061A46-D6C5-42C6-96AE-6EA494D1621F}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
+		{6F061A46-D6C5-42C6-96AE-6EA494D1621F}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
+		{6F061A46-D6C5-42C6-96AE-6EA494D1621F}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6F061A46-D6C5-42C6-96AE-6EA494D1621F} = {356D9C46-07F5-7F13-4EEF-5DD22B885BE8}
+	EndGlobalSection
+EndGlobal

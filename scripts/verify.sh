@@ -8,6 +8,7 @@ if ! "$GODOT_MONO" --version | grep -q '\.mono\.'; then
   exit 1
 fi
 python3 -m unittest discover -s integration/audio -v
+dotnet run --project integration/live-music/LiveMusic.Tests.csproj --configuration Release -- Assets/Music
 dotnet run --project tests/Lanternwake.Tests.csproj -- Content/story.json
 dotnet run --project integration/story-validation/StoryValidation.csproj -- Content/story.json
 dotnet run --project integration/pumas/ClientTests/ClientTests.csproj
@@ -33,6 +34,9 @@ for mode in smoke ui-smoke save-isolation-smoke audio-smoke; do
   fi
   if [[ "$mode" == "audio-smoke" ]] && ! grep -q "LANTERNWAKE_AUDIO_OK" "$log"; then
     echo "Audio regression did not report success." >&2; exit 1
+  fi
+  if [[ "$mode" == "audio-smoke" ]]; then
+    dotnet run --project integration/live-music/LiveMusic.Tests.csproj --configuration Release -- Assets/Music "$log"
   fi
   rm -f "$log"
   trap - EXIT

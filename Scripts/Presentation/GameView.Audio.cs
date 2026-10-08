@@ -35,12 +35,12 @@ public partial class GameView
         mute.SetPressedNoSignal(Audio.Muted);
         mute.Toggled += Audio.SetMuted;
         _readingText.Register(mute);
-        foreach (var channel in new[] { "Music", "Ambience", "Effects" })
+        foreach (var channel in new[] { "Music", "Ambience", "Effects", "Dialogue" })
         {
             var slider = controls.GetNode<HSlider>(channel);
             var label = controls.GetNode<Label>(channel + "Label");
             _readingText.Register(label);
-            string title = channel == "Ambience" ? "Location ambience" : channel;
+            string title = channel switch { "Ambience" => "Location ambience", "Dialogue" => "Character voices", _ => channel };
             slider.SetValueNoSignal(Math.Round(Audio.GetLevel(channel) * 100));
             void UpdateLabel() => label.Text = $"{title}: {slider.Value:0}%";
             UpdateLabel();

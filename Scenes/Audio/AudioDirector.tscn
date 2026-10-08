@@ -6,15 +6,23 @@
 [ext_resource type="AudioStream" path="res://Assets/Audio/archive.wav" id="4"]
 [ext_resource type="AudioStream" path="res://Assets/Audio/lantern_room.wav" id="5"]
 [ext_resource type="AudioStream" path="res://Assets/Audio/tide_cave.wav" id="6"]
-[ext_resource type="AudioStream" path="res://Assets/Audio/watch_theme.wav" id="7"]
+[ext_resource type="Resource" path="res://Assets/Music/SaltmereScore.tres" id="score"]
 [ext_resource type="AudioStream" path="res://Assets/Audio/bell_release.wav" id="8"]
 
-[node name="AudioDirector" type="Node" node_paths=PackedStringArray("AmbienceA", "AmbienceB", "Music", "Effects")]
+
+[sub_resource type="AudioStreamGenerator" id="score_stream"]
+mix_rate = 32000.0
+mix_rate_mode = 2
+buffer_length = 0.25
+
+[node name="AudioDirector" type="Node" node_paths=PackedStringArray("AmbienceA", "AmbienceB", "Music", "Effects", "Dialogue")]
 script = ExtResource("1")
 AmbienceA = NodePath("AmbienceA")
 AmbienceB = NodePath("AmbienceB")
 Music = NodePath("Music")
 Effects = NodePath("Effects")
+Dialogue = NodePath("Dialogue")
+Score = ExtResource("score")
 Harbor = ExtResource("2")
 KeeperHouse = ExtResource("3")
 Archive = ExtResource("4")
@@ -28,9 +36,12 @@ bus = &"Ambience"
 bus = &"Ambience"
 
 [node name="Music" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("7")
+stream = SubResource("score_stream")
 bus = &"Music"
 
 [node name="Effects" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("8")
 bus = &"Effects"
+
+[node name="Dialogue" type="AudioStreamPlayer" parent="."]
+bus = &"Dialogue"

@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework><Nullable>enable</Nullable>
+    <Optimize Condition="'$(Configuration)' == 'ExportRelease'">true</Optimize>
+    <!-- Nullable dictionary lookup warnings in the pinned, unmodified upstream. -->
+    <NoWarn>$(NoWarn);CS8600</NoWarn>
+  </PropertyGroup>
+</Project>

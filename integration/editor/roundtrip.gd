@@ -16,6 +16,18 @@ func snapshot(node: Node, origin: Node, result: Dictionary) -> void:
 		values["bus"] = node.bus
 		values["playing"] = node.playing
 		values["stream_path"] = node.stream.resource_path if node.stream != null else ""
+		if node.stream is AudioStreamSynchronized:
+			# A built-in resource's scene::id changes when saved into the temporary scene.
+			# Compare authored streams and gains instead of that container identifier.
+			values["stream_path"] = "AudioStreamSynchronized"
+			var stems: Array = []
+			for index in node.stream.stream_count:
+				var stem: AudioStream = node.stream.get_sync_stream(index)
+				stems.append({"path": stem.resource_path if stem != null else "", "volume": node.stream.get_sync_stream_volume(index)})
+			values["synchronized_stems"] = stems
+		if node.stream is AudioStreamGenerator:
+			values["stream_path"] = "AudioStreamGenerator"
+			values["generator"] = [node.stream.mix_rate, node.stream.mix_rate_mode, node.stream.buffer_length]
 		if node.playing:
 			failures.append("Audio started in the Editor: " + str(origin.get_path_to(node)))
 	var script: Script = node.get_script()
@@ -37,7 +49,7 @@ func snapshot(node: Node, origin: Node, result: Dictionary) -> void:
 			"StageDirector.cs":
 				properties = ["MotionEnabled"]
 			"AudioDirector.cs":
-				properties = ["FadeSeconds"]
+				properties = ["FadeSeconds", "MusicCatalogPath", "MusicBankPath", "MusicFadeSeconds", "SpeechDucking", "SpeechMusicDipDb", "SpeechPresenceDipDb", "SpeechAttackSeconds", "SpeechReleaseSeconds"]
 			"GameView.cs":
 				properties = ["StoryPath", "CharactersPerSecond", "StartWithInstantText"]
 		for property in properties:
@@ -81,11 +93,50 @@ func check_cast_preview(stage: Node, path: String) -> void:
 				failures.append("Preview character is hidden: " + path + " / " + key + " / " + child.name)
 	stage.set("PreviewLayout", initial)
 
+func music_snapshot(score: Resource) -> Array:
+	var result: Array = []
+	for spot in score.get("Spots"):
+		var mix: Resource = spot.get("Mix")
+		var values: Dictionary = {}
+		for property in ["SceneId", "StartAtBeatId", "CharacterFocus", "Reason"]:
+			values[property] = spot.get(property)
+		for property in ["Title", "Suite", "Ground", "Theme", "Bowed", "Motion", "Environment", "Character", "Journey", "ThemeUnderCharacter", "MoodUnderEnvironment", "SilenceStoryLayers"]:
+			values[property] = mix.get(property)
+		result.append(values)
+	return result
+
+func check_music_authoring() -> void:
+	var original: Resource = load("res://Assets/Music/SaltmereScore.tres")
+	var source_values := music_snapshot(original)
+	# Isolate external mix resources as well as the score's embedded spots.
+	var score: Resource = original.duplicate_deep(Resource.DEEP_DUPLICATE_ALL)
+	score.get("Spots")[0].set("CharacterFocus", 5)
+	var mix: Resource = score.get("Spots")[0].get("Mix")
+	mix.set("Environment", 0.27)
+	mix.set("Character", 0.37)
+	mix.set("Journey", 0.47)
+	mix.set("ThemeUnderCharacter", 0.57)
+	mix.set("MoodUnderEnvironment", 0.67)
+	var before := music_snapshot(score)
+	var path := "user://music-authoring-" + str(Time.get_ticks_usec()) + ".tres"
+	if ResourceSaver.save(score, path) != OK:
+		failures.append("Could not save the music focus and story-layer controls")
+	else:
+		var reopened: Resource = ResourceLoader.load(path, "Resource", ResourceLoader.CACHE_MODE_IGNORE)
+		if music_snapshot(reopened) != before:
+			failures.append("Saving/reopening lost music focus or layer values")
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
+	if music_snapshot(original) != source_values:
+		failures.append("Music authoring check mutated the production score")
+	if failures.is_empty():
+		print("LANTERNWAKE_MUSIC_AUTHORING_OK focus and mood/place/character/journey controls save and reopen; production score unchanged")
+
 func _run() -> void:
 	if not Engine.is_editor_hint():
 		push_error("This regression requires --editor.")
 		get_tree().quit(1)
 		return
+	check_music_authoring()
 	var paths: Array[String] = ["res://Scenes/Main.tscn", "res://Scenes/Stages/StageDirector.tscn", "res://Scenes/Audio/AudioDirector.tscn", "res://Scenes/UI/AudioSettingsControls.tscn"]
 	for name in ["Harbor", "KeeperHouse", "Archive", "LanternRoom", "TideCave"]:
 		paths.append("res://Scenes/Stages/" + name + ".tscn")

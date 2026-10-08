@@ -1,0 +1,6 @@
+# Preserve pinned upstream bytes across platform line-ending settings.
+ThirdParty/MeltySynth/* -text whitespace=cr-at-eol
+Assets/Music/*LICENSE.txt -text whitespace=cr-at-eol
+Assets/Music/Source/*LICENSE.txt -text whitespace=cr-at-eol
+Assets/Music/Source/*.mid binary
+Assets/Music/Source/*.sf2 binary

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="MusicMix" format=3]
+
+[ext_resource type="Script" path="res://Scripts/Presentation/MusicMix.cs" id="1"]
+
+[resource]
+script = ExtResource("1")
+Title = "Space for an ordinary recording"
+Suite = 0
+Ground = 0
+Theme = 0
+Bowed = 0
+Motion = 0
+SilenceStoryLayers = true

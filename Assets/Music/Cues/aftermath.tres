@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="MusicMix" format=3]
+
+[ext_resource type="Script" path="res://Scripts/Presentation/MusicMix.cs" id="1"]
+
+[resource]
+script = ExtResource("1")
+Title = "An ordinary morning"
+Suite = 3
+Ground = 0.52
+Theme = 0.44
+Bowed = 0.12
+Motion = 0

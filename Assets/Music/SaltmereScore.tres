@@ -1,0 +1,895 @@
+[gd_resource type="Resource" script_class="MusicScore" format=3]
+
+[ext_resource type="Script" path="res://Scripts/Presentation/MusicScore.cs" id="score"]
+[ext_resource type="Script" path="res://Scripts/Presentation/MusicSpot.cs" id="spot"]
+[ext_resource type="Resource" path="res://Assets/Music/Cues/arrival.tres" id="arrival"]
+[ext_resource type="Resource" path="res://Assets/Music/Cues/domestic.tres" id="domestic"]
+[ext_resource type="Resource" path="res://Assets/Music/Cues/memory.tres" id="memory"]
+[ext_resource type="Resource" path="res://Assets/Music/Cues/inquiry.tres" id="inquiry"]
+[ext_resource type="Resource" path="res://Assets/Music/Cues/uncanny.tres" id="uncanny"]
+[ext_resource type="Resource" path="res://Assets/Music/Cues/grief.tres" id="grief"]
+[ext_resource type="Resource" path="res://Assets/Music/Cues/reflection.tres" id="reflection"]
+[ext_resource type="Resource" path="res://Assets/Music/Cues/resolve.tres" id="resolve"]
+[ext_resource type="Resource" path="res://Assets/Music/Cues/storm.tres" id="storm"]
+[ext_resource type="Resource" path="res://Assets/Music/Cues/readiness.tres" id="readiness"]
+[ext_resource type="Resource" path="res://Assets/Music/Cues/release.tres" id="release"]
+[ext_resource type="Resource" path="res://Assets/Music/Cues/aftermath.tres" id="aftermath"]
+[ext_resource type="Resource" path="res://Assets/Music/Cues/horizon.tres" id="horizon"]
+[ext_resource type="Resource" path="res://Assets/Music/Cues/source_space.tres" id="source_space"]
+
+[sub_resource type="Resource" id="spot_0"]
+script = ExtResource("spot")
+SceneId = "ch1_s1"
+StartAtBeatId = ""
+Mix = ExtResource("arrival")
+CharacterFocus = 3
+Reason = "A Shore That Keeps Its Own Time"
+
+[sub_resource type="Resource" id="spot_1"]
+script = ExtResource("spot")
+SceneId = "ch1_s1"
+StartAtBeatId = "ch1_s1_b013"
+Mix = ExtResource("memory")
+CharacterFocus = 0
+Reason = "The flood is remembered without a threat cue."
+
+[sub_resource type="Resource" id="spot_2"]
+script = ExtResource("spot")
+SceneId = "ch1_s1"
+StartAtBeatId = "ch1_s1_b023"
+Mix = ExtResource("arrival")
+CharacterFocus = 0
+Reason = "Return to the practical arrival."
+
+[sub_resource type="Resource" id="spot_3"]
+script = ExtResource("spot")
+SceneId = "ch1_s1a"
+StartAtBeatId = ""
+Mix = ExtResource("arrival")
+CharacterFocus = 3
+Reason = "The Long Way Up"
+
+[sub_resource type="Resource" id="spot_4"]
+script = ExtResource("spot")
+SceneId = "ch1_s2"
+StartAtBeatId = ""
+Mix = ExtResource("domestic")
+CharacterFocus = 6
+Reason = "Things That Are Not Evidence Yet"
+
+[sub_resource type="Resource" id="spot_5"]
+script = ExtResource("spot")
+SceneId = "ch1_s2"
+StartAtBeatId = "ch1_s2_b016"
+Mix = ExtResource("memory")
+CharacterFocus = 0
+Reason = "The letter and an ordinary absence."
+
+[sub_resource type="Resource" id="spot_6"]
+script = ExtResource("spot")
+SceneId = "ch1_s2"
+StartAtBeatId = "ch1_s2_b021"
+Mix = ExtResource("domestic")
+CharacterFocus = 2
+Reason = "Nessa returns to a practical room."
+
+[sub_resource type="Resource" id="spot_7"]
+script = ExtResource("spot")
+SceneId = "ch1_s2a"
+StartAtBeatId = ""
+Mix = ExtResource("domestic")
+CharacterFocus = 2
+Reason = "Condition, Provenance, Use"
+
+[sub_resource type="Resource" id="spot_8"]
+script = ExtResource("spot")
+SceneId = "ch1_s3"
+StartAtBeatId = ""
+Mix = ExtResource("inquiry")
+CharacterFocus = 4
+Reason = "The Instrument Under the Stairs"
+
+[sub_resource type="Resource" id="spot_9"]
+script = ExtResource("spot")
+SceneId = "ch1_s3"
+StartAtBeatId = "ch1_s3_b015"
+Mix = ExtResource("uncanny")
+CharacterFocus = 2
+Reason = "Handwriting begins before it has an explanation."
+
+[sub_resource type="Resource" id="spot_10"]
+script = ExtResource("spot")
+SceneId = "ch1_s3"
+StartAtBeatId = "ch1_s3_b024"
+Mix = ExtResource("inquiry")
+CharacterFocus = 4
+Reason = "Witnesses document the observation."
+
+[sub_resource type="Resource" id="spot_11"]
+script = ExtResource("spot")
+SceneId = "ch1_s3"
+StartAtBeatId = "ch1_s3_b028"
+Mix = ExtResource("uncanny")
+CharacterFocus = 2
+Reason = "The second trace forms."
+
+[sub_resource type="Resource" id="spot_12"]
+script = ExtResource("spot")
+SceneId = "ch1_s3a"
+StartAtBeatId = ""
+Mix = ExtResource("uncanny")
+CharacterFocus = 4
+Reason = "A Room With Two Witnesses"
+
+[sub_resource type="Resource" id="spot_13"]
+script = ExtResource("spot")
+SceneId = "ch1_s3a"
+StartAtBeatId = "ch1_s3a_b029"
+Mix = ExtResource("reflection")
+CharacterFocus = 0
+Reason = "An ordinary work message makes room outside the mystery."
+
+[sub_resource type="Resource" id="spot_14"]
+script = ExtResource("spot")
+SceneId = "ch1_s4"
+StartAtBeatId = ""
+Mix = ExtResource("memory")
+CharacterFocus = 6
+Reason = "A Voice With Ordinary Dust"
+
+[sub_resource type="Resource" id="spot_15"]
+script = ExtResource("spot")
+SceneId = "ch1_s4"
+StartAtBeatId = "ch1_s4_b005"
+Mix = ExtResource("source_space")
+CharacterFocus = 0
+Reason = "Leave space for the ordinary cassette."
+
+[sub_resource type="Resource" id="spot_16"]
+script = ExtResource("spot")
+SceneId = "ch1_s4"
+StartAtBeatId = "ch1_s4_b010"
+Mix = ExtResource("memory")
+CharacterFocus = 0
+Reason = "The tape stops."
+
+[sub_resource type="Resource" id="spot_17"]
+script = ExtResource("spot")
+SceneId = "ch1_s4"
+StartAtBeatId = "ch1_s4_b015"
+Mix = ExtResource("grief")
+CharacterFocus = 4
+Reason = "Ewan and the six crew become particular people."
+
+[sub_resource type="Resource" id="spot_18"]
+script = ExtResource("spot")
+SceneId = "ch1_s4"
+StartAtBeatId = "ch1_s4_b022"
+Mix = ExtResource("source_space")
+CharacterFocus = 0
+Reason = "The domestic log resumes."
+
+[sub_resource type="Resource" id="spot_19"]
+script = ExtResource("spot")
+SceneId = "ch1_s4"
+StartAtBeatId = "ch1_s4_b023"
+Mix = ExtResource("inquiry")
+CharacterFocus = 0
+Reason = "Return to present-day questions."
+
+[sub_resource type="Resource" id="spot_20"]
+script = ExtResource("spot")
+SceneId = "ch1_s4a"
+StartAtBeatId = ""
+Mix = ExtResource("reflection")
+CharacterFocus = 4
+Reason = "The Ordinary Track"
+
+[sub_resource type="Resource" id="spot_21"]
+script = ExtResource("spot")
+SceneId = "ch1_s4a"
+StartAtBeatId = "ch1_s4a_b004"
+Mix = ExtResource("source_space")
+CharacterFocus = 0
+Reason = "A radio fragment is source audio, not the underscore."
+
+[sub_resource type="Resource" id="spot_22"]
+script = ExtResource("spot")
+SceneId = "ch1_s4a"
+StartAtBeatId = "ch1_s4a_b016"
+Mix = ExtResource("reflection")
+CharacterFocus = 0
+Reason = "The song timestamp is set aside."
+
+[sub_resource type="Resource" id="spot_23"]
+script = ExtResource("spot")
+SceneId = "ch1_s4a"
+StartAtBeatId = "ch1_s4a_b031"
+Mix = ExtResource("memory")
+CharacterFocus = 2
+Reason = "Affection and difficult influence."
+
+[sub_resource type="Resource" id="spot_24"]
+script = ExtResource("spot")
+SceneId = "ch1_s5"
+StartAtBeatId = ""
+Mix = ExtResource("memory")
+CharacterFocus = 2
+Reason = "A Blank Strip"
+
+[sub_resource type="Resource" id="spot_25"]
+script = ExtResource("spot")
+SceneId = "ch1_s5"
+StartAtBeatId = "ch1_s5_b019"
+Mix = ExtResource("uncanny")
+CharacterFocus = 0
+Reason = "Blank receiving paper is not an instruction."
+
+[sub_resource type="Resource" id="spot_26"]
+script = ExtResource("spot")
+SceneId = "ch2_s1"
+StartAtBeatId = ""
+Mix = ExtResource("inquiry")
+CharacterFocus = 4
+Reason = "A Label Is a Claim"
+
+[sub_resource type="Resource" id="spot_27"]
+script = ExtResource("spot")
+SceneId = "ch2_s2"
+StartAtBeatId = ""
+Mix = ExtResource("inquiry")
+CharacterFocus = 5
+Reason = "What Holding Means"
+
+[sub_resource type="Resource" id="spot_28"]
+script = ExtResource("spot")
+SceneId = "ch2_s2"
+StartAtBeatId = "ch2_s2_b011"
+Mix = ExtResource("source_space")
+CharacterFocus = 0
+Reason = "Measurement-channel playback stays audible."
+
+[sub_resource type="Resource" id="spot_29"]
+script = ExtResource("spot")
+SceneId = "ch2_s2"
+StartAtBeatId = "ch2_s2_b012"
+Mix = ExtResource("inquiry")
+CharacterFocus = 0
+Reason = "Return to distinguishing measurement from instruction."
+
+[sub_resource type="Resource" id="spot_30"]
+script = ExtResource("spot")
+SceneId = "ch2_s2a"
+StartAtBeatId = ""
+Mix = ExtResource("inquiry")
+CharacterFocus = 4
+Reason = "The Copy Between Us"
+
+[sub_resource type="Resource" id="spot_31"]
+script = ExtResource("spot")
+SceneId = "ch2_s3"
+StartAtBeatId = ""
+Mix = ExtResource("inquiry")
+CharacterFocus = 3
+Reason = "The Official Way Across"
+
+[sub_resource type="Resource" id="spot_32"]
+script = ExtResource("spot")
+SceneId = "ch2_s3"
+StartAtBeatId = "ch2_s3_b011"
+Mix = ExtResource("grief")
+CharacterFocus = 0
+Reason = "Nessa names her remembered participation."
+
+[sub_resource type="Resource" id="spot_33"]
+script = ExtResource("spot")
+SceneId = "ch2_s3"
+StartAtBeatId = "ch2_s3_b024"
+Mix = ExtResource("inquiry")
+CharacterFocus = 0
+Reason = "Current safety checks remain practical."
+
+[sub_resource type="Resource" id="spot_34"]
+script = ExtResource("spot")
+SceneId = "ch2_s3a"
+StartAtBeatId = ""
+Mix = ExtResource("inquiry")
+CharacterFocus = 3
+Reason = "A Route Made of Names"
+
+[sub_resource type="Resource" id="spot_35"]
+script = ExtResource("spot")
+SceneId = "ch2_s3a"
+StartAtBeatId = "ch2_s3a_b017"
+Mix = ExtResource("grief")
+CharacterFocus = 0
+Reason = "Past isolation is acknowledged."
+
+[sub_resource type="Resource" id="spot_36"]
+script = ExtResource("spot")
+SceneId = "ch2_s3a"
+StartAtBeatId = "ch2_s3a_b024"
+Mix = ExtResource("grief")
+CharacterFocus = 4
+Reason = "Character focus changes with the subject of the scene."
+
+[sub_resource type="Resource" id="spot_37"]
+script = ExtResource("spot")
+SceneId = "ch2_s3a"
+StartAtBeatId = "ch2_s3a_b033"
+Mix = ExtResource("inquiry")
+CharacterFocus = 3
+Reason = "Return to a route made of places."
+
+[sub_resource type="Resource" id="spot_38"]
+script = ExtResource("spot")
+SceneId = "ch2_s4"
+StartAtBeatId = ""
+Mix = ExtResource("grief")
+CharacterFocus = 6
+Reason = "The Missing Margin"
+
+[sub_resource type="Resource" id="spot_39"]
+script = ExtResource("spot")
+SceneId = "ch2_s4"
+StartAtBeatId = "ch2_s4_b013"
+Mix = ExtResource("grief")
+CharacterFocus = 2
+Reason = "Character focus changes with the subject of the scene."
+
+[sub_resource type="Resource" id="spot_40"]
+script = ExtResource("spot")
+SceneId = "ch2_s4"
+StartAtBeatId = "ch2_s4_b021"
+Mix = ExtResource("inquiry")
+CharacterFocus = 0
+Reason = "Calibration hardware creates a new bounded question."
+
+[sub_resource type="Resource" id="spot_41"]
+script = ExtResource("spot")
+SceneId = "ch2_s4a"
+StartAtBeatId = ""
+Mix = ExtResource("reflection")
+CharacterFocus = 2
+Reason = "A Familiar Hand"
+
+[sub_resource type="Resource" id="spot_42"]
+script = ExtResource("spot")
+SceneId = "ch2_s5"
+StartAtBeatId = ""
+Mix = ExtResource("readiness")
+CharacterFocus = 1
+Reason = "Sixteen Twelve"
+
+[sub_resource type="Resource" id="spot_43"]
+script = ExtResource("spot")
+SceneId = "ch2_s5"
+StartAtBeatId = "ch2_s5_b009"
+Mix = ExtResource("uncanny")
+CharacterFocus = 0
+Reason = "Wait for the observation, without a ticking deadline."
+
+[sub_resource type="Resource" id="spot_44"]
+script = ExtResource("spot")
+SceneId = "ch2_s5"
+StartAtBeatId = "ch2_s5_b012"
+Mix = ExtResource("source_space")
+CharacterFocus = 0
+Reason = "Leave the physical cup event room."
+
+[sub_resource type="Resource" id="spot_45"]
+script = ExtResource("spot")
+SceneId = "ch2_s5"
+StartAtBeatId = "ch2_s5_b017"
+Mix = ExtResource("source_space")
+CharacterFocus = 5
+Reason = "Character focus changes with the subject of the scene."
+
+[sub_resource type="Resource" id="spot_46"]
+script = ExtResource("spot")
+SceneId = "ch2_s5"
+StartAtBeatId = "ch2_s5_b018"
+Mix = ExtResource("inquiry")
+CharacterFocus = 0
+Reason = "The calibration plate is examined."
+
+[sub_resource type="Resource" id="spot_47"]
+script = ExtResource("spot")
+SceneId = "ch2_s5"
+StartAtBeatId = "ch2_s5_b026"
+Mix = ExtResource("reflection")
+CharacterFocus = 2
+Reason = "Fragments, humor, and ordinary breakage."
+
+[sub_resource type="Resource" id="spot_48"]
+script = ExtResource("spot")
+SceneId = "ch3_s1"
+StartAtBeatId = ""
+Mix = ExtResource("uncanny")
+CharacterFocus = 5
+Reason = "Beneath the Postcard"
+
+[sub_resource type="Resource" id="spot_49"]
+script = ExtResource("spot")
+SceneId = "ch3_s1"
+StartAtBeatId = "ch3_s1_b026"
+Mix = ExtResource("reflection")
+CharacterFocus = 0
+Reason = "Leave safely; the survey has what it needs."
+
+[sub_resource type="Resource" id="spot_50"]
+script = ExtResource("spot")
+SceneId = "ch3_s1a"
+StartAtBeatId = ""
+Mix = ExtResource("inquiry")
+CharacterFocus = 5
+Reason = "A Useful Error"
+
+[sub_resource type="Resource" id="spot_51"]
+script = ExtResource("spot")
+SceneId = "ch3_s2"
+StartAtBeatId = ""
+Mix = ExtResource("inquiry")
+CharacterFocus = 6
+Reason = "Two Kinds of Keeping"
+
+[sub_resource type="Resource" id="spot_52"]
+script = ExtResource("spot")
+SceneId = "ch3_s2"
+StartAtBeatId = "ch3_s2_b006"
+Mix = ExtResource("source_space")
+CharacterFocus = 0
+Reason = "Original reel and operational voices."
+
+[sub_resource type="Resource" id="spot_53"]
+script = ExtResource("spot")
+SceneId = "ch3_s2"
+StartAtBeatId = "ch3_s2_b013"
+Mix = ExtResource("grief")
+CharacterFocus = 4
+Reason = "The signoff changes what the record supports."
+
+[sub_resource type="Resource" id="spot_54"]
+script = ExtResource("spot")
+SceneId = "ch3_s2a"
+StartAtBeatId = ""
+Mix = ExtResource("readiness")
+CharacterFocus = 5
+Reason = "The Cost of Keeping"
+
+[sub_resource type="Resource" id="spot_55"]
+script = ExtResource("spot")
+SceneId = "ch3_s3"
+StartAtBeatId = ""
+Mix = ExtResource("resolve")
+CharacterFocus = 3
+Reason = "Repeat Back"
+
+[sub_resource type="Resource" id="spot_56"]
+script = ExtResource("spot")
+SceneId = "ch3_s3a"
+StartAtBeatId = ""
+Mix = ExtResource("reflection")
+CharacterFocus = 4
+Reason = "What We Owe the Living"
+
+[sub_resource type="Resource" id="spot_57"]
+script = ExtResource("spot")
+SceneId = "ch3_s3a"
+StartAtBeatId = "ch3_s3a_b035"
+Mix = ExtResource("domestic")
+CharacterFocus = 0
+Reason = "Living obligations remain outside the inquiry."
+
+[sub_resource type="Resource" id="spot_58"]
+script = ExtResource("spot")
+SceneId = "ch3_s4"
+StartAtBeatId = ""
+Mix = ExtResource("uncanny")
+CharacterFocus = 5
+Reason = "Twenty-Three Hours, Seventeen Minutes"
+
+[sub_resource type="Resource" id="spot_59"]
+script = ExtResource("spot")
+SceneId = "ch3_s4"
+StartAtBeatId = "ch3_s4_b018"
+Mix = ExtResource("resolve")
+CharacterFocus = 0
+Reason = "The known-pattern test supports a fixed interval."
+
+[sub_resource type="Resource" id="spot_60"]
+script = ExtResource("spot")
+SceneId = "ch3_s4"
+StartAtBeatId = "ch3_s4_b026"
+Mix = ExtResource("reflection")
+CharacterFocus = 0
+Reason = "The landing contains people, not only a problem."
+
+[sub_resource type="Resource" id="spot_61"]
+script = ExtResource("spot")
+SceneId = "ch3_s5"
+StartAtBeatId = ""
+Mix = ExtResource("grief")
+CharacterFocus = 2
+Reason = "The Difference Between Given and Chosen"
+
+[sub_resource type="Resource" id="spot_62"]
+script = ExtResource("spot")
+SceneId = "ch3_s5"
+StartAtBeatId = "ch3_s5_b017"
+Mix = ExtResource("grief")
+CharacterFocus = 0
+Reason = "Complete testimony is opened without an absolution cue."
+
+[sub_resource type="Resource" id="spot_63"]
+script = ExtResource("spot")
+SceneId = "ch4_s1"
+StartAtBeatId = ""
+Mix = ExtResource("grief")
+CharacterFocus = 6
+Reason = "The Answer He Kept"
+
+[sub_resource type="Resource" id="spot_64"]
+script = ExtResource("spot")
+SceneId = "ch4_s1"
+StartAtBeatId = "ch4_s1_b004"
+Mix = ExtResource("source_space")
+CharacterFocus = 0
+Reason = "Full testimony needs acoustic room."
+
+[sub_resource type="Resource" id="spot_65"]
+script = ExtResource("spot")
+SceneId = "ch4_s1"
+StartAtBeatId = "ch4_s1_b016"
+Mix = ExtResource("grief")
+CharacterFocus = 2
+Reason = "Ada names the difference."
+
+[sub_resource type="Resource" id="spot_66"]
+script = ExtResource("spot")
+SceneId = "ch4_s1"
+StartAtBeatId = "ch4_s1_b018"
+Mix = ExtResource("source_space")
+CharacterFocus = 6
+Reason = "The deposition continues."
+
+[sub_resource type="Resource" id="spot_67"]
+script = ExtResource("spot")
+SceneId = "ch4_s1"
+StartAtBeatId = "ch4_s1_b029"
+Mix = ExtResource("grief")
+CharacterFocus = 1
+Reason = "Return to the witnesses after testimony."
+
+[sub_resource type="Resource" id="spot_68"]
+script = ExtResource("spot")
+SceneId = "ch4_s1a"
+StartAtBeatId = ""
+Mix = ExtResource("memory")
+CharacterFocus = 4
+Reason = "Six Working Lives"
+
+[sub_resource type="Resource" id="spot_69"]
+script = ExtResource("spot")
+SceneId = "ch4_s1a"
+StartAtBeatId = "ch4_s1a_b029"
+Mix = ExtResource("reflection")
+CharacterFocus = 0
+Reason = "Catalogue people as people; no heroic memorial crescendo."
+
+[sub_resource type="Resource" id="spot_70"]
+script = ExtResource("spot")
+SceneId = "ch4_s2"
+StartAtBeatId = ""
+Mix = ExtResource("resolve")
+CharacterFocus = 1
+Reason = "No Single Keeper"
+
+[sub_resource type="Resource" id="spot_71"]
+script = ExtResource("spot")
+SceneId = "ch4_s2a"
+StartAtBeatId = ""
+Mix = ExtResource("resolve")
+CharacterFocus = 1
+Reason = "Who Gets to Speak"
+
+[sub_resource type="Resource" id="spot_72"]
+script = ExtResource("spot")
+SceneId = "ch4_s2a"
+StartAtBeatId = "ch4_s2a_b017"
+Mix = ExtResource("reflection")
+CharacterFocus = 0
+Reason = "Private family calls are allowed to be private."
+
+[sub_resource type="Resource" id="spot_73"]
+script = ExtResource("spot")
+SceneId = "ch4_s2a"
+StartAtBeatId = "ch4_s2a_b025"
+Mix = ExtResource("resolve")
+CharacterFocus = 0
+Reason = "The statement is prepared within its authority."
+
+[sub_resource type="Resource" id="spot_74"]
+script = ExtResource("spot")
+SceneId = "ch4_s3"
+StartAtBeatId = ""
+Mix = ExtResource("storm")
+CharacterFocus = 4
+Reason = "The Public Line"
+
+[sub_resource type="Resource" id="spot_75"]
+script = ExtResource("spot")
+SceneId = "ch4_s3"
+StartAtBeatId = "ch4_s3_b007"
+Mix = ExtResource("source_space")
+CharacterFocus = 0
+Reason = "Public statement and repeat-back occupy the foreground."
+
+[sub_resource type="Resource" id="spot_76"]
+script = ExtResource("spot")
+SceneId = "ch4_s3"
+StartAtBeatId = "ch4_s3_b017"
+Mix = ExtResource("readiness")
+CharacterFocus = 3
+Reason = "Evacuation is a list and a checked route."
+
+[sub_resource type="Resource" id="spot_77"]
+script = ExtResource("spot")
+SceneId = "ch4_s3a"
+StartAtBeatId = ""
+Mix = ExtResource("readiness")
+CharacterFocus = 3
+Reason = "Every Name Has a Door"
+
+[sub_resource type="Resource" id="spot_78"]
+script = ExtResource("spot")
+SceneId = "ch4_s4"
+StartAtBeatId = ""
+Mix = ExtResource("resolve")
+CharacterFocus = 2
+Reason = "The Hand at the Other End"
+
+[sub_resource type="Resource" id="spot_79"]
+script = ExtResource("spot")
+SceneId = "ch4_s4"
+StartAtBeatId = "ch4_s4_b017"
+Mix = ExtResource("reflection")
+CharacterFocus = 0
+Reason = "Blank paper is permitted to remain blank."
+
+[sub_resource type="Resource" id="spot_80"]
+script = ExtResource("spot")
+SceneId = "ch4_s4"
+StartAtBeatId = "ch4_s4_b021"
+Mix = ExtResource("resolve")
+CharacterFocus = 0
+Reason = "The team verifies its options."
+
+[sub_resource type="Resource" id="spot_81"]
+script = ExtResource("spot")
+SceneId = "ch4_s5"
+StartAtBeatId = ""
+Mix = ExtResource("reflection")
+CharacterFocus = 2
+Reason = "Permission to Leave"
+
+[sub_resource type="Resource" id="spot_82"]
+script = ExtResource("spot")
+SceneId = "ch4_s5"
+StartAtBeatId = "ch4_s5_b019"
+Mix = ExtResource("readiness")
+CharacterFocus = 0
+Reason = "The quarter-hour warning returns to the operation."
+
+[sub_resource type="Resource" id="spot_83"]
+script = ExtResource("spot")
+SceneId = "ch5_s1"
+StartAtBeatId = ""
+Mix = ExtResource("readiness")
+CharacterFocus = 2
+Reason = "The First Sentence"
+
+[sub_resource type="Resource" id="spot_84"]
+script = ExtResource("spot")
+SceneId = "ch5_s1"
+StartAtBeatId = "ch5_s1_b006"
+Mix = ExtResource("source_space")
+CharacterFocus = 0
+Reason = "Ada writes and reads the first trace."
+
+[sub_resource type="Resource" id="spot_85"]
+script = ExtResource("spot")
+SceneId = "ch5_s1"
+StartAtBeatId = "ch5_s1_b010"
+Mix = ExtResource("resolve")
+CharacterFocus = 0
+Reason = "Input and output agree, without a victory fanfare."
+
+[sub_resource type="Resource" id="spot_86"]
+script = ExtResource("spot")
+SceneId = "ch5_s2"
+StartAtBeatId = ""
+Mix = ExtResource("readiness")
+CharacterFocus = 3
+Reason = "No One"
+
+[sub_resource type="Resource" id="spot_87"]
+script = ExtResource("spot")
+SceneId = "ch5_s2"
+StartAtBeatId = "ch5_s2_b012"
+Mix = ExtResource("source_space")
+CharacterFocus = 2
+Reason = "The bell statement is grounded in named readiness."
+
+[sub_resource type="Resource" id="spot_88"]
+script = ExtResource("spot")
+SceneId = "ch5_s2"
+StartAtBeatId = "ch5_s2_b016"
+Mix = ExtResource("readiness")
+CharacterFocus = 1
+Reason = "Return to measured conditions."
+
+[sub_resource type="Resource" id="spot_89"]
+script = ExtResource("spot")
+SceneId = "ch5_s3"
+StartAtBeatId = ""
+Mix = ExtResource("storm")
+CharacterFocus = 1
+Reason = "The Bell Falls"
+
+[sub_resource type="Resource" id="spot_90"]
+script = ExtResource("spot")
+SceneId = "ch5_s3"
+StartAtBeatId = "ch5_s3_b004"
+Mix = ExtResource("readiness")
+CharacterFocus = 0
+Reason = "Controlled descent rather than an action-film peak."
+
+[sub_resource type="Resource" id="spot_91"]
+script = ExtResource("spot")
+SceneId = "ch5_s3"
+StartAtBeatId = "ch5_s3_b006"
+Mix = ExtResource("release")
+CharacterFocus = 0
+Reason = "The bell seats; motion stem leaves the mix."
+
+[sub_resource type="Resource" id="spot_92"]
+script = ExtResource("spot")
+SceneId = "ch5_s3"
+StartAtBeatId = "ch5_s3_b013"
+Mix = ExtResource("aftermath")
+CharacterFocus = 2
+Reason = "Relief begins as ordinary physical weight."
+
+[sub_resource type="Resource" id="spot_93"]
+script = ExtResource("spot")
+SceneId = "ch5_s3a"
+StartAtBeatId = ""
+Mix = ExtResource("aftermath")
+CharacterFocus = 2
+Reason = "The Last Room to Close"
+
+[sub_resource type="Resource" id="spot_94"]
+script = ExtResource("spot")
+SceneId = "ch5_s3a"
+StartAtBeatId = "ch5_s3a_b025"
+Mix = ExtResource("memory")
+CharacterFocus = 0
+Reason = "Grief remains complicated after a successful operation."
+
+[sub_resource type="Resource" id="spot_95"]
+script = ExtResource("spot")
+SceneId = "ch5_s3a"
+StartAtBeatId = "ch5_s3a_b035"
+Mix = ExtResource("aftermath")
+CharacterFocus = 0
+Reason = "A provisional plan to return."
+
+[sub_resource type="Resource" id="spot_96"]
+script = ExtResource("spot")
+SceneId = "ch5_s4"
+StartAtBeatId = ""
+Mix = ExtResource("horizon")
+CharacterFocus = 1
+Reason = "A Morning Without Instructions"
+
+[sub_resource type="Resource" id="spot_97"]
+script = ExtResource("spot")
+SceneId = "ch5_s4a"
+StartAtBeatId = ""
+Mix = ExtResource("aftermath")
+CharacterFocus = 4
+Reason = "A Record That Can Be Corrected"
+
+[sub_resource type="Resource" id="spot_98"]
+script = ExtResource("spot")
+SceneId = "ch5_s4a"
+StartAtBeatId = "ch5_s4a_b025"
+Mix = ExtResource("source_space")
+CharacterFocus = 0
+Reason = "Space reserved for the choir reference."
+
+[sub_resource type="Resource" id="spot_99"]
+script = ExtResource("spot")
+SceneId = "ch5_s4a"
+StartAtBeatId = "ch5_s4a_b029"
+Mix = ExtResource("aftermath")
+CharacterFocus = 0
+Reason = "Return to achievable ordinary work."
+
+[sub_resource type="Resource" id="spot_100"]
+script = ExtResource("spot")
+SceneId = "ch5_s4b"
+StartAtBeatId = ""
+Mix = ExtResource("aftermath")
+CharacterFocus = 2
+Reason = "The Song Without a Clue"
+
+[sub_resource type="Resource" id="spot_101"]
+script = ExtResource("spot")
+SceneId = "ch5_s4b"
+StartAtBeatId = "ch5_s4b_b009"
+Mix = ExtResource("source_space")
+CharacterFocus = 0
+Reason = "The authorized song extract is separate from underscore."
+
+[sub_resource type="Resource" id="spot_102"]
+script = ExtResource("spot")
+SceneId = "ch5_s4b"
+StartAtBeatId = "ch5_s4b_b014"
+Mix = ExtResource("aftermath")
+CharacterFocus = 0
+Reason = "A straightforward book repair."
+
+[sub_resource type="Resource" id="spot_103"]
+script = ExtResource("spot")
+SceneId = "ch5_s4b"
+StartAtBeatId = "ch5_s4b_b023"
+Mix = ExtResource("reflection")
+CharacterFocus = 0
+Reason = "An ordinary family call."
+
+[sub_resource type="Resource" id="spot_104"]
+script = ExtResource("spot")
+SceneId = "ch5_s4b"
+StartAtBeatId = "ch5_s4b_b028"
+Mix = ExtResource("aftermath")
+CharacterFocus = 0
+Reason = "Return to the kitchen."
+
+[sub_resource type="Resource" id="spot_105"]
+script = ExtResource("spot")
+SceneId = "ch5_s4b"
+StartAtBeatId = "ch5_s4b_b033"
+Mix = ExtResource("source_space")
+CharacterFocus = 0
+Reason = "Leave space for the repeated song and future humming."
+
+[sub_resource type="Resource" id="spot_106"]
+script = ExtResource("spot")
+SceneId = "ch5_s4b"
+StartAtBeatId = "ch5_s4b_b035"
+Mix = ExtResource("aftermath")
+CharacterFocus = 0
+Reason = "The speaker is packed away."
+
+[sub_resource type="Resource" id="spot_107"]
+script = ExtResource("spot")
+SceneId = "ch5_s5"
+StartAtBeatId = ""
+Mix = ExtResource("aftermath")
+CharacterFocus = 2
+Reason = "A Catalogue With Room"
+
+[sub_resource type="Resource" id="spot_108"]
+script = ExtResource("spot")
+SceneId = "ch5_s5"
+StartAtBeatId = "ch5_s5_b012"
+Mix = ExtResource("horizon")
+CharacterFocus = 0
+Reason = "Ada chooses to leave and return for her own reasons."
+
+[resource]
+script = ExtResource("score")
+TitleMix = ExtResource("arrival")
+Spots = Array[ExtResource("spot")]([SubResource("spot_0"), SubResource("spot_1"), SubResource("spot_2"), SubResource("spot_3"), SubResource("spot_4"), SubResource("spot_5"), SubResource("spot_6"), SubResource("spot_7"), SubResource("spot_8"), SubResource("spot_9"), SubResource("spot_10"), SubResource("spot_11"), SubResource("spot_12"), SubResource("spot_13"), SubResource("spot_14"), SubResource("spot_15"), SubResource("spot_16"), SubResource("spot_17"), SubResource("spot_18"), SubResource("spot_19"), SubResource("spot_20"), SubResource("spot_21"), SubResource("spot_22"), SubResource("spot_23"), SubResource("spot_24"), SubResource("spot_25"), SubResource("spot_26"), SubResource("spot_27"), SubResource("spot_28"), SubResource("spot_29"), SubResource("spot_30"), SubResource("spot_31"), SubResource("spot_32"), SubResource("spot_33"), SubResource("spot_34"), SubResource("spot_35"), SubResource("spot_36"), SubResource("spot_37"), SubResource("spot_38"), SubResource("spot_39"), SubResource("spot_40"), SubResource("spot_41"), SubResource("spot_42"), SubResource("spot_43"), SubResource("spot_44"), SubResource("spot_45"), SubResource("spot_46"), SubResource("spot_47"), SubResource("spot_48"), SubResource("spot_49"), SubResource("spot_50"), SubResource("spot_51"), SubResource("spot_52"), SubResource("spot_53"), SubResource("spot_54"), SubResource("spot_55"), SubResource("spot_56"), SubResource("spot_57"), SubResource("spot_58"), SubResource("spot_59"), SubResource("spot_60"), SubResource("spot_61"), SubResource("spot_62"), SubResource("spot_63"), SubResource("spot_64"), SubResource("spot_65"), SubResource("spot_66"), SubResource("spot_67"), SubResource("spot_68"), SubResource("spot_69"), SubResource("spot_70"), SubResource("spot_71"), SubResource("spot_72"), SubResource("spot_73"), SubResource("spot_74"), SubResource("spot_75"), SubResource("spot_76"), SubResource("spot_77"), SubResource("spot_78"), SubResource("spot_79"), SubResource("spot_80"), SubResource("spot_81"), SubResource("spot_82"), SubResource("spot_83"), SubResource("spot_84"), SubResource("spot_85"), SubResource("spot_86"), SubResource("spot_87"), SubResource("spot_88"), SubResource("spot_89"), SubResource("spot_90"), SubResource("spot_91"), SubResource("spot_92"), SubResource("spot_93"), SubResource("spot_94"), SubResource("spot_95"), SubResource("spot_96"), SubResource("spot_97"), SubResource("spot_98"), SubResource("spot_99"), SubResource("spot_100"), SubResource("spot_101"), SubResource("spot_102"), SubResource("spot_103"), SubResource("spot_104"), SubResource("spot_105"), SubResource("spot_106"), SubResource("spot_107"), SubResource("spot_108")])

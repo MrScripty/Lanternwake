@@ -1,0 +1,29 @@
+{
+  "format": 3,
+  "playback": "bundled MeltySynth / live MIDI",
+  "sample_rate": 32000,
+  "loop_frames": 2560000,
+  "inputs": {
+    "Assets/Music/Source/Saltmere-Acoustic.sf2": "7850bbc0c5b693299a8b9df855dbb5fad3469ffad71abd809db63806a5618326",
+    "Assets/Music/Source/ada_score.mid": "76759a9b682fe37220fcd2688a23759fdaf39addf00295eacd9fa84991ecb5fc",
+    "Assets/Music/Source/archive_score.mid": "dfe3e9217a0d99d2e596e27b1911751a79866fe1d823cbfe3c40d53b41bf6f54",
+    "Assets/Music/Source/chosen_horizon_score.mid": "ad9168bfbe86f3f0b153beccac2d7ed80d2922f64184b180d4b96485554d9ad1",
+    "Assets/Music/Source/harbor_score.mid": "d69c9562bc18bf6127c4ef058d1885c636581dee476b008c871db92fb5e7a2ff",
+    "Assets/Music/Source/inventory_score.mid": "c27183353a9facf177147a55131543fd2317dc67bc3083a9538db3fd72ed6567",
+    "Assets/Music/Source/ivo_score.mid": "0991426f31725fe5b9ddb7d806a1e1d4425cfed36b98fb820012b3875cbd42a6",
+    "Assets/Music/Source/keeper_house_score.mid": "9874d1c8b3132f48875b58a350bd77bc6735b71f1540d5294eee45de75b075ee",
+    "Assets/Music/Source/lantern_room_score.mid": "98ce3e02df3f49e630f05c72176e67782ea1ac5bc6f4ecbfead36bba29cdfd8a",
+    "Assets/Music/Source/nessa_score.mid": "8b8fd6c31371f6aa07d6ea00b268349dfb59ceead4199d62dff4a135c7562656",
+    "Assets/Music/Source/night_ledger_score.mid": "a263b38ed41830448c11974fb952e28830b2f1a1815993bf9319f447b3d08046",
+    "Assets/Music/Source/open_horizon_score.mid": "6ffe1ad5b14ea9cdb7ed75f01b9fa68ba119e66c2bc0e9a7ecbc571d26e2442d",
+    "Assets/Music/Source/saltmere_score.mid": "d01687c479dbcf4b959714f698249a794ac963b72d18d4dda5b804370e86ab04",
+    "Assets/Music/Source/sera_score.mid": "d9162734b8dcc53037b96f6248124a5e82b65f3b647dde9b466302f77cef7f1e",
+    "Assets/Music/Source/shared_ledger_score.mid": "1b282885fc60fe500e3b5f4faabaf66711467abd770eb52d0e7ff0d123e8e622",
+    "Assets/Music/Source/tide_cave_score.mid": "cce099ae7e6c30f3af912cf71beb407d9f7a51283cff30e6ec937c1c30f19616",
+    "Assets/Music/Source/tomas_score.mid": "4c41c9671e46dda2ccc57a16c244d681d316e99fe3a8985a614690a1f16ac8c3",
+    "Assets/Music/Source/undertow_score.mid": "db3ebe1c303698a489fdb4d9ba87fd9fa25bdb4e178359593926c195448b4d72",
+    "Assets/Music/Source/water_kept_score.mid": "04e5d091e41e09778242f9e5859790b266ca279ddbeb654226c53c7cc632637a",
+    "Assets/Music/Source/wrong_channel_score.mid": "0d2622eb82932c59c05abf93b4af26341925cef930b1393be87465ceba0cc758",
+    "Assets/Music/catalog.json": "bdbe67b1f9a741e518908411f10140e45d68ead8ba9aa1a79d71289a642bbc6e"
+  }
+}

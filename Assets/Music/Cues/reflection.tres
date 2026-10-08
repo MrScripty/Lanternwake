@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="MusicMix" format=3]
+
+[ext_resource type="Script" path="res://Scripts/Presentation/MusicMix.cs" id="1"]
+
+[resource]
+script = ExtResource("1")
+Title = "Room for a person"
+Suite = 0
+Ground = 0.48
+Theme = 0.32
+Bowed = 0.16
+Motion = 0
