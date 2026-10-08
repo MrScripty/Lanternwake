@@ -8,9 +8,16 @@ public enum DialogueProvider { Pumas, OpenRouter }
 public sealed record SpeechServiceSettings(bool Enabled = false, string Endpoint = "http://127.0.0.1:8080/", string Model = "")
 {
     public DialogueProvider Provider { get; init; } = DialogueProvider.Pumas;
+    public string Profile { get; init; } = "";
+    public string Language { get; init; } = "en";
+
+    public static bool ValidProfile(string? profile) => profile is not null && profile.Length <= 128 &&
+        profile.All(c => char.IsAsciiLetterOrDigit(c) || c is '_' or '-' or '.');
 
     public SpeechServiceSettings Validate()
     {
+        if (!ValidProfile(Profile) || Language is not ("en" or "de" or "fr" or "it" or "es" or "pt" or "el" or "nl" or "pl" or "vi" or "zh" or "ar" or "ja" or "ko"))
+            throw new InvalidDataException("Choose a valid speech profile and supported language.");
         var connection = new AiSettings(Provider, false, Endpoint, Model).ValidateConnection();
         return this with { Endpoint = connection.Endpoint, Model = connection.Model };
     }

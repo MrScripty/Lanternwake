@@ -24,3 +24,4 @@ try
 }
 catch (OperationCanceledException) when (cancel.IsCancellationRequested) { }
 Console.WriteLine("PASS Pumas/Cohere unsupported capability, repeated rejection, no legacy fallback and pre-cancellation. No inference claim.");
+await AudioModalityTests.RunAsync();

@@ -10,12 +10,19 @@ public sealed class SpeechRecorder : IDisposable
     private List<StereoSample> _samples = [];
     public bool Recording => _player is not null;
     private readonly PumasSpeechTranscriber _transcriber = new();
+    private Lanternwake.Core.SpeechServiceSettings _nextSettings = new();
+    public void Configure(Lanternwake.Core.SpeechServiceSettings settings)
+    {
+        _nextSettings = settings.Validate();
+        if (!Recording) _transcriber.Configure(_nextSettings);
+    }
     public SpeechCapability Capability => _transcriber.Capability;
     public bool Available => Capability.Status != SpeechAvailability.Unsupported;
     public void Start(Node owner)
     {
-        if (!Available) throw new NotSupportedException(Capability.Message);
         if (Recording) return;
+        _transcriber.Configure(_nextSettings);
+        if (!Available) throw new NotSupportedException(Capability.Message);
         _samples.Clear(); _sampleRate = (int)AudioServer.GetMixRate();
         _bus = AudioServer.BusCount;
         AudioServer.AddBus(); AudioServer.SetBusName(_bus, "LanternwakeCapture");

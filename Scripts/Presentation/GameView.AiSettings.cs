@@ -27,6 +27,7 @@ public partial class GameView
             _aiSettings = new(DialogueProvider.Pumas, false, AiSettings.DefaultEndpoint(DialogueProvider.Pumas), "");
             _aiSettingsLoadError = "AI settings could not be loaded. Open AI setup to configure them again.";
         }
+        _speech.Configure(_aiSettings.Transcription);
         if (mode == SessionMode.Normal)
         {
             _openRouterKey = System.Environment.GetEnvironmentVariable("OPENROUTER_API_KEY") ?? "";
@@ -260,7 +261,7 @@ public partial class GameView
                     _credentialNotice = enteredKey.Length > 0 ? "Key saved in your desktop keyring." : "No key saved.";
                 }
                 token.ThrowIfCancellationRequested();
-                draft.Save(_aiSettingsPath); _aiSettings = draft; _aiSettingsLoadError = "";
+                draft.Save(_aiSettingsPath); _aiSettings = draft; _speech.Configure(draft.Transcription); _aiSettingsLoadError = "";
                 if (Active())
                 {
                     credentialStatus.Text = _credentialNotice;
