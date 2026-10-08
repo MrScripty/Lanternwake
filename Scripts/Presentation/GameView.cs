@@ -404,7 +404,7 @@ public partial class GameView : Node
         if (_modal is not { } modal) return;
         _modal = null;
         modal.Hide(); modal.Exclusive = false; modal.QueueFree();
-        if (MainMenuVisible) FocusMainMenu(); else _advance.GrabFocus();
+        if (MainMenuVisible) FocusMainMenu(); else if (_chatPanel.Visible) _entry.GrabFocus(); else _advance.GrabFocus();
     }
     private void ShowStagePreview()
     {
@@ -573,6 +573,8 @@ public partial class GameView : Node
             Check(_modal is not null && !_speech.Recording && !_busy && _entry.Editable,
                 "unsupported Pumas/Cohere voice explains setup without capture or blocking typing");
             CloseModal();
+            Check(_entry.HasFocus() && _entry.Editable && !_speech.Recording,
+                "unavailable voice modal restores editable conversation focus without recording");
             var suggestion = _suggestions.GetChildren().OfType<Button>().First(); suggestion.EmitSignal(BaseButton.SignalName.Pressed);
             Check(_entry.Text == suggestion.Text && _entry.Editable, "suggestions are editable");
             var livePreview = OS.GetCmdlineUserArgs().Contains("--live-ui-preview");
