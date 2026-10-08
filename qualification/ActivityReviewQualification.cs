@@ -40,7 +40,9 @@ public partial class ActivityReviewQualification : Node
     {
         Check(Modal?.Title == "Compare the evidence" && Modal.GetNode<RichTextLabel>("%ModalText").Text == activity.Prompt, "same authored question prompt restored");
         var buttons = Modal!.GetNode<VBoxContainer>("%ModalActions").GetChildren().OfType<Button>().ToArray();
-        Check(buttons.Select(b => b.Text).SequenceEqual(activity.Options.Concat(["Review known evidence", "Read the record"])), "exact authored options, order and two review actions");
+        var expected = activity.Options.Concat(["Review known evidence", "Read the record"]);
+        if (Session.Beat.Id == "ch2_s3a_evidence") expected = expected.Append("Explore route model");
+        Check(buttons.Select(b => b.Text).SequenceEqual(expected), "exact authored options/review order and the route-only optional model action");
     }
     private async Task Layout()
     {
