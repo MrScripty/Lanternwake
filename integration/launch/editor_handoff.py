@@ -12,6 +12,58 @@ import tempfile
 import threading
 
 PROJECT = Path(__file__).resolve().parents[2]
+HANDOFF_OK = 'LANTERNWAKE_EDITOR_HANDOFF_OK editor rebuilt changed source with selected SDK and offline cache'
+EDITOR_START = 'Starting Godot .NET editor…'
+PINNED_ENGINE = 'Godot Engine v4.6.3.stable.mono.official.7d41c59c4 - https://godotengine.org'
+BUILD_DONE = '[ DONE ] dotnet_build_project'
+# Exact observed 4.6.3 shutdown signature, not a general EditorSettings exemption.
+# See docs/EDITOR-HANDOFF-DIAGNOSTIC.md for upstream evidence and removal criteria.
+ANDROID_SHUTDOWN = (
+    'ERROR: EditorSettings not instantiated yet when getting setting "export/android/android_sdk_path".',
+    '   at: _EDITOR_GET (editor/settings/editor_settings.cpp:1531)',
+)
+DIAGNOSTICS = re.compile(r'ERROR:|SCRIPT ERROR:|WARNING:|\b(?:error|warning) [A-Z]+[0-9]+:|Build FAILED|Failed to build')
+SGR = re.compile(r'\x1b\[[0-9;]*m')
+
+
+def validate_handoff_output(output, returncode, blocked_requests):
+    """Return whether the successful handoff has the one tracked engine diagnostic.
+
+    Never change the displayed output. Only the final exact two-line shutdown
+    diagnostic can be classified, after a native build and before the probe's
+    changed-DLL assertion succeeds. All other diagnostics remain fatal.
+    """
+    if returncode:
+        raise RuntimeError('Isolated native editor build failed; inspect the output above.')
+    lines = SGR.sub('', output).splitlines()
+    if lines.count(HANDOFF_OK) != 1 or not lines or lines[-1] != HANDOFF_OK or blocked_requests:
+        raise RuntimeError(f'Editor handoff did not complete offline; blocked network requests: {len(blocked_requests)}')
+
+    known_shutdown = False
+    inspected = '\n'.join(lines)
+    if (lines.count(EDITOR_START) == 1 and tuple(lines[-3:-1]) == ANDROID_SHUTDOWN):
+        editor = lines[lines.index(EDITOR_START) + 1:-3]
+        # The launcher import is a separate process: its diagnostics cannot be
+        # accepted here. Version and native-build evidence must be in this stage.
+        if (editor and editor[0] == PINNED_ENGINE
+                and sum(line.startswith('Godot Engine ') for line in editor) == 1
+                and editor.count(BUILD_DONE) == 1):
+            inspected = '\n'.join(lines[:-3] + [lines[-1]])
+            known_shutdown = True
+    if DIAGNOSTICS.search(inspected):
+        raise RuntimeError('Isolated native editor build failed; inspect the output above.')
+    return known_shutdown
+
+
+def report_handoff_result(result, blocked_requests):
+    print(result.stdout, end='', flush=True)
+    known_shutdown = validate_handoff_output(result.stdout, result.returncode, blocked_requests)
+    if known_shutdown:
+        print('::warning title=Known Godot 4.6.3 shutdown diagnostic::'
+              'Native rebuild and offline handoff passed, but the pinned engine emitted its tracked '
+              'Android EditorSettings shutdown diagnostic. Raw output is retained above; '
+              'see docs/EDITOR-HANDOFF-DIAGNOSTIC.md. This is not a warning-free engine shutdown.', flush=True)
+    return known_shutdown
 
 
 class BlockNetwork(http.server.BaseHTTPRequestHandler):
@@ -99,12 +151,7 @@ print('LANTERNWAKE_EDITOR_HANDOFF_OK editor rebuilt changed source with selected
             finally:
                 proxy.shutdown()
                 thread.join(timeout=5)
-            output = result.stdout
-            print(output, end='', flush=True)
-            if result.returncode or re.search(r'ERROR:|SCRIPT ERROR:|WARNING:|Build FAILED|Failed to build', output):
-                raise RuntimeError('Isolated native editor build failed; inspect the output above.')
-            if 'LANTERNWAKE_EDITOR_HANDOFF_OK' not in output or proxy.requests:
-                raise RuntimeError(f'Editor handoff did not complete offline; blocked network requests: {len(proxy.requests)}')
+            report_handoff_result(result, proxy.requests)
         print('PASS empty checkout/profile/cache, SDK initially outside PATH, real editor rebuild and zero external proxy requests. Linux qualification; no independent-editor or Windows/macOS claim.')
 
 
