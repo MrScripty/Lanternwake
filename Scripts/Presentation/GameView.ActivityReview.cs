@@ -1,4 +1,5 @@
 using Godot;
+using Lanternwake.Core;
 
 namespace Lanternwake.Presentation;
 
@@ -51,6 +52,10 @@ public partial class GameView
         }))).ToList();
         actions.Add(("Review known evidence", () => Review("Your catalogue", EvidenceText(), "Review known evidence")));
         actions.Add(("Read the record", () => Review("The record", HistoryText(), "Read the record")));
+        if (RouteReconstruction.AvailableAt(session)) actions.Add(("Explore route model", () =>
+        {
+            if (Current(question)) ShowRouteModel();
+        }));
         ShowWindow("Compare the evidence", activity.Prompt, actions.ToArray());
         question = _modal;
         question?.GetNode<VBoxContainer>("%ModalActions").GetChildren().OfType<Button>()

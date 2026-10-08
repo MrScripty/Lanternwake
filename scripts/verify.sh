@@ -60,6 +60,7 @@ trap - EXIT
 python3 integration/qa/runtime_lifecycle.py
 python3 integration/qa/watch_completion.py
 python3 integration/qa/activity_review.py
+python3 integration/qa/route_model.py
 python3 integration/qa/conversation_return.py
 python3 integration/qa/content_note.py
 python3 integration/qa/cup_states.py
