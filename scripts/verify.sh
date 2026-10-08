@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 cd "$(dirname "$0")/.."
+python3 scripts/check_secrets.py
 bash scripts/setup.sh
 : "${GODOT_MONO:?Set GODOT_MONO to the official Godot .NET executable}"
 if ! "$GODOT_MONO" --version | grep -q '\.mono\.'; then
@@ -12,6 +13,7 @@ dotnet run --project integration/live-music/LiveMusic.Tests.csproj --configurati
 dotnet run --project tests/Lanternwake.Tests.csproj -- Content/story.json
 dotnet run --project integration/story-validation/StoryValidation.csproj -- Content/story.json
 dotnet run --project integration/pumas/ClientTests/ClientTests.csproj
+dotnet run --project integration/ai-configuration/AiConfiguration.Tests.csproj
 dotnet run --project integration/speech/SpeechSmoke.csproj
 dotnet build Lanternwake.csproj --no-restore
 "$GODOT_MONO" --headless --editor --path . --import
@@ -22,6 +24,9 @@ for mode in smoke ui-smoke save-isolation-smoke audio-smoke; do
   if grep -q '^ERROR:' "$log"; then echo "Godot $mode emitted an error." >&2; exit 1; fi
   if [[ "$mode" == "ui-smoke" ]] && ! grep -q 'LANTERNWAKE_RECOVERY_UI_OK' "$log"; then
     echo 'Save recovery UI regression did not report success.' >&2; exit 1
+  fi
+  if [[ "$mode" == "ui-smoke" ]] && (! grep -q 'LANTERNWAKE_MAIN_MENU_OK' "$log" || ! grep -q 'LANTERNWAKE_AI_SETTINGS_UI_OK' "$log"); then
+    echo 'Startup menu and AI configuration regression did not report success.' >&2; exit 1
   fi
   if [[ "$mode" == "ui-smoke" ]] && ! grep -q 'LANTERNWAKE_READING_SIZE_OK' "$log"; then
     echo 'Reading text-size regression did not report success.' >&2; exit 1

@@ -1,0 +1,172 @@
+[gd_scene format=3]
+
+[node name="AiSettingsControls" type="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Capabilities" type="TabContainer" parent="."]
+layout_mode = 2
+use_hidden_tabs_for_min_size = false
+
+[node name="Dialogue" type="VBoxContainer" parent="Capabilities"]
+layout_mode = 2
+theme_override_constants/separation = 10
+metadata/_tab_name = "Dialogue (LLM)"
+
+[node name="DialogueEnabled" type="CheckButton" parent="Capabilities/Dialogue"]
+layout_mode = 2
+text = "Use AI for optional conversations"
+
+[node name="ProviderLabel" type="Label" parent="Capabilities/Dialogue"]
+layout_mode = 2
+text = "Conversation provider"
+
+[node name="Provider" type="OptionButton" parent="Capabilities/Dialogue"]
+layout_mode = 2
+
+[node name="EndpointLabel" type="Label" parent="Capabilities/Dialogue"]
+layout_mode = 2
+text = "Provider URL"
+
+[node name="Endpoint" type="LineEdit" parent="Capabilities/Dialogue"]
+layout_mode = 2
+placeholder_text = "http://127.0.0.1:8080/"
+max_length = 2048
+
+[node name="ApiKeyLabel" type="Label" parent="Capabilities/Dialogue"]
+layout_mode = 2
+text = "OpenRouter API key (shared across features)"
+
+[node name="ApiKey" type="LineEdit" parent="Capabilities/Dialogue"]
+layout_mode = 2
+secret = true
+placeholder_text = "Saved securely in your desktop keyring"
+max_length = 4096
+
+[node name="ProviderNote" type="Label" parent="Capabilities/Dialogue"]
+layout_mode = 2
+autowrap_mode = 3
+text = "Pumas provides the model list. Start Pumas and load a llama.cpp model, then refresh."
+
+[node name="RefreshModels" type="Button" parent="Capabilities/Dialogue"]
+layout_mode = 2
+text = "Refresh models from provider"
+
+[node name="ModelFilter" type="LineEdit" parent="Capabilities/Dialogue"]
+layout_mode = 2
+placeholder_text = "Filter models by name"
+max_length = 160
+
+[node name="Model" type="OptionButton" parent="Capabilities/Dialogue"]
+layout_mode = 2
+fit_to_longest_item = false
+
+[node name="TestConnection" type="Button" parent="Capabilities/Dialogue"]
+layout_mode = 2
+text = "Test a response"
+
+[node name="CredentialStatus" type="Label" parent="Capabilities/Dialogue"]
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="ForgetKey" type="Button" parent="Capabilities/Dialogue"]
+layout_mode = 2
+text = "Forget saved OpenRouter key"
+
+[node name="Transcription" type="VBoxContainer" parent="Capabilities"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Enabled" type="CheckButton" parent="Capabilities/Transcription"]
+layout_mode = 2
+text = "Enable microphone transcription when available"
+
+[node name="ProviderLabel" type="Label" parent="Capabilities/Transcription"]
+layout_mode = 2
+text = "Transcription provider"
+
+[node name="Provider" type="OptionButton" parent="Capabilities/Transcription"]
+layout_mode = 2
+
+[node name="ManageKey" type="Button" parent="Capabilities/Transcription"]
+layout_mode = 2
+visible = false
+text = "Manage shared OpenRouter API key"
+
+[node name="EndpointLabel" type="Label" parent="Capabilities/Transcription"]
+layout_mode = 2
+text = "Transcription URL"
+
+[node name="Endpoint" type="LineEdit" parent="Capabilities/Transcription"]
+layout_mode = 2
+max_length = 2048
+
+[node name="ModelLabel" type="Label" parent="Capabilities/Transcription"]
+layout_mode = 2
+text = "Transcription model"
+
+[node name="Model" type="OptionButton" parent="Capabilities/Transcription"]
+layout_mode = 2
+disabled = true
+fit_to_longest_item = false
+
+[node name="Availability" type="Label" parent="Capabilities/Transcription"]
+layout_mode = 2
+autowrap_mode = 3
+text = "Transcription is not available in this build yet. You can save its Pumas URL and enable preference separately from dialogue. Microphone recording remains off."
+
+[node name="Voices" type="VBoxContainer" parent="Capabilities"]
+layout_mode = 2
+theme_override_constants/separation = 10
+metadata/_tab_name = "Character voices"
+
+[node name="Enabled" type="CheckButton" parent="Capabilities/Voices"]
+layout_mode = 2
+text = "Enable character voices when available"
+
+[node name="ProviderLabel" type="Label" parent="Capabilities/Voices"]
+layout_mode = 2
+text = "Character voice provider"
+
+[node name="Provider" type="OptionButton" parent="Capabilities/Voices"]
+layout_mode = 2
+
+[node name="ManageKey" type="Button" parent="Capabilities/Voices"]
+layout_mode = 2
+visible = false
+text = "Manage shared OpenRouter API key"
+
+[node name="EndpointLabel" type="Label" parent="Capabilities/Voices"]
+layout_mode = 2
+text = "Character voice URL"
+
+[node name="Endpoint" type="LineEdit" parent="Capabilities/Voices"]
+layout_mode = 2
+max_length = 2048
+
+[node name="ModelLabel" type="Label" parent="Capabilities/Voices"]
+layout_mode = 2
+text = "Speech synthesis model"
+
+[node name="Model" type="OptionButton" parent="Capabilities/Voices"]
+layout_mode = 2
+disabled = true
+fit_to_longest_item = false
+
+[node name="Availability" type="Label" parent="Capabilities/Voices"]
+layout_mode = 2
+autowrap_mode = 3
+text = "Character speech is not available in this build yet. You can save its Pumas URL and enable preference for future support. Voice choices will appear when supported."
+
+[node name="Assignments" type="VBoxContainer" parent="Capabilities/Voices"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ConnectionStatus" type="Label" parent="."]
+layout_mode = 2
+autowrap_mode = 3
+text = "Refresh the provider's model list to choose a model."
+
+[node name="SaveConfiguration" type="Button" parent="."]
+layout_mode = 2
+text = "Save AI settings"

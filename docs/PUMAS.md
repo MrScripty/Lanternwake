@@ -58,6 +58,70 @@ JSON properties are rejected. No output is parsed as a game instruction.
 
 ## Required runtime and setup
 
+The game now opens a main menu before entering the story. Choose **AI setup**,
+leave the provider on **Pumas (local)**, and enter the local Pumas URL. Click
+**Refresh models from provider**, select a loaded llama.cpp model, enable AI
+conversations, and use **Test a response** before saving. The selector queries
+the existing read-only `get_serving_status` RPC and excludes incompatible,
+unloaded, ambiguous and stale-router entries. Loading models remains a Pumas
+operation; the game does not change Pumas profiles or start runtimes.
+
+Provider, URL, selected model and the enabled preference persist in
+`user://ai-settings.json`, separately from story save slots. Environment settings
+below seed the first launch when no saved preferences exist. Automated checks
+use disposable settings storage; author preview cannot save preferences.
+
+**OpenRouter (hosted)** is also available for optional text conversations. It
+uses the official [model catalog](https://openrouter.ai/docs/api/api-reference/models/list-all-models-and-their-properties)
+and [chat completion endpoint](https://openrouter.ai/docs/api/api-reference/chat/send-chat-completion-request).
+The selector filters for text input and text output. Enter an API key in the
+menu, then **Save AI settings** to persist it in the Linux desktop's Secret
+Service keyring through [libsecret](https://gnome.pages.gitlab.gnome.org/libsecret/func.password_storev_sync.html).
+The operating system owns keyring storage and unlock prompts. GNOME Keyring and
+Secret Service implementations of KWallet are supported; `libsecret-1.so.0` and a
+running desktop Secret Service are required. Persistence is currently implemented
+on Linux. Other platforms, unavailable services and cancelled unlocks report a
+save failure, with no plaintext fallback. **Forget saved OpenRouter key** removes
+only Lanternwake's own entry. Saved keys take priority over `OPENROUTER_API_KEY`,
+which can still seed a session when no saved key is available; saving explicitly
+also persists that environment-supplied key. Removing an entry does not remove an
+environment variable that may supply a key again next launch.
+
+Keys are masked in the menu and never serialized into settings, story saves,
+scenes, command arguments or logs. Native temporary secret buffers are cleared;
+the running game necessarily retains the key in managed memory for requests.
+Automated checks and author previews do not load environment keys or access the
+player's keyring. Local `.env` files and accidental root-level settings/key files
+are ignored by Git as an additional guard; normal credential persistence creates
+no project file. `scripts/check_secrets.py`, included in `scripts/verify.sh` and
+CI, rejects OpenRouter key patterns in tracked or commit-ready files and reports
+only filenames. This is a targeted guard, not a general-purpose secret scanner.
+The URL
+is restricted to `https://openrouter.ai/api/v1/`, and redirects are disabled.
+Hosted conversations and response tests use the player's account and may incur
+usage charges. They retain the same bounded text-only, spoiler-limited story
+context and cannot alter canonical progress. Speech remains the unchanged,
+unavailable Pumas/Cohere boundary described in [SPEECH.md](SPEECH.md).
+
+AI setup has separate **Dialogue (LLM)**, **Transcription**, and **Character voices**
+tabs. Each capability has its own **Pumas (local)** / **OpenRouter (hosted)**
+provider selector and independent connection/model preferences. Switching providers
+restores URLs edited during that form session. Pumas defaults to local loopback;
+OpenRouter uses its fixed HTTPS API address. Speech tabs link to the shared
+OpenRouter key field, which is available even when dialogue uses Pumas. Saving an
+OpenRouter key for any selected capability uses the same desktop keyring entry.
+Speech provider, URL and enable preferences persist independently, but do not activate
+unsupported audio integrations. Speech model selectors remain disabled because
+this build has no speech adapters qualified for either provider. Enabling the
+character voice preference reveals a separate assignment row for each character; those selectors
+also remain unavailable until an actual voice catalog exists. Saved model and
+voice IDs are preserved for the selected speech provider without substituting
+dialogue models. Changing the character speech provider clears voice assignments when saved, since
+voice IDs belong to a provider. Existing saved speech settings default to Pumas
+when no provider field exists, retaining their URLs and models. Existing dialogue
+settings load with speech disabled by default. This menu does not change Pumas,
+its runtime management, or the existing transcription adapter.
+
 1. Supply an **inference-enabled** `pumas-rpc`. The full official v0.7.0 Linux package sidecar was exercised successfully; see `LIVE-QUALIFICATION.md` for its exact artifact/hash. Building the qualified source is another route when sufficient memory is available.
    The audited upstream headless release archive is explicitly built with
    `--no-default-features` and cannot generate dialogue. A GUI-less process
@@ -175,6 +239,7 @@ Never present any of these outcomes as a successful live-model reply.
 
 ```sh
 dotnet run --project integration/pumas/ClientTests/ClientTests.csproj
+dotnet run --project integration/ai-configuration/AiConfiguration.Tests.csproj
 python3 -m unittest discover -s integration/pumas -v
 ```
 

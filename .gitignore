@@ -13,3 +13,10 @@ __pycache__/
 # Only reproducible generated audio. Hand-authored WAVs elsewhere stay visible.
 /Assets/Audio/*.wav
 /Assets/Music/*.wav
+
+# Local credential/environment files must never be committed. Runtime keys use the OS keyring.
+.env
+.env.*
+!.env.example
+/ai-settings.json
+/openrouter-api-key*

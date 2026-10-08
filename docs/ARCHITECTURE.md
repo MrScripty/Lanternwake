@@ -9,6 +9,23 @@ For the source-only audio composition, see [combined qualification](AUDIO-COMPOS
 - Native scenes under `Scenes/Stages`, `Scenes/Characters` and `Scenes/UI`, plus their resources, own editable artwork, lighting, camera, character placement and interface styling. The initial procedural geometry was serialized once; runtime construction was removed.
 - `StageDirector` selects and instantiates authored scenes. `StageScene` binds location settings and story cues; native `StageCastLayout` nodes define shared slots for casts of one to four characters, with optional scene and beat overrides. `StageDirector` fills those slots with the current story cast in stable identity order; editor sample meshes stay hidden in play. Repeated casts reuse their layout and instances, and new scenes automatically select by cast size. `GameView` supplies the current scene and the ordered beats up to playback position, so the latest beat layout persists and can be reconstructed on load or direct author preview. Location previews select a single layout without running gameplay. `StageMotion` adds animation to authored base transforms. These components do not consume conversation output or own story state.
 - `GameView` owns the Godot presentation, modal lifecycle, textbox, history/catalogue, editable suggestions, submit/cancel and stale-response rejection.
+- `GameView.MainMenu` opens the native startup menu before gameplay and restores
+  focus when settings close. New story, load/resume, reading and sound settings
+  are available from this menu; author previews bypass it.
+- `AiSettings` owns validated connection preferences outside story saves.
+  `GameView.AiSettings` binds the native configuration form, provider model
+  selector and cancellable response test. `AiConnection` discovers ready Pumas
+  models through its existing RPC and supplies the optional OpenRouter text
+  transport. Pumas generation still uses the unchanged `PumasClient` contract.
+  Dialogue, transcription, synthesis and character voice assignments have independent
+  preferences, with independent provider selectors for all three capabilities;
+  unavailable speech catalogs are explicit in the UI. OpenRouter credentials are
+  shared across capabilities, using one keyring entry. Settings contain
+  no API key. `DesktopCredentialStore` owns Linux libsecret/Secret Service persistence,
+  async cancellable keyring operations and removal of the application's own entry.
+  It has no file fallback or shell subprocess. Automated checks and author previews
+  use `DisabledCredentialStore` and do not load user environment keys. Credential
+  loads and changes participate in the owned operation lifecycle.
 - `PumasClient` owns the local HTTP boundary and provider verification. See PUMAS.md for exact upstream contract and qualification.
 - `SpeechRecorder` retains consent-triggered microphone capture and transfers an operation-local, in-memory stereo sample buffer and capture sample rate to `PumasSpeechTranscriber`. The typed game boundary currently reports unsupported; capture is gated before consent or touching audio devices. The retained recorder has no audio-file writer, clears transferred samples after transcription completes or fails, and clears retained samples on disposal. The required typed Pumas/Cohere producer contract is still unpublished; its input encoding/conversion and lifecycle must be established before capture can be enabled. Pumas owns the intended local recognizer runtime; the game has no direct recognizer process. The intended success path fills editable input without submitting it. See [SPEECH.md](SPEECH.md).
 - `SessionStorage` owns the normal/author-preview/test persistence policy and slot paths. `SaveRecovery` validates snapshots against the current story, publishes compatible previous bytes before replacing a primary, and supplies explicit inspected recovery candidates. `SaveStore` remains the low-level schema serializer/reader. Only schema 1 is supported; recovery never silently rewrites files. See `VERIFICATION.md` for failure ordering and durability limits.
@@ -29,7 +46,12 @@ Manual and auto saves are separate local files under Godot `user://`. Manual sav
 
 1. Core tests: canonical sequence, locked context, chat immutability, activity gates, ending, save roundtrip/replacement/version rejection, earlier-save reset.
 2. Godot .NET build: actual API/type correctness.
-3. `--ui-smoke`: actual Godot callbacks for title/start, reveal, modal open/close, editable suggestion, fallback reply/history, conversation reopen, manual save/load and activity gating. Headless integration only, not perceptual proof.
+3. `--ui-smoke`: actual Godot callbacks for main-menu startup/new/resume, AI
+   provider and model selection/persistence, title/start, reveal, modal
+   open/close, editable suggestion, fallback reply/history, conversation reopen,
+   manual save/load and activity gating. Headless integration only, not
+   perceptual proof. `integration/ai-configuration` separately verifies settings
+   and provider HTTP contracts through controlled fixtures, not live inference.
 4. `--smoke`: full authored canonical traversal, save/reopen, construct five actual 3D sets under Godot. This is a smoke, not a five-hour playtest.
 5. GUI review: title, multiple locations/characters, text, evidence/activity flows, save/load and cancellation. Screenshots and actual observed results must be recorded.
 6. Pumas required-real: inference-enabled Pumas with loaded llama.cpp model; provider-qualified request yields response. Mock tests do not satisfy this.

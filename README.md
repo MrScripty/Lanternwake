@@ -16,13 +16,23 @@ Not yet a release promise: production-qualified model responses, real-device spe
 
 Install Python 3, the official Godot **.NET** 4.6.3 build and .NET 8 SDK. The ordinary non-.NET Godot build cannot compile this project.
 
+For a local checkout with Godot .NET installed in `.toolchain/`, the launcher uses the installed .NET SDK:
+
+```sh
+bash run-game.sh           # Build and play
+bash run-game.sh --editor  # Build and open the Godot editor
+bash run-game.sh --verify  # Run the repository verification suite
 ```
-bash scripts/setup.sh  # Generate the seven original WAVs before Godot imports them.
+
+The launcher keeps build caches and game saves under `.toolchain/`; preserve `.toolchain/user-data/` to retain progress. The authored story works without an AI provider. Optional model conversations require the setup below; transcription and character voice playback remain unavailable until their providers are integrated.
+
+```
+bash scripts/setup.sh  # Verify bundled MIDI music and generate location ambience/effects before import.
 dotnet build Lanternwake.csproj
 godot-mono --path . --editor
 ```
 
-Run setup before opening `project.godot` with the .NET editor, then run. On Windows without Bash, use `py -3 scripts/setup_audio.py`; on other systems, `python3 scripts/setup_audio.py` is equivalent. Setup requires only the Python standard library, performs no downloads, and safely skips already verified audio. Missing Python stops setup with installation guidance; install it before proceeding. Generated WAVs are intentionally not tracked in Git. No LLM is required for the authored main story. Local Pumas setup is in `docs/PUMAS.md`; local speech setup is in `docs/SPEECH.md`.
+Run setup before opening `project.godot` with the .NET editor, then run. On Windows without Bash, run both `py -3 scripts/setup_audio.py` and `py -3 scripts/setup_music.py`; on other systems use `python3` for the equivalent commands. Setup uses Python's standard library, performs no downloads, and safely skips verified audio. Music plays directly from bundled MIDI through the MIT synth and acoustic instrument bank; it needs no rendered music WAVs. The .NET 8 game build packages the synth dependency. Generated ambience/effect WAVs are intentionally not tracked in Git. No LLM is required for the authored main story. Local Pumas setup is in `docs/PUMAS.md`; local speech setup is in `docs/SPEECH.md`.
 
 To adjust the game, see [the editor authoring guide](docs/AUTHORING.md). Locations, characters, camera, lighting and interface styling live in normal Godot scenes/resources. The Story Text dock edits the canonical story JSON without changing C#.
 
@@ -46,6 +56,6 @@ Set GODOT_MONO to the official .NET executable and use scripts/verify.sh for the
 - Manual Save/Load; separate automatic checkpoint; explicit previous-good recovery choices
 - Reading settings: smaller/larger reading text at 100%, 125% and 150%, reset to 100%, instant text and reduced motion. Reading text size lasts for the current game session; a fresh game starts at 100%. See [reading text size](docs/READING-TEXT-SIZE.md) for the scaled reading/choice surfaces and unchanged navigation/HUD sizes.
 - Sound settings: separate music/ambience/effects levels and master mute
-- Editable location audio loops and authored bell-release cue; see [audio authoring](docs/AUDIO.md)
+- Original MIDI score with environment and character themes, a developing five-chapter journey, live MIDI acoustic layers, speech EQ/ducking, editable location loops and bell-release cue; see [audio authoring](docs/AUDIO.md)
 
 All assets currently come from original code and authored text. Source ownership and technical contracts are documented in `docs/ARCHITECTURE.md`.

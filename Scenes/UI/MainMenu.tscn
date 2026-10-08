@@ -1,0 +1,104 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Theme" path="res://Scenes/UI/LanternwakeTheme.tres" id="1_theme"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_theme")
+
+[node name="Backdrop" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.025, 0.045, 0.055, 0.94)
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="Scroll" type="ScrollContainer" parent="Margin"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+follow_focus = true
+
+[node name="Center" type="CenterContainer" parent="Margin/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Stack" type="VBoxContainer" parent="Margin/Scroll/Center"]
+custom_minimum_size = Vector2(420, 0)
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="Margin/Scroll/Center/Stack"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.870588, 0.717647, 0.490196, 1)
+theme_override_font_sizes/font_size = 36
+text = "L A N T E R N W A K E"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="Margin/Scroll/Center/Stack"]
+layout_mode = 2
+text = "A stormbound island mystery"
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="Margin/Scroll/Center/Stack"]
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+
+[node name="MenuNewGame" type="Button" parent="Margin/Scroll/Center/Stack"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "New story"
+
+[node name="MenuContinue" type="Button" parent="Margin/Scroll/Center/Stack"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Load game"
+
+[node name="MenuAiSetup" type="Button" parent="Margin/Scroll/Center/Stack"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "AI setup"
+
+[node name="MenuReading" type="Button" parent="Margin/Scroll/Center/Stack"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Reading settings"
+
+[node name="MenuSound" type="Button" parent="Margin/Scroll/Center/Stack"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Sound settings"
+
+[node name="MenuQuit" type="Button" parent="Margin/Scroll/Center/Stack"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Quit game"
+
+[node name="MenuAiSummary" type="Label" parent="Margin/Scroll/Center/Stack"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.603922, 0.690196, 0.701961, 1)
+theme_override_font_sizes/font_size = 16
+text = "The authored story can be played without AI."
+horizontal_alignment = 1
+autowrap_mode = 3
