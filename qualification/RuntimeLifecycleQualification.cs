@@ -24,6 +24,11 @@ public partial class RuntimeLifecycleQualification : Node
         for (int i = 0; i < count; i++) await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
     }
     private static int Tracked(AudioDirector audio) => Read<List<AudioStreamPlayback>>(audio, "_playbacks").Count;
+    private static bool SettledHarbor(AudioStreamPlayer player, AudioStreamWav harbor) =>
+        player.Playing && player.Stream is AudioStreamWav loop &&
+        loop.MixRate == harbor.MixRate && loop.Format == harbor.Format && loop.Stereo == harbor.Stereo &&
+        loop.Data.AsSpan().SequenceEqual(harbor.Data) && float.IsFinite(player.VolumeLinear) &&
+        Math.Abs(player.VolumeLinear - 1) < .001;
 
     public override async void _Ready()
     {
@@ -76,7 +81,22 @@ public partial class RuntimeLifecycleQualification : Node
                         "scene changes preserve one music playback and live worker, or remain safely silent");
                 }
                 await ToSignal(GetTree().CreateTimer(.75), SceneTreeTimer.SignalName.Timeout);
-                Check(audio.AmbienceA.Playing != audio.AmbienceB.Playing, "rapid transitions settle to exactly one ambience player");
+                var active = audio.AmbienceA.Playing ? audio.AmbienceA : audio.AmbienceB;
+                Check(audio.AmbienceA.Playing != audio.AmbienceB.Playing && SettledHarbor(active, audio.Harbor),
+                    "rapid transitions settle to exactly one harbor loop at full local gain");
+                if (cycle == 0)
+                {
+                    active.VolumeLinear = 0;
+                    Check(active.Playing && !SettledHarbor(active, audio.Harbor), "settled assertion rejects a playing but silent harbor loop");
+                    active.VolumeLinear = 1;
+                    var wrong = new AudioStreamPlayer { Stream = audio.Archive, VolumeLinear = 1 };
+                    AddChild(wrong);
+                    wrong.Play();
+                    Check(wrong.Playing && !SettledHarbor(wrong, audio.Harbor), "settled assertion rejects a full-gain wrong-location loop");
+                    wrong.Stop();
+                    wrong.Free();
+                    GD.Print("LANTERNWAKE_RUNTIME_NEGATIVE_PROBES_OK silent=true wrong_stream=true");
+                }
                 audio.ApplyBeatCue("owned-exit-" + cycle, "bell_lowered", true);
                 audio.SetDialogueActive(true);
                 await ToSignal(GetTree().CreateTimer(.2), SceneTreeTimer.SignalName.Timeout);

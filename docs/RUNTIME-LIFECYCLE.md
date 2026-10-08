@@ -29,7 +29,11 @@ or a claim of Pumas audio support.
 This is Linux native regression coverage, not physical hearing, model inference,
 human playtime, or Windows/macOS qualification. Existing audio smoke checks cover
 captured MIDI/ambience PCM separately. The runtime check emits
-`LANTERNWAKE_RUNTIME_LIFECYCLE_OK cycles=4 checks=103` on success.
+`LANTERNWAKE_RUNTIME_LIFECYCLE_OK cycles=4 checks=105` on success. The settled
+ambience assertion compares harbor PCM and format rather than resource identity,
+and requires finite full local gain. Native silent and wrong-location probes
+confirm that each condition rejects playback which the original playing-count
+assertion would accept.
 
 Initial qualification uses main
 `af93c24e3f8e0ca64af8d4a46847536462c39867`, which includes the merged launcher,
