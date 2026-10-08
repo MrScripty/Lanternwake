@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "branch": "qa/direct-runtime-interruption-20261005",
+  "baseCommit": "d8574fa40df89459d11de99d5b2679fd7503dc52",
+  "baseTree": "5602169741ab2af976445bba87626a3518841f7b",
+  "productionSourceSha256": {
+    "Scripts/Presentation/GameView.cs": "015acf2b1a0109579135c528596a9279cb1e3fa3c090c8fa2c0ed418adbf52db"
+  },
+  "controllerSha256": "a393ab713fcbd58f0065cb293f93bb46db1b55adc25a8e33820f224d5a70dddb",
+  "nativeBuilds": {
+    "Debug": {
+      "dllSha256": "2d570a9ffbbadc4ce14a80ddde9b842a5a1a7978c564591c10b8099f67235c51",
+      "pdbSha256": "da12792a3d5d52b9b22ae8cb4229339ff47de318e016068c1f4363cfdc94d83a",
+      "compilerDocuments": 143,
+      "diskDocuments": 51,
+      "auditSha256": "1621a5d58d17ea17dffe087f1e1665d174cfb3a4cd94a5e1251e2a4518dd1d8d"
+    },
+    "ExportDebug": {
+      "dllSha256": "314b4b695d616245280f4290e8a312e665bf345e9f16b3e49c5819fca95e12b8",
+      "pdbSha256": "e42b493d2bf9abf39e6015e8b7846932548307e0eda8246b27863cbe9112df9a",
+      "compilerDocuments": 137,
+      "diskDocuments": 51,
+      "auditSha256": "053cc62c352710ae080931541a0c360555bd96195266337ef33b642b392c03a9"
+    },
+    "ExportRelease": {
+      "dllSha256": "340ac4fec2c7cbbfd0d9d4c7a80753907489731dc30c12d638a59b5bc330a2ff",
+      "pdbSha256": "e0d290be3a2b945405a643600c09183303196f8b681715dce25d5aec64ce9c5c",
+      "compilerDocuments": 89,
+      "diskDocuments": 51,
+      "auditSha256": "ab27c3daf6cf1d17ffd94a24cd6a808498159956139ade0ed636325c644ce52a"
+    }
+  },
+  "nativeAggregate": {
+    "command": "bash scripts/verify.sh",
+    "exitCode": 0,
+    "warnings": 0,
+    "errors": 0,
+    "logSha256": "6c5cc4f254e36f0689e5b76cbee4ccc8e708e51a824398546ad98fd13950dcfd",
+    "audioDriver": "Dummy",
+    "pcmFrames": 20480,
+    "mixerAssertions": 32
+  },
+  "externalInput": {
+    "passed": true,
+    "checks": 141,
+    "inputEvents": 186,
+    "images": {
+      "first-title.png": "621eac26a5d2bb8f9bae99ebbb31c311f02d7bd352f32ef634853c65c3659e3a",
+      "arrival-typewriter.png": "a71c75db289ca68560e94071fd3c957a0542e654ad22c901309f64b6c06fc716",
+      "arrival-revealed.png": "d974552efb5a464410781bd13569ecc963d6a0c0708589331ae1b84e507834a9",
+      "normal-conversation-beat.png": "a4b5a5a80f0e1b9b8fecd3cb52c2956c9bb2960e0e9f914c0998f612fecd6469",
+      "edited-normal-input.png": "ff6bbbefa600bfa3fcad5e56cb19b98b908b2c91e668996f64b3d719d86e4a6a",
+      "normal-authored-fallback.png": "8bb6117f046dd0121aed238be766d8f71d2b5dd8ef46a24d2fe913961c2cde91",
+      "returned-normal-passage.png": "75cd1109143ed4db4768840ae60bfb9dbef894fd92e0c044e89f42fd98b54938",
+      "unsent-draft-before-interruption.png": "61db6ddeb89e69c360c0ba5d0394ae0c634099a64362a3995e0712ea989dd50a",
+      "restart-title.png": "bd58db12d9f53ab3b1364a7fc09ac45af824c58a9bab0bbb443037d0b8b33a98",
+      "normal-restart-load-choices.png": "3d30e4099e1db4267bb1eb3bbd0fe867986b7342073def9e37d0adefabfc6639",
+      "normal-restarted-passage.png": "75f867a7ae188285ee9618db713bb9d916edb142d7c6bcbeda756d907dbb528a",
+      "escape-returned-normal-passage.png": "49eda1f2b965b6d70317b5480d2eca0f03b58701997c6ae912b3d6ddbe5d1f6c",
+      "normal-next-beat-before-recovery.png": "49235162758ebc3a30ab7fe99abfed909fa4a3fcb3145e094c0ea34a6a2fcfa4",
+      "recovery-title.png": "0513f592977f3e591e5cac4354c016b2d3768d44461e8d3bc3134ba48e113946",
+      "damaged-current-visible-recovery.png": "ecd32b7dbb070085a72e1c658cce128a81a3074bf1a2a58d643bb8d52b8d3797",
+      "visibly-recovered-normal-passage.png": "a2eb02ec654af96dab0de0dd1dfcb51dfc2f3f5733f8453f248877eaca5cf717"
+    },
+    "processes": [
+      {
+        "name": "first",
+        "pid": 21590,
+        "exitCode": -9,
+        "intentionalInterruption": true
+      },
+      {
+        "name": "restart",
+        "pid": 22425,
+        "exitCode": 0,
+        "intentionalInterruption": false
+      },
+      {
+        "name": "recovery",
+        "pid": 22988,
+        "exitCode": 0,
+        "intentionalInterruption": false
+      }
+    ],
+    "receiptSha256": "9692112c69c342526c2241d08466f40be65d4bc1c644e11dd50de6e0aed11be4",
+    "savedSlotsSha256": {
+      "save.previous.json": "6949ebd7b9afc01c7289587dc62adea3414f74776aee3ecebe0af123f345df52",
+      "save.json": "6949ebd7b9afc01c7289587dc62adea3414f74776aee3ecebe0af123f345df52",
+      "autosave.previous.json": "6949ebd7b9afc01c7289587dc62adea3414f74776aee3ecebe0af123f345df52",
+      "autosave.json": "34e26b41648ada0cd3b2fa644fc6eada9ced252b39e870bc8021adda74576d52"
+    },
+    "scope": "normal project runtime, 22 reached canonical beats, 21-beat explicit recovery; X11 synthetic mouse/key events; software pixels; offline authored fallback"
+  },
+  "negativeRegression": {
+    "checkpoint": "d8574fa40df89459d11de99d5b2679fd7503dc52",
+    "expectedFailure": "normal Save records exact beat ch1_s1_b001",
+    "observedSaveBeat": "ch1_s1_b002",
+    "expectedSaveBeat": "ch1_s1_b001",
+    "receiptSha256": "38ee8177003c408a229882fb719e757f17555f2522c3264bf048b84d5b30a982"
+  },
+  "viewportDiagnostic": {
+    "passed": true,
+    "nativeImageSha256": "47909be872b441aa8b44b6dcb1317060542dba8ad91ca0f297b39223ad3aa30a",
+    "receiptSha256": "9e4751c92b53caea25e7848c7629c9aa2f6cdfe4eda2ea034207a1884f685dc6",
+    "limitation": "Earlier incomplete root-screen button glyphs were not reproduced; capture/renderer cause unresolved. Partial PNGs do not qualify complete-label appearance."
+  },
+  "templateCache": {
+    "assetUrl": "https://github.com/godotengine/godot-builds/releases/download/4.6.3-stable/Godot_v4.6.3-stable_mono_export_templates.tpz",
+    "checksumsUrl": "https://github.com/godotengine/godot-builds/releases/download/4.6.3-stable/SHA512-SUMS.txt",
+    "assetHeadStatus": 200,
+    "assetSha256": "6436f474ee085fb0a94d3d296b9821736bdd663b6e91b2228fdf77066f1d1400",
+    "assetSha512": "6756c4c45cc711652fab0f5fbb75459f372f1f4b6cca6bb48e8953c25369418845c8cc39fcda0756effd69d0ecaf50e5653ebb9233b8e33f3bde5d8a81635168",
+    "checksumsSha256": "5938e1c970f85affe74d5be5e1d50b8c681401e0798a99ee0daef5739f567254",
+    "archiveMembers": 27,
+    "zipCrcPassed": true,
+    "archiveVersion": "4.6.3.stable.mono",
+    "status": "verified cached official dependency only; neither installed nor used for a new export",
+    "earlierRoutes": [
+      {
+        "url": "https://godotengine.org/download/archive/4.6.3-stable/",
+        "access": "shell proxy CONNECT 403; curl56; no upstream asset response; no retry"
+      },
+      {
+        "url": "https://downloads.godotengine.org/?flavor=stable&platform=templates&slug=mono_export_templates.tpz&version=4.6.3",
+        "access": "browser redirected to published object-storage URL; browser access unsupported/500; shell storage route not attempted",
+        "redirectTarget": "https://godot-releases.nbg1.your-objectstorage.com/4.6.3-stable/Godot_v4.6.3-stable_mono_export_templates.tpz"
+      }
+    ],
+    "steering": "User deferred packaging to focus on testing the normal project runtime. No additional template installation or standalone export was performed."
+  },
+  "evidenceRoot": "/workspace/lanternwake-direct-runtime-20261005",
+  "evidencePacket": "/workspace/lanternwake-direct-runtime-20261005.tar.gz",
+  "libraryUpload": "not performed; separate approval pending",
+  "remaining": [
+    "Human five-hour reading/editorial/emotional acceptance",
+    "Physical input, display, hearing, microphone and accessibility tools",
+    "Real loaded-model inference and in-flight cancellation",
+    "Atomic-write-time termination (this test kills only after completed saves)",
+    "Platform and low-end hardware coverage",
+    "Actual standalone export deferred at user request; cached templates are not an exported player",
+    "No hosted CI claim for this new branch; parent owns PR/integration"
+  ]
+}

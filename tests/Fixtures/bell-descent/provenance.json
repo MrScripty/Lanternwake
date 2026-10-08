@@ -1,0 +1,15 @@
+{
+  "frozenCommit": "0eebf4e642485a6e14c62808facbc5c91d6adff7",
+  "frozenStorySha256": "171dd89cc80a4e0de7a452216b5eb5eff0f2908746aee5fc4501db22dfc87c02",
+  "method": "Actual frozen production core traversal; answer original activities and capture full snapshots at authored beats. Compact fixtures retain its last six transcript entries. Full snapshots remain local.",
+  "fixtures": {
+    "before": {
+      "fullSnapshotSha256": "7da9e5a47e4f4feb602add9521b6f82ca1032c9e81c025883297146d2c7642bf",
+      "compactSha256": "0e220d8b65b48a9162d59d011206e63cc5ee558fb9c316cf355c4b306a9f630a"
+    },
+    "descent": {
+      "fullSnapshotSha256": "b666ef543021834c67acd9b88ebf3f19a6c05af48186bb2b0ea1203fe7fe7746",
+      "compactSha256": "9672270adc7499eaa1714a951e1c6f5b8c1e484f53f1ec8560f59772a5edb044"
+    }
+  }
+}

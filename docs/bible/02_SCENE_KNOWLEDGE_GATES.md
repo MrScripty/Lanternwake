@@ -20,7 +20,7 @@ The plot is deterministic. All essential discoveries occur in required beats. Al
 - **f_ivo_signature**: Ivo signed supervised trial acceptance despite documented unresolved alarm-channel cross-talk. This does not alone establish every consequence or legal liability.
 - **f_interval**: The configured trace interval is exactly 23 hours 17 minutes backward. A harmless matched pattern, documented clocks, and pressure response support a self-consistent trace. No arbitrary destination date or branch has been observed.
 - **f_script_match**: Ada's handwriting on the input platen has the same distinctive movements and mechanical terminal hooks as the mysterious traces. Authorship is strongly suggested, not yet explicitly resolved.
-- **f_full_testimony**: Ivo's full deposition says: 21:06 coordinator Pell ordered the obsolete east route; 21:08 Ivo sent west correction on A; 21:09 he knew there was no repeat-back, yet kept repairing routing rather than using the direct line. He later suppressed the corrected chart and false hold claim to protect his position. Wider institutional failures also matter.
+- **f_full_testimony**: Ivo's full deposition says: 21:06 coordinator Pell ordered the obsolete east route; 21:08 Ivo sent west correction on A; 21:09 he knew there was no repeat-back, yet kept repairing routing rather than using the direct line. He later suppressed the corrected chart but allowed the false hold claim to stand to protect his position. Wider institutional failures also matter.
 - **f_evidence_preserved**: Source recordings, scans, provenance, transcripts, and checksums are verified at two off-island archives. Originals are safeguarded at the high hall. The truth no longer depends on keeping the pressure machine active.
 - **f_authorship**: Ada recognizes she is the author of the two notes. Recorded output times yesterday 19:58 and 20:03 correspond to today 19:15 and 19:20 inputs. The first points to already-observed cup evidence; the second describes a checked safe plan. Blank paper is absence of a signal, not a death prediction.
 - **f_loop_completed**: Ada wrote both exact notes at the documented matching input times. The received records did not change. One self-consistent loop is completed without altered history or transported people.
@@ -238,6 +238,8 @@ Forbidden future confirmations after this scene: f_authorship, f_evidence_preser
 - Required evidence activity `ch2_s5_evidence`: What did the cup event establish?
   - Supported answer: A documented advance description matched a witnessed break.
   - Explanation: The match is evidence to investigate. It creates no rule against intervention and no moral command.
+- Persisted stage cue `cup_broken` at `ch2_s5_b012`.
+- Persisted stage cue `cup_boxed` at `ch2_s5_b026`.
 
 ## What the Water Kept (ch3)
 
@@ -337,6 +339,7 @@ Forbidden future confirmations after this scene: f_authorship, f_evidence_preser
 - Conversation `ch3_s5_b016` with Nessa Ward: Talk about choosing responsibly when some outcomes seem known.
   - Exact allowed facts: f_inventory, f_future_note, f_bell_warning, f_tomas_loss, f_wrong_channel, f_west_omission, f_cup_prediction, f_pressure_engine, f_ordinary_tape, f_ivo_signature, f_interval, f_script_match.
   - Authored offline fallback: We can take responsibility for our checks, our warnings, and the way we treat each other. Make the plan from the conditions we can verify. If the words fit later, they fit.
+- Persisted stage cue `steel_mug` at `ch3_s5_b001`.
 
 ## The Night Ledger (ch4)
 
@@ -362,7 +365,7 @@ Entry-known facts: f_bell_warning, f_cup_prediction, f_full_testimony, f_future_
 Required new facts: none; this scene deepens existing context without a new secret.
 Forbidden future confirmations after this scene: f_authorship, f_evidence_preserved, f_loop_completed, f_release_safe.
 
-No optional model conversation is enabled in this scene.
+No optional model conversation is enabled in this scene. Optional authored exchange `ch4_s1a_b035` offers Tomas practical help with permission labels, respect for private family material, or an evidentiary question about photographs. All three retain distinct authored replies in the record; leaving the moment unspoken also advances normally. This exchange grants no fact/item/gate and makes no new family permission or future preservation claim.
 ### ch4_s2 — No Single Keeper
 Location: `archive`; time: evening; living stage participants: Ada Vale, Tomas Rook, Nessa Ward, Dr Sera Wynn.
 
@@ -374,6 +377,10 @@ Forbidden future confirmations after this scene: f_authorship, f_loop_completed,
 - Conversation `ch4_s2_b020` with Dr Sera Wynn: Discuss how to communicate the findings.
   - Exact allowed facts: f_inventory, f_future_note, f_bell_warning, f_tomas_loss, f_wrong_channel, f_west_omission, f_cup_prediction, f_pressure_engine, f_ordinary_tape, f_ivo_signature, f_interval, f_script_match, f_full_testimony.
   - Authored offline fallback: Release the source copies with provenance, readable transcripts, and explicit limits. Preserve independent copies away from the tower. Let a qualified review determine conclusions these records alone cannot support.
+- Required source reconstruction `ch4_s2_reconstruction_evidence`: Which correction is supported by these sources?
+  - Supported answer: Ivo withheld the corrected chart; the false vessel-hold claim remained in the public summary.
+  - Explanation: The omission note, published summary, measurement log and deposition support distinct acts. What every editor knew remains for independent review.
+  - Wrong options receive distinct source-grounded feedback, with retry and no penalty. The checked correction rejoins Tomas's existing reading of the two headings.
 - Required evidence activity `ch4_s2_evidence`: Why can the team prioritize the pressure shutdown without losing the evidence?
   - Supported answer: Verified copies exist at independent off-island archives.
   - Explanation: Copies with provenance and checksums are acknowledged elsewhere, while originals remain safeguarded.
@@ -411,6 +418,7 @@ Forbidden future confirmations after this scene: f_authorship, f_loop_completed,
 - Required evidence activity `ch4_s3a_evidence`: Two similar names appear on different household codes. What should the team do?
   - Supported answer: Treat them as distinct until identities and locations are checked.
   - Explanation: The second identifier prevents a false duplicate and an inaccurate headcount.
+  - Wrong options receive specific Nessa/Tomas feedback: neither deleting a row nor assuming an identity verifies a person's arrival. Retry preserves the list and original gate.
 No optional model conversation is enabled in this scene.
 ### ch4_s4 — The Hand at the Other End
 Location: `lantern_room`; time: dusk; living stage participants: Ada Vale, Dr Sera Wynn, Tomas Rook, Nessa Ward.

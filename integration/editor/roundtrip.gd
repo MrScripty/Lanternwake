@@ -12,6 +12,9 @@ func snapshot(node: Node, origin: Node, result: Dictionary) -> void:
 	if node is Node3D:
 		values["transform"] = node.transform
 		values["visible"] = node.visible
+	if node is Camera3D:
+		for property in ["projection", "size", "h_offset", "v_offset", "near", "far"]:
+			values[property] = node.get(property)
 	if node is AudioStreamPlayer:
 		values["bus"] = node.bus
 		values["playing"] = node.playing
@@ -39,6 +42,11 @@ func snapshot(node: Node, origin: Node, result: Dictionary) -> void:
 				for binding in ["AdaPlacement", "NessaPlacement", "TomasPlacement", "SeraPlacement"]:
 					var character: Node = node.get(binding)
 					values[binding] = str(node.get_path_to(character)) if character != null else ""
+				for binding in ["CupIntact", "CupFragments", "CupFloorHandle", "CupBoxed", "SteelMug", "CupFloorCamera"]:
+					var target: Node = node.get(binding)
+					values[binding] = str(node.get_path_to(target)) if target != null else ""
+					if origin.name == "KeeperHouse" and target == null:
+						failures.append("Unassigned keeper-house cup state: " + binding)
 			"StageCastLayout.cs":
 				properties = ["CharacterCount", "StorySceneId", "StartAtBeatId"]
 				for binding in ["AdaPlacement", "NessaPlacement", "TomasPlacement", "SeraPlacement", "Slot1", "Slot2", "Slot3", "Slot4"]:

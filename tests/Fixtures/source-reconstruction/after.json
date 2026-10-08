@@ -1,0 +1,72 @@
+{
+  "version": 1,
+  "storyTitle": "Lanternwake",
+  "beatId": "ch4_s2_reconstruction_014",
+  "history": [
+    {
+      "speaker": "tomas",
+      "text": "And make it sound as though the falsehood was something he kept out of print. It was what people were left to read.",
+      "generated": false,
+      "beatId": "ch4_s2_reconstruction_009",
+      "sceneId": null,
+      "conversationCharacterId": null
+    },
+    {
+      "speaker": "narrator",
+      "text": "You check the omission note against the chart heading and retain its exact wording beneath the first claim. Under the second you cite the public summary, the channel log, and the point in the complete deposition where Ivo says there was no vessel hold. The same testimony can support a correction without becoming the only source for it.",
+      "generated": false,
+      "beatId": "ch4_s2_reconstruction_010",
+      "sceneId": null,
+      "conversationCharacterId": null
+    },
+    {
+      "speaker": "sera",
+      "text": "What can this page say about the editor?",
+      "generated": false,
+      "beatId": "ch4_s2_reconstruction_011",
+      "sceneId": null,
+      "conversationCharacterId": null
+    },
+    {
+      "speaker": "ada",
+      "text": "That the published exhibit used the issued version and the summary carried the false claim. Not that we\u0027ve established what every person handling those pages knew.",
+      "generated": false,
+      "beatId": "ch4_s2_reconstruction_012",
+      "sceneId": null,
+      "conversationCharacterId": null
+    },
+    {
+      "speaker": "tomas",
+      "text": "Then leave that question open for review. We don\u0027t need to invent another confession to say the crew didn\u0027t disobey an order that wasn\u0027t there.",
+      "generated": false,
+      "beatId": "ch4_s2_reconstruction_013",
+      "sceneId": null,
+      "conversationCharacterId": null
+    },
+    {
+      "speaker": "narrator",
+      "text": "Tomas catches your pencil before it rolls into the chart\u0027s curled edge. He sets it beside the source register, then asks you to read the two headings once more. This time he does not correct either. You keep the crossed-out arrow visible in the working notes. It records a mistake you made and checked, rather than one a later reader must unknowingly inherit.",
+      "generated": false,
+      "beatId": "ch4_s2_reconstruction_014",
+      "sceneId": null,
+      "conversationCharacterId": null
+    }
+  ],
+  "solvedActivities": [
+    "ch1_s1a_evidence",
+    "ch1_s2_evidence",
+    "ch1_s2a_evidence",
+    "ch1_s3_evidence",
+    "ch1_s3a_evidence",
+    "ch2_s1_evidence",
+    "ch2_s2a_evidence",
+    "ch2_s3_evidence",
+    "ch2_s3a_evidence",
+    "ch2_s5_evidence",
+    "ch3_s1_evidence",
+    "ch3_s2_evidence",
+    "ch3_s2a_evidence",
+    "ch3_s4_evidence",
+    "ch4_s1_evidence"
+  ]
+}

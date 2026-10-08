@@ -25,6 +25,10 @@ public partial class GameView
             _mainMenu.GetNode<Button>("%MenuAiSetup").Pressed += ShowAiSetup;
             _mainMenu.GetNode<Button>("%MenuReading").Pressed += ShowSettings;
             _mainMenu.GetNode<Button>("%MenuSound").Pressed += ShowAudioSettings;
+            _mainMenu.GetNode<Button>("%MenuContentNote").Pressed += () =>
+            {
+                if (MainMenuVisible && _modal is null) ShowContentNote(false);
+            };
             _mainMenu.GetNode<Button>("%MenuQuit").Pressed += () => _Notification((int)NotificationWMCloseRequest);
         }
         InterfaceRoot.Hide(); _mainMenu.Show();

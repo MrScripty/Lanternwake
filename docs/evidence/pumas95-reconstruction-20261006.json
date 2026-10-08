@@ -1,0 +1,183 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-06",
+  "base": "77b7e3d93339099993f962467cf37d6fed1e831e",
+  "adapterCommit": "b4bb2ac62319eba58c8a342bd25d8ca5a7ecaf85",
+  "testedSourceHead": "96f4ab0430f527193ecaf7307637ced100d17423",
+  "testedSourceTree": "c03444c2552be7743aa7ff0fa420a97e606c77e4",
+  "sourceSha256": {
+    "Content/story.json": "3f99fd17a1c405b87588619fcbb3fb09b9145e096199d4618c180fa311bc752e",
+    "Lanternwake.csproj": "588ec73f960f04217ea7f3058ce82cd552189b6fa6d8363d4568a3e863b7ea97",
+    "Scripts/Conversation/PumasClient.cs": "bec88d3e5dd72c362510a562ea9b1918e75267c4d9b766006f041d665655733a",
+    "Scripts/Conversation/PumasSpeechTranscriber.cs": "a6ae25d4bb9915eb6e6c6227d8b73f84634f8d3bf78b9721f745c38180bbf0ac",
+    "Scripts/Conversation/SpeechRecorder.cs": "6c0c43f6eba1b76fd979562179f4088710689aac0f3908457e3de008618b865a",
+    "Scripts/Core/CharacterProfileEdit.cs": "082152851f5b178ad68e8f41fecd5f9a83b8b4e2e7eff63da591fe2889bd2d4c",
+    "Scripts/Core/OwnedOperations.cs": "394e55879035bad54b174ac2dc632d5a1f72db7ab19904c83d031ce6397682d8",
+    "Scripts/Core/SaveRecovery.cs": "31ad2d481719e1b2db427d319829cdcf10290da06b5bec3a511af0a1126d9cd4",
+    "Scripts/Core/SaveStore.cs": "0a8ade2c5f0eee61103340e6c1bfe6ba5fe177c09150e174ec55ed2e12334403",
+    "Scripts/Core/SessionLaunch.cs": "8b0deca629b061fa01c1a273310d7586f995ffdc7c21379fbffaa541c792313f",
+    "Scripts/Core/SessionStorage.cs": "48a756322a9b09db8f0b3c2974c6c5b7c2710b2f14aa6b1a9fbf4de283cdc1f4",
+    "Scripts/Core/Story.cs": "edc3f9a8b4e943614565e67508584526d5567696de7ade0bb869346cfeef9bf9",
+    "Scripts/Core/StoryAuthoringIndex.cs": "f10a6c748bb9de948edddb1765ca4a39e8e11428c0ced812e97a3ab84962d498",
+    "Scripts/Core/StoryContextPreview.cs": "6f587eddb4112578895424f750afe09768089c8ff819d340f6773a2a55b38aa7",
+    "Scripts/Core/StorySession.cs": "53f43d9ac69052b72d52640fcc452211b9274e930a3ef4801cc7c2e049f6d4bc",
+    "Scripts/Core/StoryTextEdit.cs": "10eae4fe7767acc240cf063a2825c18f0e651f4f551de79cc79030393e69e94d",
+    "Scripts/Presentation/AudioDirector.cs": "36f006f6003d3fe61218acbf1f9e57521dde3f735c1809bc03b0faa70062f8c9",
+    "Scripts/Presentation/AuthoringSmoke.cs": "581faead69335b9570eded59aa66e877cacb315233e8ca0a6d38a99034c61c07",
+    "Scripts/Presentation/GameView.ActivityReview.cs": "690acd9802a1499f1c03987ba23ddd8683357a58d3c233fbcb3daf3141541fdb",
+    "Scripts/Presentation/GameView.Audio.cs": "14c96067babe39501b8ee7c99db6d5a977f8836fbd40e3ec4e5bd0bab09cb343",
+    "Scripts/Presentation/GameView.AudioSmoke.cs": "cea281ae44f32b0521d7cad68e9aef59e24d40741f495799622c512dfc2898de",
+    "Scripts/Presentation/GameView.Completion.cs": "8b7548efff6ecabc6bdf565e66a7fb24e0ffb948de06bc167e97a00bae82fa69",
+    "Scripts/Presentation/GameView.ContentNote.cs": "009c8982f24e095f0af1e1a488b1fa49bf338c3254fbbb52c63892eaa9fa6a91",
+    "Scripts/Presentation/GameView.ConversationReturn.cs": "dac8d4693efb632949cbd12ab5ae3449837fe708a24c4b7c16088fd9f510e0c7",
+    "Scripts/Presentation/GameView.PreviewSmoke.cs": "8a2ef11e5b77861b7bf4faf75f08b306c64d5a19f66915fda0119855530ed91e",
+    "Scripts/Presentation/GameView.ReadingSettings.cs": "d2423c6c313d2061e5a995ca7ba71cc01424b22d19f8d07eca662973f8665f1f",
+    "Scripts/Presentation/GameView.ReadingSizeSmoke.cs": "526757d32f0db3e94bd08df3497d1c0d128bb28bcb9f696f698bdc871d68b395",
+    "Scripts/Presentation/GameView.StorageSmoke.cs": "19b0d5258c102db03df9d544d75cc4c1d2fe609b4bddc652f05287b8ec515333",
+    "Scripts/Presentation/GameView.cs": "af8524396065bdd0933c8a7dfb89342d209cfb683e05cd374343a8895ce40a9c",
+    "Scripts/Presentation/ReadingTextStyle.cs": "814e4fc0919619f56899489c2732605a2da44928d31b5d519f74c7f245a5f4c4",
+    "Scripts/Presentation/StageCharacter.cs": "70872b23defdf91ffee782c38dd96533232572a88f828d9622684332b4fa5be6",
+    "Scripts/Presentation/StageDirector.cs": "9453ea6350b7ce124170d9b979c232d4c82d00fe705cd14bbb7fc54748dffe7e",
+    "Scripts/Presentation/StageMotion.cs": "e2a5c10c18e5f2aaca778540412a09c2a272fa5d99452c25d425d3666904d955",
+    "Scripts/Presentation/StageScene.cs": "c63821a8cacb3b52e5ef75d90f4c53826da96395186a374d0ae76a5a356b43be",
+    "project.godot": "a5540d44b9c6d3807c816e91dd7c857990dd4159c740a5bc536c1ce13b11d9b4",
+    "qualification/ActivityReviewQualification.cs": "438f09e956ff95d98bdd081402681ef44c71c34983384ed26a91d13d9c76f609",
+    "qualification/ContentNoteQualification.cs": "1be72e71f037617077017d0ae50bb5a2d4d54c842e40900e6925c30d6382a539",
+    "qualification/ConversationReturnQualification.cs": "417b397e9f1ed435b990ececef3ecbb660b8d1e7d6728da818301d2ad627eecc",
+    "qualification/CupStateQualification.cs": "42aee871c3fefef0011ee41faf566e588d24e3e67872e8cc5ff93dcf69befb19",
+    "qualification/LateRecoveryQualification.cs": "dfeaaade0e7a2333c5d692499866f3a4719eb906123aa891a778c30b953c6059",
+    "qualification/LongSessionQualification.cs": "833f1afa10979503226c3cf3d121ec2e5a721648ddeef6c83d64864a81627ff2",
+    "qualification/OptionalConversationQualification.cs": "b88704bac988d550631d0f0a505cafa31cd8263016ff818b914ac498d0fd9959",
+    "qualification/WatchCompletionQualification.cs": "09c103a869a434d154fb8fff499b57a92a241a7c92dbfcd6370f580a43fae03d"
+  },
+  "binaries": {
+    "Lanternwake.dll": "eb9c11f991d9c766ec447fde7d8313c2e67076d2a5a512552dce361d68f4a34b",
+    "Lanternwake.pdb": "df26b87308713e24d76d95eba6317fa47e360a15cc411102bbc8083baeb70fd3",
+    "pumas-rpc": "8dfdc80458ef59659cf512cb7d2e798fa7375a47a08cdceee3bdf5a30992240f"
+  },
+  "pumasSourceReview": {
+    "source": "95a0baad2d0aea4650fc36ad4afd969ac9391bf5",
+    "tree": "3ee66988eb1668188011b2124890b10031403ebd",
+    "files": [
+      {
+        "path": "rust/crates/pumas-core/src/models/serving.rs",
+        "sha256": "eda2b4895121f5f7111034f34ab6147c999ff27ece7215533f2ed87bcc50ad5c",
+        "sameBytesAsHistoricalE37": true
+      },
+      {
+        "path": "rust/crates/pumas-core/src/models/runtime_profile.rs",
+        "sha256": "974f75d573bcb820828978eca766217891f4693a6e50084f82277220e425323f",
+        "sameBytesAsHistoricalE37": true
+      },
+      {
+        "path": "rust/crates/pumas-rpc/src/handlers/serving.rs",
+        "sha256": "d88f9311a3a55d8a422ab9522fdd1aea93170d878fd4bc82ee26a61d61eb9ba1",
+        "sameBytesAsHistoricalE37": true
+      },
+      {
+        "path": "rust/crates/pumas-rpc/src/handlers/openai_gateway.rs",
+        "sha256": "575c4c3c8d4aa9147692b1dfa81d905bb94616b8d3e267a687bb170fa10fe2c9",
+        "sameBytesAsHistoricalE37": true
+      },
+      {
+        "path": "rust/crates/pumas-rpc/src/server.rs",
+        "sha256": "69649247450f7c3b6c1303234fdde88a1c6ffaaa33bee84c13e3006620db1df0",
+        "sameBytesAsHistoricalE37": false
+      },
+      {
+        "path": "rust/crates/pumas-rpc/src/http_admission.rs",
+        "sha256": "94e16671ce98f71f034ea809d8520f74a7a6aee2bf44cdf0a003bc4ec78c5380",
+        "sameBytesAsHistoricalE37": false
+      },
+      {
+        "path": "rust/Cargo.toml",
+        "sha256": "20bc7d7e683b50911c3182ad3056bd09a3b0fc00081cb38904dc7651346a7ebd",
+        "sameBytesAsHistoricalE37": false
+      },
+      {
+        "path": "rust/Cargo.lock",
+        "sha256": "349439594f58ed25eca72879e6e73c598a1c828017b925faf5b5b67f5e268a87",
+        "sameBytesAsHistoricalE37": false
+      },
+      {
+        "path": "docs/DEVELOPMENT.md",
+        "sha256": "ce172a64d0a0d2f6e5e75847cd2eece79817986e3ccebacc9f73d2bb891e86a0",
+        "sameBytesAsHistoricalE37": false
+      }
+    ]
+  },
+  "tests": {
+    "aggregateExitCode": 0,
+    "coreAssertions": 4153,
+    "storyChecks": 63,
+    "simulatedPumasScenarios": 22,
+    "realPumasEmptyService": true,
+    "loadedModelWire": false,
+    "realInference": false,
+    "normalPumasUI": {
+      "checks": 13,
+      "events": 33,
+      "images": 3,
+      "exitCode": 0
+    },
+    "normalContentUI": {
+      "checks": 40,
+      "events": 52,
+      "images": 11,
+      "exitCode": 0
+    },
+    "lateRecoveryCase": "manual-corrupt; 3 processes",
+    "legacySaveSnapshots": 3,
+    "compilerDocuments": 143
+  },
+  "metrics": {
+    "authoredMainPathWords": 35408,
+    "chapters": 5,
+    "scenes": 41,
+    "beats": 1438,
+    "activities": 23,
+    "conversations": 28,
+    "readingMinutesAt150Wpm": 236.1,
+    "readingMinutesAt180Wpm": 196.7,
+    "readingMinutesAt220Wpm": 160.9,
+    "playtested": false
+  },
+  "receipts": {
+    "tested-production.json": "f6ebb51061d44c1b67b6c8820eba948eb2b97a360ec9e1a3fd91c1a8f7fe7007",
+    "upstream-reviewed-source.json": "543aaa665e7dc0615c7d4b9f23df04f067a1b403daebe5a18344ec70223a479a",
+    "compiler-binding.json": "a7e90d9182c2bb1e70124c66854f380002e0468d1f4e4e34554b8df6c6978dba",
+    "verify.log": "8368cc1d66ffe785df60026927d3824bea90126cf8b73e6e0217edd8054cebec",
+    "client-tests.log": "a1fee3ecbe2dd3448dec5eb222752c98489a655241ab22d3fea9c13ebf8505f7",
+    "live-smoke-build.log": "3ec06c49ebeb27c8fb635e9c333494045185b97e35220df5bbfe1017913775a3",
+    "pumas-build.log": "b74139d7a0427a20867015b3cc2301df25591bb91318d3a8a44faf621a4ec394",
+    "pumas-features.txt": "3aa68605af9bf147581243a80ae0744bac15bf3616468f84e52444cca141185d",
+    "content-accepted-ui/receipt.json": "9f92cf988b57498248abb9bd1c0e432c0a3d37460eea1e90714a2102bc2d4e40",
+    "current-probe-accepted/normal-ui/receipt.json": "c077330e718d1d3f9fa2c0b4ea8218b7f0433ab98171abba83b6501d959abefe",
+    "current-probe-final/receipt.json": "bdeb5b1ee53ad0cba022765464b605924dfaaab648bdfeb2679ee3378273cbb7",
+    "late-targeted/receipt.json": "022755622b8a72817143dc77da2e993f0f618b841ba4c4d48671bbffae374767",
+    "legacy-save-compatibility.json": "ceb3dbbe03353d77c48bfb73845020e03fc161b91af5968752d9c170e3e7629f",
+    "story-delta.json": "a0573cd874068cc358c05d4c1cb3d3ef2d28c66b2c33ca28a7df6c2510835978",
+    "rejected-attempts.json": "8905057e6db44d6b1637ff11d115d640f2c93b4433e1120a0c60323beb1fd074",
+    "raw-manifest.json": "41013e6ce3ff4788a94996c65df9fcb578663beae5a6092fcf6b47e5cbeafd4d"
+  },
+  "remainingGates": [
+    "Registered licensed GGUF and installed/active Pumas-managed llama-cpp runtime, CPU profile and served alias.",
+    "Real loaded-model responses and native Pumas95 generation, characterization/spoiler resistance and in-flight provider cancellation.",
+    "Cohere typed transcription capability and actual speech acceptance.",
+    "Human editorial/accessibility/physical-input/hearing and five-hour duration acceptance.",
+    "Parent-owned PR metadata, CI review, merge and publication.",
+    "Separate held Library403 delivery; no retries or uploads."
+  ],
+  "limits": [
+    "Historical e37/v0.7 live evidence is not reused as Pumas95 inference acceptance.",
+    "Dummy audio and synthetic X11 observations do not qualify hearing or physical input.",
+    "Raw evidence stays local; rejected observer attempts remain separately retained."
+  ],
+  "rawArchive": {
+    "filename": "lanternwake-pumas95-evidence-20261006.tar.gz",
+    "bytes": 29372452,
+    "sha256": "4aeb80fee89ad01ee58642167db8401017688fff71992753d8654bd2105e289e",
+    "localOnly": true,
+    "LibraryDelivery": "Held403; no retry/upload"
+  }
+}

@@ -218,7 +218,7 @@
     },
     {
       "id": "f_full_testimony",
-      "text": "Ivo's full deposition says: 21:06 coordinator Pell ordered the obsolete east route; 21:08 Ivo sent west correction on A; 21:09 he knew there was no repeat-back, yet kept repairing routing rather than using the direct line. He later suppressed the corrected chart and false hold claim to protect his position. Wider institutional failures also matter."
+      "text": "Ivo's full deposition says: 21:06 coordinator Pell ordered the obsolete east route; 21:08 Ivo sent west correction on A; 21:09 he knew there was no repeat-back, yet kept repairing routing rather than using the direct line. He later suppressed the corrected chart but allowed the false hold claim to stand to protect his position. Wider institutional failures also matter."
     },
     {
       "id": "f_evidence_preserved",
@@ -778,7 +778,12 @@
                   "Whichever path looks shortest."
                 ],
                 "correctIndex": 1,
-                "explanation": "Nessa identifies the inland road; conditions still require current checks."
+        "explanation": "Nessa identifies the inland road; conditions still require current checks.",
+        "optionFeedback": [
+          "Nessa: The cliff steps are for maintenance access and stay locked to visitors. They aren't our agreed route to the house in bad weather.",
+          "Nessa: The inland road stays above the storm surge. That's the route we agreed on, unless current conditions change.",
+          "Nessa: The steep path is quicker, but distance isn't the check we're making. The inland road stays above the storm surge; we still check current conditions."
+        ]
               }
             }
           ]
@@ -972,7 +977,12 @@
                   "Every object was deliberately left as a clue."
                 ],
                 "correctIndex": 1,
-                "explanation": "The repair is directly observable. Intent requires further evidence."
+                "explanation": "The repair is directly observable. Intent requires further evidence.",
+                "optionFeedback": [
+                  "Ada: The repaired handle is visible. The cup does not tell us whether Ivo expected me; that would turn an observation into a claim about his intention.",
+                  "Ada: Blue glaze, repaired handle: those are things I can record from the cup itself. Why he kept it remains a separate question.",
+                  "Ada: I can describe the cup, pencils and paperweight. Their presence does not establish that Ivo left each one as a clue."
+                ]
               }
             }
           ]
@@ -1158,7 +1168,12 @@
                   "A definite story about why he disliked it."
                 ],
                 "correctIndex": 0,
-                "explanation": "Observation can be catalogued while motive remains unknown."
+                "explanation": "Observation can be catalogued while motive remains unknown.",
+                "optionFeedback": [
+                  "Ada: One remote is worn and taped; the replacement is still boxed. I can record their condition and placement while leaving the reason for keeping both unknown.",
+                  "Ada: A boxed replacement tells us what is here, not that every object was arranged as a clue. The catalogue can keep the reason unknown.",
+                  "Ada: I can imagine that the replacement did not feel right to him. There is no witness for that story, so I cannot record his dislike as a fact."
+                ]
               }
             }
           ]
@@ -1371,7 +1386,12 @@
                   "Two people documented a dated trace whose origin is unknown."
                 ],
                 "correctIndex": 2,
-                "explanation": "Witnesses and photographs establish the observation, not its mechanism or authority."
+                "explanation": "Witnesses and photographs establish the observation, not its mechanism or authority.",
+                "optionFeedback": [
+                  "Ada: The bell sentence is on the paper. Tomas and I witnessed it forming, but its wording does not establish that the machine can guarantee safety.",
+                  "Ada: The strokes resemble my handwriting. Tomas raised tracing and earlier access as possibilities; we have not established who made the words or how they reached the paper.",
+                  "Ada: Tomas and I photographed the strip in place, recorded the time and added a witness. That documents the trace while leaving its origin unknown."
+                ]
               }
             }
           ]
@@ -1623,7 +1643,12 @@
                   "Assume a hidden author has guaranteed safety."
                 ],
                 "correctIndex": 1,
-                "explanation": "The witnessed wording justifies investigation; it does not replace an inspection."
+                "explanation": "The witnessed wording justifies investigation; it does not replace an inspection.",
+                "optionFeedback": [
+                  "Ada: The release is tagged as isolated pending inspection. Nessa told us not to operate anything before the rigger checks it; the trace does not replace that inspection.",
+                  "Ada: Nessa has arranged a rigger to inspect the supports and shaft mechanism. We can keep the shaft clear and leave the controls alone while that check is pending.",
+                  "Ada: Neither line names its author. We have witnessed the words, but that does not give an unknown writer authority to guarantee the shaft is safe."
+                ]
               }
             }
           ]
@@ -2345,7 +2370,12 @@
                   "The published inquiry summary."
                 ],
                 "correctIndex": 0,
-                "explanation": "Channel A records hydrographic measurements; Channel B carries harbor instructions."
+                "explanation": "Channel A records hydrographic measurements; Channel B carries harbor instructions.",
+                "optionFeedback": [
+                  "Ada: Tomas described A as measurement reports, and the log records WEST LEVEL HOLDING under A. That is a water-level entry, separate from the spoken harbor instructions on B.",
+                  "Ada: Tomas put spoken harbor instructions on B. The log places WEST LEVEL HOLDING under A; treating that measurement as a vessel order would mix the two sources.",
+                  "Ada: The inquiry summary is a later written account. Tomas described A as a measurement input; a summary about the recording is separate from what that input carried."
+                ]
               }
             }
           ]
@@ -2815,7 +2845,12 @@
                   "Transcription can hide overlap, uncertain words, and editorial choices."
                 ],
                 "correctIndex": 2,
-                "explanation": "Source links and explicit conventions let another reader check those choices."
+                "explanation": "Source links and explicit conventions let another reader check those choices.",
+                "optionFeedback": [
+                  "Ada: We compared the written paragraph with the recorded passage. The text was not wholly false; keeping the sound lets us check where overlap and punctuation made it too confident.",
+                  "Ada: The recording still has overlap and uncertain words. Tomas marks those gaps rather than supplying a later explanation as the speaker's words; keeping the source does not settle every interpretation.",
+                  "Ada: Tomas marks uncertain words, omissions and overlap, and keeps a source link. Those conventions let another reader check what the transcript chose to represent."
+                ]
               }
             }
           ]
@@ -3004,7 +3039,12 @@
                   "It predicts tomorrow's wind."
                 ],
                 "correctIndex": 1,
-                "explanation": "The correction changes route information available to operators. It is not a forecast."
+                "explanation": "The correction changes route information available to operators. It is not a forecast.",
+                "optionFeedback": [
+                  "Ada: The old chart marks a sheltered west approach that the printed evacuation plan omits. Those route details matter to the comparison, rather than the appearance of the coastline.",
+                  "Ada: The old chart marks a sheltered west route past the workboat mooring. The issued evacuation plan sends craft around the eastern wall; that difference matters to the route information available to operators.",
+                  "Ada: The chart records an approach, not tomorrow's wind. Nessa keeps forecasts separate from orders, and she has told us the passage is not navigable at every tide."
+                ]
               }
             }
           ]
@@ -3267,7 +3307,12 @@
                   "The visitor map predicts the tide."
                 ],
                 "correctIndex": 1,
-                "explanation": "It documents a lost opportunity without claiming certainty about an outcome that was never observed."
+                "explanation": "It documents a lost opportunity without claiming certainty about an outcome that was never observed.",
+                "optionFeedback": [
+                  "Tomas: I want that ending, but we didn't observe it. Nessa marked where a timely direct instruction could have changed the rescue craft's movement. The blocks show lost time and a documented opportunity, not proof that everyone would have reached safety.",
+                  "It documents a lost opportunity without claiming certainty about an outcome that was never observed.",
+                  "Nessa: A visitor map shows what a visitor can see. It doesn't report the water level. We used the working chart, the logged positions, and the conditions on that night. That's why the sheltered approach matters; the model isn't a tide prediction."
+                ]
               }
             }
           ]
@@ -3734,7 +3779,8 @@
             {
               "id": "ch2_s5_b012",
               "speaker": "narrator",
-              "text": "The first seconds of 16:12 pass quietly. Then the pressure line beneath the floor knocks once. The table shivers. The repaired handle separates from the cup with a sound no louder than a snapped pencil lead. The cup tips against its own shifted weight, strikes the edge, and falls. Blue pieces scatter inside the empty area you have cleared."
+              "text": "The first seconds of 16:12 pass quietly. Then the pressure line beneath the floor knocks once. The table shivers. The repaired handle separates from the cup with a sound no louder than a snapped pencil lead. The cup tips against its own shifted weight, strikes the edge, and falls. Blue pieces scatter inside the empty area you have cleared.",
+              "stageCue": "cup_broken"
             },
             {
               "id": "ch2_s5_b013",
@@ -3829,7 +3875,8 @@
             {
               "id": "ch2_s5_b026",
               "speaker": "narrator",
-              "text": "Tomas picks up the cup fragments only after you have photographed their positions. He places them in a shallow box with tissue between them. The handle remains where it fell until Sera finishes measuring the plate. Obeying the sentence and documenting a sensible procedure have briefly produced the same behavior. You do not mistake that coincidence for permission to stop judging."
+              "text": "Tomas picks up the cup fragments only after you have photographed their positions. He places them in a shallow box with tissue between them. The handle remains where it fell until Sera finishes measuring the plate. Obeying the sentence and documenting a sensible procedure have briefly produced the same behavior. You do not mistake that coincidence for permission to stop judging.",
+              "stageCue": "cup_boxed"
             },
             {
               "id": "ch2_s5_b027",
@@ -3863,7 +3910,12 @@
                   "Nobody can ever move a cup."
                 ],
                 "correctIndex": 0,
-                "explanation": "The match is evidence to investigate. It creates no rule against intervention and no moral command."
+                "explanation": "The match is evidence to investigate. It creates no rule against intervention and no moral command.",
+                "optionFeedback": [
+                  "Ada: The line was printed yesterday, and the recording shows the cup breaking within the stated minute. That match is documented; how the advance information arrived is still a question.",
+                  "Ada: We set a stop condition before observing. A prediction matching this break has not earned the right to command our hands; it remains evidence to investigate.",
+                  "Ada: Sera said we could put the cup on the floor and observe that intervention. We chose a guarded observation, with a stop condition for danger. That procedure creates no rule that a cup cannot be moved."
+                ]
               }
             }
           ]
@@ -4078,7 +4130,12 @@
                   "The counterweight descends into its clear cradle and lifts the gate."
                 ],
                 "correctIndex": 2,
-                "explanation": "The gravity linkage is physical. It must be inspected and operated with the shaft clear."
+                "explanation": "The gravity linkage is physical. It must be inspected and operated with the shaft clear.",
+                "optionFeedback": [
+                  "Ada: The plans describe the stylus carrying a trace. The bypass diagram instead shows a physical linkage: counterweight down, gate up. A password is not the documented release.",
+                  "Ada: Nessa called the shaft a moving-load hazard and locked its access gate. Sera described lowering the counterweight into its cradle from the tower with nobody in the chamber. Inspection comes before considering use.",
+                  "Ada: The diagram shows counterweight down, gate up. Sera named that the emergency gravity release, opening the bypass to equalize pressure. Nessa and Sera still require inspection; the old drawing does not certify today’s hardware."
+                ]
               }
             }
           ]
@@ -4610,7 +4667,12 @@
                   "The broken cup handle."
                 ],
                 "correctIndex": 1,
-                "explanation": "The historical audio is a magnetic recording, not a message from a different year through the apparatus."
+                "explanation": "The historical audio is a magnetic recording, not a message from a different year through the apparatus.",
+                "optionFeedback": [
+                  "Ada: Sera described the apparatus as carrying a trace, not a spoken voice. Tomas prepared the dated magnetic reel before we listened; blank chronograph paper is not the source of that historical audio.",
+                  "Ada: Tomas identified the reel as a physical magnetic recording made in 1998, with manufacture, leader and time announcement that fit. The historical voices we heard came from that recording.",
+                  "Ada: We documented the handle as part of the cup event. Tomas prepared and dated a magnetic reel for the historical voices; the handle is not that recording."
+                ]
               }
             }
           ]
@@ -4833,7 +4895,12 @@
                   "Restart damaged equipment in secret."
                 ],
                 "correctIndex": 0,
-                "explanation": "Records can be preserved independently; scientific curiosity does not authorize additional unsafe operation."
+                "explanation": "Records can be preserved independently; scientific curiosity does not authorize additional unsafe operation.",
+                "optionFeedback": [
+                  "Ada: We listed photographs, drawings, readings, timestamps and video that can be preserved safely. Sera warned that keeping the apparatus operating adds unquantified risk. Preserving that record and making the installation safe are our revised objectives.",
+                  "Ada: Sera said operating a hazardous system to prevent skepticism is not an acceptable safety objective. We can preserve what we observed without promising universal agreement or keeping the active effect running.",
+                  "Ada: We agreed there would be no secret restart. The damaged pressure path is to remain isolated until qualified assessment and authorization; curiosity does not replace that boundary."
+                ]
               }
             }
           ]
@@ -5589,7 +5656,12 @@
                   "One hour forward."
                 ],
                 "correctIndex": 1,
-                "explanation": "The dial, plans, clock comparison, and matched trace support one fixed interval only."
+                "explanation": "The dial, plans, clock comparison, and matched trace support one fixed interval only.",
+                "optionFeedback": [
+                  "Ada: Sera said this installation’s interval is fixed. The dial and archive plans give twenty-three hours and seventeen minutes, and nothing we found supports choosing an arbitrary date or sending a warning to 1998.",
+                  "Ada: The dial and plans give twenty-three hours and seventeen minutes. The checked clocks, mechanical correspondence and matching trace agree with that backward interval. Sera called it self-consistent; the known earlier marks do not establish unrestricted choice.",
+                  "Ada: Sera described a trace received earlier. The checked clocks pair yesterday’s 18:35 record with today’s 17:52 input, twenty-three hours and seventeen minutes apart. That is the backward interval we compared, not one hour forward."
+                ]
               }
             }
           ]
@@ -5609,7 +5681,8 @@
             {
               "id": "ch3_s5_b001",
               "speaker": "narrator",
-              "text": "All four of you end up around the keeper's table because it is the only place nearby with enough chairs. The broken cup has become a shallow box of fragments. Nessa sets a plain steel mug where it used to stand. No one remarks on the substitution, but you are grateful for it."
+              "text": "All four of you end up around the keeper's table because it is the only place nearby with enough chairs. The broken cup has become a shallow box of fragments. Nessa sets a plain steel mug where it used to stand. No one remarks on the substitution, but you are grateful for it.",
+              "stageCue": "steel_mug"
             },
             {
               "id": "ch3_s5_b002",
@@ -5961,7 +6034,12 @@
                   "He knew there was no repeat-back and kept repairing routing instead of calling directly."
                 ],
                 "correctIndex": 2,
-                "explanation": "His own account establishes that specific failure, alongside the coordinator's obsolete route and later concealment."
+                "explanation": "His own account establishes that specific failure, alongside the coordinator's obsolete route and later concealment.",
+            "optionFeedback": [
+              "Ada: In the deposition, Ivo says he did not call directly when the harbor repeated the east route. He knew at 21:09 that there was no repeat-back, but kept trying to restore the routing instead.",
+              "Ada: Ivo explicitly says there was no vessel hold at 21:04; that line was a water-level report. The crew were doing their required work. His account contradicts the summary’s claim that they disobeyed a hold.",
+              "Ada: Ivo says he knew at 21:09 that nobody had repeated the west correction. He still had time to call directly, but spent it repairing the apparatus. That specific admission belongs beside the coordinator’s obsolete route and the later concealment."
+            ]
               }
             }
           ]
@@ -6150,7 +6228,25 @@
             {
               "id": "ch4_s1a_b035",
               "speaker": "narrator",
-              "text": "Nessa nods and closes a folder whose contents have not been cleared for public use. She has learned something by looking at the permission sheet first. So have you: care is not only adding information. Sometimes it is preserving a boundary while keeping the important public evidence available."
+              "text": "Nessa nods and closes a folder whose contents have not been cleared for public use. She has learned something by looking at the permission sheet first. So have you: care is not only adding information. Sometimes it is preserving a boundary while keeping the important public evidence available.",
+              "exchange": {
+                "characterId": "tomas",
+                "prompt": "The private folder is closed. Decide how to support Tomas while keeping the public record clear. You can also leave this moment unspoken.",
+                "options": [
+                  {
+                    "label": "I can help check the permission labels.",
+                    "reply": "Thank you. Keep the permission sheet with the captions, and keep each permission specific. Ruth's family asked for her checklist to be included; that doesn't open every letter in the folder. Being able to hand the next person a clear boundary is useful work."
+                  },
+                  {
+                    "label": "You don't have to share anything private for this record to matter.",
+                    "reply": "I appreciate that. Sometimes I feel expected to produce a more painful photograph before people believe the work matters. These are the ones the families chose for public use. The rest can remain theirs. I can want the account corrected without offering strangers every memory of my father."
+                  },
+                  {
+                    "label": "Could the correction stand without the family photographs?",
+                    "reply": "Yes. The channel log and the deposition support the correction. The photographs help people meet the crew as people; they aren't the proof of a vessel order that never existed. We can make the public finding checkable and let the families decide how much of their ordinary lives they want shown."
+                  }
+                ]
+              }
             },
             {
               "id": "ch4_s1a_b036",
@@ -6250,6 +6346,96 @@
               "id": "ch4_s2_b006",
               "speaker": "sera",
               "text": "Exactly. The measurement could be accurate while the response was wrong. A forecast of water is not a command to send a boat east."
+            },
+            {
+              "id": "ch4_s2_reconstruction_001",
+              "speaker": "narrator",
+              "text": "You bring the public summary back to the table. Beside it you put the Channel A log, the corrected chart, and the photograph of Ivo's instruction to use the issued version. Four sources, each with its own reference. You have been looking at them for hours. Now you need to see whether you can explain their relation without borrowing certainty from his voice."
+            },
+            {
+              "id": "ch4_s2_reconstruction_002",
+              "speaker": "ada",
+              "text": "The summary says the west vessel was told to hold at 21:04. The log says WEST LEVEL HOLDING. We've established that those are different statements."
+            },
+            {
+              "id": "ch4_s2_reconstruction_003",
+              "speaker": "tomas",
+              "text": "Keep the channel letter with the words. Someone reading the summary alone doesn't get that distinction."
+            },
+            {
+              "id": "ch4_s2_reconstruction_004",
+              "speaker": "narrator",
+              "text": "You copy A beside the measurement. Then you read the next entry, B: AWAIT HARBOR. You leave that line intact too. It records what was awaited; it does not supply a vessel order hidden between the words."
+            },
+            {
+              "id": "ch4_s2_reconstruction_005",
+              "speaker": "ada",
+              "text": "Could the wrong instruction have come from a chart error? If they thought the west approach wasn't there—"
+            },
+            {
+              "id": "ch4_s2_reconstruction_006",
+              "speaker": "nessa",
+              "text": "That's the issued route problem. The corrected chart gives them a sheltered approach to consider. It doesn't turn a water reading into an instruction. We need to show both failures."
+            },
+            {
+              "id": "ch4_s2_reconstruction_007",
+              "speaker": "narrator",
+              "text": "You have drawn one arrow between the summary and the missing chart. You rub it out. In its place you write two headings: what the crew were told, and what the public were later told about the crew. The page looks messier. Nessa rotates it so she can read the small lettering."
+            },
+            {
+              "id": "ch4_s2_reconstruction_008",
+              "speaker": "ada",
+              "text": "Ivo suppressed the corrected chart. He allowed the false hold claim to stand. Saying he suppressed both would get the direction of the second act wrong."
+            },
+            {
+              "id": "ch4_s2_reconstruction_009",
+              "speaker": "tomas",
+              "text": "And make it sound as though the falsehood was something he kept out of print. It was what people were left to read."
+            },
+            {
+              "id": "ch4_s2_reconstruction_010",
+              "speaker": "narrator",
+              "text": "You check the omission note against the chart heading and retain its exact wording beneath the first claim. Under the second you cite the public summary, the channel log, and the point in the complete deposition where Ivo says there was no vessel hold. The same testimony can support a correction without becoming the only source for it."
+            },
+            {
+              "id": "ch4_s2_reconstruction_011",
+              "speaker": "sera",
+              "text": "What can this page say about the editor?"
+            },
+            {
+              "id": "ch4_s2_reconstruction_012",
+              "speaker": "ada",
+              "text": "That the published exhibit used the issued version and the summary carried the false claim. Not that we've established what every person handling those pages knew."
+            },
+            {
+              "id": "ch4_s2_reconstruction_013",
+              "speaker": "tomas",
+              "text": "Then leave that question open for review. We don't need to invent another confession to say the crew didn't disobey an order that wasn't there."
+            },
+            {
+              "id": "ch4_s2_reconstruction_evidence",
+              "speaker": "narrator",
+              "text": "Tomas puts a blank correction card beside the four sources. Before this wording enters the deposit, he asks you to check it against both the chart instruction and the published summary. Which account preserves what Ivo kept out of the record and what he let remain in it?",
+              "activity": {
+                "prompt": "Which correction is supported by these sources?",
+                "options": [
+                  "Ivo withheld the corrected chart; the false vessel-hold claim remained in the public summary.",
+                  "Ivo withheld both the corrected chart and the false vessel-hold claim.",
+                  "The summary proves every editor knowingly concealed the correction."
+                ],
+                "correctIndex": 0,
+                "explanation": "The omission note supports withholding the corrected chart. The published summary contains the false hold claim, contradicted by the Channel A measurement log and the deposition. What each editor knew remains a question for independent review.",
+                "optionFeedback": [
+                  "",
+                  "Tomas turns the summary toward you. 'The hold claim is printed here. Keeping it out would have left a different public record.' The omission note concerns the corrected chart. Compare what was withheld with what readers were left to believe.",
+                  "Sera taps the source references. 'We can show what the exhibit used and what the summary said. That does not establish what every editor knew.' Preserve those questions for independent review; the crew's correction does not depend on inventing another person's confession."
+                ]
+              }
+            },
+            {
+              "id": "ch4_s2_reconstruction_014",
+              "speaker": "narrator",
+              "text": "Tomas catches your pencil before it rolls into the chart's curled edge. He sets it beside the source register, then asks you to read the two headings once more. This time he does not correct either. You keep the crossed-out arrow visible in the working notes. It records a mistake you made and checked, rather than one a later reader must unknowingly inherit."
             },
             {
               "id": "ch4_s2_b007",
@@ -6399,7 +6585,12 @@
                   "The originals are no longer important."
                 ],
                 "correctIndex": 0,
-                "explanation": "Copies with provenance and checksums are acknowledged elsewhere, while originals remain safeguarded."
+                "explanation": "Copies with provenance and checksums are acknowledged elsewhere, while originals remain safeguarded.",
+            "optionFeedback": [
+              "Ada: Two off-island archives acknowledged complete copies with hashes and page counts, and Sera checked them against the local checksums. Both packets include the signed source register. The pressure machine is no longer the only place the evidence survives.",
+              "Ada: Sera verified source copies at two off-island archives, rather than relying on the pressure machine to retain them. Those copies include provenance and checksums. Nothing in that verification says the machine will remember everything forever.",
+              "Ada: The copies let us stop depending on the tower, not discard the originals. Sera included the signed source register in both packets and named a storage copy to go with the original reel to the hall. Preservation still matters."
+            ]
               }
             }
           ]
@@ -6673,7 +6864,12 @@
                   "His own work and experience, with other families represented only by their consent."
                 ],
                 "correctIndex": 2,
-                "explanation": "Relevant expertise or personal loss does not confer permission to represent every other person."
+                "explanation": "Relevant expertise or personal loss does not confer permission to represent every other person.",
+            "optionFeedback": [
+              "Ada: Tomas can speak about his work and his father, but our list does not make him every family’s representative. Not all contacts were immediately reachable, and he explicitly separated publishing the operational finding from claiming their endorsement.",
+              "Ada: The statement includes people’s work and experience, not only the instrument. Our list gives Tomas his own archival work and relationship to Ewan to describe. That is a supported role; it still does not authorize speaking for every family.",
+              "Ada: Our four-column list gives Tomas his own archival work and relationship to Ewan to describe. It does not let him represent every family. The contacts we reached could choose copies or later contact; receiving a call is not endorsing our wording."
+            ]
               }
             }
           ]
@@ -6996,7 +7192,7 @@
             {
               "id": "ch4_s3a_b032",
               "speaker": "narrator",
-              "text": "As you leave the office, the man who retrieved the wrong bag earlier calls out that someone found him a dry sweater. It is too large, he says, but warm. Nessa raises a hand. There will be plenty to discuss tomorrow about communication, transport, and the way the service door bypassed check-in. Tonight, a person is warm, a record is corrected, and the route ahead is clear."
+              "text": "As you leave the office, the man who left his bag behind earlier calls out that someone found him a dry sweater. It is too large, he says, but warm. Nessa raises a hand. There will be plenty to discuss tomorrow about communication, transport, and the way the service door bypassed check-in. Tonight, a person is warm, a record is corrected, and the route ahead is clear."
             },
             {
               "id": "ch4_s3a_b033",
@@ -7015,7 +7211,12 @@
                   "Assume both names refer to the same person."
                 ],
                 "correctIndex": 1,
-                "explanation": "The second identifier prevents a false duplicate and an inaccurate headcount."
+                "explanation": "The second identifier prevents a false duplicate and an inaccurate headcount.",
+                "optionFeedback": [
+                  "Nessa leaves both rows visible. 'A cleaner total is not a checked arrival.' Deleting a row before comparing the household codes could remove a different adult from the follow-up list. Keep both entries while identities and current locations are confirmed.",
+                  "",
+                  "Tomas points to the two household codes. 'The names resemble each other. These references don't.' Similar spelling does not establish one identity or put either person at the hall. Check each person and their arrival before treating the list as complete."
+                ]
               }
             }
           ]
@@ -7035,7 +7236,7 @@
             {
               "id": "ch4_s4_b001",
               "speaker": "narrator",
-              "text": "The tower service clock reads 18:58. Sera has arranged yesterday's photographs in order along a clean bench. The first mysterious sentence was already present in the photograph taken at 19:58 yesterday. The second was recorded as it formed at 20:03. Subtract twenty-three hours and seventeen minutes, and the corresponding input times are this evening at 19:15 and 19:20."
+              "text": "The tower service clock reads 18:58. Sera has arranged yesterday's photographs in order along a clean bench. The first mysterious sentence was already present in the photograph taken at 19:58 yesterday. The second was recorded as it formed at 20:03. Add twenty-three hours and seventeen minutes, and the corresponding input times are this evening at 19:15 and 19:20."
             },
             {
               "id": "ch4_s4_b002",
@@ -7205,7 +7406,12 @@
                   "The storm cannot cause any damage."
                 ],
                 "correctIndex": 1,
-                "explanation": "Absence of a trace is not a prediction of death, safety, or any other outcome."
+                "explanation": "Absence of a trace is not a prediction of death, safety, or any other outcome.",
+            "optionFeedback": [
+              "Ada: Sera said the receiver has no trace on that part of the strip. We cannot infer a death, catastrophe or instruction from absent writing. Blank paper does not tell me I must die before writing again.",
+              "Ada: There is no recorded signal on that part of the receiving strip. Sera and Tomas kept the claim at that observation. It does not establish an outcome or add an instruction to the release checklist.",
+              "Ada: An unmarked strip records no signal; it does not forecast harmless weather. Nessa still reads the checklist: the catch-basin is empty and isolated, the shaft gate is locked, and the remaining crew have checked in. Those checks come from current conditions, not blank paper."
+            ]
               }
             }
           ]
@@ -7637,7 +7843,12 @@
                   "Verified evacuation, clear zones, tested mechanism, and current safe pressure conditions."
                 ],
                 "correctIndex": 2,
-                "explanation": "The team acts on a checked procedure and stops if conditions change. The note overrides nothing."
+                "explanation": "The team acts on a checked procedure and stops if conditions change. The note overrides nothing.",
+                "optionFeedback": [
+                  "Ada: The hall's headcount was read back and confirmed; our four names are listed separately. The lower path, shaft enclosure and outflow zone are clear. Nessa says anyone must call stop if a condition changes. The reassuring line does not replace those checks.",
+                  "Ada: Ivo's reputation is not a readiness check. Sera reports pressure below the emergency limit, tested bypass travel and an empty cradle. Nessa will release only on the measured condition and will stop if conditions change. We proceed from current checks, not his standing.",
+                  "Ada: The headcount and clear zones are verified, the bypass travel is tested, and current pressure is within the prepared procedure. Nessa still waits for Sera's measured release condition. Anyone can call stop if a condition changes; the note overrides none of that."
+                ]
               }
             }
           ]
@@ -7817,7 +8028,12 @@
                   "Destroy the surviving archive."
                 ],
                 "correctIndex": 1,
-                "explanation": "Safe isolation and independent verification protect people and evidence."
+                "explanation": "Safe isolation and independent verification protect people and evidence.",
+                "optionFeedback": [
+                  "Ada: Sera says the pressure state that supported the effect is gone, the inclusion has fractured, and there is no current receiving response. She calls for daylight verification, not a restart. A damaged pressure system is not an acceptable way to satisfy curiosity.",
+                  "Ada: Pressure has equalized, the bypass flow is stable, and the headcount is confirmed. Sera still calls for daylight verification. We keep the damaged path isolated and preserve the instrument and records; an observed safe release does not remove the need for those checks.",
+                  "Ada: The off-island copies are acknowledged, and Tomas confirmed the original reel and estate records are at the hall with Mara Ellis. The two traces also remain under glass. Losing the active pressure state is no reason to destroy the evidence that survives independently of it."
+                ]
               }
             }
           ]
@@ -8458,7 +8674,12 @@
                   "Retain it as a historical document with prominent correction and source links."
                 ],
                 "correctIndex": 2,
-                "explanation": "The correction must preserve what was published while making the evidence against it clear."
+                "explanation": "The correction must preserve what was published while making the evidence against it clear.",
+                "optionFeedback": [
+                  "Ada: The old summary remains accessible, with its catalogue entry pointing prominently to the original log, complete deposition and identified contradictions. Quietly replacing it would hide what was published and why the families challenged it. The correction must remain visible beside that history.",
+                  "Ada: The catalogue entry now links the original log, complete deposition and identified contradictions. Leaving the misleading summary unqualified would keep presenting the false account without that correction. Retaining a historical document does not mean continuing to endorse its claims.",
+                  "Ada: We retain the old summary as something that was published, while making the correction and source links prominent. That lets a reader inspect both the misleading account and the evidence against it. The record preserves publication history without treating the old claims as sound."
+                ]
               }
             }
           ]
@@ -8828,7 +9049,12 @@
                   "Paper containing an invisible final instruction."
                 ],
                 "correctIndex": 0,
-                "explanation": "The catalogue distinguishes observation from speculation, even at the ending."
+                "explanation": "The catalogue distinguishes observation from speculation, even at the ending.",
+                "optionFeedback": [
+                  "Ada: Tomas named it unmarked receiving paper, retained. The chronograph entry separates observed facts from an unresolved physical explanation and records no evidence of a message after shutdown. The catalogue can describe blank paper without assigning it a promise or an instruction.",
+                  "Ada: Unmarked paper records no signal; it does not prove that nothing bad can ever happen. The safe release was established by measurements and headcounts, and the morning readings confirmed isolation. Those observations belong in the record, but they are not a universal guarantee.",
+                  "Ada: The entry records no evidence of a message after the final shutdown. Tomas describes unmarked receiving paper, and the strip stays blank when I leave. An invisible final instruction would add a claim none of those observations supports."
+                ]
               }
             }
           ]

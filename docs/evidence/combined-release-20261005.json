@@ -1,0 +1,891 @@
+{
+  "date": "2026-10-05",
+  "sourceCommit": "05db466507dfbc736d7b0a386724a5fe068554b9",
+  "sourceTree": "540267a7ec1943e2259c5c38cffe3cff7a217988",
+  "nativeSourceFilesMatchGit": true,
+  "compiledTrackedSourceCount": 48,
+  "toolchain": {
+    "engine": "4.6.3.stable.mono.official.7d41c59c4",
+    "sdk": "8.0.425",
+    "officialEditorArchiveSha256": "702a8a6785060203fd46373adf864586ecf0c377ac685d7107dde66b1eba0a9e"
+  },
+  "aggregate": {
+    "exitCode": 0,
+    "coreAssertions": 4125,
+    "storyChecks": 63,
+    "simulatedPumasCases": 11,
+    "pythonAudioTests": 5,
+    "pythonAdapterTests": 19,
+    "nativeAudioAssertions": 32,
+    "dummyMixerFrames": 20480,
+    "editorScenes": 13
+  },
+  "renderedWatch": {
+    "beats": 1424,
+    "scenes": 41,
+    "checks": 25303,
+    "resumes": 337,
+    "wrongAnswers": 23,
+    "recoveries": 23,
+    "rollbackRecoveries": 93,
+    "processes": 6,
+    "terminal": true,
+    "renderer": "OpenGL Mesa llvmpipe",
+    "audioDriver": "Dummy",
+    "limits": "Native production button callbacks under real software rendering; no physical input/hearing, human duration, production model or ASR acceptance."
+  },
+  "renderedHeaders": {
+    "cases": [
+      {
+        "view": "wide",
+        "beat": "ch2_s5_b011",
+        "exitCode": 0,
+        "records": [
+          {
+            "backgroundPixel": [
+              0.0274509806185961,
+              0.062745101749897,
+              0.0745098069310188
+            ],
+            "bodyFont": 21,
+            "camera": "StoryCamera",
+            "chapterFont": 21,
+            "chapterText": "AUTHOR PREVIEW \u00b7 THE WRONG CHANNEL",
+            "percent": 100,
+            "placeFont": 15,
+            "placeText": "Sixteen Twelve  \u00b7  late afternoon"
+          },
+          {
+            "backgroundPixel": [
+              0.0274509806185961,
+              0.062745101749897,
+              0.0745098069310188
+            ],
+            "bodyFont": 26,
+            "camera": "StoryCamera",
+            "chapterFont": 21,
+            "chapterText": "AUTHOR PREVIEW \u00b7 THE WRONG CHANNEL",
+            "percent": 125,
+            "placeFont": 15,
+            "placeText": "Sixteen Twelve  \u00b7  late afternoon"
+          },
+          {
+            "backgroundPixel": [
+              0.0274509806185961,
+              0.062745101749897,
+              0.0745098069310188
+            ],
+            "bodyFont": 32,
+            "camera": "StoryCamera",
+            "chapterFont": 21,
+            "chapterText": "AUTHOR PREVIEW \u00b7 THE WRONG CHANNEL",
+            "percent": 150,
+            "placeFont": 15,
+            "placeText": "Sixteen Twelve  \u00b7  late afternoon"
+          }
+        ],
+        "environmentWarnings": [
+          "WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver."
+        ]
+      },
+      {
+        "view": "insert",
+        "beat": "ch2_s5_b012",
+        "exitCode": 0,
+        "records": [
+          {
+            "backgroundPixel": [
+              0.0470588244497776,
+              0.0745098069310188,
+              0.0784313753247261
+            ],
+            "bodyFont": 21,
+            "camera": "CupFloorCamera",
+            "chapterFont": 21,
+            "chapterText": "AUTHOR PREVIEW \u00b7 THE WRONG CHANNEL",
+            "percent": 100,
+            "placeFont": 15,
+            "placeText": "Sixteen Twelve  \u00b7  late afternoon"
+          },
+          {
+            "backgroundPixel": [
+              0.0470588244497776,
+              0.0745098069310188,
+              0.0784313753247261
+            ],
+            "bodyFont": 26,
+            "camera": "CupFloorCamera",
+            "chapterFont": 21,
+            "chapterText": "AUTHOR PREVIEW \u00b7 THE WRONG CHANNEL",
+            "percent": 125,
+            "placeFont": 15,
+            "placeText": "Sixteen Twelve  \u00b7  late afternoon"
+          },
+          {
+            "backgroundPixel": [
+              0.0470588244497776,
+              0.0745098069310188,
+              0.0784313753247261
+            ],
+            "bodyFont": 32,
+            "camera": "CupFloorCamera",
+            "chapterFont": 21,
+            "chapterText": "AUTHOR PREVIEW \u00b7 THE WRONG CHANNEL",
+            "percent": 150,
+            "placeFont": 15,
+            "placeText": "Sixteen Twelve  \u00b7  late afternoon"
+          }
+        ],
+        "environmentWarnings": [
+          "WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver."
+        ]
+      }
+    ],
+    "retainedImages": 6,
+    "assistantInspectedImages": [
+      "header-contrast/after/wide/100.png",
+      "header-contrast/after/wide/125.png",
+      "header-contrast/after/wide/150.png",
+      "header-contrast/after/insert/100.png",
+      "header-contrast/after/insert/125.png",
+      "header-contrast/after/insert/150.png",
+      "graphical-native/title/title.png",
+      "graphical-native/title/content-note-150-small.png",
+      "graphical-native/title/sound-settings.png",
+      "graphical-native/conversation/authored-fallback.png",
+      "graphical-native/harbor/ch1_s1_b001.png",
+      "graphical-native/archive/ch1_s4_b001.png",
+      "graphical-native/tower-before/ch5_s3_b005.png",
+      "graphical-native/house-boxed/ch2_s5_b026.png",
+      "graphical-native/house-mug/ch3_s5_b001.png",
+      "graphical-native/tower-lowered/ch5_s3_b006.png",
+      "graphical-native/cave/ch3_s1_b001.png",
+      "graphical-native/ending/ch5_s5_evidence.png",
+      "graphical-native/ending/completion.png"
+    ]
+  },
+  "renderedControls": {
+    "processes": 12,
+    "images": 20,
+    "cases": [
+      {
+        "case": "title",
+        "beat": null,
+        "exitCode": 0,
+        "images": {
+          "content-note-150-small.png": {
+            "bytes": 50562,
+            "sha256": "5e45eabee1b9923414eeaff9a8eaca70939c63f6e4017b51078e5b810ad155fb"
+          },
+          "sound-settings.png": {
+            "bytes": 61452,
+            "sha256": "121894a91c504b616576c6ac6fcdf89e5af336522dfd2e87821f336fabbc72d3"
+          },
+          "title.png": {
+            "bytes": 290307,
+            "sha256": "8636de05f44fff7facec9e893d21928281e14436607680d9e91f08010fd4edf0"
+          },
+          "title-content-note.png": {
+            "bytes": 51801,
+            "sha256": "8dcebf7a8d4102c82490deb0e4bdb2e31c61fdc9ead2ddb24fd3c2ea08070e2c"
+          },
+          "reading-settings.png": {
+            "bytes": 77507,
+            "sha256": "cb397ee48a5b3005f8687513197e3fc860b68acd89cc3febcf33a8cf3447c3c1"
+          }
+        },
+        "environmentWarnings": [
+          "WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver."
+        ],
+        "unexpectedWarnings": 0,
+        "playerSaveWrites": 0
+      },
+      {
+        "case": "harbor",
+        "beat": "ch1_s1_b001",
+        "exitCode": 0,
+        "images": {
+          "ch1_s1_b001.png": {
+            "bytes": 369449,
+            "sha256": "1c879ef048e51bd5ec47f7768debcdcfd7bbea8e9b80e995f9dd0dc3a8720709"
+          }
+        },
+        "environmentWarnings": [
+          "WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver."
+        ],
+        "unexpectedWarnings": 0,
+        "playerSaveWrites": 0
+      },
+      {
+        "case": "conversation",
+        "beat": "ch1_s1_b021",
+        "exitCode": 0,
+        "images": {
+          "editable-conversation.png": {
+            "bytes": 257148,
+            "sha256": "7a392f2369d6359081e09986ff9cb612fdabbc7f163bcba0f300cc4e34fc7500"
+          },
+          "returned-passage.png": {
+            "bytes": 290375,
+            "sha256": "46a8a2e3c2ee2fafe02bb0a69d30aa7d51b64b66843a347732af25daac1d2d23"
+          },
+          "ch1_s1_b021.png": {
+            "bytes": 289455,
+            "sha256": "5ab3ea235a1152e0d2c50522abe790df3ae87e2bda57ab4500ac45a21bc12e08"
+          },
+          "authored-fallback.png": {
+            "bytes": 273090,
+            "sha256": "11c0683ce7a707f4943379e295f5a4ff3597922d95cd2840755bb6b2007cd61a"
+          }
+        },
+        "environmentWarnings": [
+          "WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver."
+        ],
+        "unexpectedWarnings": 0,
+        "playerSaveWrites": 0
+      },
+      {
+        "case": "house-intact",
+        "beat": "ch2_s5_b011",
+        "exitCode": 0,
+        "images": {
+          "ch2_s5_b011.png": {
+            "bytes": 301889,
+            "sha256": "f855337fb2382d390b44128c2f1e237b967ec6d4d12a27efd97d5e6a62c15670"
+          }
+        },
+        "environmentWarnings": [
+          "WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver."
+        ],
+        "unexpectedWarnings": 0,
+        "playerSaveWrites": 0
+      },
+      {
+        "case": "house-broken",
+        "beat": "ch2_s5_b012",
+        "exitCode": 0,
+        "images": {
+          "ch2_s5_b012.png": {
+            "bytes": 275820,
+            "sha256": "23962eaf590dea9bb4f1996e3238c295fa499f33efb12a12320cc8c4b50997a4"
+          }
+        },
+        "environmentWarnings": [
+          "WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver."
+        ],
+        "unexpectedWarnings": 0,
+        "playerSaveWrites": 0
+      },
+      {
+        "case": "house-boxed",
+        "beat": "ch2_s5_b026",
+        "exitCode": 0,
+        "images": {
+          "ch2_s5_b026.png": {
+            "bytes": 357698,
+            "sha256": "866951fd674a77317dff76dc341b1e79244beb4f3586f7e051021d3264e37a54"
+          }
+        },
+        "environmentWarnings": [
+          "WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver."
+        ],
+        "unexpectedWarnings": 0,
+        "playerSaveWrites": 0
+      },
+      {
+        "case": "house-mug",
+        "beat": "ch3_s5_b001",
+        "exitCode": 0,
+        "images": {
+          "ch3_s5_b001.png": {
+            "bytes": 341528,
+            "sha256": "322a4d861663e2bd6d563250ff6948dcdaeb29164c6f8a354765db92cf097b55"
+          }
+        },
+        "environmentWarnings": [
+          "WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver."
+        ],
+        "unexpectedWarnings": 0,
+        "playerSaveWrites": 0
+      },
+      {
+        "case": "archive",
+        "beat": "ch1_s4_b001",
+        "exitCode": 0,
+        "images": {
+          "ch1_s4_b001.png": {
+            "bytes": 382539,
+            "sha256": "942ea84c7043fe3d1b2a4056d03f44abdf851baf81ddf61e44eae8156748d071"
+          }
+        },
+        "environmentWarnings": [
+          "WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver."
+        ],
+        "unexpectedWarnings": 0,
+        "playerSaveWrites": 0
+      },
+      {
+        "case": "tower-before",
+        "beat": "ch5_s3_b005",
+        "exitCode": 0,
+        "images": {
+          "ch5_s3_b005.png": {
+            "bytes": 331697,
+            "sha256": "d30ccbdd0fcf36ef3c3abbb24ddd926a86482b520f9144af7ccd02d4c80ee571"
+          }
+        },
+        "environmentWarnings": [
+          "WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver."
+        ],
+        "unexpectedWarnings": 0,
+        "playerSaveWrites": 0
+      },
+      {
+        "case": "tower-lowered",
+        "beat": "ch5_s3_b006",
+        "exitCode": 0,
+        "images": {
+          "ch5_s3_b006.png": {
+            "bytes": 330925,
+            "sha256": "37ded8f2a5b4ea2134f9b500ed486c8e6ade93f076334be224c15fbb9d7acf05"
+          }
+        },
+        "environmentWarnings": [
+          "WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver."
+        ],
+        "unexpectedWarnings": 0,
+        "playerSaveWrites": 0
+      },
+      {
+        "case": "cave",
+        "beat": "ch3_s1_b001",
+        "exitCode": 0,
+        "images": {
+          "ch3_s1_b001.png": {
+            "bytes": 346909,
+            "sha256": "ce336ea087787274c4a0eec1a1b89db9ed7a039ba1b1434eee58b1c25bbe0e5d"
+          }
+        },
+        "environmentWarnings": [
+          "WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver."
+        ],
+        "unexpectedWarnings": 0,
+        "playerSaveWrites": 0
+      },
+      {
+        "case": "ending",
+        "beat": "ch5_s5_evidence",
+        "exitCode": 0,
+        "images": {
+          "ch5_s5_evidence.png": {
+            "bytes": 298760,
+            "sha256": "a5de3aaee4122187f548278835cb39161fb3c5f733d4c23daa513a0c0304681a"
+          },
+          "completion.png": {
+            "bytes": 39710,
+            "sha256": "c1b7d43bdd44846a50ffdf965cca4541866fe78d874c328f9f87afc9bb217376"
+          }
+        },
+        "environmentWarnings": [
+          "WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver."
+        ],
+        "unexpectedWarnings": 0,
+        "playerSaveWrites": 0
+      }
+    ]
+  },
+  "nativeCompilerBinding": {
+    "debugDllSha256": "1679f9d5d94a394ce023756970261c2dc60265a5a14b15ed92865405b94d35a0",
+    "debugPdbSha256": "b1e25ef73305ff2530117caa3919a725792dbda7bbb421e2e263dd872602cdf5",
+    "compilerDocuments": 89,
+    "embeddedGeneratedDocuments": 38
+  },
+  "export": {
+    "dataExportQualified": true,
+    "standaloneQualified": false,
+    "standaloneBlocker": "Matching official Godot 4.6.3 .NET Linux templates absent; no download retry or bypass.",
+    "dataArchive": {
+      "sha256": "1773761e3d1d82729f8fb07c69a2712af40235eaea32a3be5c8a02cd979f10d3",
+      "crcPassed": true,
+      "entries": 57,
+      "storySha256": "12023b4919af84d8537a4ab2804c3a9ec07180d243d53c97c3e8ff8bbc805bcf",
+      "mappedResources": [
+        {
+          "resource": "Scenes/Audio/AudioDirector.tscn",
+          "target": ".godot/exported/133200997/export-3be697fc3e22d5afe05170f9d825ae99-AudioDirector.scn"
+        },
+        {
+          "resource": "Scenes/Characters/Ada.tscn",
+          "target": ".godot/exported/133200997/export-f7a1e3204035dfe8e58640ae6e8a22b9-Ada.scn"
+        },
+        {
+          "resource": "Scenes/Characters/Nessa.tscn",
+          "target": ".godot/exported/133200997/export-051f37cdd92898ecca9906a399bee740-Nessa.scn"
+        },
+        {
+          "resource": "Scenes/Characters/Sera.tscn",
+          "target": ".godot/exported/133200997/export-19d5e88466f66ff24ea9bb3c9b688725-Sera.scn"
+        },
+        {
+          "resource": "Scenes/Characters/Tomas.tscn",
+          "target": ".godot/exported/133200997/export-7531db7d26144303ad2b7adcce47a812-Tomas.scn"
+        },
+        {
+          "resource": "Scenes/Main.tscn",
+          "target": ".godot/exported/133200997/export-a8e1520d83f25710dd4e3da8c6f32601-Main.scn"
+        },
+        {
+          "resource": "Scenes/Stages/Archive.tscn",
+          "target": ".godot/exported/133200997/export-721800fac37b38d30f20d22137a9e47a-Archive.scn"
+        },
+        {
+          "resource": "Scenes/Stages/Harbor.tscn",
+          "target": ".godot/exported/133200997/export-ffdcb2c6fd6551b0c18972f835a527e9-Harbor.scn"
+        },
+        {
+          "resource": "Scenes/Stages/KeeperHouse.tscn",
+          "target": ".godot/exported/133200997/export-6823a7f242bc4f6773d9e006b6900d52-KeeperHouse.scn"
+        },
+        {
+          "resource": "Scenes/Stages/LanternRoom.tscn",
+          "target": ".godot/exported/133200997/export-b818a892c38f109cb1eb4c542704ba1f-LanternRoom.scn"
+        },
+        {
+          "resource": "Scenes/Stages/StageDirector.tscn",
+          "target": ".godot/exported/133200997/export-ed2e80ec65041101318098822e43c7b0-StageDirector.scn"
+        },
+        {
+          "resource": "Scenes/Stages/TideCave.tscn",
+          "target": ".godot/exported/133200997/export-742f9710ec8354a58a2ea6ede5d0dee7-TideCave.scn"
+        },
+        {
+          "resource": "Scenes/UI/AudioSettingsControls.tscn",
+          "target": ".godot/exported/133200997/export-f1a8efa831dad389bb7bb8191df16ed5-AudioSettingsControls.scn"
+        },
+        {
+          "resource": "Scenes/UI/ChoiceButton.tscn",
+          "target": ".godot/exported/133200997/export-fe81e6889d36d4ba1aea5bff56dbdec4-ChoiceButton.scn"
+        },
+        {
+          "resource": "Scenes/UI/GameInterface.tscn",
+          "target": ".godot/exported/133200997/export-f612a92b6bc971c6ecee00da5bfe0ce5-GameInterface.scn"
+        },
+        {
+          "resource": "Scenes/UI/LanternwakeTheme.tres",
+          "target": ".godot/exported/133200997/export-91622f2ab7bd7b18feb4cac4c4f4c2c0-LanternwakeTheme.res"
+        },
+        {
+          "resource": "Scenes/UI/MicrophoneConsent.tscn",
+          "target": ".godot/exported/133200997/export-94dce2e199d127af61258de3ebc8fce7-MicrophoneConsent.scn"
+        },
+        {
+          "resource": "Scenes/UI/ModalWindow.tscn",
+          "target": ".godot/exported/133200997/export-748db8abb90c6852cf11fea6981af369-ModalWindow.scn"
+        }
+      ],
+      "audio": [
+        {
+          "asset": "Assets/Audio/archive.wav",
+          "generatedSha256": "d569a63f2694c7b07367a6be715103c4cd708c2169aafbdce38aeeb4132bfc34",
+          "imported": ".godot/imported/archive.wav-1a6e6521e8edcaab254f6f7eda7be510.sample"
+        },
+        {
+          "asset": "Assets/Audio/bell_release.wav",
+          "generatedSha256": "fd16e43f75b2bb4ba26529064673911689b16f21bf179938eab9c577a71dbae7",
+          "imported": ".godot/imported/bell_release.wav-d83254a7307b0e13aaf273bbdd1706a6.sample"
+        },
+        {
+          "asset": "Assets/Audio/harbor.wav",
+          "generatedSha256": "8c5fced1a5452a9d71e09f470c4e5ce55003edb54575430603f390dee2438577",
+          "imported": ".godot/imported/harbor.wav-b4db1c989abd6fc01d691e716f91efbe.sample"
+        },
+        {
+          "asset": "Assets/Audio/keeper_house.wav",
+          "generatedSha256": "282a7873d6556cce45c9e03299a536cafdaa4c82cb6b9511bf1f79b2c43dacf8",
+          "imported": ".godot/imported/keeper_house.wav-8faf810dc56dc7e26dca4fe3cb6cf5ca.sample"
+        },
+        {
+          "asset": "Assets/Audio/lantern_room.wav",
+          "generatedSha256": "5a6deb93e691460c81d034172b3edaf97451c604cf8c18b1812d8387bd85825c",
+          "imported": ".godot/imported/lantern_room.wav-c4f111a050a8dca32643d92b596c5252.sample"
+        },
+        {
+          "asset": "Assets/Audio/tide_cave.wav",
+          "generatedSha256": "9d2e3387d37bdf552611ba3f7d044259ab3bed86293a48d758bbdaa3ae2410f3",
+          "imported": ".godot/imported/tide_cave.wav-1de7cc4e3e015b0396f13ca9625f2b27.sample"
+        },
+        {
+          "asset": "Assets/Audio/watch_theme.wav",
+          "generatedSha256": "45cbd9c3cdbe1f28fbde56cb9f1ef785303ddf11fcaf1bad3d77d9630c6f37f8",
+          "imported": ".godot/imported/watch_theme.wav-645bd61031bb52acb03109be1b8721d0.sample"
+        }
+      ],
+      "headerResource": {
+        "background": "(0.1, 0.1, 0.1, 0.6)",
+        "binaryResource": "res://.godot/exported/133200997/export-f612a92b6bc971c6ecee00da5bfe0ce5-GameInterface.scn",
+        "chapterFont": 16,
+        "paddingLeft": 12,
+        "paddingTop": 3,
+        "panel": "PanelContainer",
+        "placeFont": 15
+      }
+    },
+    "officialBuildLogs": {
+      "c7de5bd23606c43e93edd77b55903475_Debug-msbuild_issues.csv": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "c7de5bd23606c43e93edd77b55903475_Debug-msbuild_log.txt": "b3048558f6cc551daafd3e182323853bfb1be033ed71f33ea20820cdb2b7a773",
+      "c7de5bd23606c43e93edd77b55903475_ExportRelease-msbuild_issues.csv": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "c7de5bd23606c43e93edd77b55903475_ExportRelease-msbuild_log.txt": "94b3379ec5baca3b33d5ac8a7d475c261e7394da02b461dcb1200aa883a95cb2"
+    }
+  },
+  "managedLibrary": {
+    "dll": "managed-publish/Lanternwake.dll",
+    "dllSha256": "ddb6ade3ab43436938a87dba5c44d4a0ad24c736438204502bf83038117faddc",
+    "pdbSha256": "ce4815aaa7f09cba5fb21f5e7eaeb4f79195464ac7cc51f1d6bbad44147052f5"
+  },
+  "auditorNegativeTests": {
+    "kind": "synthetic artifact tampering tests",
+    "checks": [
+      {
+        "case": "mismatched-pdb",
+        "rejected": true,
+        "exitCode": -6
+      },
+      {
+        "case": "tampered-compiler-source",
+        "rejected": true,
+        "exitCode": -6
+      }
+    ],
+    "ownedRejectedSnapshotRestored": true
+  },
+  "rejectedAttempts": [
+    "Header display interference; full exclusive rerun passed.",
+    "Initial audit could not retain Editor temporary publish; explicit publish added.",
+    "Export teardown EditorSettings diagnostic; rejected despite exit 0.",
+    "Initial PDB audit did not read embedded generated source; auditor corrected."
+  ],
+  "remaining": [
+    "Matching official player templates and actual standalone/clean-machine runtime.",
+    "Human editorial/emotional continuity and five-hour duration.",
+    "Physical input/hearing, accessibility tools and hardware/platform performance.",
+    "Production loaded-model/cancellation, Pumas Cohere ASR and physical microphone.",
+    "Parent integration/review/PR7 hold/merge/release."
+  ],
+  "evidenceFileSha256": {
+    "combined-release/adapter-tests.log": "a1429b4aaa46e9ea6bdb6fcf34cd34fb96575323510a140e3fe40ea87b0135b1",
+    "combined-release/auditor-negative-checks.json": "74e64034722fbde0c096967aeed192e93427b40bc77986234577f1ef84a0cbd8",
+    "combined-release/export-runner-audited.log": "4a6b113c92a0873192e6df15149872131b2174580890936418986222675cdcbb",
+    "combined-release/export-runner-final.log": "5c751588f75fd127b0e72f654487ea95f57fe93405e26936305e56e9ae795695",
+    "combined-release/export-runner-qualified.log": "09cde9b2fde2515e5bd10c615d1d20697a307b3280f1399d7df01f1cc04c5d2d",
+    "combined-release/export-runner.log": "1e51644d317d39f7c86c5cbbfa02dd14a503435aefdb215d79ebf4ea8fca68e0",
+    "combined-release/graphical-controls.log": "2a6518ef9e0f3d9dcb1e17cd494782708202bb1ca0d8f660ff79147928824715",
+    "combined-release/header-final.log": "d9910addc65be78f02eb4ec4baff4988c95a04fc76e7d011c8768c452d4c2551",
+    "combined-release/native-compiler-binding.json": "8eb16d89f3ece82d0a7f789a2a02736f0d6943858f4bd68ed364c9ba3306891d",
+    "combined-release/pdb-inspector-check.log": "64cf0518ae334f6fdaa35208d6fe6e1e75599fd7811ab0544bb1a0196969625a",
+    "combined-release/rejected-header/insert/100.png": "cce639912ab3395dc09b9b6f8b0d9e6d4e796e1296e71700b745eec2f3ef9d6e",
+    "combined-release/rejected-header/insert/native.log": "8e544774795dc7691be44bffc946bca68f0b88d0810be803985a6fa34b87bccb",
+    "combined-release/rejected-header/wide/100.png": "9fef2ea4dbfe9cadb8b8d873efade41ee9c43afcff4a586f95ba1bf629445d6a",
+    "combined-release/rejected-header/wide/125.png": "7b99ca27de72c090ed20525724612dbb65d4fba0127b2acab19e391c32868fa1",
+    "combined-release/rejected-header/wide/150.png": "051dd791ab04bc5657de7f8b40c38b6a5f6630269991cd587ec4c40f8e9dacf7",
+    "combined-release/rejected-header/wide/native.log": "98e9341d45f123e55178ccea77df8e5729ce72b122d9a355ead30826a9938e7f",
+    "combined-release/rendered-watch.log": "cd3495b64de5d559f270a4883102f62a870e171e7a48ee97cf00b168519be4ec",
+    "combined-release/restore.log": "40d104602671164ab3958225da3e1c8cabd55f0251d6df6bc911d9d5a24f44ce",
+    "combined-release/source-binding.json": "deeb258bd82b9900fd18af4f802a04779926f957baf13674f938f7f0c760cab1",
+    "combined-release/toolchain.sha256": "f8043db247a452882d41bae7da1dc4a8ae15b0cc155679054a3a6bb1582963cf",
+    "combined-release/verify.log": "aeda94c1358ad71587e6870f84a16381cc22413f6c7a0c497e7c694f5191d4a0",
+    "export/archived-header.log": "86796fd296a51de501c8440a9cf9c5ea1bc95bfab02ca320a143c5e15a71f07a",
+    "export/build-Debug.log": "e0ac7b69283c5df7cf7b69c10eae7c669a2c3b107083e2ce43709006ad713da2",
+    "export/build-ExportDebug.log": "0d664b2e8c0729ade147ada9a613657494a7b4b606aaef4e4f354398609f6c36",
+    "export/build-ExportRelease.log": "e912df79fbb14b73912f6c610d3047c72f0ad31ace819ae99f2ec02208594c5a",
+    "export/compiler-binding.log": "7cb8f0418b6c47f57a3326e6ee54f37b51b6e0cca1305b0220021ac0a153babb",
+    "export/editor-build.log": "6b078964b1105e88c405af832a001fe802c897d09d2e30d6e0c08daed05aeee6",
+    "export/export-pack.log": "a9e982750e2eb1e4d1c1cfb9941a84f2b61bc2a15d4dc48d0fad448fdbd06ec3",
+    "export/import.log": "98139c46966cebdf02c298a7e32c05424b1f2d5da40c6ac3c93ad35428146b9f",
+    "export/lanternwake-data.zip": "1773761e3d1d82729f8fb07c69a2712af40235eaea32a3be5c8a02cd979f10d3",
+    "export/managed-publish/GodotSharp.dll": "2142e62894176d7340f50581f8b2fe84e36ae64e1a85f1b2bd7737a7e8a5c8ba",
+    "export/managed-publish/Lanternwake.deps.json": "3adc6d0a5cb0c0b353f5c68e357982cd772f82e9319816073694a0d0fc052ffd",
+    "export/managed-publish/Lanternwake.dll": "ddb6ade3ab43436938a87dba5c44d4a0ad24c736438204502bf83038117faddc",
+    "export/managed-publish/Lanternwake.pdb": "ce4815aaa7f09cba5fb21f5e7eaeb4f79195464ac7cc51f1d6bbad44147052f5",
+    "export/managed-publish/Lanternwake.runtimeconfig.json": "46c986e4f45508f40c79a4042fe8eac8a6b6574199a85884ed81c33bb18af092",
+    "export/managed-publish/Microsoft.CSharp.dll": "00fcf8acbc2b4afbc7331992c92bb5cf3c27c4f2e746726a55f1790bf78431b7",
+    "export/managed-publish/Microsoft.VisualBasic.Core.dll": "94d660bf5376c94cc5348c4e11100c2395e786640c590f6fd4748b7a42c1acde",
+    "export/managed-publish/Microsoft.VisualBasic.dll": "d7e8dbea11eafc51fc57bf470de987df613b2e5df2dd1b0bc5b677d2205d907d",
+    "export/managed-publish/Microsoft.Win32.Primitives.dll": "ec2352bd0e3568ef633148d0d77d366ed34994dd544ff755e84fd86be57926d2",
+    "export/managed-publish/Microsoft.Win32.Registry.dll": "bc52d87b8cb3ef76d769d8e442b5f8fc9ca9092de4dfa363a18e1a85d4c93cab",
+    "export/managed-publish/System.AppContext.dll": "bd7a0197cd2f989bcea93be93cc17d89cc9c27cda11f4c8d70b0342c1a3bfe0d",
+    "export/managed-publish/System.Buffers.dll": "367644f459c7bc83b53bdb4c1dabfd6b02099c21d9f399de7ef680185cbdf000",
+    "export/managed-publish/System.Collections.Concurrent.dll": "f698fee80eed2f1513d2399bbb6385f61ff4a9e5af2f9379a14d939747eef1d8",
+    "export/managed-publish/System.Collections.Immutable.dll": "f43f9ae9348e2d5b405f5261811d46f23bb32095435b18ca5c9d45c80c132898",
+    "export/managed-publish/System.Collections.NonGeneric.dll": "3e85673a2d7c43da4d69b6a781fda09031193ee8e71e0891375e6868bdea737f",
+    "export/managed-publish/System.Collections.Specialized.dll": "9c75be8b20a380d55f59bfb7aa6fa1b29b33fa76f5a32047ca987d7764188bc8",
+    "export/managed-publish/System.Collections.dll": "0ad5731bfd4414c71c6c3f345d4045d1d2fcaef63500c18d864793b5ce023195",
+    "export/managed-publish/System.ComponentModel.Annotations.dll": "57ebf81eb8abdbe7441d70983a5896361a5f8a305c58292347ae60c0d99e054e",
+    "export/managed-publish/System.ComponentModel.DataAnnotations.dll": "bea1bc469d42e06d44a3f09a7bbbbe1a5fdecd6e17a31881678e28c9959a7018",
+    "export/managed-publish/System.ComponentModel.EventBasedAsync.dll": "7f7d1016c25b255fe7a1d2799ea611f72202b2a8aa84ad9a3126ea2f6e43a89b",
+    "export/managed-publish/System.ComponentModel.Primitives.dll": "c0580e173dc8345836547fc69749b014a49bbebb4e8f991a5aba7a5cdbe928ae",
+    "export/managed-publish/System.ComponentModel.TypeConverter.dll": "56115ccd4a47500576e1b421d7faf0d0aa5cf34838b7493dd1d1b7478dedb102",
+    "export/managed-publish/System.ComponentModel.dll": "0802be8ebcb700f302ad596df30ec921cfee0c87e2b8b41003f1924ba35907e1",
+    "export/managed-publish/System.Configuration.dll": "ec935feab8b9444b5a146213fc164d20563cf3db4c3047590755dac3a1f4fa13",
+    "export/managed-publish/System.Console.dll": "c87f3b4a2b9971c2c86d4b9a7562ed92c3e37c32457fb1d7012838bdbf331977",
+    "export/managed-publish/System.Core.dll": "ff4dddcdee367fbf1f1d46f4319fff2ba26f3a00dc1e2e6d9642c4af047521b4",
+    "export/managed-publish/System.Data.Common.dll": "6e94b48eafa26d52d4f387ff70370119489e74eb5c0ba6e39a16cc68d30be7f3",
+    "export/managed-publish/System.Data.DataSetExtensions.dll": "c05418c67062c004965e0be42a9d4881d1c2080bf9f2bdf9c5b0d10bc5a071be",
+    "export/managed-publish/System.Data.dll": "ec64258b68f6e7301c8383b41ea6deb618a9e708ca9d200c14c713b28f8de45f",
+    "export/managed-publish/System.Diagnostics.Contracts.dll": "c5a646dbeeab0014a7a77347c63694543276db166cde69c9dd0cae931fa3a53d",
+    "export/managed-publish/System.Diagnostics.Debug.dll": "49ce5de3f912e1b7fa3def203bb320fbda1ed2d33b39923436af7783e6d6d713",
+    "export/managed-publish/System.Diagnostics.DiagnosticSource.dll": "f6bc6ce6fcf2ddaea2dadbabb9b82b487778526fd18b0f70cbc07b5293321fee",
+    "export/managed-publish/System.Diagnostics.FileVersionInfo.dll": "5fe99a828e72217eab55bff55b4d94959140a1ec703a642b060d1700dd4a9311",
+    "export/managed-publish/System.Diagnostics.Process.dll": "4ec059d6d76a5c60807ad6079df8c87049e82c65ef38061969660e23e3fa2382",
+    "export/managed-publish/System.Diagnostics.StackTrace.dll": "84880c229f36fdec3a573fa76cf9caa014b794686ce2ea78015161e1559c0ff5",
+    "export/managed-publish/System.Diagnostics.TextWriterTraceListener.dll": "edb117d3e95e545c253cc99ad363dca1cd170e73832d9b834d2311c2ae5d9e5a",
+    "export/managed-publish/System.Diagnostics.Tools.dll": "984222021597d7d1dcf1048ee250c53fec9e40eed439fac801ca1f29f7ac4ac6",
+    "export/managed-publish/System.Diagnostics.TraceSource.dll": "a5bf7f7d475b206d4d980aa3b57e33c340e380048d1c8eef2828d6092cafd0ee",
+    "export/managed-publish/System.Diagnostics.Tracing.dll": "7a1f9ad08fb8b3fe970d648ad37d312dd736b888a3f289c33d5dd62cae52c080",
+    "export/managed-publish/System.Drawing.Primitives.dll": "969d8e8ba00181998dd3c8e9ec2828824967266d25129edbe5f81c65d1044867",
+    "export/managed-publish/System.Drawing.dll": "2abc533c5e99cf2cbb6d8abe88430cf14faa1a09d2a06f8bcd3de966a4ef457b",
+    "export/managed-publish/System.Dynamic.Runtime.dll": "ad6ae8fd21c56db2caa68047682a718ef2816b1396917359d1c4c57a23d801b4",
+    "export/managed-publish/System.Formats.Asn1.dll": "011cfc4a04faef058332721b97c3beab2b9b3743b05764ad21bc06c87dbc30e7",
+    "export/managed-publish/System.Formats.Tar.dll": "aec2249fd9657dfd368f394df51a777e17458ef388cdec45c699e44367994a2a",
+    "export/managed-publish/System.Globalization.Calendars.dll": "ad9fad5c59a4a427c090e009ae541d2402635087486744f8112bb9b87ba739d9",
+    "export/managed-publish/System.Globalization.Extensions.dll": "086de1d6a41e525aab46012c8b6fc71c8bf5130f4499e8cd5bb3b6d9193f7ce1",
+    "export/managed-publish/System.Globalization.dll": "4fe9254e3ccac282ba74c618f7f200f8fa7c25d10d988bdcc1cbdf98bd61f696",
+    "export/managed-publish/System.IO.Compression.Brotli.dll": "77599a66827f23ab81ddaa1fdf0bc872fb500d231287cc8a7c7ffc02520c95ac",
+    "export/managed-publish/System.IO.Compression.FileSystem.dll": "0c35b228d9fab75ea918041500ac6147d67d96b838fafef90f474ab89f85725a",
+    "export/managed-publish/System.IO.Compression.ZipFile.dll": "af94fe41e54d300a73e11388322f478ab1e57196290c26a40de4595013da0168",
+    "export/managed-publish/System.IO.Compression.dll": "7cdb7d92dbbd3e5116dea80a377760e22cd1e1d55413b4faaf13fd1d7d68c090",
+    "export/managed-publish/System.IO.FileSystem.AccessControl.dll": "b03931f9bd8a79efdb23d9e3f3ac5a14a557e0b705c49fc6156c81a11871b25d",
+    "export/managed-publish/System.IO.FileSystem.DriveInfo.dll": "7f97ee675998f732e2643607d0196de2b383418eb1a550c3809c78d4cc346260",
+    "export/managed-publish/System.IO.FileSystem.Primitives.dll": "0c40ae621c45ca4d0e70e11ff1cec99de5f52d16ddf0558787e7b2f48340dc51",
+    "export/managed-publish/System.IO.FileSystem.Watcher.dll": "ccd0b9d2ff7eb9788620acb92e302784914997643e2c86457b6c93b9747fc554",
+    "export/managed-publish/System.IO.FileSystem.dll": "945b10dc0db9b01c63f5c5f6541699ac5fede142b78088961dd994943790cfc9",
+    "export/managed-publish/System.IO.IsolatedStorage.dll": "97a123bdcb7771111d2a5b822a08054e462f466a9babf114ec761d27cbf5f9d4",
+    "export/managed-publish/System.IO.MemoryMappedFiles.dll": "0e40df752d8f873c1395b902164dcef18609b16ce3ffec9d00d4caca212a60e8",
+    "export/managed-publish/System.IO.Pipes.AccessControl.dll": "f9f4e28445b5e912534bbee56c5333d312e22849fdbf4ef26a753b43078411a5",
+    "export/managed-publish/System.IO.Pipes.dll": "2662aadf930bd6e4d43fb0bd83e510135a7f75775c903436afdbdcc8cbfb03c3",
+    "export/managed-publish/System.IO.UnmanagedMemoryStream.dll": "876168007cb1a1899c6851637baf48cdc23c8c17fcc221a08ecd0c59dde01bda",
+    "export/managed-publish/System.IO.dll": "ff8ac4f446b421f0724f1b983a5b8840ba9ed480d5f4e20bbd1262dd89884f4c",
+    "export/managed-publish/System.Linq.Expressions.dll": "5a789a1c87711d4f93f641c21d22264cfc57e0cc811685451102368c4449ce1a",
+    "export/managed-publish/System.Linq.Parallel.dll": "ea4348a6290d61bb221ad8462fca1c2f37e80b9134dc9aeeb411d02a02046734",
+    "export/managed-publish/System.Linq.Queryable.dll": "6d6eb2f5bc984a1f63ea837d46c79389994cd3206ba6187f625fbe97cd9b316e",
+    "export/managed-publish/System.Linq.dll": "e902fd5e69fa954ecf656c0fa2e671da2d45be74779c0a6e87cb3ef754a0196f",
+    "export/managed-publish/System.Memory.dll": "5f72614c3a94863e4ee17c8696a87d640fafa5b1f8c3957966cf8f8aff68caf8",
+    "export/managed-publish/System.Net.Http.Json.dll": "cdee9afb9a423c56b5d8d007bc44c067acf3369fde3b54c2beed2c1322a9098d",
+    "export/managed-publish/System.Net.Http.dll": "6f1904aff29960e76e67441f57cdc825fd7f31f2127d778ef7472050338a4bf8",
+    "export/managed-publish/System.Net.HttpListener.dll": "545351cb52f9aa133ba3a2860e3afa294e279974b4225705b5fa5ec683ed3feb",
+    "export/managed-publish/System.Net.Mail.dll": "6f76a007d830d6ab9e1431252dda277634363bd53a929ad603b825da44ec7e51",
+    "export/managed-publish/System.Net.NameResolution.dll": "67e98761bc798f473e89f3ee14bcb549c7007b84df58021fdf7fc275fed2a10d",
+    "export/managed-publish/System.Net.NetworkInformation.dll": "8c6e63a103feb19c12e27d68b4c4bf8076605c91e7617472c03ae97def3a00ef",
+    "export/managed-publish/System.Net.Ping.dll": "ae15c28ce1fd4b2bd24428cd8353c37200b1768f0f2387c20138129e2609a042",
+    "export/managed-publish/System.Net.Primitives.dll": "a0fab941908e55eb9d9e00b5cb61066d2723610ffa5c206e05dc8dcd9dbd155e",
+    "export/managed-publish/System.Net.Quic.dll": "064254dc2b5f85f09f6b97c8d9ee1487c185a52fa53ec911ef7abcb8838e1e5d",
+    "export/managed-publish/System.Net.Requests.dll": "88aaee549b0c363c381d830c259dc7a8ed63be6e8f9e3445d33a45d39695639e",
+    "export/managed-publish/System.Net.Security.dll": "01d23647211b1957ad8aafb9fc62cd28bde67ff4a4338511351f67d0dff84dff",
+    "export/managed-publish/System.Net.ServicePoint.dll": "4707c433643ba0861597f6901ebfaf1ca66f97903f3895c79895a71465d03581",
+    "export/managed-publish/System.Net.Sockets.dll": "24cbb36f6eae0a67c2e164fb53064ffaf910724271eb5c0f20c231701059860a",
+    "export/managed-publish/System.Net.WebClient.dll": "b73527b2958af787197ee4596bf34d71a3c82cf523a500fe5c0095b1d053621c",
+    "export/managed-publish/System.Net.WebHeaderCollection.dll": "c71f2edab7fd8732a572fbaa488a94760dc9b99c6f069251a82a77d17227cc0b",
+    "export/managed-publish/System.Net.WebProxy.dll": "3de13774eab479907b253b2e250768cc3bf9d1987c23f861afa9205985a032f4",
+    "export/managed-publish/System.Net.WebSockets.Client.dll": "41da4ce14aa9a1f5dbdd0273586418c7291f8176c3eff8986ee4995e38da9163",
+    "export/managed-publish/System.Net.WebSockets.dll": "f62a523fd015d31efde377e458d5e27bff55266807ce654107ffa4a66b6af5b5",
+    "export/managed-publish/System.Net.dll": "7881ca9fcad3865732c05b0d26f10a3c7823031160885ab8361cecea1822e5dd",
+    "export/managed-publish/System.Numerics.Vectors.dll": "b169daf3be3c4a3af5af6ff24889cf18939378187aeaacd240b2bb248cb0c41d",
+    "export/managed-publish/System.Numerics.dll": "cdbd4b1f668f4b367bdf4882c0450497768290243490ecf471c0d16bc023c2b2",
+    "export/managed-publish/System.ObjectModel.dll": "f8cfae07051f92318d5e1bf4e8666543ce1a42e60d40ef812f94bfd559248c97",
+    "export/managed-publish/System.Private.CoreLib.dll": "e41147aa5aa53a311a77407dc1b2eb381ef75ff769596b4cc1dd08573f7d1300",
+    "export/managed-publish/System.Private.DataContractSerialization.dll": "99222b850b34d6e43ad238bc2b6f96f22860515de615505975d15d408f0532c7",
+    "export/managed-publish/System.Private.Uri.dll": "67c0dea568f773fae4ce5e31f3522116e4166eef4dd0504fee3f017b8b937e04",
+    "export/managed-publish/System.Private.Xml.Linq.dll": "15002fac0a729f257fdbfda5f4867d2b8356b51f2c1f1763c4f4fd0e001ef191",
+    "export/managed-publish/System.Private.Xml.dll": "3eed79c1a113c0279161a4ee96f9c353c30fa6aeb643e366038b9faf2f4a1b1a",
+    "export/managed-publish/System.Reflection.DispatchProxy.dll": "18f72b2cd386ee3cc7164da700df65ee75a61c4ab0ce4352121a77b0a34fbc8e",
+    "export/managed-publish/System.Reflection.Emit.ILGeneration.dll": "67d7d7cee289857123bda3be19ce437bc7c85763cf7405d7cd79d8aabd874a04",
+    "export/managed-publish/System.Reflection.Emit.Lightweight.dll": "24f89da6025b06609250c9bf32cccabadd906712296b4e21d6f7681f7eee6cc6",
+    "export/managed-publish/System.Reflection.Emit.dll": "768b299f6bbc0ff5e6404ba22b079cc6fd2f3693ae88d3ec18e95f559349931b",
+    "export/managed-publish/System.Reflection.Extensions.dll": "59a444c0dc76804be6369042ed7311d09119e7b1908df94f3acc54d160720bee",
+    "export/managed-publish/System.Reflection.Metadata.dll": "cd600af0c13eeaeac72b966f6a9be89ca5db163a61e68fa77f4e111ae914dfd9",
+    "export/managed-publish/System.Reflection.Primitives.dll": "9b73be37e864d45be3b92c38df93a6dcc5dbfb1627cadaa18087ac0fc6505c54",
+    "export/managed-publish/System.Reflection.TypeExtensions.dll": "5343727ced3ec942b7a5f017f72131649ca929cc77bfd45f3601dccfe93ea635",
+    "export/managed-publish/System.Reflection.dll": "49f75b0fd9e3637b6602ec94ad00fd699f409741ed7c02a2ac47808cb0a26d11",
+    "export/managed-publish/System.Resources.Reader.dll": "7bf934e0ca7dba2a0ac9e67cc0dda8d889bda493908403e6d3344d98ba4ffe58",
+    "export/managed-publish/System.Resources.ResourceManager.dll": "74d1a2f15bb114b97c0eca4c8064c8ec7554b680e89391e7593f305e6eba2531",
+    "export/managed-publish/System.Resources.Writer.dll": "bb33daa5f433eb8495d631b5fcba849fd76e1bf4ef77a09c9387ecbac06913ff",
+    "export/managed-publish/System.Runtime.CompilerServices.Unsafe.dll": "58283b6b703f49b2f5b2a85b1eb9a1fb036ee63ea5c86c61b50d066dd3c20c50",
+    "export/managed-publish/System.Runtime.CompilerServices.VisualC.dll": "d59762b432b794d2421fd6c6a3cdb64de77ae087ea283d7097be7f672fd094e3",
+    "export/managed-publish/System.Runtime.Extensions.dll": "753d0afa7637e09853cb10c9f37f517af65b1b4014f1ebd411fcfee586bbf47f",
+    "export/managed-publish/System.Runtime.Handles.dll": "d63555cc6fabdc9bad5183f40b77ceb8af1b20fde51ed16ec7bb6f820197d4d0",
+    "export/managed-publish/System.Runtime.InteropServices.JavaScript.dll": "55925654f37467720665bcb9544195a06b62de38b17c7fbca8e9a89493fa9452",
+    "export/managed-publish/System.Runtime.InteropServices.RuntimeInformation.dll": "dbe2142566c6c107aac159e2cd93b097d0095a3d964639dd7636bcfaf9b9e817",
+    "export/managed-publish/System.Runtime.InteropServices.dll": "bb24720da300be041bf4e65e2e33c2955ff0526870aefe3525989a6c4c1a81e4",
+    "export/managed-publish/System.Runtime.Intrinsics.dll": "5bb1a5eeafb61b19c89479a46c3a58cf77be819041af0977ea575a6449ab7aa1",
+    "export/managed-publish/System.Runtime.Loader.dll": "bd50a001cef6782ee430755c84502727ebb20868e628c9b560131cc6d52a03c1",
+    "export/managed-publish/System.Runtime.Numerics.dll": "d6b5fc665aaa6623510bae06a3ef9d21803a36c34248fb45dbcdd58bd3013f31",
+    "export/managed-publish/System.Runtime.Serialization.Formatters.dll": "d21fa3b62a2ce76d40865f1714605377aa1930853792ad8b80aee6adcd3a994c",
+    "export/managed-publish/System.Runtime.Serialization.Json.dll": "a0fee3828ed7d6fb8fbcd3ed06e4aa5df42a4d3722edac5998eae6c11a721a27",
+    "export/managed-publish/System.Runtime.Serialization.Primitives.dll": "7a6557c559852b61b53961206b86015e89b9e5b420e8899bdc6a61a030cc6132",
+    "export/managed-publish/System.Runtime.Serialization.Xml.dll": "48edefb449541359d1e94163a36d83c62478729b5759a8f06caa00e3644972f0",
+    "export/managed-publish/System.Runtime.Serialization.dll": "9a841649c708fb82b3c03cf146272eda12c8b4403b831a2ece616df318855e60",
+    "export/managed-publish/System.Runtime.dll": "7d470f0a0797a08f49b2ee0b40ad2b89335941b3ba6d0ce0b16a8e57a6245e08",
+    "export/managed-publish/System.Security.AccessControl.dll": "ca6f598d64d8370600327f64239a18daedab8247aec0d2b20d6bc1de9e0505d0",
+    "export/managed-publish/System.Security.Claims.dll": "06fb70623d7b51138352a820c7cb93ef392b4a040de90b3852d832e230bc3b3b",
+    "export/managed-publish/System.Security.Cryptography.Algorithms.dll": "c492a01f39e833d95d4e64094e19a547ebccc4f4d04fd96ad0384dc0fa695b79",
+    "export/managed-publish/System.Security.Cryptography.Cng.dll": "ab1b79ed8d48aea316ec9139032e291dc63851129ca6c3227b2afe73fdc98d44",
+    "export/managed-publish/System.Security.Cryptography.Csp.dll": "b20aa6a9334762df0a2e13c6487d30f14216e15fef4fdb50913f1ba906cfd2e2",
+    "export/managed-publish/System.Security.Cryptography.Encoding.dll": "c845081b54979ac813df7513ed04b4c7da443f432d14d57656e1ca7ea159c76c",
+    "export/managed-publish/System.Security.Cryptography.OpenSsl.dll": "e91f4f017b7588aadb6931de7b8ce82d56b193a384575967b44a597b08dec537",
+    "export/managed-publish/System.Security.Cryptography.Primitives.dll": "92991527caa9b5f5e125d84ac150eef2acb595694771677b3ad642f6b98a5d2c",
+    "export/managed-publish/System.Security.Cryptography.X509Certificates.dll": "8b18f808ba4e28899ae22d370be10365cd37315ba0e3c9eef023ac703b4ef825",
+    "export/managed-publish/System.Security.Cryptography.dll": "17a878718fc4f36826cfc5b0e2e6b63c414a0344d962deed47c286b9674f4a96",
+    "export/managed-publish/System.Security.Principal.Windows.dll": "4abfcb566c88bee81666fe30b5a91a4be72526aae5f8f346a1a9db106be04965",
+    "export/managed-publish/System.Security.Principal.dll": "77473a74768ac416637e4e7fd1a6b5c4e15c44839ce0fab974cebba08adf06e8",
+    "export/managed-publish/System.Security.SecureString.dll": "a1837b1c05eedf35f37f62bcb1bfe7070ab464eff4353f8aaa11fa7f4969e69f",
+    "export/managed-publish/System.Security.dll": "d2f8cc1dbbb7a58b84b5f4fef4850e9068a1c07950c12ea28303f21a19438f64",
+    "export/managed-publish/System.ServiceModel.Web.dll": "62e62ad6f5926dab40e845e388fe46eefbb860e23b70f0c15db8047035ef1b4e",
+    "export/managed-publish/System.ServiceProcess.dll": "c7d1741b8339a1edc53fd3a7addf1cb3be0c79623303f6e3c3d38a9bee257c9a",
+    "export/managed-publish/System.Text.Encoding.CodePages.dll": "a6824e995adea6931f5e6552a44a365d0e4a07c576cfdb1a8f2c4ac07448e1b1",
+    "export/managed-publish/System.Text.Encoding.Extensions.dll": "783afc6484991ef464f366450239be133594122eab2cb90c288d3e11e830d2a5",
+    "export/managed-publish/System.Text.Encoding.dll": "e102ba06ea75c81b8ed0b3267a8ace594948978906a8e57bbed48af1ab6fb4cb",
+    "export/managed-publish/System.Text.Encodings.Web.dll": "65df69f26dc75fe211567811f4ddd92e9727f92ffeee35c8649b5e0442e725b1",
+    "export/managed-publish/System.Text.Json.dll": "f56cc5646215469819b79ce62fd8553e0a7abee58b9cadf0c27c4c5eea8d3c02",
+    "export/managed-publish/System.Text.RegularExpressions.dll": "93b50431b918b05ef15d5194164f10ed5e57aae260de551af7188a4cfd473a19",
+    "export/managed-publish/System.Threading.Channels.dll": "8f2cbda232bf3fff665d9fcd927064dafe6f3b46657a36f577968328f06cccbf",
+    "export/managed-publish/System.Threading.Overlapped.dll": "94a4ad69520902da80f42a233893df32a2f5d0d4637d0d9f5317d5ae4fc9189d",
+    "export/managed-publish/System.Threading.Tasks.Dataflow.dll": "939d40d26665d1fd22cb4d10e9808b8f4d648b0da2c7aca807c2302592b28cbc",
+    "export/managed-publish/System.Threading.Tasks.Extensions.dll": "6a1cc96bf7991ce31522a83fa639ddb9bdb9d79358709b4fa5e69c3ee8d71c02",
+    "export/managed-publish/System.Threading.Tasks.Parallel.dll": "3c99e3e04aa198f16206ab5d0f66991ccadcd480d7c725ffea0e839947164169",
+    "export/managed-publish/System.Threading.Tasks.dll": "087ea74ba3586b8b06103b1eb9444350147d44d9c4a4e0430618468be41478a1",
+    "export/managed-publish/System.Threading.Thread.dll": "bbe88c244dec7cf82991ed038fd128e2be6a7e1501e32b63f2fa4779f59e091b",
+    "export/managed-publish/System.Threading.ThreadPool.dll": "edf044cff7e518b746dd7090c1c00d5dee8162930d350c335fad08a4502520d7",
+    "export/managed-publish/System.Threading.Timer.dll": "33bdbb5c6d9a66d5bbfe3d166582f916077d465703e720805bbfb10d502897bd",
+    "export/managed-publish/System.Threading.dll": "cc2bb026c413b0fff62a6911fb35420b32ec2fd961d95bbedb88218be8c20846",
+    "export/managed-publish/System.Transactions.Local.dll": "ef0b712a8c8370d989e1585840c4db3ec881111117bfcb9981754da01b3f0f65",
+    "export/managed-publish/System.Transactions.dll": "5c313436a76f856a535054e8b22bb46d72dc49a1c50f1172b0df14127ca751c8",
+    "export/managed-publish/System.ValueTuple.dll": "ecc9c29e3b6dcb1098edb7a92bae0c03088d13d4d09b739bbf0bc751d34fd538",
+    "export/managed-publish/System.Web.HttpUtility.dll": "3c4d451a2185bb134cf29d1326d6ebe3860313eb5375fee8f94655c2301c329c",
+    "export/managed-publish/System.Web.dll": "c5bf3af32792570870af2fe7bafca63022554a6a41c04494058443a3f7e250ff",
+    "export/managed-publish/System.Windows.dll": "cd9a109732177ad4c22556f2508b168561f090a817ca2f408d507b00bedcb36b",
+    "export/managed-publish/System.Xml.Linq.dll": "61ee7fd8f753bac8bdf49fc1c235dc024b8d12b2c2b5c9bdce3e92e219023632",
+    "export/managed-publish/System.Xml.ReaderWriter.dll": "4ce1deb758a14b9899d803b37bb63ef7c69bf3f98f71cbe4446a86c0a18bc906",
+    "export/managed-publish/System.Xml.Serialization.dll": "e08e21ebbe2cc3e35e2a1c114abc7d95f76586de4ad177bf4ad4ba0bc5efb2b9",
+    "export/managed-publish/System.Xml.XDocument.dll": "7d40bf58834ce79dc3eda98dd087babebb47cc64483bd98361f3fefda6d5ccd3",
+    "export/managed-publish/System.Xml.XPath.XDocument.dll": "1bc0bc94d655d8ecdbd0b7c7a172221d7f4f8dd49d65e9b19cf7a8e543271c82",
+    "export/managed-publish/System.Xml.XPath.dll": "b66bfc0d7f81cedd1b77612be82c3d6aa92bf5dc3e270ef2c83329f1d9c43b50",
+    "export/managed-publish/System.Xml.XmlDocument.dll": "772f060ac93d45ff97e497a3d3ffc61d3953826fae56fc55667109cd046d4704",
+    "export/managed-publish/System.Xml.XmlSerializer.dll": "112fb7ac1d141f420b874a81981d123eae63de02e3844d29c56bd788829a6311",
+    "export/managed-publish/System.Xml.dll": "fc86f5ff37fdbc2bbe7c8e61e093f29758f04617fad0d09c1c0b06e2aacf7f05",
+    "export/managed-publish/System.dll": "282ce1d7cabefa4fe8181afbc4dc4e1caf6eec2de4c66f6eb04afa042fa16e6b",
+    "export/managed-publish/WindowsBase.dll": "2fae711304fdee6a3afa1acee0d069d95f994a4c45c5145b86e83efa42fd8c5b",
+    "export/managed-publish/createdump": "a8a246cadd7e3c37fd231e20bc96631aa65866afb748f6534f237a46d8882e7c",
+    "export/managed-publish/libSystem.Globalization.Native.so": "405a332ba5c52538bf9644aada787ea22f5ee9761ec1363b4209d8589bada2ea",
+    "export/managed-publish/libSystem.IO.Compression.Native.so": "05caac4d54c2447a9ede17477960120447f3bdd93517111b6ecab06a62d89caa",
+    "export/managed-publish/libSystem.Native.so": "0367d630ff3c8704e323587fd7ea06eeff425b55c6a19aa5186783cc643181ea",
+    "export/managed-publish/libSystem.Net.Security.Native.so": "210dfeb716d960509e11c4c0f157bd1015d192bb272add6fd7a8db03aced2e64",
+    "export/managed-publish/libSystem.Security.Cryptography.Native.OpenSsl.so": "62b4613917f97e3d96a416b1af9885ce5b7ad2d4668b42c23b9d63eeb33f7ea5",
+    "export/managed-publish/libclrgc.so": "962ed16c27a704f0c7e55b480417ca46ea38b591dfe028f0b34f4929273386b6",
+    "export/managed-publish/libclrjit.so": "cbc0ae446c9232cc4b719252220d71746a59aedd7f2c8ea01fdc174bf6bfc249",
+    "export/managed-publish/libcoreclr.so": "5f487529bdbc3899300ab3f0d511de0a2aa512c1d884a985614b98cff3ec9f93",
+    "export/managed-publish/libcoreclrtraceptprovider.so": "b02ea6a730cabe45803006b078a8fba6b0a1a3c5fe24a08f74d1cc18a8b59401",
+    "export/managed-publish/libhostfxr.so": "bc982af757c215cf1feeee1df99ec752a23308b1c92d36cabd8f3e787ba7ced6",
+    "export/managed-publish/libhostpolicy.so": "b32ecd0d4aefb81bdc079a8cdbc46f3428ce68a4062d4c245f421f20028c37f7",
+    "export/managed-publish/libmscordaccore.so": "eae73c83fcfa82a6958e4d61e840fd1db72cee27450d1d9cf67426db864bca21",
+    "export/managed-publish/libmscordbi.so": "ee37a7b8dc7649c6fd7f34e0183341f408f644e1aa4d7aa5cb53c38092e2e24e",
+    "export/managed-publish/mscorlib.dll": "a4dbe7a16743574bceaba986e56189a03a6534c3b937b236b8463202c71fcc75",
+    "export/managed-publish/netstandard.dll": "d8926332796f92f0835884e807e1584ca9ccdac662b1d70ab5b42e140c1f54be",
+    "export/official-build-logs/c7de5bd23606c43e93edd77b55903475_Debug-msbuild_issues.csv": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "export/official-build-logs/c7de5bd23606c43e93edd77b55903475_Debug-msbuild_log.txt": "b3048558f6cc551daafd3e182323853bfb1be033ed71f33ea20820cdb2b7a773",
+    "export/official-build-logs/c7de5bd23606c43e93edd77b55903475_ExportRelease-msbuild_issues.csv": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "export/official-build-logs/c7de5bd23606c43e93edd77b55903475_ExportRelease-msbuild_log.txt": "94b3379ec5baca3b33d5ac8a7d475c261e7394da02b461dcb1200aa883a95cb2",
+    "export/receipt.json": "de1b9bda9e6076efcdabf4abdf8ade9935eea43c59676c969e0f3b53dced4a87",
+    "export/restore.log": "5e711542c3fdde23c9f8319252b4d1e1a72acfff66f4d591a43f304f208a6278",
+    "export/retained-publish.log": "f39f03df1e22dcb6c4b993205e1dcdd3b9dc7f698840924b613165583a5f2b39",
+    "export/runtime-restore.log": "ab819add9ef682128e9a1881c142ea24cfae5a4d1d3d5084402fd901af41c4be",
+    "export/setup.log": "ca16be5fb3731da7c554db2a041bce1cbb161526f16f2efb9642a590f5e31def",
+    "export/source.tar": "368e10a0d9419dacb674bcb0c8a69459469d2dcb858d23acd26299669ab5fd77",
+    "export/standalone-attempt.log": "d8047dd53461c8ef70a31a2bc6c6e5c8ae1e300555e579d9a88d6230efcf82ed",
+    "graphical-long-session/chapter-1.log": "039b21b8e374ffb0ad281be63e8df3a25b10f98e267adfacace2dc237017df0a",
+    "graphical-long-session/chapter-2.log": "45cebef65a49285276f3fa5da728fd9a1ff0eda3cba2ebf737ea45b82716f54a",
+    "graphical-long-session/chapter-3.log": "41375cd4dd3679444ced25244722c5c78015ebbdcfd308bfbc5a24376ca13112",
+    "graphical-long-session/chapter-4.log": "8bf52a69faf379ffa8fd6b59f82c284789ef69fd46b9fbad9303f4dbdd0701ad",
+    "graphical-long-session/chapter-5.log": "b376c92b8b59da94c6867ee53f07f504f038b32508676972fdcb779eab26b07f",
+    "graphical-long-session/chapter-6.log": "32e26fe3189eb4a9e957fe30dbfe051d374c4536a8198ca6391d62309634bb48",
+    "graphical-long-session/summary.json": "fa73c70e3a223efd8db0637b9a67556e6b5867f7a3873c9bc8ca30a5e1d8f083",
+    "graphical-native/archive/ch1_s4_b001.png": "942ea84c7043fe3d1b2a4056d03f44abdf851baf81ddf61e44eae8156748d071",
+    "graphical-native/archive/native.log": "03ad6f4324758a7047715b6b530c257a32680c2374750b94e8c2fd46f165ab83",
+    "graphical-native/cave/ch3_s1_b001.png": "ce336ea087787274c4a0eec1a1b89db9ed7a039ba1b1434eee58b1c25bbe0e5d",
+    "graphical-native/cave/native.log": "03ad6f4324758a7047715b6b530c257a32680c2374750b94e8c2fd46f165ab83",
+    "graphical-native/conversation/authored-fallback.png": "11c0683ce7a707f4943379e295f5a4ff3597922d95cd2840755bb6b2007cd61a",
+    "graphical-native/conversation/ch1_s1_b021.png": "5ab3ea235a1152e0d2c50522abe790df3ae87e2bda57ab4500ac45a21bc12e08",
+    "graphical-native/conversation/editable-conversation.png": "7a392f2369d6359081e09986ff9cb612fdabbc7f163bcba0f300cc4e34fc7500",
+    "graphical-native/conversation/native.log": "03ad6f4324758a7047715b6b530c257a32680c2374750b94e8c2fd46f165ab83",
+    "graphical-native/conversation/returned-passage.png": "46a8a2e3c2ee2fafe02bb0a69d30aa7d51b64b66843a347732af25daac1d2d23",
+    "graphical-native/ending/ch5_s5_evidence.png": "a5de3aaee4122187f548278835cb39161fb3c5f733d4c23daa513a0c0304681a",
+    "graphical-native/ending/completion.png": "c1b7d43bdd44846a50ffdf965cca4541866fe78d874c328f9f87afc9bb217376",
+    "graphical-native/ending/native.log": "03ad6f4324758a7047715b6b530c257a32680c2374750b94e8c2fd46f165ab83",
+    "graphical-native/harbor/ch1_s1_b001.png": "1c879ef048e51bd5ec47f7768debcdcfd7bbea8e9b80e995f9dd0dc3a8720709",
+    "graphical-native/harbor/native.log": "03ad6f4324758a7047715b6b530c257a32680c2374750b94e8c2fd46f165ab83",
+    "graphical-native/house-boxed/ch2_s5_b026.png": "866951fd674a77317dff76dc341b1e79244beb4f3586f7e051021d3264e37a54",
+    "graphical-native/house-boxed/native.log": "03ad6f4324758a7047715b6b530c257a32680c2374750b94e8c2fd46f165ab83",
+    "graphical-native/house-broken/ch2_s5_b012.png": "23962eaf590dea9bb4f1996e3238c295fa499f33efb12a12320cc8c4b50997a4",
+    "graphical-native/house-broken/native.log": "9da5b3762f050105d6a158d7e8bd293b3a505c9fa26e0a03a633a21f56b20140",
+    "graphical-native/house-intact/ch2_s5_b011.png": "f855337fb2382d390b44128c2f1e237b967ec6d4d12a27efd97d5e6a62c15670",
+    "graphical-native/house-intact/native.log": "03ad6f4324758a7047715b6b530c257a32680c2374750b94e8c2fd46f165ab83",
+    "graphical-native/house-mug/ch3_s5_b001.png": "322a4d861663e2bd6d563250ff6948dcdaeb29164c6f8a354765db92cf097b55",
+    "graphical-native/house-mug/native.log": "03ad6f4324758a7047715b6b530c257a32680c2374750b94e8c2fd46f165ab83",
+    "graphical-native/result.json": "d6d35b36a92a05b14e7c3ec58c4461917ee8a8ea66959654bea767a2a8e74df7",
+    "graphical-native/title/content-note-150-small.png": "5e45eabee1b9923414eeaff9a8eaca70939c63f6e4017b51078e5b810ad155fb",
+    "graphical-native/title/native.log": "03ad6f4324758a7047715b6b530c257a32680c2374750b94e8c2fd46f165ab83",
+    "graphical-native/title/reading-settings.png": "cb397ee48a5b3005f8687513197e3fc860b68acd89cc3febcf33a8cf3447c3c1",
+    "graphical-native/title/sound-settings.png": "121894a91c504b616576c6ac6fcdf89e5af336522dfd2e87821f336fabbc72d3",
+    "graphical-native/title/title-content-note.png": "8dcebf7a8d4102c82490deb0e4bdb2e31c61fdc9ead2ddb24fd3c2ea08070e2c",
+    "graphical-native/title/title.png": "8636de05f44fff7facec9e893d21928281e14436607680d9e91f08010fd4edf0",
+    "graphical-native/tower-before/ch5_s3_b005.png": "d30ccbdd0fcf36ef3c3abbb24ddd926a86482b520f9144af7ccd02d4c80ee571",
+    "graphical-native/tower-before/native.log": "03ad6f4324758a7047715b6b530c257a32680c2374750b94e8c2fd46f165ab83",
+    "graphical-native/tower-lowered/ch5_s3_b006.png": "37ded8f2a5b4ea2134f9b500ed486c8e6ade93f076334be224c15fbb9d7acf05",
+    "graphical-native/tower-lowered/native.log": "03ad6f4324758a7047715b6b530c257a32680c2374750b94e8c2fd46f165ab83",
+    "header-contrast/after/insert/100.png": "3b9b0c3a65ab90bc278dc62b4eee67ae313a756a8989fbb0ee02cb7b6db34051",
+    "header-contrast/after/insert/125.png": "572a016c9235c015b7d727fd989650b2c819bed95f347bb945af75870c909d93",
+    "header-contrast/after/insert/150.png": "8f8009414935a586a29624933cdeb05b4b7f523c0a80ff1e0d43020cf456fef4",
+    "header-contrast/after/insert/native.log": "d02df16d50a23bd19aebce68a0394eb0a6fe6510b3633d0609e64775c29b73a9",
+    "header-contrast/after/result.json": "dfe0719e31f63d2f0a58bc91d9310fcdd43b628a1465634b240ff549dd83943b",
+    "header-contrast/after/wide/100.png": "4270bbe832b2d48246d5374b889c6d3b12e86172e34989bc89880175d91788d4",
+    "header-contrast/after/wide/125.png": "97a91614b75edb5b9e184eb6a1c375da8c1ab216c5fe2ec5a382449190d14892",
+    "header-contrast/after/wide/150.png": "c40fff07b2640f88826bad4eb7d6a9ac2eca7ea2558445d9fbec2706c6dced2a",
+    "header-contrast/after/wide/native.log": "98e9341d45f123e55178ccea77df8e5729ce72b122d9a355ead30826a9938e7f",
+    "rejected-export-attempts/lanternwake-combined-export-20261005/build-Debug.log": "b55fb81757ddfce93fbeb77ead88b477a9e9b395b55ce3a2d00ba9ae401a1228",
+    "rejected-export-attempts/lanternwake-combined-export-20261005/build-ExportDebug.log": "1061b68a8ca4807353eec0ccd8fe20e95e8ae1b86aaa460ed26254b1717f26df",
+    "rejected-export-attempts/lanternwake-combined-export-20261005/build-ExportRelease.log": "96c6b15d25d64ee0479b08851c54f18d180680b583f421e9c6ba1e590fb44886",
+    "rejected-export-attempts/lanternwake-combined-export-20261005/editor-build.log": "6b078964b1105e88c405af832a001fe802c897d09d2e30d6e0c08daed05aeee6",
+    "rejected-export-attempts/lanternwake-combined-export-20261005/export-pack.log": "a9e982750e2eb1e4d1c1cfb9941a84f2b61bc2a15d4dc48d0fad448fdbd06ec3",
+    "rejected-export-attempts/lanternwake-combined-export-20261005/import.log": "98139c46966cebdf02c298a7e32c05424b1f2d5da40c6ac3c93ad35428146b9f",
+    "rejected-export-attempts/lanternwake-combined-export-20261005/receipt.json": "c58d3f8ee5850da58917509050973416f312fdf40dcdea60584cb07a852d5a99",
+    "rejected-export-attempts/lanternwake-combined-export-20261005/restore.log": "4ddb3db7635d3c8ad19cdb2a60684f20c206cd0c3ce035a325abc7ea6c23d514",
+    "rejected-export-attempts/lanternwake-combined-export-20261005/runtime-restore.log": "faed899e702e60821aca7b5cbecc9da5666c45a7ad86cc9f539f05afa3305f2e",
+    "rejected-export-attempts/lanternwake-combined-export-20261005/setup.log": "ca16be5fb3731da7c554db2a041bce1cbb161526f16f2efb9642a590f5e31def",
+    "rejected-export-attempts/lanternwake-combined-export-audited-20261005/archived-header.log": "86796fd296a51de501c8440a9cf9c5ea1bc95bfab02ca320a143c5e15a71f07a",
+    "rejected-export-attempts/lanternwake-combined-export-audited-20261005/build-Debug.log": "f165f96bb2e39fb12767930def648f571eaa1f89fd5e2e556ad8b6dc8754bfa2",
+    "rejected-export-attempts/lanternwake-combined-export-audited-20261005/build-ExportDebug.log": "55ca36dcab079f521acd9259baf03e1c67066b61c11667f5f33ebedbaba56299",
+    "rejected-export-attempts/lanternwake-combined-export-audited-20261005/build-ExportRelease.log": "d1e77c1a81053b82561059b0a87894664265a50c4e9f5c0dd441cfbc87b00cb1",
+    "rejected-export-attempts/lanternwake-combined-export-audited-20261005/compiler-binding.log": "c05061fbd0446244fdaa941fc20cc32b008d343593c63e0026f0c538fcce124f",
+    "rejected-export-attempts/lanternwake-combined-export-audited-20261005/editor-build.log": "6b078964b1105e88c405af832a001fe802c897d09d2e30d6e0c08daed05aeee6",
+    "rejected-export-attempts/lanternwake-combined-export-audited-20261005/export-pack.log": "a9e982750e2eb1e4d1c1cfb9941a84f2b61bc2a15d4dc48d0fad448fdbd06ec3",
+    "rejected-export-attempts/lanternwake-combined-export-audited-20261005/import.log": "98139c46966cebdf02c298a7e32c05424b1f2d5da40c6ac3c93ad35428146b9f",
+    "rejected-export-attempts/lanternwake-combined-export-audited-20261005/receipt.json": "354793e9d6e51f87ee499d1e4861babe5c8597b2c84aa966ba77e02fe7295ef0",
+    "rejected-export-attempts/lanternwake-combined-export-audited-20261005/restore.log": "ace9f5230cc26988d0e0d2462ccd42ba2be6b88629a8a3fa092abb5e9f17afb1",
+    "rejected-export-attempts/lanternwake-combined-export-audited-20261005/retained-publish.log": "bc7861052bab6eb3d707ec1e5d608f7332a55be7ebcb3048ee7a162d45a84802",
+    "rejected-export-attempts/lanternwake-combined-export-audited-20261005/runtime-restore.log": "a7be7d8ab48d61f17c54a18b0bbc7b725fbe84e0d260984a45dc3c93827b9ab2",
+    "rejected-export-attempts/lanternwake-combined-export-audited-20261005/setup.log": "ca16be5fb3731da7c554db2a041bce1cbb161526f16f2efb9642a590f5e31def",
+    "rejected-export-attempts/lanternwake-combined-export-final-20261005/build-Debug.log": "9c055d7e14aae118863785b2f9f6673f7323917ccc745562d972fbaf16f59451",
+    "rejected-export-attempts/lanternwake-combined-export-final-20261005/build-ExportDebug.log": "bdc1cf45c1d2a4d8f62a4c05ba2a7d3ef55c3ddf39e211aee644283491a60f62",
+    "rejected-export-attempts/lanternwake-combined-export-final-20261005/build-ExportRelease.log": "a6896bbbd3fc16f71c0de3218636fc6f73681a4b7b534fd24d4faffbeca81b50",
+    "rejected-export-attempts/lanternwake-combined-export-final-20261005/editor-build.log": "6b078964b1105e88c405af832a001fe802c897d09d2e30d6e0c08daed05aeee6",
+    "rejected-export-attempts/lanternwake-combined-export-final-20261005/export-pack.log": "06874009ead747d0150fa77f1da40f31cf89366091bf3485ad59eb8627a828c1",
+    "rejected-export-attempts/lanternwake-combined-export-final-20261005/import.log": "98139c46966cebdf02c298a7e32c05424b1f2d5da40c6ac3c93ad35428146b9f",
+    "rejected-export-attempts/lanternwake-combined-export-final-20261005/receipt.json": "d726337d459c0fabdb0586d561756744c6c1dd0faed5bae583c7dd69a3b0c44f",
+    "rejected-export-attempts/lanternwake-combined-export-final-20261005/restore.log": "3c30890e6d0b82839fea52397323a5929e3842ba8d3f383623de9e2d3705b82e",
+    "rejected-export-attempts/lanternwake-combined-export-final-20261005/runtime-restore.log": "2674609c87fd4d9bae99456ba2dd711badab44dd0a8d52c0bed99b7bf18e8a91",
+    "rejected-export-attempts/lanternwake-combined-export-final-20261005/setup.log": "ca16be5fb3731da7c554db2a041bce1cbb161526f16f2efb9642a590f5e31def",
+    "tools/integration/qa/ExportAudit/ExportAudit.csproj": "031da6a6f6d810b9f23ffe7818f3acefb7b0ff54b0eb8c6752735ad58d254904",
+    "tools/integration/qa/ExportAudit/Program.cs": "f4cbcb1becbdbc059d8d49c49ed2987f98ded7589624ec46a9f3c693e95c7d11",
+    "tools/integration/qa/combined_export.py": "82cc60144fbe6960aa81bc04faedd9d6e980a8124f140849586df3ec835670b8",
+    "tools/integration/qa/export_header_audit.gd": "89276ac5be28d9672f6e569a3750272f22c441b6f21ed22ed7877afe33fb135b"
+  },
+  "limits": "Automated/native software-rendered and mixer evidence only; no physical-device, real-model/ASR, human playtime or standalone player claim."
+}

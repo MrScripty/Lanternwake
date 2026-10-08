@@ -137,8 +137,8 @@ public partial class OptionalConversationQualification : Node
         Check(Session.History.SequenceEqual(before.History.Concat(pair)), "one explicit Send appends exactly one authored scoped pair");
         Check(Canonical() == canonical, "suggested, edited and freely typed replies have identical canonical effect");
         Check(Dialogue.Text == chat.Fallback && !Dialogue.BbcodeEnabled, "native UI displays exact fallback as plain text");
-        Check(_game.InterfaceRoot.GetNode<Label>("%StatusLabel").Text == "Authored reply · local Pumas unavailable (model_unavailable)", "visible provenance reports unavailable model and authored reply");
-        Check(Observe<string>(Observe<PumasClient>(_game, "_pumas"), "_model") == "", "model guard rejects before any transport");
+        Check(_game.CurrentStatusText == "Authored reply · The selected model is not ready. Refresh models and choose an available model.", "presentation provenance reports unavailable model and authored reply");
+        Check(Observe<AiSettings>(_game, "_aiSettings").Model == "", "configured model guard rejects before any transport");
         Check(Entry.Text == "" && Entry.Editable && !Observe<bool>(_game, "_busy"), "completed fallback clears submitted draft and releases input");
         Check(Snapshot(Storage.Read(true)) == Snapshot(Session.Snapshot()), "fallback outcome autosaves full exact provenance");
         Check(manualBefore.SequenceEqual(Files().Where(p => p.Key.StartsWith("save", StringComparison.Ordinal))), "chat autosave does not change explicit manual checkpoints");
@@ -196,7 +196,7 @@ public partial class OptionalConversationQualification : Node
     private void Finish()
     {
         var before = Session.Snapshot();
-        Check(Session.IsEnding && Session.CanAdvance && Session.SolvedActivities.Count == 23, "full story remains completable with optional replies");
+        Check(Session.IsEnding && Session.CanAdvance && Session.SolvedActivities.Count == _story.Chapters.SelectMany(c => c.Scenes).SelectMany(s => s.Beats).Count(b => b.Activity is not null), "full story remains completable with optional replies");
         Press("AdvanceButton"); Check(Modal.Title == "The light remains", "actual ending route remains available"); Close();
         Check(Snapshot(Session.Snapshot()) == Snapshot(before), "Finish appends no duplicate story or chat events");
     }

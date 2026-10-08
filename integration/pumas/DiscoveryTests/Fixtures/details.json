@@ -1,0 +1,1 @@
+{"success":true,"details":{"repoId":"Fixture/Dialogue-GGUF","downloadOptions":[{"quant":"Q4_K_M","sizeBytes":491000000},{"quant":"sharded","sizeBytes":null,"fileGroup":{"filenames":["model-1.gguf","model-2.gguf"],"shardCount":2,"label":"Two GGUF shards"}}],"totalSizeBytes":null}}

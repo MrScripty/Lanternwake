@@ -4,16 +4,16 @@
 
 The compiler counts only required beat text as main-path prose. It excludes optional model replies, authored fallback replies, suggested player input, static item/fact entries, and this bible. Consequently the count understates total available authored reading but does not inflate the main story with optional material.
 
-Current measured main path: **34,937 words, 41 scenes, 1,424 beats**. The 23 evidence activities are real runtime gates with objective multiple-choice answers, gentle retries, no timer, and authored explanation. Conversation is optional and never a duration requirement.
+Current measured main path: **35,456 words, 41 scenes, 1,439 beats**. The 24 evidence activities are real runtime gates with objective multiple-choice answers, gentle retries, no timer, and authored explanation. Conversation is optional and never a duration requirement.
 
 | Reading pace | Required text alone |
 | --- | ---: |
-| 140 words/minute | 249 minutes |
-| 150 words/minute | 233 minutes |
-| 180 words/minute | 194 minutes |
-| 220 words/minute | 159 minutes |
+| 140 words/minute | 253 minutes |
+| 150 words/minute | 236 minutes |
+| 180 words/minute | 197 minutes |
+| 220 words/minute | 161 minutes |
 
-Planning allowance, not measured performance: the 23 evidence reviews may add roughly12–30 minutes depending on recall and inspection; navigation, scene settling, and reflection may add15–35 minutes. The ranges must not be treated as guaranteed additive runtime: some reflection happens while reading. A reflective first pass at140–150wpm is near the five-hour target; a quick reader will finish considerably sooner. Market language should say "a substantial five-chapter mystery" until representative playtesting establishes a median. Never count unlimited chat as authored hours.
+Planning allowance, not measured performance: the 24 evidence reviews may add roughly12–30 minutes depending on recall and inspection; navigation, scene settling, and reflection may add15–35 minutes. The ranges must not be treated as guaranteed additive runtime: some reflection happens while reading. A reflective first pass at140–150wpm is near the five-hour target; a quick reader will finish considerably sooner. Market language should say "a substantial five-chapter mystery" until representative playtesting establishes a median. Never count unlimited chat as authored hours.
 
 The existing native runtime verification performed by the game worker exercises UI and representative interactions, not a complete timed reading playtest. A working build and a schema test do not establish literary pacing or a five-hour median.
 

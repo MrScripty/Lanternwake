@@ -1,0 +1,36 @@
+# Chapter 1 inventory feedback — 2026-10-07
+
+Local branch `feat/chapter1-feedback-20261007` starts from verified merged main `27711d28e41c7566a966971ad36cc66383b642c8` (tree `32b01e46cefdc66a790ed62f4b8daff28735939c`). Core/build/native source checkpoint: `f7e7df92bef8e465ed3b386cc86b3afe2b2bdc4c` (tree `2173a9e742425c213c1d228d1e0631483edc0ecd`). Corrected rendered checkpoint: `30df52e04df9b9f82f155767651ee5f29e1ade70` (tree `0d1785bc9a866d1ee32cff5f6439c9c353ef16dc`), direct child of the native checkpoint. The containing evidence commit changes documentation only. No publication occurs.
+
+## Audit and selected batch
+
+The existing remaining-gameplay plan calls for explanatory retries without shame, penalty or resource loss, deducible from earlier required material. At base, Chapter 1 has five activities: `ch1_s1a_evidence` already has distinct feedback; `ch1_s2_evidence`, `ch1_s2a_evidence`, `ch1_s3_evidence` and `ch1_s3a_evidence` have generic retries. The exact selected pair was reported before edits: the two adjacent inventory gates, observation versus inferred intent. Trace/documentation and inspection-response gates are deferred unchanged, not blocked on authorship.
+
+| Selected gate | Already-reached grounding | Mistake distinction | Original successor |
+| --- | --- | --- | --- |
+| `ch1_s2_evidence` | `ch1_s2_b008`, `b013`, `b017`, `b019` | A repaired handle does not establish expecting Ada; accumulated objects are not established as deliberately planted clues. | `ch1_s2a_b001` |
+| `ch1_s2a_evidence` | `ch1_s2a_b016–b018` | Boxed presence does not establish that every object was intended as a clue; an imagined dislike story cannot become a definite catalogue fact. | `ch1_s3_b001` |
+
+Six restrained Ada rationales retain the distinction between observable condition and unknown motive. They do not assert that Ivo lacked intent or reveal later cup/mechanism/authorship events. Independent intent review found no authoring blocker. Removing only these two `optionFeedback` fields reproduces the complete prior story exactly. Every ID/order/prose line/option/answer/explanation/gate/ending and all runtime C#/scene/save/Pumas ownership remain unchanged. Required metrics remain 35,456 words, 1,439 beats, 41 scenes, 24 activities, 28 conversations and one authored exchange. This local candidate has 3/5 Chapter 1 and 6/24 total activities with distinct feedback; 18 remain generic.
+
+## Actual qualification
+
+Reuse the existing first-route preservation tests for both new cases: pre-batch complete-story traversal checkpoints, both wrong answers and a repeat, complete snapshot and derived facts/items/cues/progress, correct-only unlock at the same beat, prior solved gates/record preservation, solved restoration, original successor and author text-edit preservation. Twenty-eight new assertions bring Core to 4,283, with clean build (zero warnings/errors). The unmodified base story rejects the newly required cup feedback as an expected negative control (exit 134). Fresh structure validation passes 63 checks and official Godot 4.6.3 .NET import is clean.
+
+Existing native question review passes 2,639 checks over all 24 activities/1,439 beats, plus 46 preview checks: actual modal text/options, wrong-answer state/save bytes, Back/originating focus, retired callbacks, real Load and enlarged small-window action layout. Shared native UI smoke reports 100/125/150% reading reset/reopen/reveal/reflow/scroll/focus, explicit recovery and title/history/catalogue/save/load success. No full aggregate or integration rerun is claimed.
+
+Both selected cases pass actual normal Main at 100%, 125% and 150%: six distinct fresh sessions, 35 checks each, source unchanged and production Settings Quit exit 0. Each loads an actual pre-batch version-2 checkpoint (126/159 reached authored transcript lines), populates all four current/previous manual/automatic slots, and uses only external X11 player input. Both wrong answers and immediate retries preserve the full live snapshot/derived state and all four slot byte sequences; keyboard Back restores the same unanswered question and originating option. Only the correct answer unlocks Continue, preserves record/facts/items/cues/manual checkpoints, and survives actual solved-state Save/Load. Explicit Continue reaches each original successor, with its actual displayed text observed before capture. Root and independent read-only review inspected complete rationales, both restored gold-focus states and enlarged question controls. Short feedback fits without clipping at all three sizes.
+
+Accepted cases bind the same DLL SHA256 `b3369557f9af0fa69737cc998b5325daed16ca3351eeb0c5c55999236a7fbe6a` and rendered source map. The existing passive DEBUG wrapper reads the real Main session and does not perform player actions or read/write slots. The source map differs from the native checkpoint only in the task controller's OCR excerpt; compiled game, content, Core tests, native qualifications and assets are byte-identical. The native checkpoint retains its original identity.
+
+## Retained rejection and independent review
+
+The first cup-100 graphical attempt stopped at the second rationale because OCR read the isolated pronoun `I` as `|`; the captured full explanation is plainly legible. It remains a failed receipt under `normal-ch1_s2_evidence-100`, with unchanged source and no production-Quit claim. The controller now checks a distinctive excerpt after the speaker/opening, still derived from actual pixels; title, ending excerpt, exact native full text, full state/save and Back/retry assertions remain. All six accepted attempts use unique `*-qualified` folders. No old failure or prior first-route capture is promoted to new evidence.
+
+Independent read-only review covers the intent, final content/tests/controller and six finalized receipts/captures at `30df52e04df9b9f82f155767651ee5f29e1ade70`. No material finding remains; the reviewer edits nothing, executes no tests and requests no external review. The exact report is retained in the artifact map.
+
+## Evidence and limits
+
+[The receipt](evidence/chapter1-inventory-feedback-20261007.json) binds the Chapter 1 audit and anchors, exact source/tree/binaries, Core/native logs, six normal receipts/image hashes/full-state hashes and locations, seeds, retained rejection and independent reports. Raw evidence is local at `/workspace/lanternwake-chapter1-feedback-evidence-20261007`. The owned authenticated Xorg :191 is stopped before freezing the artifact map; private Xauthority and reproducible fixture caches are excluded.
+
+This is synthetic input/software rendering with Dummy audio, without physical-device/accessibility-tool, hearing, human editorial/pacing/duration, hardware/Vulkan/export or release acceptance. Short feedback does not overflow, so no new overflowing-prose scroll claim is made. Normal Save/Load proves solved-state persistence, not advance-away restoration. Existing graphical Editor, provider/model, descent/performance and integration receipts retain their own historical sources; they were not rerun or relabelled. No models/downloads, raw upload, push, PR or publication occurred. Broader Chapter 1 trace feedback remains the next separate batch.

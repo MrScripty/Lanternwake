@@ -1,0 +1,31 @@
+# First bad-weather route feedback — 2026-10-07
+
+Local branch `feat/first-route-feedback-20261007` starts from verified main `b232747dbe242481b367705d6ee20000cb8fb05e` (tree `4a533142694ee9ec4cdd782e0eb12f3ce9eab004`). The bounded content checkpoint is `c2da082c5397d4912b522089e92c2fee4606e689`; corrected external-input qualification uses `2c83b8f2b823097e63ca9b81444de6ee39f076c9` (tree `4268a125bf0db8ce819921ae1b7edc6f5c06a8dc`). The containing evidence commit changes documentation only. No push, PR or external review request occurs.
+
+## Behavior and preservation
+
+Only `ch1_s1a_evidence.optionFeedback` changes production content. Nessa explains that the cliff steps are locked maintenance access, and that shortest distance does not establish the agreed bad-weather route. Both explanations use already-reached `ch1_s1a_b046–b048` facts. The inland-road rationale retains the existing condition-check qualification. Feedback is explanatory and non-punitive; it grants no new fact, item or story event.
+
+Wrong answers use the existing keyboard reader and return to the same unanswered question with the originating answer focused. Correct answer, explanation and explicit Continue remain unchanged. Removing only this field restores the complete main story exactly: every prior ID/order/line/choice/gate/scene/ending is preserved. Runtime C#, scenes, saves/schema and Pumas ownership are unchanged. Required content remains 35,456 words, 1,439 beats, 41 scenes, 24 activities, 28 conversations and one authored exchange. Four of 24 activities now have distinct feedback; 20 retain generic retries.
+
+## Executed qualification
+
+The full bounded aggregate at `c2da082c5397d4912b522089e92c2fee4606e689` exited 0 in 245.20 seconds with no warning/error lines: 4,255 core assertions, 63 structure checks, 23 conversation and 26 controlled discovery/activity contracts, complete route/completion/recovery/save isolation, audio, content-note/cup/family/descent/performance checks and 13-scene Editor roundtrip/dock/author/playtest checks. Native question review passed 2,617 assertions across all 24 activities and 1,439 beats; preview passed 46. It exercises exact feedback, full snapshot/save-byte preservation, Back/originating focus, enlarged layouts and retired callbacks.
+
+Fourteen new focused core assertions establish pre-feedback checkpoint compatibility, repeated wrong-answer full-state preservation, correct unlock without automatic advance, solved restoration, the original `ch1_s2_b001` successor and author-edit preservation. The unmodified main story fails the new feedback requirement as an expected negative control. Seed comes from actual core traversal of the complete prior story, not fabricated history or measured playtime.
+
+Actual normal Main sessions at 100%, 125% and 150% each passed 34 recorded checks and production Settings Quit with exit 0. Both wrong choices and immediate keyboard retries preserve the complete live state and every byte of four populated manual/automatic/current/previous slots. Keyboard Back restores the unanswered prompt and gold originating-option focus. The correct answer alone unlocks Continue at the same beat, preserves history/facts/items/cues and explicit manual checkpoints, and supports actual Save/Load of solved state. Explicit Continue reaches the unchanged inventory scene. Short feedback fits fully at all three sizes; captured question, both rationales, restored focus and solved view were inspected. The immediate successor captures still show the preceding solved view; the next beat is established by the live-state assertion and aggregate, without a fresh next-scene rendering claim.
+
+All accepted normal runs bind DLL SHA256 `fd403d01c125a91fa61c669d268097ce849d40a62ea70650af46aa79bd791e4d` and the same source map. The passive DEBUG observer only reads the actual session; all player actions use external X11 input. The two post-aggregate commits change only this controller's pixel observation and focused Back activation, with compiled game/story/tests/qualification and verification wiring byte-identical. The earlier aggregate retains its checkpoint identity and is not relabelled as a later run.
+
+## Independent review and retained attempts
+
+An independent read-only agent reviewed the source/tone and all three qualified native receipts/captures at `2c83b8f2b823097e63ca9b81444de6ee39f076c9`. It found no remaining material production issue. Its initial controller finding identified two visible Back controls with the same caption; keyboard activation fixes the ambiguity without changing production behavior.
+
+The first graphical observer attempt rejected a correctly visible feedback title; the second rejected a correctly visible restored question with third-option gold focus. Full-page OCR segmentation omitted those regions. Targeted title/prose OCR now reads actual captured pixels, retaining all assertions. Both rejected receipts/images/logs stay unchanged and excluded under `normal-100` and `normal-100-final`; accepted runs use distinct `*-qualified` directories. The initial nullable compiler warning is also retained; it was corrected before clean core/aggregate qualification. No rejected capture is promoted to a pass.
+
+## Evidence and visual limits
+
+[The receipt](evidence/first-route-feedback-20261007.json) binds exact source/tree/checkpoints, binary, core/aggregate/native steps, seed, three normal receipts/full live states/images, independent-review notes and an explicit artifact map. Raw evidence remains local at `/workspace/lanternwake-first-route-feedback-evidence-20261007`. Owned authenticated Xorg :190 is stopped before the final map; private Xauthority and reproducible fixture caches are excluded.
+
+These are synthetic-input software-rendered observations with Dummy audio, not physical-device/assistive-tool, hearing, human editorial/pacing/duration, hardware/Vulkan/platform or release acceptance. The new short text does not overflow; no new overflowing-prose scroll claim is made. Normal Save/Load checks solved-state persistence, not restoration after advancing away. No model/download, Pumas workaround, chronology change, export or raw upload occurred. Candidate remains local; parent owns publication/integration and external review.

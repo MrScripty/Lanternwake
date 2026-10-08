@@ -82,7 +82,7 @@ public partial class LongSessionQualification : Node
         Check(Session.Inventory.Select(i => i.Id).ToHashSet().SetEquals(prefix.SelectMany(b => b.UnlockItems ?? [])), "derived inventory matches authored prefix");
         Check(Session.ActiveStageCues.ToHashSet().SetEquals(prefix.Select(b => b.StageCue).OfType<string>()), "stage cues match authored prefix");
         Check(_game.InterfaceRoot.GetNode<RichTextLabel>("%DialogueText").Text == Session.Beat.Text, "game renders current required text");
-        Check(_game.InterfaceRoot.GetNode<Label>("%PlaceLabel").Text == Session.Scene.Title + "  ·  " + Session.Scene.TimeOfDay.Replace('_', ' '), "scene label matches source");
+        Check(_game.CurrentPlaceText == Session.Scene.Title + "  ·  " + Session.Scene.TimeOfDay.Replace('_', ' '), "scene label matches source");
         Check(Observe<string>(_game.Stage, "_location") == Session.Scene.Location, "actual stage location matches source");
         var visible = Session.Scene.CharacterIds.Where(id => id is not ("ivo" or "operator" or "clerk")).ToArray();
         var actors = Observe<List<Node3D>>(_game.Stage, "_actors");
@@ -125,7 +125,7 @@ public partial class LongSessionQualification : Node
         Action(activity.Options[(activity.CorrectIndex + 1) % activity.Options.Length]);
         await Frame();
         Check(Snapshot(Session.Snapshot()) == Snapshot(unsolved), "wrong answer has no progress, transcript or evidence penalty");
-        Check(_game.InterfaceRoot.GetNode<Label>("%StatusLabel").Text.Contains("try again"), "wrong answer gives retry feedback");
+        Check(_game.CurrentStatusText.Contains("try again"), "wrong answer gives retry feedback");
         FilesUnchanged(before);
         _wrongAnswers++;
         Press("AdvanceButton");

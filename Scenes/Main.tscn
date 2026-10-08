@@ -13,6 +13,8 @@
 [ext_resource type="PackedScene" path="res://Scenes/UI/MainMenu.tscn" id="9_menu"]
 [ext_resource type="PackedScene" path="res://Scenes/UI/AiSettingsControls.tscn" id="10_ai_settings"]
 
+[ext_resource type="PackedScene" path="res://Scenes/UI/PumasSearchControls.tscn" id="9_pumas_search"]
+
 [node name="Lanternwake" type="Node" unique_id=1068266348 node_paths=PackedStringArray("Stage", "InterfaceRoot", "Audio")]
 script = ExtResource("1_game")
 Stage = NodePath("StageDirector")
@@ -24,6 +26,8 @@ ChoiceButtonScene = ExtResource("6_choice")
 AudioSettingsControlsScene = ExtResource("8_audio_settings")
 MainMenuScene = ExtResource("9_menu")
 AiSettingsControlsScene = ExtResource("10_ai_settings")
+
+PumasSearchControlsScene = ExtResource("9_pumas_search")
 
 [node name="StageDirector" parent="." unique_id=301876949 instance=ExtResource("2_stage")]
 

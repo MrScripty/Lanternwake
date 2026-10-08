@@ -25,7 +25,8 @@ def ensure_assets(root=ROOT, *, regenerate=False, renderer=generate):
             changed.append(name)
     if changed and not regenerate:
         raise ValueError('Generated audio was modified: ' + ', '.join(changed) +
-                         '. Preserve custom audio outside Assets/Audio, then rerun with --regenerate to replace these generated files.')
+                         '. Preserve custom audio outside Assets/Audio, then run python3 scripts/setup_audio.py --regenerate '
+                         '(Windows: py -3 scripts/setup_audio.py --regenerate) from the checkout to replace these generated files.')
     if not missing and not changed:
         print('Audio setup: all seven assets already match; no files changed.')
         return

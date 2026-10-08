@@ -9,6 +9,7 @@ under `Main.tscn > Interface`; the `Lanternwake` root's Inspector holds its
   panel backgrounds and button states. The HUD and modal shell share it.
 - Edit `MainMenu.tscn` for the startup menu, buttons and AI summary. Main owns
   its `Main Menu Scene` reference. Escape returns to this menu during play.
+  Its content-note button reads the existing authored note without starting the story.
 - Edit `AiSettingsControls.tscn` for the dialogue, transcription and character voice
   tabs, provider URL, model selectors and response test. Model choices come from
   the selected provider. Speech provider selectors are independent; model and voice selectors stay disabled

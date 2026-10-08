@@ -2,7 +2,7 @@
 
 ## Adaptive Saltmere score
 
-The former `watch_theme` tone loop is no longer assigned to the game. Nineteen original
+The former `watch_theme` tone loop is no longer assigned to the game or included in executable exports. Nineteen original
 MIDI tracks now use soft acoustic piano, cello, solo violin, nylon guitar,
 quiet accordion reeds, and pizzicato strings. This small ensemble follows the
 story's coastal domestic detail, investigation, physical storm, grief, and
@@ -78,6 +78,21 @@ within each audio block. Short stereo reflection buffers preserve room sound.
 Playback keeps advancing through story changes and menus without restarting.
 Music still reaches the Music bus for EQ, sidechain compression and voice
 activity ducking. Normal startup has no full-track render or audio cache.
+
+Playback acquisition first checks that the player has a native playback and
+retains only a non-null handle. Missing streams therefore cannot put null into
+per-frame retirement or tree-exit disposal. This does not replace setup: absent
+location assets still report the Inspector assignment failure, with fresh-checkout
+setup commands for Linux and Windows. The
+native `qualification/audio-lifecycle.tscn` regression covers missing music and
+effects, naturally finished effects, live loop retention, interrupted transitions,
+repeat shutdown and direct tree exit. `scripts/verify.sh` runs it after the audio smoke.
+
+An AudioEffectCapture on the real Master mixer observes nonzero bounded PCM.
+This is native Godot mixing evidence, not proof of physical speaker output,
+subjective sound quality, production voice recognition, model quality, or
+five-hour gameplay duration. If a backend produces no capture frames, the
+smoke reports PCM unavailable rather than fabricating a pass.
 
 The decoded instrument bank is shared by every voice. Memory holds the bank,
 active synth voices and small output/reflection buffers, rather than hundreds

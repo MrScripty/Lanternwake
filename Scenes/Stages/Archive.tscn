@@ -4230,13 +4230,14 @@ size = Vector3(0.12, 0.09, 0.05)
 [sub_resource type="BoxMesh" id="BoxMesh_rum8b"]
 size = Vector3(0.12, 0.09, 0.05)
 
-[node name="Archive" type="Node3D" unique_id=675710108 node_paths=PackedStringArray("StoryCamera", "Atmosphere", "KeyLight", "CastOrigin")]
+[node name="Archive" type="Node3D" unique_id=675710108 node_paths=PackedStringArray("StoryCamera", "Atmosphere", "KeyLight", "CastOrigin", "PerformanceFocus")]
 script = ExtResource("1_yxqq3")
 PreviewLayout = "2 characters"
 StoryCamera = NodePath("StoryCamera")
 Atmosphere = NodePath("IslandAtmosphere")
 KeyLight = NodePath("Moonlight")
 CastOrigin = NodePath("CastOrigin")
+PerformanceFocus = NodePath("Scenery/ReelToReel")
 DawnEnvironment = SubResource("Environment_dofg6")
 DuskEnvironment = SubResource("Environment_y7r2y")
 

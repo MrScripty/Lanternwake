@@ -16,23 +16,35 @@ Not yet a release promise: production-qualified model responses, real-device spe
 
 Install Python 3, the official Godot **.NET** 4.6.3 build and .NET 8 SDK. The ordinary non-.NET Godot build cannot compile this project.
 
-For a local checkout with Godot .NET installed in `.toolchain/`, the launcher uses the installed .NET SDK:
+From the checkout, run one command. On Linux/macOS:
 
 ```sh
-bash run-game.sh           # Build and play
-bash run-game.sh --editor  # Build and open the Godot editor
-bash run-game.sh --verify  # Run the repository verification suite
+python3 scripts/run.py --godot "/path/to/the/Godot.NET/executable"
 ```
 
-The launcher keeps build caches and game saves under `.toolchain/`; preserve `.toolchain/user-data/` to retain progress. The authored story works without an AI provider. Optional model conversations require the setup below; transcription and character voice playback remain unavailable until their providers are integrated.
+On Windows (PowerShell or Command Prompt, no Bash required):
 
-```
-bash scripts/setup.sh  # Verify bundled MIDI music and generate location ambience/effects before import.
-dotnet build Lanternwake.csproj
-godot-mono --path . --editor
+```powershell
+py -3 scripts/run.py --godot "C:\Tools\Godot\Godot_v4.6.3-stable_mono_win64_console.exe"
 ```
 
-Run setup before opening `project.godot` with the .NET editor, then run. On Windows without Bash, run both `py -3 scripts/setup_audio.py` and `py -3 scripts/setup_music.py`; on other systems use `python3` for the equivalent commands. Setup uses Python's standard library, performs no downloads, and safely skips verified audio. Music plays directly from bundled MIDI through the MIT synth and acoustic instrument bank; it needs no rendered music WAVs. The .NET 8 game build packages the synth dependency. Generated ambience/effect WAVs are intentionally not tracked in Git. No LLM is required for the authored main story. Local Pumas setup is in `docs/PUMAS.md`; local speech setup is in `docs/SPEECH.md`.
+Use your installed executable's path; on Windows choose the `_console.exe` variant so preparation errors are visible. You can omit `--godot` when `GODOT_MONO` names it or a Godot .NET executable is on PATH. If dotnet is outside PATH, pass `--dotnet` its executable. If `python3`/`py` is missing, install Python 3 from python.org first.
+
+The launcher checks installed prerequisites, verifies bundled MIDI music and generates/verifies location ambience and effect WAVs, restores C# packages from the installed Godot distribution, builds Debug, imports assets and runs the game directly from source. It uses only Python's standard library, installs no prerequisites, and downloads no software, packages, models or export templates. Its local package cache, generated WAVs, imports and builds are ignored by Git. A second run keeps matching WAV bytes and modification times; a modified generated WAV is refused rather than overwritten. Keep custom audio outside `Assets/Audio`. Preparation failures stop before launch and show the next action.
+
+To edit, add `--editor` to the same launcher command. This opens Godot with the selected dotnet path, project-local package cache and offline feed retained for editor builds. `--setup-only` prepares assets/builds and exits; afterward rerun the launcher with `--editor` to edit or without `--setup-only` to play. Opening `project.godot` independently requires configuring your own dotnet and NuGet environment; preparation does not change your shell or global settings.
+
+Restore, build and import each have a five-minute limit; slow machines can increase it with `--setup-timeout SECONDS`. Expiry or Ctrl+C stops the owned preparation process tree. This setting does not time audio generation, game/editor sessions or model requests.
+
+Pass optional Godot arguments after `--`; for example, `python3 scripts/run.py -- --headless -- --audio-smoke` runs the native audio check after setup. `bash scripts/setup.sh` (Windows: `py -3 scripts/setup_audio.py` and `py -3 scripts/setup_music.py`) remains available when you only need to generate audio. No executable export is needed to play from source. The shared launcher has been exercised on Linux; Windows/macOS execution remains unqualified.
+
+The startup menu offers story, load/resume, reading and sound settings, and independent AI provider configuration. Music plays from bundled MIDI through MeltySynth and an acoustic instrument bank; no rendered music WAVs are needed.
+
+For this checkout with Godot in `.toolchain/`, `bash run-game.sh`, `bash run-game.sh --editor`, and `bash run-game.sh --verify` remain convenient local shortcuts. This helper keeps saves under `.toolchain/user-data/`; preserve that folder to retain local progress.
+
+No LLM is required for the authored main story. Local Pumas setup is in `docs/PUMAS.md`; local speech setup is in `docs/SPEECH.md`.
+
+`Lanternwake.sln` tracks the Godot C# build configurations `Debug`, `ExportDebug` and `ExportRelease`. Executable export also requires the matching official .NET player templates; current partial export evidence and limits are recorded in [export qualification](docs/EXPORT-SOLUTION.md).
 
 To adjust the game, see [the editor authoring guide](docs/AUTHORING.md). Locations, characters, camera, lighting and interface styling live in normal Godot scenes/resources. The Story Text dock edits the canonical story JSON without changing C#.
 
@@ -50,12 +62,18 @@ Set GODOT_MONO to the official .NET executable and use scripts/verify.sh for the
 ## Controls
 
 - Click or Space/Enter: reveal/advance
+- Content note: available before Arrival and through Settings during play. Uses the existing bible's note; reading it does not start or advance the story. See [content-note qualification](docs/PLAYER-CONTENT-NOTE.md).
+- Keeper-house cup states follow the existing canonical break, boxing and steel-mug beats, including save/load and replay. See [cup-stage qualification and visual limits](docs/CANONICAL-CUP-STATES.md).
 - Stay and talk: optional conversation panel
 - Suggestions populate editable input; Say this submits
+- Return / Escape from optional conversation resumes the paused authored passage; replies remain in the record. Cancelled or retired conversation controls cannot submit hidden drafts. See [conversation return](docs/CONVERSATION-STORY-RETURN.md).
 - H: history; E: catalogue; Escape: close panel
+- Long record/catalogue text: Tab to the gold-outlined scrollbar, Up/Down or Page Up/Down to read, Home/End for the beginning/end; Tab reaches Close or Back to question. See [keyboard reading](docs/KEYBOARD-RECORD-READING.md).
 - Manual Save/Load; separate automatic checkpoint; explicit previous-good recovery choices
+- Finish: review the record/evidence, explicitly save the completed watch, or confirm starting a new watch. Starting again preserves manual saves and session reading/sound preferences; automatic checkpoints update as the new watch progresses.
+- Evidence questions: review known evidence or read the record, then return to the same unanswered question. Review, return and cancellation preserve the current question and save files. See [question review](docs/QUESTION-EVIDENCE-REVIEW.md) for qualification and limits.
 - Reading settings: smaller/larger reading text at 100%, 125% and 150%, reset to 100%, instant text and reduced motion. Reading text size lasts for the current game session; a fresh game starts at 100%. See [reading text size](docs/READING-TEXT-SIZE.md) for the scaled reading/choice surfaces and unchanged navigation/HUD sizes.
 - Sound settings: separate music/ambience/effects levels and master mute
 - Original MIDI score with environment and character themes, a developing five-chapter journey, live MIDI acoustic layers, speech EQ/ducking, editable location loops and bell-release cue; see [audio authoring](docs/AUDIO.md)
 
-All assets currently come from original code and authored text. Source ownership and technical contracts are documented in `docs/ARCHITECTURE.md`.
+Artwork, story text and MIDI compositions are original project work. The bundled synth and instrument bank retain their separate licences; see [audio provenance](docs/AUDIO.md#provenance-and-verification). Source ownership and technical contracts are documented in `docs/ARCHITECTURE.md`.

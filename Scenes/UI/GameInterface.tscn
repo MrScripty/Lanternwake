@@ -30,11 +30,21 @@ grow_horizontal = 2
 [node name="TopRow" type="HBoxContainer" parent="TopBar" unique_id=321651694]
 layout_mode = 2
 
-[node name="Titles" type="VBoxContainer" parent="TopBar/TopRow" unique_id=1085608912]
+[node name="Titles" type="PanelContainer" parent="TopBar/TopRow"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ChapterLabel" type="Label" parent="TopBar/TopRow/Titles" unique_id=1068553857]
+[node name="Padding" type="MarginContainer" parent="TopBar/TopRow/Titles"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 3
+
+[node name="Text" type="VBoxContainer" parent="TopBar/TopRow/Titles/Padding"]
+layout_mode = 2
+
+[node name="ChapterLabel" type="Label" parent="TopBar/TopRow/Titles/Padding/Text"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.870588, 0.717647, 0.490196, 1)
@@ -101,7 +111,13 @@ The second is your name."
 [node name="Controls" type="HBoxContainer" parent="DialoguePanel/Margin/Stack" unique_id=1624537139]
 layout_mode = 2
 
-[node name="TalkButton" type="Button" parent="DialoguePanel/Margin/Stack/Controls" unique_id=1193310121]
+[node name="ContentNoteButton" type="Button" parent="DialoguePanel/Margin/Stack/Controls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "Content note"
+
+[node name="TalkButton" type="Button" parent="DialoguePanel/Margin/Stack/Controls"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2

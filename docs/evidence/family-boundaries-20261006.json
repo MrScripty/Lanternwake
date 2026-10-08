@@ -1,0 +1,147 @@
+{
+  "productionCommit": "161c3b9bc6004854e8c90c6cfe90da2c825c5d0e",
+  "productionTree": "5546d1edfad59f394e094146f71bc7ca186673e4",
+  "frozenBase": "935c8fe27eb4c5a3ef4aeb3f1e547f7f7045c457",
+  "gap": "Optional authored Tomas intentions after private folder closes in Six Working Lives; one distinct retained response per choice",
+  "sourceSha256": {
+    "Scripts/Core/CharacterProfileEdit.cs": "082152851f5b178ad68e8f41fecd5f9a83b8b4e2e7eff63da591fe2889bd2d4c",
+    "Scripts/Core/StorySession.cs": "c91afaa44baa012d29b24be024248373aee541efe1d9fe7493d28ff9b47dcc26",
+    "Scripts/Core/SaveStore.cs": "0a8ade2c5f0eee61103340e6c1bfe6ba5fe177c09150e174ec55ed2e12334403",
+    "Scripts/Core/StoryAuthoringIndex.cs": "e92b68d3a683d874c3c057ff07b6f21ad28076dcc19abe0c20cc8a30e2bb3272",
+    "Scripts/Core/SessionStorage.cs": "48a756322a9b09db8f0b3c2974c6c5b7c2710b2f14aa6b1a9fbf4de283cdc1f4",
+    "Scripts/Core/OwnedOperations.cs": "394e55879035bad54b174ac2dc632d5a1f72db7ab19904c83d031ce6397682d8",
+    "Scripts/Core/StoryTextEdit.cs": "10eae4fe7767acc240cf063a2825c18f0e651f4f551de79cc79030393e69e94d",
+    "Scripts/Core/StoryContextPreview.cs": "6f587eddb4112578895424f750afe09768089c8ff819d340f6773a2a55b38aa7",
+    "Scripts/Core/Story.cs": "38f99ee751522c0688099cabf63bde705711592c3898d4a894b38ee24ea9060f",
+    "Scripts/Core/SessionLaunch.cs": "8b0deca629b061fa01c1a273310d7586f995ffdc7c21379fbffaa541c792313f",
+    "Scripts/Core/SaveRecovery.cs": "bc022a337d4aa5c1d45c0f9299b7a826cf59f2d603b47c40c5a8e88ed8d196e4",
+    "Scripts/Presentation/GameView.ReadingSizeSmoke.cs": "526757d32f0db3e94bd08df3497d1c0d128bb28bcb9f696f698bdc871d68b395",
+    "Scripts/Presentation/GameView.ReadingSettings.cs": "d2423c6c313d2061e5a995ca7ba71cc01424b22d19f8d07eca662973f8665f1f",
+    "Scripts/Presentation/StageDirector.cs": "9453ea6350b7ce124170d9b979c232d4c82d00fe705cd14bbb7fc54748dffe7e",
+    "Scripts/Presentation/GameView.ActivityReview.cs": "3a4aed467385c4f1c9f337ca00c0d8857e67fe563e02136ba744a7064b2e0ba9",
+    "Scripts/Presentation/GameView.Completion.cs": "8b7548efff6ecabc6bdf565e66a7fb24e0ffb948de06bc167e97a00bae82fa69",
+    "Scripts/Presentation/GameView.StorageSmoke.cs": "19b0d5258c102db03df9d544d75cc4c1d2fe609b4bddc652f05287b8ec515333",
+    "Scripts/Presentation/GameView.Audio.cs": "14c96067babe39501b8ee7c99db6d5a977f8836fbd40e3ec4e5bd0bab09cb343",
+    "Scripts/Presentation/StageCharacter.cs": "70872b23defdf91ffee782c38dd96533232572a88f828d9622684332b4fa5be6",
+    "Scripts/Presentation/GameView.cs": "ccc69436377cab363b8a9c528fd1ae54f924d8082bf5ff602ff00cd564ab91ef",
+    "Scripts/Presentation/GameView.AuthoredExchange.cs": "53626f3d8e8410f530512f44b6f25ac1ce7b5adb24b1079c4901137aab001056",
+    "Scripts/Presentation/GameView.PreviewSmoke.cs": "8a2ef11e5b77861b7bf4faf75f08b306c64d5a19f66915fda0119855530ed91e",
+    "Scripts/Presentation/AudioDirector.cs": "36f006f6003d3fe61218acbf1f9e57521dde3f735c1809bc03b0faa70062f8c9",
+    "Scripts/Presentation/AuthoringSmoke.cs": "581faead69335b9570eded59aa66e877cacb315233e8ca0a6d38a99034c61c07",
+    "Scripts/Presentation/StageScene.cs": "c63821a8cacb3b52e5ef75d90f4c53826da96395186a374d0ae76a5a356b43be",
+    "Scripts/Presentation/StageMotion.cs": "e2a5c10c18e5f2aaca778540412a09c2a272fa5d99452c25d425d3666904d955",
+    "Scripts/Presentation/GameView.AudioSmoke.cs": "cea281ae44f32b0521d7cad68e9aef59e24d40741f495799622c512dfc2898de",
+    "Scripts/Presentation/GameView.ContentNote.cs": "009c8982f24e095f0af1e1a488b1fa49bf338c3254fbbb52c63892eaa9fa6a91",
+    "Scripts/Presentation/GameView.ConversationReturn.cs": "dac8d4693efb632949cbd12ab5ae3449837fe708a24c4b7c16088fd9f510e0c7",
+    "Scripts/Presentation/ReadingTextStyle.cs": "814e4fc0919619f56899489c2732605a2da44928d31b5d519f74c7f245a5f4c4",
+    "Scripts/Conversation/PumasSpeechTranscriber.cs": "a6ae25d4bb9915eb6e6c6227d8b73f84634f8d3bf78b9721f745c38180bbf0ac",
+    "Scripts/Conversation/SpeechRecorder.cs": "6c0c43f6eba1b76fd979562179f4088710689aac0f3908457e3de008618b865a",
+    "Scripts/Conversation/PumasClient.cs": "bec88d3e5dd72c362510a562ea9b1918e75267c4d9b766006f041d665655733a",
+    "Content/story.json": "62c952e3c0d981a16e5b9ab5d6aeb6cd050d4481ef36e0b923f5efd5249e8c13"
+  },
+  "nativeDllSha256": "81aa8acd7a30cc9f2f36bc8fefe85ce4f40c6da70a334938e910fc904a40f9ef",
+  "saveVersion": 2,
+  "metrics": {
+    "authoredMainPathWords": 35456,
+    "chapters": 5,
+    "scenes": 41,
+    "beats": 1439,
+    "activities": 24,
+    "conversations": 28,
+    "authoredExchanges": 1,
+    "readingMinutesAt150Wpm": 236.4,
+    "readingMinutesAt180Wpm": 197.0,
+    "readingMinutesAt220Wpm": 161.2,
+    "playtested": false
+  },
+  "tests": {
+    "fullVerifyExit": 0,
+    "coreAssertions": 4241,
+    "structureChecks": 63,
+    "simulatedContracts": 22,
+    "nativeBeats": 1439,
+    "activitiesReviewed": 24,
+    "conversationReturns": 28,
+    "editorScenes": 13,
+    "familyPlayerChecks": 70,
+    "familyPreviewChecks": 20,
+    "actualFrozenReaderPreservesChoices": [
+      0,
+      1,
+      2
+    ]
+  },
+  "normalSessions": {
+    "normal-0": {
+      "checks": 15,
+      "receiptSha256": "66f2789cc70bec1724ddcfb3d015891c1bc00480c2ed1e5fa213abf8ee012ca7",
+      "controllerSha256": "03d1ade33affbc93a3b3f086fd4d69c152be7384fb8adbf68862aed3763e75cb",
+      "nativeDllSha256": "81aa8acd7a30cc9f2f36bc8fefe85ce4f40c6da70a334938e910fc904a40f9ef",
+      "images": {
+        "current.png": "761729cd0753422dccd5b3cc62a015dfbc445f30bcfa232166b5822add771a1b",
+        "title.png": "0b0a150551352572e90f9438256b1536ed57fbe4b03e288ec9cee1691b98f93a",
+        "intentions-150.png": "fbc435ad91738abd8fb8bb50060add9054301ed0c8f905be91d8e63a7c4a5f1c",
+        "focused-intention-150.png": "51804a9351c2ef499280b5f5ea70f3ed57adef1f04c4de52bbc94854955a543e",
+        "authored-consequence-150.png": "a4699c84aacfc34d775f63f2f5740f0967150f45a53ee14945dab7cc7404d609",
+        "restored-consequence-150.png": "76aba1b9893b069ebcb9467b7899ebacd04ff008f0fa233eb3818cbebc2e1da5"
+      }
+    },
+    "normal-1b": {
+      "checks": 18,
+      "receiptSha256": "5e57ed309a1376f18a1c4ce57baa6298de362c099ecb34a618f4550a3ad9e121",
+      "controllerSha256": "9fc31e463d5dfe0670d08f729f2528e969020a8b6cbe3285889992b930d19d21",
+      "nativeDllSha256": "81aa8acd7a30cc9f2f36bc8fefe85ce4f40c6da70a334938e910fc904a40f9ef",
+      "images": {
+        "current.png": "1b64271a633f8696a51dd27927edfc037d88c7f6b71830989d758439c16b554f",
+        "title.png": "bd1ec13b7b60ddada26650e54b98748446a068842e432b698d9a9dea75f7f6b5",
+        "intentions-150.png": "6da15852a5350b3f16d732d74be6ee5816f9518465f02a1c46c6c38c61e33fdb",
+        "focused-intention-150.png": "c667d9ccbd99967da25460b9d75434ad5b2e307e285eb9175e16b7535630ab84",
+        "authored-consequence-150.png": "a071285d8e27a07ddcb53c3fe13998039954ccb00faa84c6a7156c341e77367d",
+        "restored-consequence-150.png": "0d11f2b0c5aa8406b584188b3ef7bb9c9dfcaaae117bb821e55a61605d33712e"
+      }
+    },
+    "normal-2b": {
+      "checks": 18,
+      "receiptSha256": "e147a2260a2bf524bf90053f7f029d9f311eb427ee85c38c599d8bb29a08aff1",
+      "controllerSha256": "4874e6b114fb297d464b1bc6ab7309f6475ca3440b79c08d5baf05e0b1729b46",
+      "nativeDllSha256": "81aa8acd7a30cc9f2f36bc8fefe85ce4f40c6da70a334938e910fc904a40f9ef",
+      "images": {
+        "current.png": "f0188f74448b728cb03a81f2ef10b402e82a10d7c6e6f9524060a9ea4683adac",
+        "title.png": "03be597b2d12eae4b30b57552db90c2dd5ead118bea1c5b097632158c35156a6",
+        "intentions-150.png": "44cfd8ff4a4cadc3dfc902092fe6a38e9b549a7fce52828f8bf0ca7a32527d1d",
+        "focused-intention-150.png": "e2ea828a41bca067bbc17d580a4c290eab39543bb50c2613bf9c40bb89c38bdc",
+        "authored-consequence-150.png": "bc3538082890f5241e5471218898147bd2dde1b096fb74c6b4b5266668b92da6",
+        "restored-consequence-150.png": "861a0df3fd30c0b4410250e5b81ed75d3ba2c575f9edd9c1e7c26a9cb9857766"
+      }
+    }
+  },
+  "exploratoryControllerFailures": {
+    "normal-1": {
+      "receiptSha256": "aa0bb24775846a537903f9625865a1b49cb35257271ceb0c5f95cdb5878ea3fc",
+      "failure": "Visible state did not settle: I appreciate that. Sometimes I feel"
+    },
+    "normal-2": {
+      "receiptSha256": "ba04b2be03b4b217260d00d8029c34384f2d91346baaf480556f9bb3186f9a37",
+      "failure": "Visible state did not settle: ordinary lives they want shown."
+    }
+  },
+  "localEvidenceSha256": {
+    "full-verify.log": "2e669f26d0be19c10aa3cbae2bd89bfa5f0513f55ede33ef7f6aad2e392513eb",
+    "native-exchange-player.log": "29fec7663e4cadae0e433751130a59acda1fb807b838e003cfeeaf926d266546",
+    "native-exchange-preview.log": "a816eb70ae05cffada1edef8c12ec9d805486139addb1e227f73e6d0d60a874d",
+    "frozen-reader-reproducible.log": "5066a5f158fc40f98f240c985aae8f4d9d4a71196ec2b55d5345779c1f435c14",
+    "canon-preservation.json": "66eee7020c342a1e498f82112c211b93953399849782df6c3d9e9dd47760b856",
+    "metrics.json": "f61b211f08615e5a6206aee54a75b9cb62692bbce38e57af42c4fd5ffc42b1ca",
+    "fixture-generator.cs": "599cb5fc25988ee20ce6fe51f12c50f0318147dc91543b63a6188fea63714599",
+    "fixture-generator.csproj": "6acc04a3fb7744c1ba112b89c732b114f978859e2beea353425448f1dac1a1e1"
+  },
+  "fixtureProvenanceSha256": "91c55c2b012a306cf428109d0c35ba2c1d995c7a51a8789026a7f88e38faf5f5",
+  "separateAdapterReviewRepair": "5fdf0b179f7bec1efbc6b19612bba3202aa60bfb",
+  "limits": [
+    "All prior canon/main-path values identical after removing only new exchange property.",
+    "No physical-device/accessibility-tool, human editorial/duration, live model, hearing or ASR acceptance.",
+    "No blocked runtime or Library retry; raw logs/screenshots remain local.",
+    "Independent adapter fixture repair is separately qualified; production adapter is unchanged.",
+    "Parent owns main/PR/merges/publication."
+  ]
+}

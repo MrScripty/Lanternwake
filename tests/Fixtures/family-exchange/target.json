@@ -1,0 +1,72 @@
+{
+  "version": 2,
+  "storyTitle": "Lanternwake",
+  "beatId": "ch4_s1a_b035",
+  "history": [
+    {
+      "speaker": "ada",
+      "text": "Good.",
+      "generated": false,
+      "beatId": "ch4_s1a_b030",
+      "sceneId": null,
+      "conversationCharacterId": null
+    },
+    {
+      "speaker": "narrator",
+      "text": "For several minutes, you work on descriptions that avoid turning each person into a single exemplary trait. Leila was not merely organized. Ruth was not merely kind. Dev was not simply cheerful. The permitted source material supports particular actions, jokes, preferences, and skills. You keep those particulars rather than manufacturing six inspirational biographies.",
+      "generated": false,
+      "beatId": "ch4_s1a_b031",
+      "sceneId": null,
+      "conversationCharacterId": null
+    },
+    {
+      "speaker": "nessa",
+      "text": "Do we include the disagreements people remember?",
+      "generated": false,
+      "beatId": "ch4_s1a_b032",
+      "sceneId": null,
+      "conversationCharacterId": null
+    },
+    {
+      "speaker": "tomas",
+      "text": "If relevant, supported, and appropriate to the permission. We don\u0027t need to make them flawless. We also don\u0027t need to collect every old irritation to prove they\u0027re human.",
+      "generated": false,
+      "beatId": "ch4_s1a_b033",
+      "sceneId": null,
+      "conversationCharacterId": null
+    },
+    {
+      "speaker": "ada",
+      "text": "Enough complexity to prevent sainthood, not an inventory of gossip.",
+      "generated": false,
+      "beatId": "ch4_s1a_b034",
+      "sceneId": null,
+      "conversationCharacterId": null
+    },
+    {
+      "speaker": "narrator",
+      "text": "Nessa nods and closes a folder whose contents have not been cleared for public use. She has learned something by looking at the permission sheet first. So have you: care is not only adding information. Sometimes it is preserving a boundary while keeping the important public evidence available.",
+      "generated": false,
+      "beatId": "ch4_s1a_b035",
+      "sceneId": null,
+      "conversationCharacterId": null
+    }
+  ],
+  "solvedActivities": [
+    "ch1_s1a_evidence",
+    "ch1_s2_evidence",
+    "ch1_s2a_evidence",
+    "ch1_s3_evidence",
+    "ch1_s3a_evidence",
+    "ch2_s1_evidence",
+    "ch2_s2a_evidence",
+    "ch2_s3_evidence",
+    "ch2_s3a_evidence",
+    "ch2_s5_evidence",
+    "ch3_s1_evidence",
+    "ch3_s2_evidence",
+    "ch3_s2a_evidence",
+    "ch3_s4_evidence",
+    "ch4_s1_evidence"
+  ]
+}

@@ -1,0 +1,260 @@
+{
+  "schemaVersion": 1,
+  "branch": "recovery/integration-repairs-20261006",
+  "verifiedBase": "17a4cc679ba6b1a2255644c55035d797fab60a44",
+  "baseTree": "dff121955f05643ef2c22b8b9bb41b2a9dbc3906",
+  "repairCommit": "038ad35747c3adaff4fea4f6a81b3af63bb6b660",
+  "repairTree": "b0f740a3746f027888140750841893e46e0ef866",
+  "completedUtc": "2026-10-06T00:45:34.913919+00:00",
+  "scope": [
+    "Enable existing keyboard-reading helper on main dialogue",
+    "Correct Ivo testimony fact without IDs/branches changing",
+    "Add 23h17m for yesterday output to today input",
+    "Correct Pumas setup docs to approved no-build-download pin; retain historical wire evidence",
+    "Regenerate knowledge-gates bible with three existing cup cues",
+    "Narrow nonblank validation documentation without adding a validator"
+  ],
+  "changedSourceSha256": {
+    "Content/story.json": "419925c7655204e9c3dd8d9eae2b3365e461d113a10066eb6373e531ded2ae97",
+    "Scripts/Presentation/GameView.cs": "af8524396065bdd0933c8a7dfb89342d209cfb683e05cd374343a8895ce40a9c",
+    "docs/CONTENT-CONTRACT.md": "e6ea542dbc8ce4dbae5e4d304a09da74e3256f50b123c8099625b058062c1721",
+    "docs/PUMAS.md": "2db199cfcbf562bdc6df1c814fb9cd0f6444b2e0be14811d7e915b8444938396",
+    "docs/QUALIFICATION-SETUP.md": "c73506795a5ab1ef586e4007e04c99582994a34dcf954c8248dacb5c4d3c7aba",
+    "docs/bible/02_SCENE_KNOWLEDGE_GATES.md": "48af1f430d986aa35c2e6ce44fb0960691cea22426dc6ac26aa28d43b79571d3",
+    "integration/qa/main_passage_keyboard.py": "e85c7f808212ac9751e42b7c3daeebc3c8fb24f5af74e74c58282dcf4434511d"
+  },
+  "testedProduction": {
+    "verifiedBase": "17a4cc679ba6b1a2255644c55035d797fab60a44",
+    "files": {
+      "Content/story.json": "419925c7655204e9c3dd8d9eae2b3365e461d113a10066eb6373e531ded2ae97",
+      "Scripts/Presentation/GameView.cs": "af8524396065bdd0933c8a7dfb89342d209cfb683e05cd374343a8895ce40a9c",
+      "Scripts/Presentation/GameView.ReadingSettings.cs": "d2423c6c313d2061e5a995ca7ba71cc01424b22d19f8d07eca662973f8665f1f",
+      ".godot/mono/temp/bin/Debug/Lanternwake.dll": "042ecff264d68af8f8dba2105364b515c0634ebc3e5fe5a7684c7edba224f970",
+      ".godot/mono/temp/bin/Debug/Lanternwake.pdb": "2ee4b1af621cf7fcffbcd93544a8d78f3245cd2173a97ebaa35d68cb5a2fb78e"
+    }
+  },
+  "storyDelta": {
+    "passed": true,
+    "changedStoryValues": [
+      "/facts/12/text",
+      "/chapters/3/scenes/6/beats/0/text"
+    ],
+    "idsBranchesAndOtherValuesPreserved": true,
+    "add23h17mVerified": true
+  },
+  "nativeAggregate": {
+    "command": "bash scripts/verify.sh",
+    "exitCode": 0,
+    "warnings": 0,
+    "errors": 0,
+    "coreAssertions": 4125,
+    "storyChecks": 63,
+    "simulatedPumasScenarios": 11,
+    "audioSetupTests": 5,
+    "authoredBeats": 1424,
+    "activities": 23,
+    "conversations": 28,
+    "completeCupChecks": 4926,
+    "keeperBeatObservations": 341,
+    "editorScenes": 13,
+    "mixerPcmFrames": 20480,
+    "audioDriver": "Dummy",
+    "logSha256": "8ec025c1926c24dc6ac18d48477116ca016f1ad44a7761d5cc1d4b4570b1ae3a"
+  },
+  "normalPlayer": {
+    "mainPassage": {
+      "passed": true,
+      "checks": 44,
+      "events": 67,
+      "images": 29,
+      "receiptSha256": "e9d8d8724104f95a7495a09e750421069982ab5d53ee54e7fdda18c8df4cb789",
+      "controllerSha256": "e85c7f808212ac9751e42b7c3daeebc3c8fb24f5af74e74c58282dcf4434511d",
+      "sourceUnchanged": true,
+      "nativeDllSha256": "042ecff264d68af8f8dba2105364b515c0634ebc3e5fe5a7684c7edba224f970",
+      "scrollObservations": [
+        {
+          "percent": 125,
+          "tabAttempts": 6,
+          "proseRegion": [
+            140,
+            640,
+            1285,
+            765
+          ],
+          "differingPixels": [
+            3,
+            4,
+            5,
+            4,
+            4,
+            29204
+          ]
+        },
+        {
+          "percent": 150,
+          "tabAttempts": 6,
+          "proseRegion": [
+            140,
+            640,
+            1285,
+            765
+          ],
+          "differingPixels": [
+            2,
+            2,
+            2,
+            4,
+            5,
+            33702
+          ]
+        }
+      ]
+    },
+    "saveRestartRecovery": {
+      "passed": true,
+      "checks": 142,
+      "events": 188,
+      "images": 16,
+      "receiptSha256": "a4ac7e4c429d65feaacd145de1f8a693eafea34e52e2d10585c075b4bc773ce4",
+      "controllerSha256": "1156883dc067676f387d19c21e6f2dbb12e743630443514cc2217d2f7ba9048d",
+      "processes": [
+        {
+          "name": "first",
+          "pid": 6013,
+          "exitCode": -9,
+          "intentionalInterruption": true
+        },
+        {
+          "name": "restart",
+          "pid": 6630,
+          "exitCode": 0,
+          "intentionalInterruption": false
+        },
+        {
+          "name": "recovery",
+          "pid": 6942,
+          "exitCode": 0,
+          "intentionalInterruption": false
+        }
+      ]
+    },
+    "focusedControls": {
+      "passed": true,
+      "checks": 84,
+      "events": 125,
+      "images": 47,
+      "receiptSha256": "58efa9ac8d32d990314de89ec945eb6d34187576771e36e2fd9e04ec0d746e63",
+      "controllerSha256": "5ace22b40f3fd0bd961b5df80370846ef748dae1b276173777064ab4d3bfa8d8",
+      "sourceUnchanged": true,
+      "nativeDllSha256": "042ecff264d68af8f8dba2105364b515c0634ebc3e5fe5a7684c7edba224f970"
+    }
+  },
+  "compilerBinding": {
+    "dllPdbMatch": true,
+    "compilerDocuments": 143,
+    "trackedCompiledSources": 48,
+    "auditSha256": "ad98aca96e1e0cb458e269996c0577d553a6224c943d3efffb43c849bf8fed25"
+  },
+  "pumasDocumentationSource": {
+    "pin": "95a0baad2d0aea4650fc36ad4afd969ac9391bf5",
+    "remoteMainVerified": true,
+    "qualification": "source inspection for documentation only; no Pumas build, wire or live-inference run",
+    "files": {
+      "rust/Cargo.toml": "20bc7d7e683b50911c3182ad3056bd09a3b0fc00081cb38904dc7651346a7ebd",
+      "rust/crates/pumas-core/Cargo.toml": "770a9333799a9c48bf04cd8e5783404819670655ec6ec2bc68239458f6c6672b",
+      "docs/DEVELOPMENT.md": "ce172a64d0a0d2f6e5e75847cd2eece79817986e3ccebacc9f73d2bb891e86a0",
+      "rust/crates/pumas-core/src/onnx_runtime/native_library.rs": "880039994df5dafcdb4ae501918a327401857b2ac0be0ea732b11bc2e8f27308"
+    }
+  },
+  "rejectedObserverAttempts": [
+    {
+      "run": "passage",
+      "passed": false,
+      "receiptSha256": "d5b06f9ba0954339a0115dcb88b2561693d28c6fa688487fbec0a357d73c2c5a",
+      "failure": "125% scrollbar space preserves rendered passage",
+      "checksCompleted": 14
+    },
+    {
+      "run": "passage-final",
+      "passed": false,
+      "receiptSha256": "2cabb9021664f1fe1fbb1bc828f5c2d8a1cac3970b77b80b8131ab57d08fa981",
+      "failure": "125% Home restores exact opening prose",
+      "checksCompleted": 15
+    },
+    {
+      "run": "passage-qualified",
+      "passed": false,
+      "receiptSha256": "87e44dd11a96c4979c0214d881207b40a2b37385d2865ae8c9a9133fc444dfac",
+      "failure": "Command '['tesseract', '/workspace/lanternwake-integration-recovery-20261006/passage-qualified/current.png', 'stdout', 'tsv']' timed out after 15 seconds",
+      "checksCompleted": 19
+    },
+    {
+      "run": "passage-accepted",
+      "passed": false,
+      "receiptSha256": "9131aadc98992624b0b2225950d983b76f032bfb2e45693bc34272f6babf3ba0",
+      "failure": "Expected one OCR control 'Larger reading text'; found []. Inspect current.png.",
+      "checksCompleted": 2
+    },
+    {
+      "run": "direct",
+      "passed": false,
+      "receiptSha256": "4b13ea2e13cad27e66bd0266ba3485d784c324be8ad8ca442ec5b912c8dead79",
+      "failure": "Expected one visible OCR control 'Recover previous manual save', found []; inspect /workspace/lanternwake-integration-recovery-20261006/direct/current.png",
+      "checksCompleted": 132
+    },
+    {
+      "run": "focused",
+      "passed": false,
+      "receiptSha256": "91906adf30a859b6cf6995648de3e0f9cc9b2e04c13500581621471bf5b5dd31",
+      "failure": "Expected one OCR control 'Load current manual save'; found []. Inspect current.png.",
+      "checksCompleted": 1
+    },
+    {
+      "run": "focused-qualified",
+      "passed": false,
+      "receiptSha256": "bcc0b287ff3040d7f1a6acd39cc5789b3e3ca213917393662fa9c862800b9bb8",
+      "failure": "native gold underline confirms Tab focus: Stay and talk",
+      "checksCompleted": 63
+    }
+  ],
+  "rawEvidence": {
+    "path": "/workspace/lanternwake-integration-recovery-20261006.tar.gz",
+    "bytes": 70202015,
+    "sha256": "0ee0567d09a90a660060abfb28e225bad432d5bd71cc5345ab687000fe77e8d0",
+    "privateEvidenceUploaded": false
+  },
+  "rawManifestSha256": "8353a08f35004b13457b0b7346155dfec79194f1008ba5d4bac6503b3b89ce8c",
+  "limits": [
+    "Synthetic X11 input and observed software-rendered pixels; no physical-device, accessibility-tool or hearing acceptance.",
+    "Native aggregate callbacks/full traversal are not a human reading/editorial/emotional or five-hour duration playtest.",
+    "Authored model fallback and simulated Pumas contracts; no new loaded-model inference or Pumas 95a0baa wire qualification.",
+    "Pumas/Cohere typed producer contract, actual microphone and ASR remain gated.",
+    "No new standalone export, gamepad, platform or release qualification.",
+    "No Library upload, PR metadata action, merge, publication or account/credential/security change."
+  ],
+  "sourceBindingNote": "Native runs used the repaired working tree based on 17a4cc6 before committing. Production C#, story and main regression controller hashes match repair commit 038ad35. A final documentation-only Pumas sentence clarified the approved setup pin after tests.",
+  "observerAdapters": {
+    "direct": {
+      "path": "accepted-controllers/direct_runtime_input.py",
+      "changes": "Task-local copy adds a native menu-readiness wait and increases post-click settling from .25s to .75s.",
+      "sha256": "1156883dc067676f387d19c21e6f2dbb12e743630443514cc2217d2f7ba9048d"
+    },
+    "focused": {
+      "path": "accepted-controllers/focused_control_input.py",
+      "changes": "Task-local copy adds native menu-readiness/OCR retries and .35s settling after Tab/key releases before observing focus.",
+      "sha256": "5ace22b40f3fd0bd961b5df80370846ef748dae1b276173777064ab4d3bfa8d8"
+    },
+    "threadLimits": {
+      "OMP_THREAD_LIMIT": "1",
+      "LP_NUM_THREADS": "2"
+    },
+    "gameInjection": false,
+    "existingRepositoryControllersModified": false
+  },
+  "refsPreserved": {
+    "baselineRefs": 3,
+    "originalSavedCheckoutHead": "65548f97e1c203884864bf4dcc1d1849db4cbcd1",
+    "parentOwnedRemoteMain": "3051855bb0c8f4a6d222081f22d00a19c3298572",
+    "frozenFeatureRemote": "17a4cc679ba6b1a2255644c55035d797fab60a44"
+  }
+}

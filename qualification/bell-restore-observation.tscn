@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://qualification/BellRestoreObservation.cs" id="1_observe"]
+
+[node name="BellRestoreObservation" type="Node"]
+script = ExtResource("1_observe")

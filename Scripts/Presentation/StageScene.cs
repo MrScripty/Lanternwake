@@ -12,8 +12,26 @@ public partial class StageScene : Node3D
     [Export] public WorldEnvironment Atmosphere { get; set; } = null!;
     [Export] public DirectionalLight3D KeyLight { get; set; } = null!;
     [Export] public Node3D CastOrigin { get; set; } = null!;
+    [Export] public Node3D? PerformanceFocus { get; set; }
     [Export] public Node3D? BellBody { get; set; }
     [Export] public Vector3 BellLoweredOffset { get; set; } = new(0, -2.1f, 0);
+
+    [ExportGroup("Optional guided bell descent")]
+    [Export] public string BellDescentStartBeatId { get; set; } = "";
+    [Export] public string BellDescentFlowBeatId { get; set; } = "";
+    [Export] public Camera3D? BellReleaseCamera { get; set; }
+    [Export] public MeshInstance3D? BellSuspension { get; set; }
+    [Export(PropertyHint.Range, "0.1,6,0.1")] public double BellTravelSeconds { get; set; } = 1.8;
+
+    [ExportGroup("Optional cup states")]
+    [Export] public Node3D? CupIntact { get; set; }
+    [Export] public Node3D? CupFragments { get; set; }
+    [Export] public Node3D? CupFloorHandle { get; set; }
+    [Export] public Node3D? CupBoxed { get; set; }
+    [Export] public Node3D? SteelMug { get; set; }
+    [Export] public Camera3D? CupFloorCamera { get; set; }
+    [Export] public Camera3D? CupInventoryCamera { get; set; }
+    [Export] public string CupInventoryBeatId { get; set; } = "";
 
     [ExportGroup("Optional time-of-day looks")]
     [Export] public Godot.Environment? DawnEnvironment { get; set; }
@@ -55,6 +73,13 @@ public partial class StageScene : Node3D
     private Color _nightLightColor;
     private float _nightEnergy;
     private Vector3 _bellOrigin;
+    private Vector3 _bellTarget;
+    private string? _bellBeatId;
+    private Tween? _bellTravel;
+    private bool _motionEnabled = true;
+    private Vector3 _suspensionOrigin;
+    private Vector3 _suspensionScale;
+    private float _suspensionHeight;
 
     public override void _Ready()
     {
@@ -69,7 +94,13 @@ public partial class StageScene : Node3D
         _nightEnvironment = Atmosphere.Environment;
         _nightLightColor = KeyLight.LightColor;
         _nightEnergy = KeyLight.LightEnergy;
-        if (BellBody != null) _bellOrigin = BellBody.Position;
+        if (BellBody != null) _bellOrigin = _bellTarget = BellBody.Position;
+        if (BellSuspension != null)
+        {
+            if (BellSuspension.Mesh == null) throw new InvalidOperationException($"Stage '{Name}' has no mesh on its bell suspension binding.");
+            _suspensionOrigin = BellSuspension.Position; _suspensionScale = BellSuspension.Scale;
+            _suspensionHeight = BellSuspension.Mesh.GetAabb().Size.Y * _suspensionScale.Y;
+        }
         StoryCamera.MakeCurrent();
     }
 
@@ -83,13 +114,61 @@ public partial class StageScene : Node3D
         KeyLight.LightEnergy = _nightEnergy * (dawn ? DawnKeyLightEnergyMultiplier : dusk ? DuskKeyLightEnergyMultiplier : 1);
     }
 
-    public void ApplyAuthoredCues(string[] cues)
+    public void ApplyAuthoredCues(string[] cues, string? currentCue = null, string? currentBeatId = null, bool playTransition = true)
     {
-        if (BellBody != null) BellBody.Position = _bellOrigin + (Array.IndexOf(cues, "bell_lowered") >= 0 ? BellLoweredOffset : Vector3.Zero);
+        bool bellStart = BellDescentStartBeatId.Length > 0 && currentBeatId == BellDescentStartBeatId;
+        bool bellFlow = BellDescentFlowBeatId.Length > 0 && currentBeatId == BellDescentFlowBeatId;
+        ApplyBellState(Array.IndexOf(cues, "bell_lowered") >= 0 ? 1 : bellFlow ? .9f : bellStart ? .5f : 0,
+            currentBeatId, playTransition && (bellStart || bellFlow));
+        bool mug = Array.IndexOf(cues, "steel_mug") >= 0;
+        bool boxed = mug || Array.IndexOf(cues, "cup_boxed") >= 0;
+        bool broken = boxed || Array.IndexOf(cues, "cup_broken") >= 0;
+        if (CupIntact != null) CupIntact.Visible = !broken;
+        if (CupFragments != null) CupFragments.Visible = broken && !boxed;
+        if (CupFloorHandle != null) CupFloorHandle.Visible = broken && !mug;
+        if (CupBoxed != null) CupBoxed.Visible = boxed;
+        if (SteelMug != null) SteelMug.Visible = mug;
+        // Persistent object state survives recovery; close views belong to the
+        // current inventory/break beat, never to later cumulative history.
+        if (!Engine.IsEditorHint())
+        {
+            var camera = BellReleaseCamera != null && (bellStart || bellFlow || currentCue == "bell_lowered") ? BellReleaseCamera
+                : currentCue == "cup_broken" && broken && !boxed ? CupFloorCamera ?? StoryCamera
+                : !broken && currentBeatId == CupInventoryBeatId ? CupInventoryCamera ?? StoryCamera : StoryCamera;
+            if (!camera.Current) camera.MakeCurrent();
+        }
     }
+
+    private void ApplyBellState(float fraction, string? beatId, bool animate)
+    {
+        if (BellBody == null || Engine.IsEditorHint()) return;
+        var target = _bellOrigin + BellLoweredOffset * fraction;
+        // Same-beat refreshes retain their current travel; Load always settles directly.
+        if (animate && _motionEnabled && beatId == _bellBeatId && target == _bellTarget) return;
+        StopBellTravel(); _bellBeatId = beatId; _bellTarget = target;
+        if (!animate || !_motionEnabled || BellBody.Position.IsEqualApprox(target)) { SetBellPosition(target); return; }
+        _bellTravel = CreateTween().SetTrans(Tween.TransitionType.Sine).SetEase(Tween.EaseType.InOut);
+        _bellTravel.TweenMethod(Callable.From<Vector3>(SetBellPosition), BellBody.Position, target,
+            double.IsFinite(BellTravelSeconds) ? Math.Clamp(BellTravelSeconds, .1, 6) : 1.8);
+    }
+
+    private void SetBellPosition(Vector3 position)
+    {
+        BellBody!.Position = position;
+        if (BellSuspension == null || _suspensionHeight <= 0) return;
+        // Pay out beneath the fixed top anchor without changing the authored mesh resource.
+        var descent = position.Y - _bellOrigin.Y;
+        BellSuspension.Position = _suspensionOrigin + Vector3.Up * (descent * .5f);
+        BellSuspension.Scale = _suspensionScale * new Vector3(1, (_suspensionHeight - descent) / _suspensionHeight, 1);
+    }
+
+    private void StopBellTravel() { _bellTravel?.Kill(); _bellTravel?.Dispose(); _bellTravel = null; }
+    public override void _ExitTree() => StopBellTravel();
 
     public void SetMotionEnabled(bool enabled)
     {
+        _motionEnabled = enabled;
+        if (!enabled && BellBody != null && !Engine.IsEditorHint()) { StopBellTravel(); SetBellPosition(_bellTarget); }
         SetMotionEnabledBelow(this, enabled);
         // Slot meshes are static authoring references, even while the real cast animates.
         foreach (var layout in CastLayouts().Where(layout => layout.UsesSlots))

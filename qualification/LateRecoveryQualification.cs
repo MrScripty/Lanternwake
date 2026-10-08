@@ -122,7 +122,7 @@ public partial class LateRecoveryQualification : Node
             if (session.Beat.Activity is { } activity) Check(session.AnswerActivity(activity.CorrectIndex), "fixture setup solves only actual prior gates");
             Check(session.Advance(), "fixture setup follows production domain timeline");
         }
-        Check(_late.History.Count == 1424 && !_late.SolvedActivities.Contains(_late.BeatId), "late checkpoint retains final unsolved gate");
+        Check(_late.History.Count == _ordered.Length && !_late.SolvedActivities.Contains(_late.BeatId), "late checkpoint retains final unsolved gate");
     }
 
     private async Task Prepare()
@@ -182,7 +182,7 @@ public partial class LateRecoveryQualification : Node
             else { Press("SaveButton"); repaired = _beforeCue; }
             if (_damage == "read-error")
             {
-                Check(_game.InterfaceRoot.GetNode<Label>("%StatusLabel").Text.StartsWith("Could not save:"), "actual save surfaces read error");
+                Check(_game.CurrentStatusText.StartsWith("Could not save:"), "actual save surfaces read error");
                 Unchanged(before); _saveErrors++;
                 Directory.Delete(Slot(_automatic));
                 if (_automatic) { await Select(true, true, _beforeCue); Press("AdvanceButton"); }

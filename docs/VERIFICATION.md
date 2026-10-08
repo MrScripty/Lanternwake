@@ -1,5 +1,9 @@
 # Verification record
 
+The [integration repair verification](INTEGRATION-RECOVERY-VERIFICATION.md)
+records the recovery from remote `17a4cc6`, enlarged main-passage keyboard reading,
+the scoped story/documentation corrections and their native delta evidence.
+
 The [playable coverage inventory](PLAYABLE-COVERAGE-INVENTORY.md) reconciles the
 accepted source, long save/resume, late recovery and optional authored-fallback
 qualification, with exact identities and remaining human/platform/audio gates.

@@ -19,7 +19,7 @@ public sealed record PumasReply(bool Success, string Text, string ErrorCode)
 /// Direct client of the source-qualified Pumas headless inference API.
 /// Owns its transport and contains no Godot objects or canonical game state.
 /// </summary>
-public sealed class PumasClient : IDisposable
+public sealed partial class PumasClient : IDisposable
 {
     private const int MaxResponseBytes = 262_144;
     private readonly HttpClient _http;
@@ -81,6 +81,7 @@ public sealed class PumasClient : IDisposable
             if (!root.TryGetProperty("choices", out var choices) || choices.ValueKind != JsonValueKind.Array ||
                 choices.GetArrayLength() != 1 || choices[0].ValueKind != JsonValueKind.Object ||
                 !choices[0].TryGetProperty("message", out var message) || message.ValueKind != JsonValueKind.Object ||
+                StringField(message, "role") != "assistant" ||
                 !message.TryGetProperty("content", out var content) || content.ValueKind != JsonValueKind.String)
                 return PumasReply.Unavailable("invalid_response");
             var text = content.GetString() ?? string.Empty;
@@ -108,29 +109,50 @@ public sealed class PumasClient : IDisposable
             schema.ValueKind != JsonValueKind.Number || !schema.TryGetInt32(out var version) || version != 1 ||
             !snapshot.TryGetProperty("served_models", out var models) || models.ValueKind != JsonValueKind.Array)
             throw new PumasProtocolException("pumas_contract");
-        JsonElement? selected = null;
+        var routers = snapshot.TryGetProperty("router_profiles", out var observed) ? observed : default;
+        if (routers.ValueKind is not (JsonValueKind.Undefined or JsonValueKind.Array))
+            throw new PumasProtocolException("pumas_contract");
+        if (routers.ValueKind == JsonValueKind.Array &&
+            routers.EnumerateArray().Any(router => router.ValueKind != JsonValueKind.Object))
+            throw new PumasProtocolException("pumas_contract");
+        JsonElement? aliasMatch = null, idMatch = null;
+        var aliasCount = 0;
+        var idCount = 0;
         foreach (var candidate in models.EnumerateArray())
         {
             if (candidate.ValueKind != JsonValueKind.Object) throw new PumasProtocolException("pumas_contract");
             if (StringField(candidate, "load_state") != "loaded" ||
                 (StringField(candidate, "model_id") != _model && StringField(candidate, "model_alias") != _model)) continue;
-            if (selected.HasValue) throw new PumasProtocolException("model_unavailable");
-            selected = candidate;
+            var profile = StringField(candidate, "profile_id");
+            if (string.IsNullOrWhiteSpace(profile)) throw new PumasProtocolException("pumas_contract");
+            if (!RouterCurrent(routers, profile)) continue;
+            if (StringField(candidate, "model_alias") == _model) { aliasMatch = candidate; aliasCount++; }
+            if (StringField(candidate, "model_id") == _model) { idMatch = candidate; idCount++; }
         }
+        // Pumas resolves a current loaded alias before a base model ID. A
+        // library ID that happens to equal another model's alias is not a
+        // second alias match (95a0baad openai_gateway.rs).
+        var selected = aliasCount > 0 ? aliasMatch : idMatch;
+        if ((aliasCount > 0 ? aliasCount : idCount) > 1)
+            throw new PumasProtocolException("model_unavailable");
         if (!selected.HasValue) throw new PumasProtocolException("model_unavailable");
         if (StringField(selected.Value, "provider") != "llama_cpp") throw new PumasProtocolException("wrong_provider");
-        var profile = StringField(selected.Value, "profile_id");
-        if (string.IsNullOrWhiteSpace(profile)) throw new PumasProtocolException("pumas_contract");
-        if (!snapshot.TryGetProperty("router_profiles", out var routers)) return;
-        if (routers.ValueKind != JsonValueKind.Array) throw new PumasProtocolException("pumas_contract");
+    }
+
+    private static bool RouterCurrent(JsonElement routers, string profile)
+    {
+        if (routers.ValueKind == JsonValueKind.Undefined) return true;
+        var matches = 0;
+        var current = true;
         foreach (var router in routers.EnumerateArray())
         {
-            if (router.ValueKind != JsonValueKind.Object) throw new PumasProtocolException("pumas_contract");
-            if (StringField(router, "profile_id") == profile &&
-                (StringField(router, "observation_state") != "current" ||
-                 StringField(router, "catalog_state") is not ("current" or "pending")))
-                throw new PumasProtocolException("model_unavailable");
+            if (StringField(router, "profile_id") != profile) continue;
+            matches++;
+            current = StringField(router, "observation_state") == "current" &&
+                      StringField(router, "catalog_state") is "current" or "pending";
         }
+        if (matches > 1) throw new PumasProtocolException("pumas_contract");
+        return current;
     }
 
     private async Task<JsonDocument> PostJsonAsync(string path, object payload, CancellationToken token)
@@ -187,5 +209,5 @@ public sealed class PumasClient : IDisposable
     }
 
     /// <summary>Caller must cancel and await active invocations before disposing.</summary>
-    public void Dispose() { _http.Dispose(); _generation.Dispose(); }
+    public void Dispose() { _http.Dispose(); _generation.Dispose(); _setup.Dispose(); }
 }

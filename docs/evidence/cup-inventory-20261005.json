@@ -1,0 +1,109 @@
+{
+  "branch": "feat/cup-inventory-insert-20261005",
+  "baseCommit": "f4838546eb6da5fd9269349084e54a668bdee9fa",
+  "baseTree": "7d414030dbe40f55deb0fe45770fecba2ff48f82",
+  "completedUtc": "2026-10-06T00:01:23.528205+00:00",
+  "scope": "Wide b007 -> static repaired-cup insert b008 -> wide b009; actual save/load/recovery and repeat; no story/input/save changes",
+  "normalPlayer": {
+    "normal": {
+      "passed": true,
+      "checks": 38,
+      "events": 62,
+      "images": 13,
+      "exitCode": 0,
+      "sourceUnchanged": true,
+      "nativeDllSha256": "a642d79b993a3a069ff1bfb5e728960880dd8fadc611f75477f8da026634510b",
+      "receiptSha256": "51a4eeb70c4ca2588e5c66ca2c45c9bef90ab7de57efa0efe49fe3309fbff545",
+      "seedSha256": "a50b1053ba926f4386e67e0f3bdc2973136bb9733d58a0f00ce0aad2a5312036"
+    },
+    "fresh": {
+      "passed": true,
+      "checks": 9,
+      "events": 17,
+      "images": 4,
+      "exitCode": 0,
+      "sourceUnchanged": true,
+      "nativeDllSha256": "a642d79b993a3a069ff1bfb5e728960880dd8fadc611f75477f8da026634510b",
+      "receiptSha256": "32d27bcced0476c7025fde66cd0129d3290c61ebc00317ecd7be5d1af44b0ca9",
+      "seedSha256": "8b73f854a3af8e53356747b61c84804528ca918e1ec5de1cec3cf0ab6fff7ec8"
+    }
+  },
+  "authorPreview": {
+    "cases": [
+      "house-inventory",
+      "house-broken"
+    ],
+    "injectedQaScript": true,
+    "passed": true,
+    "resultSha256": "1dd01db02d8f2208dacc975edc22f7487206b320664289b4c74ac3e3474796dc"
+  },
+  "managedBuilds": {
+    "Debug": {
+      "dllPdbMatch": true,
+      "compilerDocuments": 143,
+      "trackedCompiledSources": 48,
+      "dllSha256": "a642d79b993a3a069ff1bfb5e728960880dd8fadc611f75477f8da026634510b",
+      "pdbSha256": "4c8af9342abb9d71539cfa1208b8dc6e1d90681e528e2f4d9099a7ab80a48255",
+      "auditSha256": "b3781c169fbe2d07cbcc899610fffaec81c469d5e258df0d3e662850015647fe"
+    },
+    "ExportDebug": {
+      "dllPdbMatch": true,
+      "compilerDocuments": 137,
+      "trackedCompiledSources": 48,
+      "dllSha256": "fd0cf5f878189c7d25e0807e46ab6fc0ac2322b206a6a2bd15462d2b2258bd16",
+      "pdbSha256": "4c9e2a5f25a8a43e6e7cd96a6a477bd4ba55e58f939827a6860c33f2136ff21d",
+      "auditSha256": "7a79c2057ae935585c9fa17f4b31a561a9b7e84ea161db480efcc180c9b052f0"
+    },
+    "ExportRelease": {
+      "dllPdbMatch": true,
+      "compilerDocuments": 89,
+      "trackedCompiledSources": 48,
+      "dllSha256": "3e46a5e6ea7b2b4f3a4a165bcbc2fe055ced6c054a56b22f894694d28a78afd4",
+      "pdbSha256": "4af86b332e518729be1e14e3d8eede0ab948e3c8325bd3c612e3542409b0f646",
+      "auditSha256": "b9468e27ad7a3695b43828ebb432dd3eec2ee98db5db0abd4a7808d7c55af874"
+    }
+  },
+  "nativeAggregate": {
+    "exitCode": 0,
+    "coreAssertions": 4125,
+    "storyChecks": 63,
+    "authoredBeats": 1424,
+    "keeperBeatObservations": 341,
+    "completeCupChecks": 4926,
+    "editorScenes": 13,
+    "knownImportWarnings": [
+      "WARNING: Missing .uid file for path \"res://integration/pumas/LiveSmoke/Program.cs\". The file was re-created from cache.",
+      "WARNING: Missing .uid file for path \"res://integration/qa/ExportAudit/Program.cs\". The file was re-created from cache.",
+      "WARNING: Missing .uid file for path \"res://integration/qa/export_header_audit.gd\". The file was re-created from cache.",
+      "WARNING: Missing .uid file for path \"res://integration/speech/Program.cs\". The file was re-created from cache.",
+      "WARNING: Missing .uid file for path \"res://Scripts/Conversation/PumasSpeechTranscriber.cs\". The file was re-created from cache."
+    ],
+    "logSha256": "4ef65518a95df745397fa3761a28b9aa531891ff5ee38a535826b7a1cb1fbb3e",
+    "focusedCleanImportSha256": "393d9632b593b7da11e7faa7ce04fbe79d3f00b5495d7dfbaaae1031a82d3641"
+  },
+  "audits": {
+    "scope-audit.json": "e3df573df1522932dc2d0b0b1be2c51f5571aea3083b21e2a8f9173ca06a8cef",
+    "normal-save-audit.json": "75b5f2027683e78aab75ed859224e04eca8cb301ba8c10cdad91aa91deba53e1",
+    "fresh-save-audit.json": "cc44e6464f3c793292a9ae77a847142087d53ef3449dd23095a6e63d9033abd6",
+    "normal-pixel-audit.json": "2b67cf4aaa3ffef80de589e172ce7d6836aa28d54af6d2d01138bf8ba5156f1d"
+  },
+  "testedSourceSha256": {
+    "Scenes/Stages/KeeperHouse.tscn": "3834db433a934a177ce7ed437723d273f35b0366959cfad815aeadae635ac2ee",
+    "Scripts/Presentation/GameView.cs": "95293c0922dc7efa6b044f0c278c81d835b44974421e4274507d9a15a3825260",
+    "Scripts/Presentation/StageDirector.cs": "9453ea6350b7ce124170d9b979c232d4c82d00fe705cd14bbb7fc54748dffe7e",
+    "Scripts/Presentation/StageScene.cs": "c63821a8cacb3b52e5ef75d90f4c53826da96395186a374d0ae76a5a356b43be",
+    "qualification/CupStateQualification.cs": "42aee871c3fefef0011ee41faf566e588d24e3e67872e8cc5ff93dcf69befb19",
+    "integration/qa/cup_inventory.py": "9eaba504aeea173ca9c6901209aec09abcf6d128ea6e820aa7e0fe6ecf972411",
+    "integration/qa/graphical_inspection.py": "4913a815458fc518050b0d19da7100b44a93573ecbe4f5a256f9b1ef81fcebb7",
+    "integration/qa/graphical_probe.gd": "8e40d9559fd13801b8a42e06afbc849c75e71392d08c9565df5192f92afc7fb2",
+    "integration/qa/normal_player.py": "7ddf2d4dd347eb3e41101c7eec5803dfb1e0ef0ddcb963d8f10d44ea0afde2c3"
+  },
+  "localPacket": "/workspace/lanternwake-cup-inventory-20261005.tar.gz",
+  "limits": [
+    "Synthetic normal-player X11 input; software renderer and Dummy audio; no physical device/hearing or human art/duration acceptance.",
+    "Authored model fallback; no real-model or microphone/ASR claim.",
+    "Managed assemblies are not standalone playable exports.",
+    "Additional poses/inserts/bell staging, other platforms, accessibility tools and full five-hour playthrough remain unqualified.",
+    "No Library upload, PR action/merge, live publication or account/security change."
+  ]
+}

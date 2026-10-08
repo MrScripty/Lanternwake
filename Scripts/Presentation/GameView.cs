@@ -27,11 +27,13 @@ public partial class GameView : Node
     private StageDirector _stage = null!;
     private Label _chapter = null!;
     private Label? _place, _speaker, _status;
+    private string _placeText = "", _speakerText = "", _statusText = "";
     private RichTextLabel _dialogue = null!;
     private VBoxContainer _suggestions = null!;
     private PanelContainer _chatPanel = null!;
     private LineEdit _entry = null!;
     private Button _advance = null!, _talk = null!, _mic = null!, _send = null!;
+    private Button _titleContentNote = null!;
     private Window? _modal;
     private readonly SpeechRecorder _speech = new();
     private CancellationTokenSource? _request, _speechRequest;
@@ -93,7 +95,10 @@ public partial class GameView : Node
         _entry = InterfaceRoot.GetNode<LineEdit>("%PlayerEntry");
         _mic = InterfaceRoot.GetNode<Button>("%MicrophoneButton");
         _send = InterfaceRoot.GetNode<Button>("%SendButton");
+        _titleContentNote = InterfaceRoot.GetNode<Button>("%ContentNoteButton");
+        _titleContentNote.Pressed += ShowTitleContentNote;
         _readingText.Register(_dialogue); _readingText.Register(_entry);
+        EnableKeyboardReading(_dialogue);
         InterfaceRoot.GetNode<Button>("%EvidenceButton").Pressed += ShowEvidence;
         InterfaceRoot.GetNode<Button>("%HistoryButton").Pressed += ShowHistory;
         InterfaceRoot.GetNode<Button>("%SaveButton").Pressed += () => Save(false);
@@ -106,19 +111,22 @@ public partial class GameView : Node
         _entry.TextSubmitted += _ => SendReply();
         _mic.Pressed += ToggleMicrophone;
         _send.Pressed += SendReply;
-        InterfaceRoot.GetNode<Button>("%ReturnButton").Pressed += CloseConversation;
+        InterfaceRoot.GetNode<Button>("%ReturnButton").Pressed += ReturnToStory;
     }
     // These informational labels may be removed from an authored interface.
     private void SetPlaceText(string text)
     {
+        _placeText = text;
         if (_place is not null) _place.Text = text;
     }
     private void SetSpeakerText(string text)
     {
+        _speakerText = text;
         if (_speaker is not null) _speaker.Text = text;
     }
     private void SetStatusText(string text)
     {
+        _statusText = text;
         if (_status is not null) _status.Text = text;
         else if (_chatPanel is not null && _chatPanel.Visible)
         {
@@ -126,6 +134,11 @@ public partial class GameView : Node
             if (note is not null) note.Text = text;
         }
     }
+    public string CurrentPlaceText => _place?.Text ?? _placeText;
+    public string CurrentSpeakerText => GetSpeakerText();
+    public string CurrentStatusText => GetStatusText();
+    private string GetSpeakerText() => _speaker?.Text ?? _speakerText;
+    private string GetStatusText() => _status?.Text ?? _statusText;
     // Only the number, text and callbacks of these rows are determined at runtime.
     private Button ChoiceButton(string text, Action action)
     {
@@ -148,12 +161,13 @@ public partial class GameView : Node
         if (_dialogue.VisibleCharacters >= 0 && _dialogue.VisibleCharacters < _dialogue.GetTotalCharacterCount()) { _dialogue.VisibleCharacters = -1; return; }
         if (!_session.CanAdvance) { ShowActivity(); return; }
         if (_session.Advance()) { RenderBeat(); Save(true); }
-        else ShowWindow("The light remains", "You have reached the end of Lanternwake. Your evidence and conversations remain in History.\n\nThank you for keeping watch.");
+        else ShowCompletion();
     }
     private void RenderBeat(bool playAudioCue = true)
     {
         if (MainMenuVisible) HideMainMenu();
         _generation++;
+        _titleContentNote.Visible = false;
         var scene = _session.Scene;
         Audio.ShowLocation(scene.Location);
         Audio.ApplyBeatCue(_session.Beat.Id, _session.Beat.StageCue, playAudioCue);
@@ -161,12 +175,14 @@ public partial class GameView : Node
         var reachedBeatIds = scene.Beats.Take(beatIndex + 1).Select(beat => beat.Id).ToArray();
         Audio.ApplyStoryMusic(scene.Id, scene.Location, _session.Chapter.Id, reachedBeatIds);
         _stage.ShowLocation(scene.Location, scene.TimeOfDay, scene.CharacterIds, scene.Id, reachedBeatIds);
-        _stage.ApplyAuthoredCues(_session.ActiveStageCues);
+        _stage.ApplyAuthoredCues(_session.ActiveStageCues, _session.Beat.StageCue, _session.Beat.Id, playAudioCue);
+        _stage.ApplyPerformance(scene.Id, _session.Beat.Id, _session.Beat.Speaker);
         _chapter.Text = (_previewMode ? "AUTHOR PREVIEW · " : "") + _session.Chapter.Title.ToUpperInvariant();
         SetPlaceText(scene.Title + "  ·  " + scene.TimeOfDay.Replace('_', ' '));
         SetSpeakerText(DisplayName(_session.Beat.Speaker));
         _dialogue.Text = _session.Beat.Text; _characters = 0; _dialogue.VisibleCharacters = _instant ? -1 : 0;
-        _talk.Visible = _session.Beat.Conversation is not null;
+        _talk.Visible = _session.Beat.Conversation is not null || _session.Beat.Exchange is not null;
+        _talk.Text = _session.Beat.Exchange is { } exchange ? "Speak with " + DisplayName(exchange.CharacterId) : "Stay and talk";
         _advance.Text = !_session.CanAdvance ? "Examine evidence  ›" : _session.IsEnding ? "Finish  ›" : "Continue  ›";
         SetStatusText((_previewMode ? "AUTHOR PREVIEW · player saves disabled · " : "") + $"{_session.Progress:P0} · Space / Enter to continue · E evidence · H history");
     }
@@ -175,8 +191,25 @@ public partial class GameView : Node
     {
         if (Engine.IsEditorHint()) return;
         _operations.ObserveCompleted(error => GD.PushWarning(error.Message));
-        if (_started && _dialogue.VisibleCharacters >= 0) { _characters += delta * CharactersPerSecond; _dialogue.VisibleCharacters = Math.Min((int)_characters, _dialogue.GetTotalCharacterCount()); }
+        if (_started && _exchangeReading is null && _dialogue.VisibleCharacters >= 0) { _characters += delta * CharactersPerSecond; _dialogue.VisibleCharacters = Math.Min((int)_characters, _dialogue.GetTotalCharacterCount()); }
         if (_speech.Recording) { _speech.Poll(); _recordSeconds += delta; _mic.Text = $"Stop ({_recordSeconds:0}s)"; if (_recordSeconds >= 30) ToggleMicrophone(); }
+    }
+    public override void _Input(InputEvent @event)
+    {
+        if (Engine.IsEditorHint() || _closing || _chatPanel is null || @event is not InputEventKey key) return;
+        // LineEdit consumes Escape during GUI dispatch, so handle the intended
+        // conversation cancellation before it merely releases text-field focus.
+        if (_chatPanel.Visible && _modal is null && key.Keycode == Key.Escape)
+        {
+            GetViewport().SetInputAsHandled();
+            if (key.Pressed && !key.Echo) ReturnToStory();
+            return;
+        }
+        if (_chatPanel.Visible || _modal is not null || _advance?.HasFocus() != true || key.Keycode is not (Key.Space or Key.Enter)) return;
+        // The focused Button and global reveal shortcut can otherwise both act on
+        // the same physical press. Own both edges here, before GUI dispatch.
+        GetViewport().SetInputAsHandled();
+        if (key.Pressed && !key.Echo) Advance();
     }
     public override void _UnhandledKeyInput(InputEvent @event)
     {
@@ -189,21 +222,35 @@ public partial class GameView : Node
             var path = Path.Combine(folder, (_started ? _session.Scene.Id : "title") + ".png");
             GetViewport().GetTexture().GetImage().SavePng(path); SetStatusText("Development screenshot captured."); return;
         }
-        if (key.Keycode == Key.Escape) { if (_modal is not null) CloseModal(); else if (_chatPanel.Visible) CloseConversation(); else if (!MainMenuVisible) ShowMainMenu(); return; }
+        if (key.Keycode == Key.Escape) { if (_modal is not null) _modal.EmitSignal(Window.SignalName.CloseRequested); else if (_chatPanel.Visible) ReturnToStory(); else if (!MainMenuVisible) ShowMainMenu(); return; }
         if (MainMenuVisible) return;
         if (_chatPanel.Visible || _modal is not null) return;
-        if (key.Keycode is Key.Space or Key.Enter) Advance();
+        if (key.Keycode is Key.Space or Key.Enter)
+        {
+            // Focused controls own keyboard activation through GUI dispatch.
+            // Continue is handled once in _Input; other controls must not also
+            // advance the story on key-down before their key-up activation.
+            if (GetViewport().GuiGetFocusOwner() is null) Advance();
+        }
         else if (key.Keycode == Key.H) ShowHistory();
         else if (key.Keycode == Key.E) ShowEvidence();
     }
     private void OpenConversation()
     {
-        if (!_started || _busy || _session.Beat.Conversation is not { } chat) return;
+        if (_session.Beat.Exchange is not null) { ShowAuthoredExchange(); return; }
+        if (!_started || _busy || _closing || _chatPanel.Visible || _modal is not null || _session.Beat.Conversation is not { } chat) return;
+        _conversationReading = new(_session, _session.Beat.Id, _generation, GetSpeakerText(), _dialogue.Text,
+            _dialogue.VisibleCharacters, _characters, GetStatusText());
+        var generation = _generation;
         foreach (var child in _suggestions.GetChildren()) { _suggestions.RemoveChild(child); child.QueueFree(); }
         foreach (var suggestion in chat.Suggestions)
         {
             var captured = suggestion;
-            var choice = ChoiceButton(captured, () => { _entry.Text = captured; _entry.GrabFocus(); _entry.CaretColumn = _entry.Text.Length; });
+            var choice = ChoiceButton(captured, () =>
+            {
+                if (generation != _generation || !_chatPanel.Visible || _closing) return;
+                _entry.Text = captured; _entry.GrabFocus(); _entry.CaretColumn = _entry.Text.Length;
+            });
             _suggestions.AddChild(choice); _readingText.Register(choice);
         }
         _chatPanel.Visible = true; _entry.Text = ""; _entry.GrabFocus();
@@ -211,12 +258,23 @@ public partial class GameView : Node
     }
     private void CloseConversation()
     {
+        var reading = _conversationReading;
+        _conversationReading = null;
+        // Load restores the same session object; the saved view also belongs to a beat and generation.
+        var restore = _chatPanel.Visible && reading is not null && reading.Session == _session &&
+            reading.BeatId == _session.Beat.Id && reading.Generation == _generation && !_closing;
         _generation++; _request?.Cancel(); _speechRequest?.Cancel(); _speech.Dispose(); _busy = false; _chatPanel.Visible = false; _mic.Text = "Use voice"; _mic.Disabled = false; _send.Disabled = false; _advance.Disabled = false; _entry.Editable = true; _advance.GrabFocus();
+        if (restore)
+        {
+            SetSpeakerText(reading!.Speaker); _dialogue.Text = reading.Text;
+            _dialogue.VisibleCharacters = reading.VisibleCharacters; _characters = reading.Characters;
+            SetStatusText(reading.Status);
+        }
     }
-    private void SendReply() { if (!_busy && !_closing && !_speech.Recording) _operations.Track(SendReplyAsync()); }
+    private void SendReply() { if (_chatPanel.Visible && !_busy && !_closing && !_speech.Recording) _operations.Track(SendReplyAsync()); }
     private async Task SendReplyAsync()
     {
-        if (_busy || _speech.Recording || string.IsNullOrWhiteSpace(_entry.Text) || _session.Beat.Conversation is not { } chat) return;
+        if (!_chatPanel.Visible || _closing || _busy || _speech.Recording || string.IsNullOrWhiteSpace(_entry.Text) || _session.Beat.Conversation is not { } chat) return;
         var input = _entry.Text.Trim(); var generation = _generation;
         _busy = true; _entry.Editable = false; _send.Disabled = true; _advance.Disabled = true; SetStatusText("Waiting for a reply from " + _aiSettings.Provider + "…");
         _request?.Dispose(); _request = new CancellationTokenSource(TimeSpan.FromSeconds(45));
@@ -266,12 +324,12 @@ public partial class GameView : Node
         catch (Exception error) { if (generation == _generation) SetStatusText(error.Message); }
         finally { if (generation == _generation) { _busy = false; _mic.Disabled = false; _mic.Text = "Use voice"; _send.Disabled = false; _entry.Editable = true; } }
     }
-    private void Save(bool auto)
+    private bool Save(bool auto)
     {
-        if (!_started) return;
-        if (!_storage!.CanUseSaves) { if (!auto) SetStatusText("AUTHOR PREVIEW · saving and loading player slots is disabled."); return; }
-        try { _storage.Write(auto, _session.Snapshot()); if (!auto) SetStatusText("Saved on this device."); }
-        catch (Exception error) { SetStatusText("Could not save: " + error.Message); }
+        if (!_started) return false;
+        if (!_storage!.CanUseSaves) { if (!auto) SetStatusText("AUTHOR PREVIEW · saving and loading player slots is disabled."); return auto; }
+        try { _storage.Write(auto, _session.Snapshot()); if (!auto) SetStatusText("Saved on this device."); return true; }
+        catch (Exception error) { SetStatusText("Could not save: " + error.Message); return false; }
     }
     private void ShowLoad()
     {
@@ -301,28 +359,30 @@ public partial class GameView : Node
         catch (Exception error) { SetStatusText("Could not load: " + error.Message); CloseModal(); }
     }
 
-    private void ShowActivity()
-    {
-        if (_session.Beat.Activity is not { } activity) return;
-        ShowWindow("Compare the evidence", activity.Prompt, activity.Options.Select((option, index) => (option, (Action)(() =>
-        {
-            if (_session.AnswerActivity(index)) { CloseModal(); SetStatusText(activity.Explanation); _advance.Text = "Continue  ›"; Save(true); }
-            else { SetStatusText("That does not fit the evidence yet. Check your catalogue and try again."); CloseModal(); }
-        }))).ToArray());
-    }
-    private void ShowHistory() => ShowWindow("The record", string.Join("\n\n", _session.History.Select(h => (DisplayName(h.Speaker) is { Length: > 0 } name ? name + (h.Generated ? " [optional local dialogue]" : "") + ":\n" : "") + h.Text)));
-    private void ShowEvidence() => ShowWindow("Your catalogue", "OBJECTS\n\n" + string.Join("\n\n", _session.Inventory.Select(i => i.Name + "\n" + i.Description)) + "\n\nESTABLISHED FACTS\n\n" + string.Join("\n\n", _session.KnownFacts.Select(f => f.Text)));
-    private void ShowWindow(string title, string text, (string Text, Action Action)[]? actions = null)
+    private string HistoryText() => string.Join("\n\n", _session.History.Select(h => (DisplayName(h.Speaker) is { Length: > 0 } name ? name + (h.Generated ? " [optional local dialogue]" : "") + ":\n" : "") + h.Text));
+    private string EvidenceText() => "OBJECTS\n\n" + string.Join("\n\n", _session.Inventory.Select(i => i.Name + "\n" + i.Description)) + "\n\nESTABLISHED FACTS\n\n" + string.Join("\n\n", _session.KnownFacts.Select(f => f.Text));
+    private void ShowHistory() => ShowWindow("The record", HistoryText());
+    private void ShowEvidence() => ShowWindow("Your catalogue", EvidenceText());
+    private void ShowWindow(string title, string text, (string Text, Action Action)[]? actions = null, Action? dismiss = null)
     {
         if (_busy) return;
         CloseModal();
         _modal = ModalScene.Instantiate<Window>();
         _modal.Title = title;
         AddChild(_modal);
-        _modal.CloseRequested += CloseModal;
-        _modal.WindowInput += input => { if (input is InputEventKey { Pressed: true, Keycode: Key.Escape }) CloseModal(); };
-        _modal.GetNode<RichTextLabel>("%ModalText").Text = text;
-        _readingText.Register(_modal.GetNode<RichTextLabel>("%ModalText"));
+        var window = _modal;
+        void Dismiss()
+        {
+            // A queued close/input callback belongs only to the window that raised it.
+            if (_modal != window || _closing) return;
+            if (dismiss is null) CloseModal(); else dismiss();
+        }
+        _modal.CloseRequested += Dismiss;
+        _modal.WindowInput += input => { if (input is InputEventKey { Pressed: true, Keycode: Key.Escape }) Dismiss(); };
+        var prose = _modal.GetNode<RichTextLabel>("%ModalText");
+        prose.Text = text;
+        _readingText.Register(prose);
+        EnableKeyboardReading(prose);
         var actionRows = _modal.GetNode<VBoxContainer>("%ModalActions");
         _modal.GetNode<ScrollContainer>("%ModalActionsScroll").Visible = actions is { Length: > 0 };
         if (actions is not null)
@@ -331,15 +391,21 @@ public partial class GameView : Node
                 var choice = ChoiceButton(action.Text, action.Action);
                 actionRows.AddChild(choice); _readingText.Register(choice);
             }
-        var window = _modal;
         window.SizeChanged += () => FitModalActions(window);
         actionRows.MinimumSizeChanged += () => FitModalActions(window);
         FitModalActions(window);
         Callable.From(() => FitModalActions(window)).CallDeferred();
-        _modal.GetNode<Button>("%ModalCloseButton").Pressed += CloseModal;
+        _modal.GetNode<Button>("%ModalCloseButton").Pressed += Dismiss;
         _modal.PopupCentered();
     }
-    private void CloseModal() { if (_modal is not null) { CancelAiSetup(); _modal.Hide(); _modal.Exclusive = false; _modal.QueueFree(); _modal = null; if (MainMenuVisible) FocusMainMenu(); else _advance.GrabFocus(); } }
+    private void CloseModal()
+    {
+        CancelAiSetup(); _setupRequest?.Cancel(); _exchangeReading = null;
+        if (_modal is not { } modal) return;
+        _modal = null;
+        modal.Hide(); modal.Exclusive = false; modal.QueueFree();
+        if (MainMenuVisible) FocusMainMenu(); else _advance.GrabFocus();
+    }
     private void ShowStagePreview()
     {
         var locations = new[] { "harbor", "keeper_house", "archive", "lantern_room", "tide_cave" };
@@ -373,7 +439,7 @@ public partial class GameView : Node
             await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
             void Check(bool condition, string claim) { if (!condition) throw new InvalidOperationException("UI smoke: " + claim); }
             Check(MainMenuVisible && !InterfaceRoot.Visible && !_started, "startup opens menu before the story");
-            _UnhandledKeyInput(new InputEventKey { Keycode = Key.Enter, Pressed = true });
+            _Input(new InputEventKey { Keycode = Key.Enter, Pressed = true });
             Check(!_started, "unhandled Enter cannot advance story behind the menu");
             _mainMenu!.GetNode<Button>("%MenuAiSetup").EmitSignal(BaseButton.SignalName.Pressed);
             Check(_modal?.Title == "AI setup", "menu opens AI configuration and speech availability");
@@ -482,13 +548,13 @@ public partial class GameView : Node
             Check(!MainMenuVisible && _session.Beat.Id == menuBeat, "resume preserves story position");
             GD.Print("LANTERNWAKE_MAIN_MENU_OK startup settings AI availability new story resume keyboard focus");
             _started = false;
-            _UnhandledKeyInput(new InputEventKey { Keycode = Key.Enter, Pressed = true });
+            _Input(new InputEventKey { Keycode = Key.Enter, Pressed = true });
             Check(_started && _dialogue.Text == _session.Beat.Text, "Enter starts authored story with the authored interface");
             _started = false;
             _advance.EmitSignal(BaseButton.SignalName.Pressed);
             Check(_started && _dialogue.Text == _session.Beat.Text, "arrival button starts authored story with the authored interface");
             var first = _session.Beat.Id; _dialogue.VisibleCharacters = 0;
-            _UnhandledKeyInput(new InputEventKey { Keycode = Key.Enter, Pressed = true });
+            _Input(new InputEventKey { Keycode = Key.Enter, Pressed = true });
             Check(_session.Beat.Id == first && _dialogue.VisibleCharacters == -1, "first advance reveals text only");
             _advance.EmitSignal(BaseButton.SignalName.Pressed);
             Check(_session.Beat.Id != first && _dialogue.Text == _session.Beat.Text, "continue button advances and renders the next authored beat");
@@ -561,10 +627,10 @@ public partial class GameView : Node
     {
         if (Engine.IsEditorHint()) return;
         if (what != NotificationWMCloseRequest || _closing) return;
-        _closing = true; _generation++; _request?.Cancel(); _speechRequest?.Cancel(); CancelAiSetup(); _speech.Dispose();
+        _closing = true; _generation++; _request?.Cancel(); _speechRequest?.Cancel(); _speechRequest?.Dispose(); _setupRequest?.Cancel(); CancelAiSetup(); _speech.Dispose();
         try { await _operations.DrainAsync(); }
         catch (Exception error) { GD.PushWarning("Shutdown operation: " + error.Message); }
-        finally { QuitAfterAudio(); }
+        finally { _setupPumas?.Dispose(); _setupPumas = null; QuitAfterAudio(); }
     }
-    public override void _ExitTree() { if (Engine.IsEditorHint()) return; _generation++; _request?.Cancel(); _request?.Dispose(); _speechRequest?.Cancel(); _speechRequest?.Dispose(); CancelAiSetup(); _credentialLifetime.Cancel(); _aiSetupRequest?.Dispose(); _speech.Dispose(); _storage?.Dispose(); }
+    public override void _ExitTree() { if (Engine.IsEditorHint()) return; _generation++; _request?.Cancel(); _request?.Dispose(); _speechRequest?.Cancel(); _speechRequest?.Dispose(); _setupRequest?.Cancel(); CancelAiSetup(); _credentialLifetime.Cancel(); _aiSetupRequest?.Dispose(); _setupPumas?.Dispose(); _speech.Dispose(); _storage?.Dispose(); }
 }
