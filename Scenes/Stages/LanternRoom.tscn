@@ -3,6 +3,12 @@
 [ext_resource type="Script" path="res://Scripts/Presentation/StageScene.cs" id="1_ntfim"]
 [ext_resource type="Script" path="res://Scripts/Presentation/StageMotion.cs" id="2_gqmen"]
 
+[ext_resource type="Script" path="res://Scripts/Presentation/StageCastLayout.cs" id="cast_layout_script"]
+[ext_resource type="PackedScene" path="res://Scenes/Characters/Ada.tscn" id="cast_ada"]
+[ext_resource type="PackedScene" path="res://Scenes/Characters/Nessa.tscn" id="cast_nessa"]
+[ext_resource type="PackedScene" path="res://Scenes/Characters/Tomas.tscn" id="cast_tomas"]
+[ext_resource type="PackedScene" path="res://Scenes/Characters/Sera.tscn" id="cast_sera"]
+
 [sub_resource type="Environment" id="Environment_hvd81"]
 background_mode = 1
 background_color = Color(0.3372549, 0.43529412, 0.4745098, 1)
@@ -941,6 +947,7 @@ size = Vector3(1.15, 0.11, 0.33)
 
 [node name="LanternRoom" type="Node3D" unique_id=791372443 node_paths=PackedStringArray("StoryCamera", "Atmosphere", "KeyLight", "CastOrigin", "BellBody")]
 script = ExtResource("1_ntfim")
+PreviewLayout = "2 characters"
 StoryCamera = NodePath("StoryCamera")
 Atmosphere = NodePath("IslandAtmosphere")
 KeyLight = NodePath("Moonlight")
@@ -1635,3 +1642,86 @@ mesh = SubResource("BoxMesh_ebya2")
 
 [node name="CastOrigin" type="Marker3D" parent="." unique_id=991411232]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3, 0.14, 3.05)
+
+[node name="Characters1" type="Node3D" parent="CastOrigin" node_paths=PackedStringArray("Slot1")]
+visible = false
+script = ExtResource("cast_layout_script")
+CharacterCount = 1
+Slot1 = NodePath("Slot1")
+metadata/_editor_description_ = "Shared layout for every 1-character cast in this location. Move the slots to change all matching scenes."
+
+[node name="Slot1" parent="CastOrigin/Characters1" instance=ExtResource("cast_ada")]
+position = Vector3(0.00000000, 0, 0)
+rotation = Vector3(0, 0.418879020, 0)
+metadata/_edit_group_ = true
+
+[node name="Characters2" type="Node3D" parent="CastOrigin" node_paths=PackedStringArray("Slot1", "Slot2")]
+script = ExtResource("cast_layout_script")
+CharacterCount = 2
+Slot1 = NodePath("Slot1")
+Slot2 = NodePath("Slot2")
+metadata/_editor_description_ = "Shared layout for every 2-character cast in this location. Move the slots to change all matching scenes."
+
+[node name="Slot1" parent="CastOrigin/Characters2" instance=ExtResource("cast_ada")]
+position = Vector3(-1.55000000, 0, 0)
+rotation = Vector3(0, 0.418879020, 0)
+metadata/_edit_group_ = true
+
+[node name="Slot2" parent="CastOrigin/Characters2" instance=ExtResource("cast_tomas")]
+position = Vector3(1.55000000, 0, 0)
+rotation = Vector3(0, 0.209439510, 0)
+metadata/_edit_group_ = true
+
+[node name="Characters3" type="Node3D" parent="CastOrigin" node_paths=PackedStringArray("Slot1", "Slot2", "Slot3")]
+visible = false
+script = ExtResource("cast_layout_script")
+CharacterCount = 3
+Slot1 = NodePath("Slot1")
+Slot2 = NodePath("Slot2")
+Slot3 = NodePath("Slot3")
+metadata/_editor_description_ = "Shared layout for every 3-character cast in this location. Move the slots to change all matching scenes."
+
+[node name="Slot1" parent="CastOrigin/Characters3" instance=ExtResource("cast_ada")]
+position = Vector3(-2.65000000, 0, 0)
+rotation = Vector3(0, 0.418879020, 0)
+metadata/_edit_group_ = true
+
+[node name="Slot2" parent="CastOrigin/Characters3" instance=ExtResource("cast_tomas")]
+position = Vector3(2.65000000, 0, 0)
+rotation = Vector3(0, 0.000000000, 0)
+metadata/_edit_group_ = true
+
+[node name="Slot3" parent="CastOrigin/Characters3" instance=ExtResource("cast_sera")]
+position = Vector3(0.00000000, 0, 0)
+rotation = Vector3(0, 0.209439510, 0)
+metadata/_edit_group_ = true
+
+[node name="Characters4" type="Node3D" parent="CastOrigin" node_paths=PackedStringArray("Slot1", "Slot2", "Slot3", "Slot4")]
+visible = false
+script = ExtResource("cast_layout_script")
+CharacterCount = 4
+Slot1 = NodePath("Slot1")
+Slot2 = NodePath("Slot2")
+Slot3 = NodePath("Slot3")
+Slot4 = NodePath("Slot4")
+metadata/_editor_description_ = "Shared layout for every 4-character cast in this location. Move the slots to change all matching scenes."
+
+[node name="Slot1" parent="CastOrigin/Characters4" instance=ExtResource("cast_ada")]
+position = Vector3(-3.15000000, 0, 0)
+rotation = Vector3(0, 0.418879020, 0)
+metadata/_edit_group_ = true
+
+[node name="Slot2" parent="CastOrigin/Characters4" instance=ExtResource("cast_nessa")]
+position = Vector3(3.15000000, 0, 0)
+rotation = Vector3(0, -0.209439510, 0)
+metadata/_edit_group_ = true
+
+[node name="Slot3" parent="CastOrigin/Characters4" instance=ExtResource("cast_tomas")]
+position = Vector3(1.05000000, 0, 0)
+rotation = Vector3(0, 0.000000000, 0)
+metadata/_edit_group_ = true
+
+[node name="Slot4" parent="CastOrigin/Characters4" instance=ExtResource("cast_sera")]
+position = Vector3(-1.05000000, 0, 0)
+rotation = Vector3(0, 0.209439510, 0)
+metadata/_edit_group_ = true

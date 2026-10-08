@@ -20,7 +20,7 @@ public partial class StageDirector : Node3D
     [Export] public PackedScene Tomas { get; set; } = null!;
     [Export] public PackedScene Sera { get; set; } = null!;
 
-    private readonly List<Node3D> _actors = new();
+    private readonly List<(StageCharacter Actor, bool Placed)> _actors = new();
     private StageScene? _stage;
     private string _location = "";
     private string? _castKey;
@@ -39,7 +39,7 @@ public partial class StageDirector : Node3D
     }
 
     /// <summary>Repeated beats retain the authored stage and its current ambient motion.</summary>
-    public void ShowLocation(string location, string timeOfDay, string[] characterIds)
+    public void ShowLocation(string location, string timeOfDay, string[] characterIds, string storySceneId = "", string[]? reachedBeatIds = null)
     {
         ArgumentNullException.ThrowIfNull(characterIds);
         PackedScene scene = location switch
@@ -64,15 +64,19 @@ public partial class StageDirector : Node3D
             }
             _stage = scene.Instantiate<StageScene>();
             AddChild(_stage);
+            _stage.HidePlacedCharacters();
             _location = location;
             _castKey = null;
             _stage.SetMotionEnabled(_motionEnabled);
         }
         _stage!.ApplyTimeOfDay(timeOfDay);
         string[] visibleIds = Array.FindAll(characterIds, id => id is not ("ivo" or "operator" or "clerk"));
-        string castKey = string.Join('|', visibleIds);
+        Array.Sort(visibleIds, (a, b) => CharacterSlotOrder(a).CompareTo(CharacterSlotOrder(b)));
+        var layout = _stage.FindCastLayout(storySceneId, reachedBeatIds, visibleIds.Length);
+        string castKey = layout?.GetInstanceId() + ":" + string.Join('|', visibleIds);
         if (_castKey == castKey) return;
         ClearActors();
+        _stage.SelectCastLayout(storySceneId, reachedBeatIds, visibleIds.Length);
         float spacing = visibleIds.Length <= 2 ? _stage.PairSpacing : visibleIds.Length <= 3 ? _stage.TrioSpacing : _stage.EnsembleSpacing;
         for (int i = 0; i < visibleIds.Length; i++)
         {
@@ -86,16 +90,37 @@ public partial class StageDirector : Node3D
             };
             if (character == null)
                 throw new InvalidOperationException($"The {visibleIds[i]} character scene is not assigned in StageDirector's Inspector.");
-            var actor = character.Instantiate<StageCharacter>();
-            actor.Position += Vector3.Right * ((i - (visibleIds.Length - 1) * 0.5f) * spacing);
-            actor.RotationDegrees += Vector3.Up * (_stage.FacingDegrees + i * _stage.FacingStepDegrees);
-            if (actor.Breathing is { } breathing) breathing.Phase += i * 2;
-            _stage.CastOrigin.AddChild(actor);
+            var slot = layout?.UsesSlots == true ? layout.GetSlot(i)
+                ?? throw new InvalidOperationException($"Cast layout '{layout.Name}' has no placement slot {i + 1}.") : null;
+            var actor = slot == null ? _stage.GetCharacterPlacement(visibleIds[i]) : null;
+            bool placed = actor != null;
+            if (actor == null)
+            {
+                actor = character.Instantiate<StageCharacter>();
+                if (slot != null) actor.Transform = slot.Transform;
+                else
+                {
+                    actor.Position += Vector3.Right * ((i - (visibleIds.Length - 1) * 0.5f) * spacing);
+                    actor.RotationDegrees += Vector3.Up * (_stage.FacingDegrees + i * _stage.FacingStepDegrees);
+                }
+                if (actor.Breathing is { } breathing) breathing.Phase += i * 2;
+                (slot != null ? layout! : _stage.CastOrigin).AddChild(actor);
+            }
+            actor.Visible = true;
             StageScene.SetMotionEnabledBelow(actor, _motionEnabled);
-            _actors.Add(actor);
+            _actors.Add((actor, placed));
         }
         _castKey = castKey;
     }
+
+    private static int CharacterSlotOrder(string id) => id switch
+    {
+        "ada" => 0,
+        "nessa" => 1,
+        "tomas" => 2,
+        "sera" => 3,
+        _ => 4,
+    };
 
     public void ApplyAuthoredCues(string[] cues)
     {
@@ -105,10 +130,15 @@ public partial class StageDirector : Node3D
 
     private void ClearActors()
     {
-        foreach (var actor in _actors)
+        foreach (var (actor, placed) in _actors)
         {
-            actor.GetParent().RemoveChild(actor);
-            actor.QueueFree();
+            if (placed)
+                actor.Visible = false;
+            else
+            {
+                actor.GetParent().RemoveChild(actor);
+                actor.QueueFree();
+            }
         }
         _actors.Clear();
     }

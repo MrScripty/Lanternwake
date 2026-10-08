@@ -12,13 +12,76 @@ Select `StoryCamera` and enable the viewport's **Preview** checkbox to see the g
 
 The stage root exposes optional dawn/dusk environment resources and key-light variations. Edit the look used by the story's time of day, or clear an optional environment to use the default. Runtime time selection is explicit here, rather than hidden in C# constants. Existing day/night changes are preserved.
 
-`Scenes/Stages/StageDirector.tscn` assigns the five location scenes and character scenes. Keep these references assigned. A location's cast origin moves the ensemble; its exported spacing and facing settings control grouping. The bell offset is an authored story cue and should remain connected to the correct bell node.
+For the harbor lighthouse beam, select `Scenery > Lighthouse > BeaconPivot >
+BeaconLight` in `Harbor.tscn`. Under **Light**, `Volumetric Fog Energy` controls
+the visible shaft's brightness in the mist, while `Energy` controls illumination
+on scenery and rain. Under **Spot**, adjust `Angle` for beam width and `Range`
+for reach. The sibling `Rotation` component controls the sweep speed. The
+lighthouse lantern's `Cylinder006` material controls its warm emission.
+The harbor's night, dawn and dusk environments enable volumetric fog; adjust
+their **Volumetric Fog > Density** for thicker or thinner mist. This effect uses
+Godot's Forward+ renderer. Run the scene or stage preview to see the moving beam.
+
+The harbor's standing lanterns are grouped under `Scenery > LanternPost001` and
+`Scenery > LanternPost002`. Move or rotate these parent nodes to reposition each
+complete post, base, arm, lantern and flickering light. Their pivots sit at the
+post bases. Expand a parent in the Scene tree to adjust an individual part.
+
+`Scenes/Stages/StageDirector.tscn` assigns the five location scenes and character scenes. Keep these references assigned. A location's cast origin moves all its layouts; exported spacing and facing settings supply fallback placement when a character has no authored instance. The bell offset is an authored story cue and should remain connected to the correct bell node.
 
 ## Characters and motion
 
 Open a character scene under `Scenes/Characters/` to change its silhouette, mesh dimensions, clothing materials or base transform. Instances use that scene wherever the character appears. Character IDs and historical speakers remain defined in story JSON; historical speakers are not living actors.
 
+Each location has four shared cast layouts under `CastOrigin`: `Characters1`,
+`Characters2`, `Characters3` and `Characters4`. The game automatically chooses
+one from the number of living characters in the current story scene. Every
+matching cast in that location reuses that layout, including newly added story
+scenes. You arrange each cast size once. Characters fill the slots in the fixed
+order Ada, Nessa, Tomas, Sera, skipping absent characters; changing the order of
+IDs in the story does not shuffle a repeated cast.
+
+Select the location root, then **Cast preview > Preview Layout**, and choose
+**1 character**, **2 characters**, **3 characters** or **4 characters**. Expand
+that layout under `CastOrigin`, select `Slot1`, `Slot2`, etc., and use the normal
+move/rotate/scale controls. The visible slot models are sample characters for
+positioning and lighting; the game fills the slots with the actual story cast.
+The template models are hidden during play. Select `StoryCamera` and enable
+**Preview** to judge framing and lights. Save the location scene to update every
+story scene with that cast size. Move a layout parent to move that size's whole
+formation, or move `CastOrigin` to move all formations together. The harbor's
+shared two-character layout includes your edits to the first harbor arrangement.
+
+For an intentional exception, duplicate the shared layout with **Ctrl+D** and
+rename the copy. Set **Story Scene Id** to the story scene that needs a different
+formation. Leave **Start At Beat Id** empty for a scene-wide override, or set it
+to a saved dialogue beat ID such as `ch1_s1_b010` for a change during the scene.
+The Story Text dock identifies scene and beat IDs. Select the location root and
+choose the new `scene` or `scene / beat` entry in **Preview Layout**, move that
+copy's slots, then save. The shared layout keeps **Story Scene Id** and **Start
+At Beat Id** empty so other scenes continue to share it. Keep the slots assigned
+when renaming or reorganizing their nodes.
+
+Selection priority is the latest reached beat override, then a scene override,
+then the shared layout for the cast size. A beat override remains active until
+another override in the same scene; to return to a previous formation later,
+duplicate it and assign the later trigger beat. There must be one shared layout
+per cast size and one override per scene/trigger. Loading a save or using **Play
+saved beat** reconstructs the latest applicable override in story order. Changes
+apply immediately at the trigger beat. The story controls the cast size, and
+inactive layouts do not add visible characters. **Default** previews the
+location's fallback character instances; the harbor retains your original four
+instances for compatibility. When a shared layout is absent, default character
+bindings or the spacing/facing controls supply fallback placement. The editor
+keeps character animation still.
+
 Small `StageMotion` components animate their parent's authored transform, rather than replacing it with a hardcoded pose. Their Inspector controls expose motion kind, phase, amount and speed. The player’s reduced-motion setting disables ambient animation. Keep a motion component attached to a compatible 3D node.
+
+For the harbor boat, select `Scenery > WeatheredFishingBoat > BoatFloat` in
+`Harbor.tscn`. `Amount` controls vertical bobbing and `Speed` controls the wave
+rhythm. Under **Boat floating**, `Boat Roll Degrees` controls side-to-side rocking
+and `Boat Pitch Degrees` controls bow-to-stern rocking. Preview these by running
+the scene or using stage preview; the editor keeps the authored boat pose still.
 
 ## Interface
 

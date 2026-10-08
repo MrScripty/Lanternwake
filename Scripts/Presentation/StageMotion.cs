@@ -15,6 +15,12 @@ public partial class StageMotion : Node
     [Export] public float Phase { get; set; }
     [Export] public float Amount { get; set; } = 0.09f;
     [Export] public float Speed { get; set; } = 0.8f;
+
+    [ExportGroup("Boat floating")]
+    [Export(PropertyHint.Range, "0,15,0.1")] public float BoatRollDegrees { get; set; } = 3;
+    [Export(PropertyHint.Range, "0,15,0.1")] public float BoatPitchDegrees { get; set; } = 1;
+
+    [ExportGroup("Rain")]
     [Export] public float RainFirstFallDistance { get; set; } = 1;
     [Export] public float RainHeight { get; set; } = 13;
     [Export] public float RainSlant { get; set; } = 0.16f;
@@ -50,8 +56,15 @@ public partial class StageMotion : Node
         switch (Kind)
         {
             case MotionKind.BoatFloat:
-                _target.Position = _position + Vector3.Up * (Mathf.Sin(_elapsed * Speed + Phase) * Amount);
-                _target.Rotation = _rotation + new Vector3(0, 0, Mathf.Sin(_elapsed * 0.65f + Phase) * Amount * 0.4f);
+                // Overlapping swells keep the hull from moving like a single pendulum.
+                // All motion shares the speed control and stays around its authored pose.
+                float wave = _elapsed * Speed + Phase;
+                float heave = Mathf.Sin(wave) * 0.72f + Mathf.Sin(wave * 1.73f + 1.1f) * 0.28f;
+                float roll = Mathf.Sin(wave * 0.91f + 1.4f) * 0.8f + Mathf.Sin(wave * 1.67f) * 0.2f;
+                float pitch = Mathf.Sin(wave * 0.83f + 0.6f);
+                _target.Position = _position + Vector3.Up * (heave * Amount);
+                _target.Rotation = _rotation + new Vector3(Mathf.DegToRad(BoatPitchDegrees) * pitch, 0,
+                    Mathf.DegToRad(BoatRollDegrees) * roll);
                 break;
             case MotionKind.LampFlicker when _target is OmniLight3D light:
                 light.LightEnergy = _energy * (0.96f + 0.025f * Mathf.Sin(_elapsed * 3.2f + Phase) + 0.015f * Mathf.Sin(_elapsed * 7.1f));

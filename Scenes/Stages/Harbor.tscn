@@ -2,6 +2,11 @@
 
 [ext_resource type="Script" uid="uid://bvwksffkhjjc4" path="res://Scripts/Presentation/StageScene.cs" id="1_cst1j"]
 [ext_resource type="Script" uid="uid://323c50kwdbwv" path="res://Scripts/Presentation/StageMotion.cs" id="2_j5v1o"]
+[ext_resource type="PackedScene" path="res://Scenes/Characters/Ada.tscn" id="3_ada"]
+[ext_resource type="PackedScene" uid="uid://c8abs0re3etyp" path="res://Scenes/Characters/Nessa.tscn" id="4_nessa"]
+[ext_resource type="PackedScene" path="res://Scenes/Characters/Tomas.tscn" id="5_tomas"]
+[ext_resource type="PackedScene" path="res://Scenes/Characters/Sera.tscn" id="6_sera"]
+[ext_resource type="Script" uid="uid://j0pkn4bathta" path="res://Scripts/Presentation/StageCastLayout.cs" id="cast_layout_script"]
 
 [sub_resource type="Environment" id="Environment_bha2g"]
 background_mode = 1
@@ -15,6 +20,11 @@ fog_enabled = true
 fog_light_color = Color(0.49411765, 0.5882353, 0.58431375, 1)
 fog_light_energy = 0.35
 fog_density = 0.008
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.008
+volumetric_fog_emission_energy = 0.0
+volumetric_fog_ambient_inject = 0.18
+volumetric_fog_temporal_reprojection_amount = 0.7
 
 [sub_resource type="Environment" id="Environment_v25ty"]
 background_mode = 1
@@ -28,19 +38,54 @@ fog_enabled = true
 fog_light_color = Color(0.21960784, 0.34117648, 0.37254903, 1)
 fog_light_energy = 0.35
 fog_density = 0.008
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.01
+volumetric_fog_emission_energy = 0.0
+volumetric_fog_ambient_inject = 0.18
+volumetric_fog_temporal_reprojection_amount = 0.7
 
 [sub_resource type="Environment" id="Environment_4xmot"]
 background_mode = 1
 background_color = Color(0.09803922, 0.16862746, 0.23137255, 1)
 ambient_light_source = 2
 ambient_light_color = Color(0.5686275, 0.7058824, 0.7411765, 1)
-ambient_light_energy = 0.63
+ambient_light_energy = 0.0
 reflected_light_source = 1
 tonemap_mode = 2
+tonemap_exposure = 0.81
+ssao_radius = 7.07
+ssao_intensity = 6.89
+ssao_detail = 1.43
+ssao_light_affect = 0.41
+ssao_ao_channel_affect = 1.0
+glow_enabled = true
+glow_normalized = true
+glow_intensity = 2.97
+glow_strength = 1.48
+glow_hdr_threshold = 0.4
+glow_hdr_luminance_cap = 0.15
+glow_map_strength = 0.71
 fog_enabled = true
 fog_light_color = Color(0.21960784, 0.34117648, 0.37254903, 1)
 fog_light_energy = 0.35
 fog_density = 0.008
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.01
+volumetric_fog_emission_energy = 0.0
+volumetric_fog_gi_inject = 0.25
+volumetric_fog_length = 130.37
+volumetric_fog_detail_spread = 2.8284273
+volumetric_fog_ambient_inject = 0.18
+volumetric_fog_temporal_reprojection_amount = 0.7
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_0web0"]
+auto_exposure_scale = 0.01
+auto_exposure_speed = 4.3
+dof_blur_far_enabled = true
+dof_blur_far_distance = 45.47
+dof_blur_near_enabled = true
+dof_blur_near_distance = 19.35
+dof_blur_amount = 0.03
 
 [sub_resource type="Shader" id="Shader_hid28"]
 code = "shader_type spatial;
@@ -363,10 +408,12 @@ rings = 1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3upce"]
 cull_mode = 2
-shading_mode = 0
 diffuse_mode = 3
 specular_mode = 2
 albedo_color = Color(0.6117647, 0.67058825, 0.57254905, 1)
+emission_enabled = true
+emission = Color(1, 0.82, 0.48, 1)
+emission_energy_multiplier = 2.0
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_t3fi2"]
 top_radius = 1.03
@@ -1548,7 +1595,6 @@ size = Vector3(0.024, 0.81, 0.01)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6hkl5"]
 transparency = 1
 cull_mode = 2
-shading_mode = 0
 diffuse_mode = 3
 specular_mode = 2
 albedo_color = Color(0.6392157, 0.73333335, 0.76862746, 0.28)
@@ -1559,15 +1605,20 @@ bottom_radius = 0.008
 height = 0.48
 radial_segments = 4
 
-[node name="Harbor" type="Node3D" unique_id=1288852502 node_paths=PackedStringArray("StoryCamera", "Atmosphere", "KeyLight", "CastOrigin")]
+[node name="Harbor" type="Node3D" unique_id=1288852502 node_paths=PackedStringArray("StoryCamera", "Atmosphere", "KeyLight", "CastOrigin", "AdaPlacement", "NessaPlacement", "TomasPlacement", "SeraPlacement")]
 script = ExtResource("1_cst1j")
+PreviewLayout = "2 characters"
+DawnEnvironment = SubResource("Environment_bha2g")
+DuskEnvironment = SubResource("Environment_v25ty")
+DawnKeyLightEnergyMultiplier = 1.2272727
 StoryCamera = NodePath("StoryCamera")
 Atmosphere = NodePath("IslandAtmosphere")
 KeyLight = NodePath("Moonlight")
 CastOrigin = NodePath("CastOrigin")
-DawnEnvironment = SubResource("Environment_bha2g")
-DuskEnvironment = SubResource("Environment_v25ty")
-DawnKeyLightEnergyMultiplier = 1.2272727
+AdaPlacement = NodePath("CastOrigin/Ada")
+NessaPlacement = NodePath("CastOrigin/Nessa")
+TomasPlacement = NodePath("CastOrigin/Tomas")
+SeraPlacement = NodePath("CastOrigin/Sera")
 
 [node name="IslandAtmosphere" type="WorldEnvironment" parent="." unique_id=686218417]
 environment = SubResource("Environment_4xmot")
@@ -1575,35 +1626,38 @@ environment = SubResource("Environment_4xmot")
 [node name="Moonlight" type="DirectionalLight3D" parent="." unique_id=1378317620]
 transform = Transform3D(0.8290376, 0.3741731, -0.4155613, 0, 0.7431448, 0.6691306, 0.5591929, -0.55473447, 0.616095, 0, 0, 0)
 light_color = Color(0.7176471, 0.83137256, 0.8509804, 1)
-light_energy = 1.1
+light_energy = 0.286
 shadow_enabled = true
 directional_shadow_max_distance = 65.0
 
 [node name="SeaFill" type="DirectionalLight3D" parent="." unique_id=2008143430]
 transform = Transform3D(-0.76604444, -0.16636568, 0.6208852, 0, 0.9659258, 0.25881904, -0.64278764, 0.1982669, -0.7399421, 0, 0, 0)
 light_color = Color(0.45882353, 0.6039216, 0.6862745, 1)
-light_energy = 0.48
+light_energy = 0.749
 
 [node name="StoryCamera" type="Camera3D" parent="." unique_id=58415195]
 transform = Transform3D(0.872506, -0.14195624, 0.4675272, 0, 0.9568645, 0.2905347, -0.48860338, -0.25349328, 0.83487004, 14, 12, 24)
+attributes = SubResource("CameraAttributesPractical_0web0")
 projection = 1
 current = true
-size = 19.5
-near = 0.1
-far = 180.0
+fov = 43.3
+size = 20.347
+near = 10.0
+far = 83.74
 
 [node name="Scenery" type="Node3D" parent="." unique_id=1141131764]
 
 [node name="TidalWater" type="MeshInstance3D" parent="Scenery" unique_id=170960404]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.68, -4)
+transform = Transform3D(0.99992913, 0, 0.011902864, 0, 1, 0, -0.011902864, 0, 0.99992913, 0, -0.68, -4)
 material_override = SubResource("ShaderMaterial_h323u")
 cast_shadow = 0
+gi_lightmap_texel_scale = 0.01
 mesh = SubResource("PlaneMesh_c7loe")
 
 [node name="TidalMotion" type="Node" parent="Scenery/TidalWater" unique_id=180777757 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 5
+Target = NodePath("..")
 
 [node name="Rock001" type="MeshInstance3D" parent="Scenery" unique_id=1398682208]
 transform = Transform3D(6.5, 0, 0, 0, 2.5, 0, 0, 0, 3.8, -34, -1.6, -28)
@@ -1882,23 +1936,36 @@ omni_attenuation = 1.35
 
 [node name="Flicker" type="Node" parent="Scenery/Lighthouse/LanternLight001" unique_id=1997406661 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 1
+Target = NodePath("..")
 
 [node name="BeaconPivot" type="Node3D" parent="Scenery/Lighthouse" unique_id=2123275670]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.15, 0)
 
 [node name="RotatingLanternBeam" type="MeshInstance3D" parent="Scenery/Lighthouse/BeaconPivot" unique_id=670268510]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, -13)
+visible = false
 material_override = SubResource("StandardMaterial3D_ivm7n")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_xkh14")
 
+[node name="BeaconLight" type="SpotLight3D" parent="Scenery/Lighthouse/BeaconPivot" unique_id=1747303430]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.85)
+light_color = Color(1, 0.9, 0.68, 1)
+light_energy = 5.008
+light_volumetric_fog_energy = 40.0
+shadow_enabled = true
+distance_fade_enabled = true
+spot_range = 42.0
+spot_attenuation = 0.6
+spot_angle = 8.0
+spot_angle_attenuation = 0.8
+
 [node name="Rotation" type="Node" parent="Scenery/Lighthouse/BeaconPivot" unique_id=776026634 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 3
 Speed = 0.13
+Target = NodePath("..")
 
 [node name="Panel001" type="MeshInstance3D" parent="Scenery" unique_id=1705337282]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -0.35, 2.6)
@@ -2316,7 +2383,7 @@ material_override = SubResource("StandardMaterial3D_afby1")
 mesh = SubResource("BoxMesh_oy51x")
 
 [node name="TimberPier" type="Node3D" parent="Scenery" unique_id=1690762291]
-transform = Transform3D(0.99254614, 0, -0.12186935, 0, 1, 0, 0.12186935, 0, 0.99254614, 5, -0.05, -3.8)
+transform = Transform3D(0.99254614, 0, -0.12186935, 0, 1, 0, 0.12186935, 0, 0.99254614, 4.954802, -0.05, -1.0727842)
 
 [node name="Panel001" type="MeshInstance3D" parent="Scenery/TimberPier" unique_id=1923131509]
 material_override = SubResource("StandardMaterial3D_vj7cc")
@@ -2586,14 +2653,18 @@ omni_attenuation = 1.35
 
 [node name="Flicker" type="Node" parent="Scenery/WeatheredFishingBoat/LanternLight001" unique_id=47152048 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 1
 Phase = 1.7
+Target = NodePath("..")
 
 [node name="BoatFloat" type="Node" parent="Scenery/WeatheredFishingBoat" unique_id=592571044 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Phase = 0.8
+Amount = 0.11
+Speed = 0.9
+BoatRollDegrees = 4.5
+BoatPitchDegrees = 2.0
+Target = NodePath("..")
 
 [node name="HarborShed" type="Node3D" parent="Scenery" unique_id=1871574838]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0.24, 1.3)
@@ -2709,7 +2780,7 @@ material_override = SubResource("StandardMaterial3D_23elq")
 mesh = SubResource("CylinderMesh_xkhfu")
 
 [node name="Ring001" type="MeshInstance3D" parent="Scenery/HarborShed" unique_id=410184640]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -1.1, 0.93, 1.68)
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -0.85220194, 0.75434434, 1.6800001)
 material_override = SubResource("StandardMaterial3D_8gqpp")
 mesh = SubResource("TorusMesh_eoxuh")
 
@@ -2722,9 +2793,9 @@ omni_attenuation = 1.35
 
 [node name="Flicker" type="Node" parent="Scenery/HarborShed/LanternLight001" unique_id=466984667 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 1
 Phase = 3.4
+Target = NodePath("..")
 
 [node name="Panel084" type="MeshInstance3D" parent="Scenery" unique_id=87638350]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.2, 0.76, 3.8)
@@ -2747,42 +2818,42 @@ material_override = SubResource("StandardMaterial3D_vegc5")
 mesh = SubResource("BoxMesh_bacjt")
 
 [node name="Panel088" type="MeshInstance3D" parent="Scenery" unique_id=1457438935]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.22, 0.76, 3.8)
+transform = Transform3D(0.9858238, 0, 0.16778398, 0, 1, 0, -0.16778398, 0, 0.9858238, 7.2118907, 0.76, 3.6437788)
 material_override = SubResource("StandardMaterial3D_wga1c")
 mesh = SubResource("BoxMesh_82fdf")
 
 [node name="Panel089" type="MeshInstance3D" parent="Scenery" unique_id=777403878]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.22, 1.0799999, 4.25)
+transform = Transform3D(0.9858238, 0, 0.16778398, 0, 1, 0, -0.16778398, 0, 0.9858238, 7.2873936, 1.0799999, 4.0873995)
 material_override = SubResource("StandardMaterial3D_vegc5")
 mesh = SubResource("BoxMesh_k0our")
 
 [node name="Panel090" type="MeshInstance3D" parent="Scenery" unique_id=1369700744]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.22, 0.44, 4.25)
+transform = Transform3D(0.9858238, 0, 0.16778398, 0, 1, 0, -0.16778398, 0, 0.9858238, 7.2873936, 0.44, 4.0873995)
 material_override = SubResource("StandardMaterial3D_vegc5")
 mesh = SubResource("BoxMesh_w0o6h")
 
 [node name="Panel091" type="MeshInstance3D" parent="Scenery" unique_id=68613366]
-transform = Transform3D(0.7313537, 0.6819984, 0, -0.6819984, 0.7313537, 0, 0, 0, 1, 7.22, 0.76, 4.25)
+transform = Transform3D(0.7209859, 0.67233026, 0.16778398, -0.6819984, 0.7313537, 0, -0.12270943, -0.1144284, 0.9858238, 7.2873936, 0.76, 4.0873995)
 material_override = SubResource("StandardMaterial3D_vegc5")
 mesh = SubResource("BoxMesh_stcc7")
 
 [node name="Panel092" type="MeshInstance3D" parent="Scenery" unique_id=1253682669]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.2, 1.71, 3.8)
+transform = Transform3D(0.9199926, 0, 0.39193574, 0, 1, 0, -0.39193574, 0, 0.9199926, 6.970021, 1.71, 3.872511)
 material_override = SubResource("StandardMaterial3D_vj7cc")
 mesh = SubResource("BoxMesh_m7se5")
 
 [node name="Panel093" type="MeshInstance3D" parent="Scenery" unique_id=1982122148]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.2, 2.03, 4.25)
+transform = Transform3D(0.9199926, 0, 0.39193574, 0, 1, 0, -0.39193574, 0, 0.9199926, 7.146392, 2.03, 4.2865076)
 material_override = SubResource("StandardMaterial3D_vegc5")
 mesh = SubResource("BoxMesh_gb2ok")
 
 [node name="Panel094" type="MeshInstance3D" parent="Scenery" unique_id=441134677]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.2, 1.3900001, 4.25)
+transform = Transform3D(0.9199926, 0, 0.39193574, 0, 1, 0, -0.39193574, 0, 0.9199926, 7.146392, 1.3900001, 4.2865076)
 material_override = SubResource("StandardMaterial3D_vegc5")
 mesh = SubResource("BoxMesh_woch3")
 
 [node name="Panel095" type="MeshInstance3D" parent="Scenery" unique_id=576138371]
-transform = Transform3D(0.7313537, 0.6819984, 0, -0.6819984, 0.7313537, 0, 0, 0, 1, 6.2, 1.71, 4.25)
+transform = Transform3D(0.67284, 0.6274335, 0.39193574, -0.6819984, 0.7313537, 0, -0.28664365, -0.26729953, 0.9199926, 7.146392, 1.71, 4.2865076)
 material_override = SubResource("StandardMaterial3D_vegc5")
 mesh = SubResource("BoxMesh_1irn4")
 
@@ -2797,176 +2868,184 @@ material_override = SubResource("StandardMaterial3D_23elq")
 mesh = SubResource("CylinderMesh_2k04s")
 
 [node name="Cylinder003" type="MeshInstance3D" parent="Scenery" unique_id=596747888]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.39999986, 0.54, -0.22)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.39999986, 0.54, 5.455835)
 material_override = SubResource("StandardMaterial3D_23elq")
 mesh = SubResource("CylinderMesh_kuby5")
 
 [node name="Cylinder004" type="MeshInstance3D" parent="Scenery" unique_id=1401058624]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.39999986, 0.84, -0.22)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.39999986, 0.84, 5.455835)
 material_override = SubResource("StandardMaterial3D_23elq")
 mesh = SubResource("CylinderMesh_rm2kl")
 
 [node name="Cylinder005" type="MeshInstance3D" parent="Scenery" unique_id=1296788003]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8000002, 0.54, -0.22)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.06827, 0.54, 5.3550105)
 material_override = SubResource("StandardMaterial3D_23elq")
 mesh = SubResource("CylinderMesh_kkyh4")
 
 [node name="Cylinder006" type="MeshInstance3D" parent="Scenery" unique_id=465017326]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8000002, 0.84, -0.22)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.06827, 0.84, 5.3550105)
 material_override = SubResource("StandardMaterial3D_23elq")
 mesh = SubResource("CylinderMesh_1wdud")
 
 [node name="Cylinder007" type="MeshInstance3D" parent="Scenery" unique_id=1727489927]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.0000005, 0.54, -0.22)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.159431, 0.54, -0.22)
 material_override = SubResource("StandardMaterial3D_23elq")
 mesh = SubResource("CylinderMesh_6oyrf")
 
 [node name="Cylinder008" type="MeshInstance3D" parent="Scenery" unique_id=1135220639]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.0000005, 0.84, -0.22)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.159431, 0.84, -0.22)
 material_override = SubResource("StandardMaterial3D_23elq")
 mesh = SubResource("CylinderMesh_sy88h")
 
-[node name="Cylinder009" type="MeshInstance3D" parent="Scenery" unique_id=1651607261]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7, 1.95, -0.1)
+[node name="LanternPost001" type="Node3D" parent="Scenery" unique_id=1528449261]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8381908, 0.25, 2.2345362)
+metadata/_edit_group_ = true
+
+[node name="Post" type="MeshInstance3D" parent="Scenery/LanternPost001" unique_id=1651607261]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
 material_override = SubResource("StandardMaterial3D_23elq")
 mesh = SubResource("CylinderMesh_jfvkj")
 
-[node name="Cylinder010" type="MeshInstance3D" parent="Scenery" unique_id=1197118480]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7, 0.45, -0.1)
+[node name="Base" type="MeshInstance3D" parent="Scenery/LanternPost001" unique_id=1197118480]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
 material_override = SubResource("StandardMaterial3D_23elq")
 mesh = SubResource("CylinderMesh_dawbf")
 
-[node name="Cylinder011" type="MeshInstance3D" parent="Scenery" unique_id=468727910]
-transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, -0.42499998, 3.65, -0.1)
+[node name="Arm" type="MeshInstance3D" parent="Scenery/LanternPost001" unique_id=468727910]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0.275, 3.4, 0)
 material_override = SubResource("StandardMaterial3D_23elq")
 mesh = SubResource("CylinderMesh_phefd")
 
-[node name="Lantern" type="Node3D" parent="Scenery" unique_id=811885411]
-transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, -0.14999998, 3, -0.1)
+[node name="Lantern" type="Node3D" parent="Scenery/LanternPost001" unique_id=811885411]
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0.55, 2.75, 0)
 
-[node name="Cylinder001" type="MeshInstance3D" parent="Scenery/Lantern" unique_id=229524292]
+[node name="Cylinder001" type="MeshInstance3D" parent="Scenery/LanternPost001/Lantern" unique_id=229524292]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 material_override = SubResource("StandardMaterial3D_23elq")
 mesh = SubResource("CylinderMesh_v8e6m")
 
-[node name="Cylinder002" type="MeshInstance3D" parent="Scenery/Lantern" unique_id=564135574]
+[node name="Cylinder002" type="MeshInstance3D" parent="Scenery/LanternPost001/Lantern" unique_id=564135574]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.42, 0)
 material_override = SubResource("StandardMaterial3D_27lqh")
 mesh = SubResource("CylinderMesh_1w274")
 
-[node name="Cylinder003" type="MeshInstance3D" parent="Scenery/Lantern" unique_id=343526265]
+[node name="Cylinder003" type="MeshInstance3D" parent="Scenery/LanternPost001/Lantern" unique_id=343526265]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.69, 0)
 material_override = SubResource("StandardMaterial3D_23elq")
 mesh = SubResource("CylinderMesh_4rg6k")
 
-[node name="Cylinder004" type="MeshInstance3D" parent="Scenery/Lantern" unique_id=69301579]
+[node name="Cylinder004" type="MeshInstance3D" parent="Scenery/LanternPost001/Lantern" unique_id=69301579]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.14849241, 0.43, 0.14849241)
 material_override = SubResource("StandardMaterial3D_sm7uc")
 mesh = SubResource("CylinderMesh_oi6e7")
 
-[node name="Cylinder005" type="MeshInstance3D" parent="Scenery/Lantern" unique_id=1472602183]
+[node name="Cylinder005" type="MeshInstance3D" parent="Scenery/LanternPost001/Lantern" unique_id=1472602183]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.14849241, 0.43, 0.14849241)
 material_override = SubResource("StandardMaterial3D_sm7uc")
 mesh = SubResource("CylinderMesh_kultn")
 
-[node name="Cylinder006" type="MeshInstance3D" parent="Scenery/Lantern" unique_id=413063964]
+[node name="Cylinder006" type="MeshInstance3D" parent="Scenery/LanternPost001/Lantern" unique_id=413063964]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1484924, 0.43, -0.14849244)
 material_override = SubResource("StandardMaterial3D_sm7uc")
 mesh = SubResource("CylinderMesh_x85go")
 
-[node name="Cylinder007" type="MeshInstance3D" parent="Scenery/Lantern" unique_id=1629585957]
+[node name="Cylinder007" type="MeshInstance3D" parent="Scenery/LanternPost001/Lantern" unique_id=1629585957]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1484924, 0.43, -0.14849244)
 material_override = SubResource("StandardMaterial3D_sm7uc")
 mesh = SubResource("CylinderMesh_wo5st")
 
-[node name="Ring001" type="MeshInstance3D" parent="Scenery/Lantern" unique_id=676062789]
+[node name="Ring001" type="MeshInstance3D" parent="Scenery/LanternPost001/Lantern" unique_id=676062789]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0.86, 0)
 material_override = SubResource("StandardMaterial3D_sm7uc")
 mesh = SubResource("TorusMesh_wb5nt")
 
-[node name="LanternLight001" type="OmniLight3D" parent="Scenery" unique_id=907306513]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.14999998, 3.396, -0.1)
+[node name="LanternLight001" type="OmniLight3D" parent="Scenery/LanternPost001" unique_id=907306513]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 3.146, 0)
 light_color = Color(1, 0.8156863, 0.5411765, 1)
 light_energy = 1.6
-omni_range = 4.0499997
+omni_range = 7.597
 omni_attenuation = 1.35
 
-[node name="Flicker" type="Node" parent="Scenery/LanternLight001" unique_id=874039899 node_paths=PackedStringArray("Target")]
+[node name="Flicker" type="Node" parent="Scenery/LanternPost001/LanternLight001" unique_id=874039899 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 1
 Phase = 5.1000004
+Target = NodePath("..")
 
-[node name="Cylinder012" type="MeshInstance3D" parent="Scenery" unique_id=1997296049]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 1.85, 4.9)
+[node name="LanternPost002" type="Node3D" parent="Scenery" unique_id=1894262425]
+transform = Transform3D(-0.9965973, 0, -0.082425475, 0, 1, 0, 0.082425475, 0, -0.9965973, 7.1878815, 0.25, 4.293078)
+metadata/_edit_group_ = true
+
+[node name="Post" type="MeshInstance3D" parent="Scenery/LanternPost002" unique_id=1997296049]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
 material_override = SubResource("StandardMaterial3D_23elq")
 mesh = SubResource("CylinderMesh_1h6wc")
 
-[node name="Cylinder013" type="MeshInstance3D" parent="Scenery" unique_id=267680566]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.45, 4.9)
+[node name="Base" type="MeshInstance3D" parent="Scenery/LanternPost002" unique_id=267680566]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
 material_override = SubResource("StandardMaterial3D_23elq")
 mesh = SubResource("CylinderMesh_etj8g")
 
-[node name="Cylinder014" type="MeshInstance3D" parent="Scenery" unique_id=1504444913]
-transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 7.275, 3.45, 4.9)
+[node name="Arm" type="MeshInstance3D" parent="Scenery/LanternPost002" unique_id=1504444913]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0.275, 3.2, 0)
 material_override = SubResource("StandardMaterial3D_23elq")
 mesh = SubResource("CylinderMesh_jf0uc")
 
-[node name="Prop001" type="Node3D" parent="Scenery" unique_id=111335769]
-transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 7.55, 2.8000002, 4.9)
+[node name="Lantern" type="Node3D" parent="Scenery/LanternPost002" unique_id=111335769]
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0.55, 2.5500002, 0)
 
-[node name="Cylinder001" type="MeshInstance3D" parent="Scenery/Prop001" unique_id=1771922797]
+[node name="Cylinder001" type="MeshInstance3D" parent="Scenery/LanternPost002/Lantern" unique_id=1771922797]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 material_override = SubResource("StandardMaterial3D_23elq")
 mesh = SubResource("CylinderMesh_g4ecd")
 
-[node name="Cylinder002" type="MeshInstance3D" parent="Scenery/Prop001" unique_id=953875277]
+[node name="Cylinder002" type="MeshInstance3D" parent="Scenery/LanternPost002/Lantern" unique_id=953875277]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.42, 0)
 material_override = SubResource("StandardMaterial3D_27lqh")
 mesh = SubResource("CylinderMesh_2booy")
 
-[node name="Cylinder003" type="MeshInstance3D" parent="Scenery/Prop001" unique_id=412350492]
+[node name="Cylinder003" type="MeshInstance3D" parent="Scenery/LanternPost002/Lantern" unique_id=412350492]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.69, 0)
 material_override = SubResource("StandardMaterial3D_23elq")
 mesh = SubResource("CylinderMesh_5mnys")
 
-[node name="Cylinder004" type="MeshInstance3D" parent="Scenery/Prop001" unique_id=218956940]
+[node name="Cylinder004" type="MeshInstance3D" parent="Scenery/LanternPost002/Lantern" unique_id=218956940]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.14849241, 0.43, 0.14849241)
 material_override = SubResource("StandardMaterial3D_sm7uc")
 mesh = SubResource("CylinderMesh_g61sm")
 
-[node name="Cylinder005" type="MeshInstance3D" parent="Scenery/Prop001" unique_id=1231721679]
+[node name="Cylinder005" type="MeshInstance3D" parent="Scenery/LanternPost002/Lantern" unique_id=1231721679]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.14849241, 0.43, 0.14849241)
 material_override = SubResource("StandardMaterial3D_sm7uc")
 mesh = SubResource("CylinderMesh_7tm22")
 
-[node name="Cylinder006" type="MeshInstance3D" parent="Scenery/Prop001" unique_id=547522720]
+[node name="Cylinder006" type="MeshInstance3D" parent="Scenery/LanternPost002/Lantern" unique_id=547522720]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1484924, 0.43, -0.14849244)
 material_override = SubResource("StandardMaterial3D_sm7uc")
 mesh = SubResource("CylinderMesh_oewgp")
 
-[node name="Cylinder007" type="MeshInstance3D" parent="Scenery/Prop001" unique_id=964410070]
+[node name="Cylinder007" type="MeshInstance3D" parent="Scenery/LanternPost002/Lantern" unique_id=964410070]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1484924, 0.43, -0.14849244)
 material_override = SubResource("StandardMaterial3D_sm7uc")
 mesh = SubResource("CylinderMesh_gp6bb")
 
-[node name="Ring001" type="MeshInstance3D" parent="Scenery/Prop001" unique_id=908022686]
+[node name="Ring001" type="MeshInstance3D" parent="Scenery/LanternPost002/Lantern" unique_id=908022686]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0.86, 0)
 material_override = SubResource("StandardMaterial3D_sm7uc")
 mesh = SubResource("TorusMesh_pq2xc")
 
-[node name="LanternLight002" type="OmniLight3D" parent="Scenery" unique_id=471833141]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.55, 3.196, 4.9)
+[node name="LanternLight002" type="OmniLight3D" parent="Scenery/LanternPost002" unique_id=471833141]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 2.946, 0)
 light_color = Color(1, 0.8156863, 0.5411765, 1)
 light_energy = 1.6
-omni_range = 4.0499997
+omni_range = 7.597
 omni_attenuation = 1.35
 
-[node name="Flicker" type="Node" parent="Scenery/LanternLight002" unique_id=1972497137 node_paths=PackedStringArray("Target")]
+[node name="Flicker" type="Node" parent="Scenery/LanternPost002/LanternLight002" unique_id=1972497137 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 1
 Phase = 6.8
+Target = NodePath("..")
 
 [node name="Cylinder015" type="MeshInstance3D" parent="Scenery" unique_id=593739189]
 transform = Transform3D(-0.32019317, 0.94735223, 0, -0.94735223, -0.32019317, 0, 0, 0, 1, -3.44, 0.565922, -0.22)
@@ -3022,22 +3101,22 @@ mesh = SubResource("CylinderMesh_arv84")
 transform = Transform3D(0.9781476, 0, -0.2079117, 0, 1, 0, 0.2079117, 0, 0.9781476, 3, 0.26, 0)
 
 [node name="Panel001" type="MeshInstance3D" parent="Scenery/TidalChartBoard" unique_id=148591484]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.78, 0)
+transform = Transform3D(-0.99867195, 0, 0.051516756, 0, 1, 0, -0.051516756, 0, -0.99867195, -0.6273012, 1.78, 0.18551469)
 material_override = SubResource("StandardMaterial3D_wga1c")
 mesh = SubResource("BoxMesh_w01o1")
 
 [node name="Panel002" type="MeshInstance3D" parent="Scenery/TidalChartBoard" unique_id=1137988473]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.78, 0.105)
+transform = Transform3D(-0.99867195, 0, 0.051516756, 0, 1, 0, -0.051516756, 0, -0.99867195, -0.621892, 1.78, 0.080654144)
 material_override = SubResource("StandardMaterial3D_6tvup")
 mesh = SubResource("BoxMesh_tuo2i")
 
 [node name="Panel003" type="MeshInstance3D" parent="Scenery/TidalChartBoard" unique_id=1684901381]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.87, 0.9, 0)
+transform = Transform3D(-0.99867195, 0, 0.051516756, 0, 1, 0, -0.051516756, 0, -0.99867195, 0.24154305, 0.9, 0.23033431)
 material_override = SubResource("StandardMaterial3D_wga1c")
 mesh = SubResource("BoxMesh_kgl0b")
 
 [node name="Panel004" type="MeshInstance3D" parent="Scenery/TidalChartBoard" unique_id=1738979475]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.87, 0.9, 0)
+transform = Transform3D(-0.99867195, 0, 0.051516756, 0, 1, 0, -0.051516756, 0, -0.99867195, -1.4961458, 0.9, 0.14069512)
 material_override = SubResource("StandardMaterial3D_wga1c")
 mesh = SubResource("BoxMesh_1wu5n")
 
@@ -3069,10 +3148,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder025" unique_id=173707590 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 9.497427
 RainFirstFallDistance = 6.5251045
+Target = NodePath("..")
 
 [node name="Cylinder026" type="MeshInstance3D" parent="Scenery" unique_id=254991038]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -9.737169, 0.47523963, -7.280596)
@@ -3082,10 +3161,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder026" unique_id=443608289 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 7.302434
 RainFirstFallDistance = 1.4752396
+Target = NodePath("..")
 
 [node name="Cylinder027" type="MeshInstance3D" parent="Scenery" unique_id=1534827104]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -9.836842, 2.7504663, 0.27440548)
@@ -3095,10 +3174,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder027" unique_id=306811890 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 9.868401
 RainFirstFallDistance = 3.7504663
+Target = NodePath("..")
 
 [node name="Cylinder028" type="MeshInstance3D" parent="Scenery" unique_id=1926510859]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 5.1998615, 1.67753, 0.24946785)
@@ -3108,10 +3187,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder028" unique_id=1706681754 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 8.547678
 RainFirstFallDistance = 2.67753
+Target = NodePath("..")
 
 [node name="Cylinder029" type="MeshInstance3D" parent="Scenery" unique_id=2142436309]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -11.658178, 2.746751, 8.773624)
@@ -3121,10 +3200,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder029" unique_id=2036856289 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 8.641712
 RainFirstFallDistance = 3.746751
+Target = NodePath("..")
 
 [node name="Cylinder030" type="MeshInstance3D" parent="Scenery" unique_id=1473846927]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -8.54453, 6.157771, -4.7776074)
@@ -3134,10 +3213,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder030" unique_id=1711623964 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 9.81287
 RainFirstFallDistance = 7.157771
+Target = NodePath("..")
 
 [node name="Cylinder031" type="MeshInstance3D" parent="Scenery" unique_id=518965911]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 8.627199, 7.319263, -6.4696946)
@@ -3147,10 +3226,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder031" unique_id=106788183 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 8.629676
 RainFirstFallDistance = 8.319263
+Target = NodePath("..")
 
 [node name="Cylinder032" type="MeshInstance3D" parent="Scenery" unique_id=369418014]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -2.1529598, 2.6624198, 3.961687)
@@ -3160,10 +3239,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder032" unique_id=7413388 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 7.179614
 RainFirstFallDistance = 3.6624198
+Target = NodePath("..")
 
 [node name="Cylinder033" type="MeshInstance3D" parent="Scenery" unique_id=1014325]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 1.1907768, 2.4631639, 0.7795248)
@@ -3173,10 +3252,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder033" unique_id=455377753 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 7.4036255
 RainFirstFallDistance = 3.4631639
+Target = NodePath("..")
 
 [node name="Cylinder034" type="MeshInstance3D" parent="Scenery" unique_id=1692438991]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 9.541674, 6.5048823, -6.731905)
@@ -3186,10 +3265,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder034" unique_id=1550306392 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 8.133467
 RainFirstFallDistance = 7.5048823
+Target = NodePath("..")
 
 [node name="Cylinder035" type="MeshInstance3D" parent="Scenery" unique_id=25786300]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 0.42255592, 3.5299823, 4.7139444)
@@ -3199,10 +3278,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder035" unique_id=1534669828 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 9.296619
 RainFirstFallDistance = 4.5299826
+Target = NodePath("..")
 
 [node name="Cylinder036" type="MeshInstance3D" parent="Scenery" unique_id=85722599]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 5.6838074, 12.144875, -5.759437)
@@ -3212,10 +3291,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder036" unique_id=1602849740 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 9.814662
 RainFirstFallDistance = 13.144875
+Target = NodePath("..")
 
 [node name="Cylinder037" type="MeshInstance3D" parent="Scenery" unique_id=226501786]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -3.5476074, 4.352291, -8.243329)
@@ -3225,10 +3304,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder037" unique_id=1183115911 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 9.679498
 RainFirstFallDistance = 5.352291
+Target = NodePath("..")
 
 [node name="Cylinder038" type="MeshInstance3D" parent="Scenery" unique_id=1831307077]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 6.445587, 2.1446671, 5.6002235)
@@ -3238,10 +3317,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder038" unique_id=1512233446 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 9.998915
 RainFirstFallDistance = 3.1446671
+Target = NodePath("..")
 
 [node name="Cylinder039" type="MeshInstance3D" parent="Scenery" unique_id=77508506]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -8.411125, 5.550608, -8.798488)
@@ -3251,10 +3330,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder039" unique_id=1033522577 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 8.660528
 RainFirstFallDistance = 6.550608
+Target = NodePath("..")
 
 [node name="Cylinder040" type="MeshInstance3D" parent="Scenery" unique_id=7248200]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 11.081165, 7.705685, 4.268339)
@@ -3264,10 +3343,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder040" unique_id=2061105459 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 9.724505
 RainFirstFallDistance = 8.705685
+Target = NodePath("..")
 
 [node name="Cylinder041" type="MeshInstance3D" parent="Scenery" unique_id=1771321739]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 1.3777189, 5.900036, -1.0135975)
@@ -3277,10 +3356,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder041" unique_id=448728105 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 8.381562
 RainFirstFallDistance = 6.900036
+Target = NodePath("..")
 
 [node name="Cylinder042" type="MeshInstance3D" parent="Scenery" unique_id=1650075136]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 3.5218067, 4.9131103, 4.216654)
@@ -3290,10 +3369,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder042" unique_id=1854036180 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 8.64264
 RainFirstFallDistance = 5.9131103
+Target = NodePath("..")
 
 [node name="Cylinder043" type="MeshInstance3D" parent="Scenery" unique_id=2139038994]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -11.659254, 7.2911673, -8.642789)
@@ -3303,10 +3382,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder043" unique_id=2111289038 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 9.662761
 RainFirstFallDistance = 8.291167
+Target = NodePath("..")
 
 [node name="Cylinder044" type="MeshInstance3D" parent="Scenery" unique_id=120737044]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 7.66337, 6.442537, -4.593108)
@@ -3316,10 +3395,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder044" unique_id=80058200 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 9.514536
 RainFirstFallDistance = 7.442537
+Target = NodePath("..")
 
 [node name="Cylinder045" type="MeshInstance3D" parent="Scenery" unique_id=2109606260]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -3.1722212, 3.0978305, -5.8872046)
@@ -3329,10 +3408,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder045" unique_id=539273324 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 7.157808
 RainFirstFallDistance = 4.097831
+Target = NodePath("..")
 
 [node name="Cylinder046" type="MeshInstance3D" parent="Scenery" unique_id=1429946233]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -9.724897, 10.463941, -2.692278)
@@ -3342,10 +3421,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder046" unique_id=296427677 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 8.025517
 RainFirstFallDistance = 11.463941
+Target = NodePath("..")
 
 [node name="Cylinder047" type="MeshInstance3D" parent="Scenery" unique_id=10522107]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -1.5350361, 7.0113916, 9.413069)
@@ -3355,10 +3434,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder047" unique_id=111515903 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 8.13427
 RainFirstFallDistance = 8.011392
+Target = NodePath("..")
 
 [node name="Cylinder048" type="MeshInstance3D" parent="Scenery" unique_id=1739062563]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -0.6716013, 7.9286394, 0.35561085)
@@ -3368,10 +3447,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder048" unique_id=565941952 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 9.659896
 RainFirstFallDistance = 8.928639
+Target = NodePath("..")
 
 [node name="Cylinder049" type="MeshInstance3D" parent="Scenery" unique_id=637654806]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 2.627365, 10.7578745, -4.959001)
@@ -3381,10 +3460,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder049" unique_id=130540475 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 7.64029
 RainFirstFallDistance = 11.7578745
+Target = NodePath("..")
 
 [node name="Cylinder050" type="MeshInstance3D" parent="Scenery" unique_id=522464638]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 0.5772295, 9.769594, -3.0368786)
@@ -3394,10 +3473,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder050" unique_id=2066705779 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 9.878962
 RainFirstFallDistance = 10.769594
+Target = NodePath("..")
 
 [node name="Cylinder051" type="MeshInstance3D" parent="Scenery" unique_id=1768887259]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 4.470848, 7.0237303, 6.9056416)
@@ -3407,10 +3486,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder051" unique_id=332840513 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 7.400879
 RainFirstFallDistance = 8.02373
+Target = NodePath("..")
 
 [node name="Cylinder052" type="MeshInstance3D" parent="Scenery" unique_id=1406029141]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -10.280813, 11.601517, -4.766782)
@@ -3420,10 +3499,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder052" unique_id=52683698 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 9.004926
 RainFirstFallDistance = 12.601517
+Target = NodePath("..")
 
 [node name="Cylinder053" type="MeshInstance3D" parent="Scenery" unique_id=1058105349]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -8.614492, 2.8846583, -5.9496536)
@@ -3433,10 +3512,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder053" unique_id=126383149 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 8.865241
 RainFirstFallDistance = 3.8846583
+Target = NodePath("..")
 
 [node name="Cylinder054" type="MeshInstance3D" parent="Scenery" unique_id=1179306874]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -2.1610537, 8.590586, 5.824009)
@@ -3446,10 +3525,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder054" unique_id=237795437 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 9.125714
 RainFirstFallDistance = 9.590586
+Target = NodePath("..")
 
 [node name="Cylinder055" type="MeshInstance3D" parent="Scenery" unique_id=1826158299]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -10.523041, 1.3972533, -8.978842)
@@ -3459,10 +3538,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder055" unique_id=1797336707 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 7.15218
 RainFirstFallDistance = 2.3972533
+Target = NodePath("..")
 
 [node name="Cylinder056" type="MeshInstance3D" parent="Scenery" unique_id=715293989]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -1.5962124, 4.325656, -7.8550673)
@@ -3472,10 +3551,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder056" unique_id=1041472904 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 8.313965
 RainFirstFallDistance = 5.325656
+Target = NodePath("..")
 
 [node name="Cylinder057" type="MeshInstance3D" parent="Scenery" unique_id=345123404]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -11.793802, 2.3559716, -3.4106665)
@@ -3485,10 +3564,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder057" unique_id=1556268092 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 9.731346
 RainFirstFallDistance = 3.3559716
+Target = NodePath("..")
 
 [node name="Cylinder058" type="MeshInstance3D" parent="Scenery" unique_id=1157014459]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -6.1811657, 0.7398908, -2.9344444)
@@ -3498,10 +3577,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder058" unique_id=1134901676 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 8.798454
 RainFirstFallDistance = 1.7398908
+Target = NodePath("..")
 
 [node name="Cylinder059" type="MeshInstance3D" parent="Scenery" unique_id=67777305]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 11.923882, 3.1978164, -1.427125)
@@ -3511,10 +3590,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder059" unique_id=2067666478 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 8.730043
 RainFirstFallDistance = 4.1978164
+Target = NodePath("..")
 
 [node name="Cylinder060" type="MeshInstance3D" parent="Scenery" unique_id=228296301]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 13.86982, 3.0128784, -5.105495)
@@ -3524,10 +3603,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder060" unique_id=1975885581 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 8.551116
 RainFirstFallDistance = 4.0128784
+Target = NodePath("..")
 
 [node name="Cylinder061" type="MeshInstance3D" parent="Scenery" unique_id=1277814384]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -5.225047, 3.930482, -5.5707064)
@@ -3537,10 +3616,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder061" unique_id=2012097038 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 7.6552095
 RainFirstFallDistance = 4.930482
+Target = NodePath("..")
 
 [node name="Cylinder062" type="MeshInstance3D" parent="Scenery" unique_id=1519004913]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -1.5934153, 11.648437, -0.009464264)
@@ -3550,10 +3629,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder062" unique_id=1555967179 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 9.691917
 RainFirstFallDistance = 12.648437
+Target = NodePath("..")
 
 [node name="Cylinder063" type="MeshInstance3D" parent="Scenery" unique_id=366371794]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -11.982808, 7.0652204, -7.500659)
@@ -3563,10 +3642,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder063" unique_id=537492657 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 8.13226
 RainFirstFallDistance = 8.06522
+Target = NodePath("..")
 
 [node name="Cylinder064" type="MeshInstance3D" parent="Scenery" unique_id=1045266141]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 6.612583, 3.8665807, 1.0475159)
@@ -3576,10 +3655,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder064" unique_id=1708022169 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 7.873648
 RainFirstFallDistance = 4.866581
+Target = NodePath("..")
 
 [node name="Cylinder065" type="MeshInstance3D" parent="Scenery" unique_id=238358751]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -0.8748722, 5.294817, -8.189045)
@@ -3589,10 +3668,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder065" unique_id=1907145344 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 9.747656
 RainFirstFallDistance = 6.294817
+Target = NodePath("..")
 
 [node name="Cylinder066" type="MeshInstance3D" parent="Scenery" unique_id=1670086360]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 2.7628136, 4.5657573, -1.5044222)
@@ -3602,10 +3681,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder066" unique_id=1223595749 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 7.299132
 RainFirstFallDistance = 5.5657573
+Target = NodePath("..")
 
 [node name="Cylinder067" type="MeshInstance3D" parent="Scenery" unique_id=687910451]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 11.321333, 7.8394227, 4.632168)
@@ -3615,10 +3694,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder067" unique_id=1555668386 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 7.423358
 RainFirstFallDistance = 8.839422
+Target = NodePath("..")
 
 [node name="Cylinder068" type="MeshInstance3D" parent="Scenery" unique_id=1293075060]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -6.499226, 2.7887528, 4.9786997)
@@ -3628,10 +3707,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder068" unique_id=1332214628 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 9.570108
 RainFirstFallDistance = 3.7887528
+Target = NodePath("..")
 
 [node name="Cylinder069" type="MeshInstance3D" parent="Scenery" unique_id=135316456]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 11.157162, 6.9422503, 5.4609976)
@@ -3641,10 +3720,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder069" unique_id=634929653 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 7.3148003
 RainFirstFallDistance = 7.9422503
+Target = NodePath("..")
 
 [node name="Cylinder070" type="MeshInstance3D" parent="Scenery" unique_id=876461922]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -9.8842125, 11.554965, -9.387791)
@@ -3654,10 +3733,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder070" unique_id=473014828 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 7.441135
 RainFirstFallDistance = 12.554965
+Target = NodePath("..")
 
 [node name="Cylinder071" type="MeshInstance3D" parent="Scenery" unique_id=1058375311]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 6.087652, 5.61809, 7.4824104)
@@ -3667,10 +3746,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder071" unique_id=1355809648 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 9.100154
 RainFirstFallDistance = 6.61809
+Target = NodePath("..")
 
 [node name="Cylinder072" type="MeshInstance3D" parent="Scenery" unique_id=1593775267]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 13.094534, 12.6861515, 7.980709)
@@ -3680,10 +3759,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder072" unique_id=1335607848 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 8.778128
 RainFirstFallDistance = 13.6861515
+Target = NodePath("..")
 
 [node name="Cylinder073" type="MeshInstance3D" parent="Scenery" unique_id=996810691]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 6.4210835, 1.7865597, -7.127185)
@@ -3693,10 +3772,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder073" unique_id=692960421 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 8.657028
 RainFirstFallDistance = 2.7865596
+Target = NodePath("..")
 
 [node name="Cylinder074" type="MeshInstance3D" parent="Scenery" unique_id=1747976760]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -9.046061, 4.27492, 9.081619)
@@ -3706,10 +3785,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder074" unique_id=185118872 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 9.779394
 RainFirstFallDistance = 5.27492
+Target = NodePath("..")
 
 [node name="Cylinder075" type="MeshInstance3D" parent="Scenery" unique_id=1799322207]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 11.571844, 1.5828031, -3.0043168)
@@ -3719,10 +3798,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder075" unique_id=1690261855 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 9.413036
 RainFirstFallDistance = 2.5828032
+Target = NodePath("..")
 
 [node name="Cylinder076" type="MeshInstance3D" parent="Scenery" unique_id=795540885]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -8.396094, 4.6592965, 3.3027077)
@@ -3732,10 +3811,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder076" unique_id=2009228109 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 9.465426
 RainFirstFallDistance = 5.6592965
+Target = NodePath("..")
 
 [node name="Cylinder077" type="MeshInstance3D" parent="Scenery" unique_id=440859412]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 9.247219, 3.4874332, 0.29328442)
@@ -3745,10 +3824,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder077" unique_id=887497824 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 7.4992905
 RainFirstFallDistance = 4.4874334
+Target = NodePath("..")
 
 [node name="Cylinder078" type="MeshInstance3D" parent="Scenery" unique_id=540916629]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 1.6826239, 5.816752, -6.4012403)
@@ -3758,10 +3837,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder078" unique_id=1511722443 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 8.63259
 RainFirstFallDistance = 6.816752
+Target = NodePath("..")
 
 [node name="Cylinder079" type="MeshInstance3D" parent="Scenery" unique_id=1662946568]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -2.4528723, 12.265537, -5.316331)
@@ -3771,10 +3850,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder079" unique_id=141281764 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 7.3923907
 RainFirstFallDistance = 13.265537
+Target = NodePath("..")
 
 [node name="Cylinder080" type="MeshInstance3D" parent="Scenery" unique_id=1362655289]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 0.35856533, 9.421458, -6.6447406)
@@ -3784,10 +3863,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder080" unique_id=1376329800 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 9.678284
 RainFirstFallDistance = 10.421458
+Target = NodePath("..")
 
 [node name="Cylinder081" type="MeshInstance3D" parent="Scenery" unique_id=966437192]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 6.711918, 1.8056879, -1.0498152)
@@ -3797,10 +3876,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder081" unique_id=1807693953 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 7.2842283
 RainFirstFallDistance = 2.805688
+Target = NodePath("..")
 
 [node name="Cylinder082" type="MeshInstance3D" parent="Scenery" unique_id=1722651086]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -11.015396, 2.555698, 4.3098164)
@@ -3810,10 +3889,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder082" unique_id=331954643 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 8.6017475
 RainFirstFallDistance = 3.555698
+Target = NodePath("..")
 
 [node name="Cylinder083" type="MeshInstance3D" parent="Scenery" unique_id=2139876414]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 3.2382717, 11.005607, -5.452651)
@@ -3823,10 +3902,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder083" unique_id=1338944147 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 9.968573
 RainFirstFallDistance = 12.005607
+Target = NodePath("..")
 
 [node name="Cylinder084" type="MeshInstance3D" parent="Scenery" unique_id=997082027]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 2.0936604, 2.9414444, 9.652393)
@@ -3836,10 +3915,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder084" unique_id=1075044364 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 7.969883
 RainFirstFallDistance = 3.9414444
+Target = NodePath("..")
 
 [node name="Cylinder085" type="MeshInstance3D" parent="Scenery" unique_id=1640427366]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 8.476709, 0.680052, 8.110157)
@@ -3849,10 +3928,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder085" unique_id=1109208190 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 8.991051
 RainFirstFallDistance = 1.680052
+Target = NodePath("..")
 
 [node name="Cylinder086" type="MeshInstance3D" parent="Scenery" unique_id=1701879316]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -0.08658123, 9.523869, -8.633403)
@@ -3862,10 +3941,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder086" unique_id=812868456 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 7.738503
 RainFirstFallDistance = 10.523869
+Target = NodePath("..")
 
 [node name="Cylinder087" type="MeshInstance3D" parent="Scenery" unique_id=14535199]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 13.809711, 7.792771, -6.4868064)
@@ -3875,10 +3954,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder087" unique_id=574886863 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 7.593128
 RainFirstFallDistance = 8.79277
+Target = NodePath("..")
 
 [node name="Cylinder088" type="MeshInstance3D" parent="Scenery" unique_id=246913002]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -10.349617, 10.702693, -1.012537)
@@ -3888,10 +3967,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder088" unique_id=1935216047 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 7.458515
 RainFirstFallDistance = 11.702693
+Target = NodePath("..")
 
 [node name="Cylinder089" type="MeshInstance3D" parent="Scenery" unique_id=398495181]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 13.711752, 5.9412975, -7.993031)
@@ -3901,10 +3980,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder089" unique_id=550425076 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 7.0765786
 RainFirstFallDistance = 6.9412975
+Target = NodePath("..")
 
 [node name="Cylinder090" type="MeshInstance3D" parent="Scenery" unique_id=1740829346]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 12.505148, 7.415103, 5.0186024)
@@ -3914,10 +3993,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder090" unique_id=121372799 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 8.793854
 RainFirstFallDistance = 8.415103
+Target = NodePath("..")
 
 [node name="Cylinder091" type="MeshInstance3D" parent="Scenery" unique_id=650246630]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 2.4776506, 12.749729, 1.7298365)
@@ -3927,10 +4006,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder091" unique_id=930983501 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 9.033382
 RainFirstFallDistance = 13.749729
+Target = NodePath("..")
 
 [node name="Cylinder092" type="MeshInstance3D" parent="Scenery" unique_id=928488628]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -6.8379006, 2.4753816, -9.897249)
@@ -3940,10 +4019,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder092" unique_id=1547897063 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 7.451255
 RainFirstFallDistance = 3.4753816
+Target = NodePath("..")
 
 [node name="Cylinder093" type="MeshInstance3D" parent="Scenery" unique_id=1846055155]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 13.904726, 11.8415575, -2.7245693)
@@ -3953,10 +4032,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder093" unique_id=1088622876 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 8.27434
 RainFirstFallDistance = 12.8415575
+Target = NodePath("..")
 
 [node name="Cylinder094" type="MeshInstance3D" parent="Scenery" unique_id=1394207375]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, 9.938156, 6.553033, -1.3686457)
@@ -3966,10 +4045,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder094" unique_id=1539868622 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 9.914175
 RainFirstFallDistance = 7.553033
+Target = NodePath("..")
 
 [node name="Cylinder095" type="MeshInstance3D" parent="Scenery" unique_id=1219799007]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -11.024062, 2.6174405, -7.254937)
@@ -3979,10 +4058,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder095" unique_id=1817353209 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 8.414305
 RainFirstFallDistance = 3.6174405
+Target = NodePath("..")
 
 [node name="Cylinder096" type="MeshInstance3D" parent="Scenery" unique_id=1440911930]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -12.413891, 6.731159, -1.2148151)
@@ -3992,10 +4071,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder096" unique_id=1954678519 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 9.269962
 RainFirstFallDistance = 7.731159
+Target = NodePath("..")
 
 [node name="Cylinder097" type="MeshInstance3D" parent="Scenery" unique_id=1032114960]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -1.8780661, 0.9688789, -9.289342)
@@ -4005,10 +4084,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder097" unique_id=329479895 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 7.246109
 RainFirstFallDistance = 1.968879
+Target = NodePath("..")
 
 [node name="Cylinder098" type="MeshInstance3D" parent="Scenery" unique_id=2015068495]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -9.474338, 12.442217, -1.7520752)
@@ -4018,10 +4097,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder098" unique_id=1876725952 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 7.5898986
 RainFirstFallDistance = 13.442217
+Target = NodePath("..")
 
 [node name="Cylinder099" type="MeshInstance3D" parent="Scenery" unique_id=457808790]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -4.5613165, 3.998233, -7.7817945)
@@ -4031,10 +4110,10 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder099" unique_id=1939574823 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 8.441336
 RainFirstFallDistance = 4.998233
+Target = NodePath("..")
 
 [node name="Cylinder100" type="MeshInstance3D" parent="Scenery" unique_id=2127138523]
 transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -8.908823, 5.0769615, -9.478147)
@@ -4044,10 +4123,105 @@ mesh = SubResource("CylinderMesh_loxyr")
 
 [node name="Rainfall" type="Node" parent="Scenery/Cylinder100" unique_id=1549144605 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_j5v1o")
-Target = NodePath("..")
 Kind = 2
 Speed = 9.301228
 RainFirstFallDistance = 6.0769615
+Target = NodePath("..")
 
 [node name="CastOrigin" type="Marker3D" parent="." unique_id=871221042]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3, 0.28, 3.45)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2604098, 0.28, 1.9970596)
+
+[node name="Ada" parent="CastOrigin" unique_id=1456591645 instance=ExtResource("3_ada")]
+transform = Transform3D(0.99744576, 0, 0.07142782, 0, 1, 0, -0.07142782, 0, 0.99744576, -0.8133371, 0, -0.548265)
+visible = false
+metadata/_edit_group_ = true
+
+[node name="Nessa" parent="CastOrigin" unique_id=1392530715 instance=ExtResource("4_nessa")]
+transform = Transform3D(0.6478939, 0, -0.76173055, 0, 1, 0, 0.76173055, 0, 0.6478939, 1.9804168, 0, 0)
+visible = false
+metadata/_edit_group_ = true
+
+[node name="Tomas" parent="CastOrigin" unique_id=1742501345 instance=ExtResource("5_tomas")]
+transform = Transform3D(0.78626686, 0, 0.617887, 0, 1, 0, -0.617887, 0, 0.78626686, -2.113739, 0, -0.088927984)
+visible = false
+metadata/_edit_group_ = true
+
+[node name="Sera" parent="CastOrigin" unique_id=398766387 instance=ExtResource("6_sera")]
+transform = Transform3D(0.9782816, 0, -0.20727995, 0, 1, 0, 0.20727995, 0, 0.9782816, 0.7739663, 0, -0.5632577)
+visible = false
+metadata/_edit_group_ = true
+
+[node name="Characters1" type="Node3D" parent="CastOrigin" node_paths=PackedStringArray("Slot1")]
+visible = false
+script = ExtResource("cast_layout_script")
+CharacterCount = 1
+Slot1 = NodePath("Slot1")
+metadata/_editor_description_ = "Shared layout for every 1-character cast in this location. Move the slots to change all matching scenes."
+
+[node name="Slot1" parent="CastOrigin/Characters1" instance=ExtResource("3_ada")]
+position = Vector3(0.00000000, 0, 0)
+rotation = Vector3(0, 0.418879020, 0)
+metadata/_edit_group_ = true
+
+[node name="Characters2" type="Node3D" parent="CastOrigin" node_paths=PackedStringArray("Slot1", "Slot2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.2540202)
+script = ExtResource("cast_layout_script")
+CharacterCount = 2
+Slot1 = NodePath("Slot1")
+Slot2 = NodePath("Slot2")
+metadata/_editor_description_ = "Shared layout for every 2-character cast in this location. Move the slots to change all matching scenes."
+
+[node name="Slot1" parent="CastOrigin/Characters2" unique_id=415870928 instance=ExtResource("3_ada")]
+transform = Transform3D(0.6914122, 0, 0.72246057, 0, 1, 0, -0.72246057, 0, 0.6914122, -0.49996185, 0, 0.16552877)
+metadata/_edit_group_ = true
+
+[node name="Slot2" parent="CastOrigin/Characters2" unique_id=1082733686 instance=ExtResource("4_nessa")]
+transform = Transform3D(0.89316726, 0, -0.44972438, 0, 1, 0, 0.44972438, 0, 0.89316726, 1.440516, 0, 0)
+metadata/_edit_group_ = true
+
+[node name="Characters3" type="Node3D" parent="CastOrigin" node_paths=PackedStringArray("Slot1", "Slot2", "Slot3")]
+visible = false
+script = ExtResource("cast_layout_script")
+CharacterCount = 3
+Slot1 = NodePath("Slot1")
+Slot2 = NodePath("Slot2")
+Slot3 = NodePath("Slot3")
+metadata/_editor_description_ = "Shared layout for every 3-character cast in this location. Move the slots to change all matching scenes."
+
+[node name="Slot1" parent="CastOrigin/Characters3" unique_id=1643927597 instance=ExtResource("3_ada")]
+transform = Transform3D(0.99744576, 0, 0.07142782, 0, 1, 0, -0.07142782, 0, 0.99744576, -0.8133371, 0, -0.548265)
+metadata/_edit_group_ = true
+
+[node name="Slot2" parent="CastOrigin/Characters3" unique_id=2108688386 instance=ExtResource("4_nessa")]
+transform = Transform3D(0.6478939, 0, -0.76173055, 0, 1, 0, 0.76173055, 0, 0.6478939, 1.9804168, 0, 0)
+metadata/_edit_group_ = true
+
+[node name="Slot3" parent="CastOrigin/Characters3" unique_id=262099821 instance=ExtResource("5_tomas")]
+transform = Transform3D(0.78626686, 0, 0.617887, 0, 1, 0, -0.617887, 0, 0.78626686, -2.113739, 0, -0.088927984)
+metadata/_edit_group_ = true
+
+[node name="Characters4" type="Node3D" parent="CastOrigin" node_paths=PackedStringArray("Slot1", "Slot2", "Slot3", "Slot4")]
+visible = false
+script = ExtResource("cast_layout_script")
+CharacterCount = 4
+Slot1 = NodePath("Slot1")
+Slot2 = NodePath("Slot2")
+Slot3 = NodePath("Slot3")
+Slot4 = NodePath("Slot4")
+metadata/_editor_description_ = "Shared layout for every 4-character cast in this location. Move the slots to change all matching scenes."
+
+[node name="Slot1" parent="CastOrigin/Characters4" unique_id=1398798392 instance=ExtResource("3_ada")]
+transform = Transform3D(0.99744576, 0, 0.07142782, 0, 1, 0, -0.07142782, 0, 0.99744576, -0.8133371, 0, -0.548265)
+metadata/_edit_group_ = true
+
+[node name="Slot2" parent="CastOrigin/Characters4" unique_id=1320810120 instance=ExtResource("4_nessa")]
+transform = Transform3D(0.6478939, 0, -0.76173055, 0, 1, 0, 0.76173055, 0, 0.6478939, 1.9804168, 0, 0)
+metadata/_edit_group_ = true
+
+[node name="Slot3" parent="CastOrigin/Characters4" unique_id=1071097980 instance=ExtResource("5_tomas")]
+transform = Transform3D(0.78626686, 0, 0.617887, 0, 1, 0, -0.617887, 0, 0.78626686, -2.113739, 0, -0.088927984)
+metadata/_edit_group_ = true
+
+[node name="Slot4" parent="CastOrigin/Characters4" unique_id=81143795 instance=ExtResource("6_sera")]
+transform = Transform3D(0.9782816, 0, -0.20727995, 0, 1, 0, 0.20727995, 0, 0.9782816, 0.7739663, 0, -0.5632577)
+metadata/_edit_group_ = true

@@ -30,6 +30,27 @@ public partial class StageScene : Node3D
     [Export] public float FacingDegrees { get; set; } = 24;
     [Export] public float FacingStepDegrees { get; set; } = -12;
 
+    [ExportGroup("Fallback characters")]
+    [Export] public StageCharacter? AdaPlacement { get; set; }
+    [Export] public StageCharacter? NessaPlacement { get; set; }
+    [Export] public StageCharacter? TomasPlacement { get; set; }
+    [Export] public StageCharacter? SeraPlacement { get; set; }
+
+    [ExportGroup("Cast preview")]
+    [Export]
+    public string PreviewLayout
+    {
+        get => _previewStoryScene;
+        set
+        {
+            _previewStoryScene = value;
+            if (Engine.IsEditorHint() && IsNodeReady()) ApplyEditorCastPreview();
+        }
+    }
+
+    private string _previewStoryScene = "Default";
+    private StageCastLayout? _activeCastLayout;
+
     private Godot.Environment _nightEnvironment = null!;
     private Color _nightLightColor;
     private float _nightEnergy;
@@ -37,7 +58,12 @@ public partial class StageScene : Node3D
 
     public override void _Ready()
     {
-        if (Engine.IsEditorHint()) return;
+        if (Engine.IsEditorHint())
+        {
+            ApplyEditorCastPreview();
+            NotifyPropertyListChanged();
+            return;
+        }
         if (Atmosphere == null || KeyLight == null || StoryCamera == null || CastOrigin == null)
             throw new InvalidOperationException($"Stage '{Name}' has an unassigned scene binding in the Inspector.");
         _nightEnvironment = Atmosphere.Environment;
@@ -62,7 +88,83 @@ public partial class StageScene : Node3D
         if (BellBody != null) BellBody.Position = _bellOrigin + (Array.IndexOf(cues, "bell_lowered") >= 0 ? BellLoweredOffset : Vector3.Zero);
     }
 
-    public void SetMotionEnabled(bool enabled) => SetMotionEnabledBelow(this, enabled);
+    public void SetMotionEnabled(bool enabled)
+    {
+        SetMotionEnabledBelow(this, enabled);
+        // Slot meshes are static authoring references, even while the real cast animates.
+        foreach (var layout in CastLayouts().Where(layout => layout.UsesSlots))
+            for (int i = 0; i < layout.CharacterCount; i++)
+                if (layout.GetSlot(i) is { } slot) SetMotionEnabledBelow(slot, false);
+    }
+
+    /// <summary>Native character instances provide visible, editable placement and lighting targets.</summary>
+    public StageCharacter? GetCharacterPlacement(string characterId) =>
+        _activeCastLayout?.GetCharacterPlacement(characterId) ?? GetDefaultCharacterPlacement(characterId);
+
+    private StageCharacter? GetDefaultCharacterPlacement(string characterId) => characterId switch
+    {
+        "ada" => AdaPlacement,
+        "nessa" => NessaPlacement,
+        "tomas" => TomasPlacement,
+        "sera" => SeraPlacement,
+        _ => null,
+    };
+
+    public void HidePlacedCharacters()
+    {
+        // Unassigned preview instances must also stay out of the story's active cast.
+        foreach (var character in CastOrigin.FindChildren("*", "", true, false).OfType<StageCharacter>())
+            character.Visible = false;
+        foreach (var layout in CastLayouts()) layout.Visible = false;
+        _activeCastLayout = null;
+    }
+
+    /// <summary>Beat layouts take effect from their trigger through the rest of this scene, in story order.</summary>
+    public StageCastLayout? FindCastLayout(string storySceneId, string[]? reachedBeatIds = null, int characterCount = 0)
+    {
+        var layouts = CastLayouts().Where(layout => !layout.IsShared && layout.StorySceneId == storySceneId).ToArray();
+        foreach (var beatId in (reachedBeatIds ?? Array.Empty<string>()).Reverse())
+        {
+            var beatLayout = layouts.SingleOrDefault(layout => layout.StartAtBeatId == beatId);
+            if (beatLayout != null) return beatLayout;
+        }
+        return layouts.SingleOrDefault(layout => layout.StartAtBeatId.Length == 0)
+            ?? CastLayouts().SingleOrDefault(layout => layout.IsShared && layout.CharacterCount == characterCount);
+    }
+
+    public void SelectCastLayout(string storySceneId, string[]? reachedBeatIds = null, int characterCount = 0)
+    {
+        HidePlacedCharacters();
+        _activeCastLayout = FindCastLayout(storySceneId, reachedBeatIds, characterCount);
+        if (_activeCastLayout != null) _activeCastLayout.Visible = true;
+    }
+
+    public override void _ValidateProperty(Godot.Collections.Dictionary property)
+    {
+        if (property["name"].AsString() != nameof(PreviewLayout)) return;
+        property["hint"] = (int)PropertyHint.Enum;
+        property["hint_string"] = string.Join(',', new[] { "Default" }.Concat(CastLayouts().Select(layout => layout.PreviewKey)));
+    }
+
+    public void RefreshEditorCastPreview()
+    {
+        NotifyPropertyListChanged();
+        if (Engine.IsEditorHint() && IsNodeReady()) ApplyEditorCastPreview();
+    }
+
+    private IEnumerable<StageCastLayout> CastLayouts() => CastOrigin == null
+        ? Enumerable.Empty<StageCastLayout>()
+        : CastOrigin.GetChildren().OfType<StageCastLayout>();
+
+    private void ApplyEditorCastPreview()
+    {
+        if (CastOrigin == null) return;
+        var selected = CastLayouts().FirstOrDefault(layout => layout.PreviewKey == _previewStoryScene);
+        foreach (var layout in CastLayouts()) layout.Visible = layout == selected;
+        foreach (var character in CastOrigin.GetChildren().OfType<StageCharacter>())
+            character.Visible = selected == null;
+        // Preview visibility belongs to layout parents; individual authored poses stay untouched.
+    }
 
     public static void SetMotionEnabledBelow(Node parent, bool enabled)
     {

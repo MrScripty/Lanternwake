@@ -40,7 +40,6 @@ public partial class GameView : Node
     private int _previewIndex;
     private bool _busy, _started, _instant;
     private double _characters, _recordSeconds;
-    private string _lastScene = "";
     private int _generation;
 
     public override void _Ready()
@@ -136,7 +135,9 @@ public partial class GameView : Node
         var scene = _session.Scene;
         Audio.ShowLocation(scene.Location);
         Audio.ApplyBeatCue(_session.Beat.Id, _session.Beat.StageCue, playAudioCue);
-        if (_lastScene != scene.Id) { _stage.ShowLocation(scene.Location, scene.TimeOfDay, scene.CharacterIds); _lastScene = scene.Id; }
+        var beatIndex = Array.FindIndex(scene.Beats, beat => beat.Id == _session.Beat.Id);
+        var reachedBeatIds = scene.Beats.Take(beatIndex + 1).Select(beat => beat.Id).ToArray();
+        _stage.ShowLocation(scene.Location, scene.TimeOfDay, scene.CharacterIds, scene.Id, reachedBeatIds);
         _stage.ApplyAuthoredCues(_session.ActiveStageCues);
         _chapter.Text = (_previewMode ? "AUTHOR PREVIEW · " : "") + _session.Chapter.Title.ToUpperInvariant();
         _place.Text = scene.Title + "  ·  " + scene.TimeOfDay.Replace('_', ' ');
@@ -257,7 +258,7 @@ public partial class GameView : Node
     }
     private void Load(bool auto)
     {
-        try { var snapshot = _storage!.Read(auto); _session.Restore(snapshot); CloseConversation(); CloseModal(); _started = true; _lastScene = ""; RenderBeat(false); }
+        try { var snapshot = _storage!.Read(auto); _session.Restore(snapshot); CloseConversation(); CloseModal(); _started = true; RenderBeat(false); }
         catch (Exception error) { _status.Text = "Could not load: " + error.Message; CloseModal(); }
     }
     private void LoadCandidate(SaveCandidate candidate)
@@ -267,7 +268,7 @@ public partial class GameView : Node
         {
             // Capture the inspected snapshot, not a possibly changed file at click time.
             var snapshot = candidate.Snapshot ?? throw new InvalidDataException("This snapshot is unavailable.");
-            _session.Restore(snapshot); CloseConversation(); CloseModal(); _started = true; _lastScene = ""; RenderBeat(false);
+            _session.Restore(snapshot); CloseConversation(); CloseModal(); _started = true; RenderBeat(false);
             if (candidate.Previous) _status.Text = "Recovered the selected previous snapshot into this session. Save files were not rewritten.";
         }
         catch (Exception error) { _status.Text = "Could not load: " + error.Message; CloseModal(); }
@@ -322,7 +323,7 @@ public partial class GameView : Node
             if (_session.Beat.Activity is { } activity) _session.AnswerActivity(activity.CorrectIndex);
             _session.Advance();
         }
-        _started = true; _lastScene = ""; RenderBeat(false); _dialogue.VisibleCharacters = -1;
+        _started = true; RenderBeat(false); _dialogue.VisibleCharacters = -1;
         _status.Text = "AUTHOR PREVIEW · F10 next stage · F12 screenshot · player save/load disabled";
     }
 
