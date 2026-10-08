@@ -36,6 +36,7 @@ public partial class GameView : Node
     private Button _titleContentNote = null!;
     private Window? _modal;
     private readonly SpeechRecorder _speech = new();
+    private ConfirmationDialog? _microphoneConsent;
     private CancellationTokenSource? _request, _speechRequest;
     private readonly OwnedOperations _operations = new();
     private bool _closing, _previewMode, _stagePreview;
@@ -192,14 +193,14 @@ public partial class GameView : Node
         if (Engine.IsEditorHint()) return;
         _operations.ObserveCompleted(error => GD.PushWarning(error.Message));
         if (_started && _exchangeReading is null && _dialogue.VisibleCharacters >= 0) { _characters += delta * CharactersPerSecond; _dialogue.VisibleCharacters = Math.Min((int)_characters, _dialogue.GetTotalCharacterCount()); }
-        if (_speech.Recording) { _speech.Poll(); _recordSeconds += delta; _mic.Text = $"Stop ({_recordSeconds:0}s)"; if (_recordSeconds >= 30) ToggleMicrophone(); }
+        PollMicrophone(delta);
     }
     public override void _Input(InputEvent @event)
     {
         if (Engine.IsEditorHint() || _closing || _chatPanel is null || @event is not InputEventKey key) return;
         // LineEdit consumes Escape during GUI dispatch, so handle the intended
         // conversation cancellation before it merely releases text-field focus.
-        if (_chatPanel.Visible && _modal is null && key.Keycode == Key.Escape)
+        if (_chatPanel.Visible && _modal is null && _microphoneConsent is null && key.Keycode == Key.Escape)
         {
             GetViewport().SetInputAsHandled();
             if (key.Pressed && !key.Echo) ReturnToStory();
@@ -263,7 +264,7 @@ public partial class GameView : Node
         // Load restores the same session object; the saved view also belongs to a beat and generation.
         var restore = _chatPanel.Visible && reading is not null && reading.Session == _session &&
             reading.BeatId == _session.Beat.Id && reading.Generation == _generation && !_closing;
-        _generation++; _request?.Cancel(); _speechRequest?.Cancel(); _speech.Dispose(); _busy = false; _chatPanel.Visible = false; _mic.Text = "Use voice"; _mic.Disabled = false; _send.Disabled = false; _advance.Disabled = false; _entry.Editable = true; _advance.GrabFocus();
+        _generation++; _request?.Cancel(); _speechRequest?.Cancel(); CloseMicrophoneConsent(); _speech.Discard(); _busy = false; _chatPanel.Visible = false; _mic.Text = "Use voice"; _mic.Disabled = false; _send.Disabled = false; _advance.Disabled = false; _entry.Editable = true; _advance.GrabFocus();
         if (restore)
         {
             SetSpeakerText(reading!.Speaker); _dialogue.Text = reading.Text;
@@ -271,10 +272,10 @@ public partial class GameView : Node
             SetStatusText(reading.Status);
         }
     }
-    private void SendReply() { if (_chatPanel.Visible && !_busy && !_closing && !_speech.Recording) _operations.Track(SendReplyAsync()); }
+    private void SendReply() { if (_chatPanel.Visible && !_busy && !_closing && !_speech.Recording && !_speech.HasRecording) _operations.Track(SendReplyAsync()); }
     private async Task SendReplyAsync()
     {
-        if (!_chatPanel.Visible || _closing || _busy || _speech.Recording || string.IsNullOrWhiteSpace(_entry.Text) || _session.Beat.Conversation is not { } chat) return;
+        if (!_chatPanel.Visible || _closing || _busy || _speech.Recording || _speech.HasRecording || string.IsNullOrWhiteSpace(_entry.Text) || _session.Beat.Conversation is not { } chat) return;
         var input = _entry.Text.Trim(); var generation = _generation;
         _busy = true; _entry.Editable = false; _send.Disabled = true; _advance.Disabled = true; SetStatusText("Waiting for a reply from " + _aiSettings.Provider + "…");
         _request?.Dispose(); _request = new CancellationTokenSource(TimeSpan.FromSeconds(45));
@@ -304,25 +305,6 @@ public partial class GameView : Node
             }
         }
         finally { if (generation == _generation) { _busy = false; _entry.Editable = true; _send.Disabled = false; _advance.Disabled = false; } }
-    }
-    private void ToggleMicrophone() { if (!_busy && !_closing) _operations.Track(ToggleMicrophoneAsync()); }
-    private async Task ToggleMicrophoneAsync()
-    {
-        if (_busy) return;
-        if (!_speech.Recording)
-        {
-            if (!_speech.Available) { ShowWindow("Cohere Transcribe via Pumas", _speech.Capability.Message); return; }
-            var consent = MicrophoneConsentScene.Instantiate<ConfirmationDialog>();
-            _mic.Disabled = true; AddChild(consent);
-            consent.Confirmed += () => { try { _speech.Start(this); _recordSeconds = 0; _send.Disabled = true; _entry.Editable = false; } catch (Exception e) { SetStatusText(e.Message); } _mic.Disabled = false; consent.QueueFree(); };
-            consent.Canceled += () => { _mic.Disabled = false; consent.QueueFree(); }; consent.PopupCentered(); return;
-        }
-        _busy = true; _mic.Disabled = true; SetStatusText("Transcribing with Cohere through Pumas…");
-        _speechRequest?.Dispose(); _speechRequest = new CancellationTokenSource(TimeSpan.FromSeconds(90));
-        var generation = _generation;
-        try { var text = await _speech.StopAndTranscribe(_speechRequest.Token); if (generation == _generation) { _entry.Text = text; _entry.GrabFocus(); SetStatusText("Review and edit your transcript, then choose Say this."); } }
-        catch (Exception error) { if (generation == _generation) SetStatusText(error.Message); }
-        finally { if (generation == _generation) { _busy = false; _mic.Disabled = false; _mic.Text = "Use voice"; _send.Disabled = false; _entry.Editable = true; } }
     }
     private bool Save(bool auto)
     {
@@ -629,10 +611,10 @@ public partial class GameView : Node
     {
         if (Engine.IsEditorHint()) return;
         if (what != NotificationWMCloseRequest || _closing) return;
-        _closing = true; _generation++; _request?.Cancel(); _speechRequest?.Cancel(); _speechRequest?.Dispose(); _setupRequest?.Cancel(); CancelAiSetup(); _speech.Dispose();
+        _closing = true; _generation++; _request?.Cancel(); _speechRequest?.Cancel(); _speechRequest?.Dispose(); _setupRequest?.Cancel(); CancelAiSetup(); CloseMicrophoneConsent(); _speech.Discard();
         try { await _operations.DrainAsync(); }
         catch (Exception error) { GD.PushWarning("Shutdown operation: " + error.Message); }
         finally { _setupPumas?.Dispose(); _setupPumas = null; QuitAfterAudio(); }
     }
-    public override void _ExitTree() { if (Engine.IsEditorHint()) return; _generation++; _request?.Cancel(); _request?.Dispose(); _speechRequest?.Cancel(); _speechRequest?.Dispose(); _setupRequest?.Cancel(); CancelAiSetup(); _credentialLifetime.Cancel(); _aiSetupRequest?.Dispose(); _setupPumas?.Dispose(); _speech.Dispose(); _storage?.Dispose(); }
+    public override void _ExitTree() { if (Engine.IsEditorHint()) return; _generation++; _request?.Cancel(); _request?.Dispose(); _speechRequest?.Cancel(); _speechRequest?.Dispose(); _setupRequest?.Cancel(); CancelAiSetup(); _credentialLifetime.Cancel(); _aiSetupRequest?.Dispose(); _setupPumas?.Dispose(); CloseMicrophoneConsent(); _speech.Dispose(); _storage?.Dispose(); }
 }

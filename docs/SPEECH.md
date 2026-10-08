@@ -4,7 +4,36 @@ Voice input is temporarily **unsupported**. The requested backend is local Coher
 
 `PumasSpeechTranscriber` owns this explicit unavailable microphone boundary. `PumasAudioTextClient` now implements the generic consumer described below, with synthetic transport/lifecycle qualification only. The Use voice action explains the missing integration before recording or requesting microphone consent. It does not guess an endpoint, return a fabricated transcript, invoke a vendor CLI, or fall back to another recognizer. Old `LANTERNWAKE_WHISPER_*` settings have no effect.
 
-The retained `SpeechRecorder` passes an operation-local, in-memory stereo sample buffer and the Godot capture sample rate to that typed game boundary. It has no audio-file writer. It clears transferred samples in `finally` after transcription completes or fails, and clears retained samples on disposal. This implementation is gated and establishes no physical capture or recognition result. The generic consumer preserves the actual sample rate and stereo float PCM. PR61 assigns decoding/normalization to the owned Pumas bridge; Lanternwake does not relabel unconverted samples mono 16 kHz.
+The retained `SpeechRecorder` now connects explicitly consented Godot capture to the generic
+adapter. Shipping installed-runtime admission remains independently closed;
+capability JSON, saved preferences and the debug fixture cannot authorize a
+microphone. `Use voice` first probes the selected local contract. The existing
+consent dialog wraps inside a 640px viewport and starts capture only after
+`Start recording`. Its second probe must preserve the consent-bound model/profile;
+a changed selection requires fresh consent. There is no background recording,
+automatic permission acceptance, direct recognizer or non-Pumas audio destination.
+
+The existing muted `AudioStreamPlayer`/`AudioEffectCapture` path is owned by
+`GodotSpeechCaptureSource`. Each capture owns a uniquely named bus, stream,
+playback and effect. Stop resolves the bus by name rather than a stale index,
+stops microphone playback/input, clears unread capture frames and releases owned
+resources. Device start failure, read failure, capture overflow or three seconds
+without frames discards the clip and restores typed input. Native mixer ownership
+may settle on later frames; app shutdown also drains authored audio.
+
+`SpeechSampleBuffer` retains at most 30 seconds or the transport's PCM budget,
+with envelope headroom at high sample rates. It validates finite normalized
+stereo floats and zeroes entire replaced/disposed arrays. Temporary source arrays
+are also zeroed. Either the sample bound or 30-second elapsed limit stops capture
+without sending. The user must choose `Stop and transcribe` or, after the limit,
+`Transcribe recording`. Return, Load and close discard the clip. Transcription
+moves its sample buffer into the original operation; cancellation retains it
+until that transport settles, then zeroes it in `finally`. Pending remains true
+through this cleanup. No audio file is written. Only the editable entry receives
+a current-generation transcript; `Say this` remains a separate user action.
+Consent window identity and generation checks reject queued callbacks and awaited
+rechecks after Load, Return or close. Unknown producer outcomes remain blocked
+across conversation reopen and settings changes.
 
 ## Generic consumer contract (Pumas PR61)
 
@@ -52,7 +81,7 @@ Independent speech configuration now retains optional profile and a closed
 language choice (`en` for this English story), defaults old configurations
 without changing their provider, URL or model, and passes transcription
 preferences into the recorder on load/save. Owner scenes, menu layout, dialogue
-provider, voice preferences and story/save slots are preserved. The microphone
+provider, voice preferences and story/save slots are preserved. The shipping microphone
 boundary remains explicitly Unsupported even if a synthetic capability says
 available. Actual installed audio qualification must precede capture activation;
 preferences or advertised availability are not an override.
@@ -65,17 +94,17 @@ are labelled fixtures and qualify no inference, physical microphone or ASR quali
 
 ## Producer dependency and re-enable conditions
 
-The pinned Pumas source exposes generic audio admission grammar and private ownership foundations, while installed audio remains unqualified and publicly unavailable. The Pumas implementation owner must supply the reusable capability and lifecycle contract before the Lanternwake consumer can be enabled. Coordinate against [Pumas-Library](https://github.com/MrScripty/Pumas-Library), then bind the implementation version in this document.
+The pinned Pumas source exposes generic audio admission grammar and private ownership foundations, while installed audio remains unqualified and publicly unavailable. The Pumas implementation owner must supply the reusable capability and lifecycle contract before shipping microphone admission can be issued. The generic consumer and bounded capture path are now implemented and qualify only against owned synthetic sources. Coordinate against [Pumas-Library](https://github.com/MrScripty/Pumas-Library), then bind the implementation version in this document.
 
 The bounded integration requires:
 
 1. Pumas discovers a ready local Cohere Transcribe model and explicitly identifies its repository/revision or content digest, native cohere_asr architecture, managed runtime, supported language, input constraints and local execution capability. A generic loaded model is insufficient.
-2. Pumas owns bounded mono 16 kHz PCM admission (explicit encoding, sample count and language), decoding and inference through its managed runtime. The native Transformers loader must use local_files_only=True and trust_remote_code=False. Specify the actual request/response schema and route in the producer first; this game currently assumes none.
+2. Pumas owns bounded mono 16 kHz PCM admission (explicit encoding, sample count and language), decoding and inference through its managed runtime. The native Transformers loader must use local_files_only=True and trust_remote_code=False. Specify the actual request/response schema and route in the producer first; the implemented generic consumer uses the exact pinned PR61 grammar above.
 3. Pumas owns operation cancellation and terminal cleanup. The game retains each request through completion and discards replies after scene advance, load, close or shutdown. Cancellation of a client HTTP request alone is not evidence that inference stopped.
 4. After consumer wiring, qualify success, cancellation after observed admission, timeout, malformed/oversized audio or responses, missing/wrong model, close/reopen, retry and shutdown. Use a synthetic fixture first, followed by approved local model execution. Verify the game's in-memory sample cleanup and producer-side audio custody and terminal cleanup; if the producer uses temporary files, qualify their removal separately. Do not infer producer cleanup from client cancellation.
 5. Re-enable capture only when the local capability has been verified. Keep the existing explicit microphone consent, 30-second capture limit, operation-local samples, editable transcript and separate Say this action. Physical microphone/device behavior needs its own evidence.
 
-The review trigger is publication of the Pumas transcription contract. Pumas owns inference; Lanternwake owns capture, editable input and stale-result rejection. This milestone is a cutover/removal with an explicit dependency, not completion of speech recognition.
+The review trigger is publication of the Pumas transcription contract. Pumas owns inference; Lanternwake owns capture, editable input and stale-result rejection. This milestone implements bounded capture and generic consumer wiring, while installed inference and physical microphone qualification remain separate dependencies.
 
 ## Official model and acquisition facts
 
@@ -85,6 +114,17 @@ The same vendor also offers a hosted service. That is a separate data destinatio
 
 ## Evidence
 
-`dotnet run --project integration/speech/SpeechSmoke.csproj` checks the production unavailable boundary, repeated calls, cancellation and rejection of legacy recognizer settings. The Godot UI smoke verifies Use voice shows the explanation without starting capture or disabling typed input. These are cutover checks, not Cohere inference qualification.
-
-Earlier Whisper recognition/process tests remain historical evidence only in Git history and [LIVE-QUALIFICATION.md](LIVE-QUALIFICATION.md). They do not qualify the new backend.
+`dotnet run --project integration/speech/SpeechSmoke.csproj` checks the production
+unavailable boundary, legacy rejection, 106 generic synthetic contract assertions
+and 19 sample-buffer assertions. `python3 integration/qa/speech_capture.py` runs a
+marked disposable profile and real Godot generator through the capture bus and
+generic adapter, using a controlled HTTP handler. It covers consent cancellation,
+stale confirmation and held recheck after Load, shifted buses, an injected elapsed
+limit with no POST, editable transcript/save preservation, device failure,
+starvation/read failure, cancellation and timeout with deliberately held transport
+custody, sticky unknown outcomes, and active-source disposal. The fixture permit
+cannot authorize a microphone. Rendered runs display **OWNED SYNTHETIC AUDIO ·
+NO MICROPHONE · NO INFERENCE** and qualify actual controls and the elapsed limit;
+they do not qualify an installed Pumas model, OS permissions or physical capture.
+The full `scripts/verify.sh` includes the native capture gate. Real hardware and
+producer-owned device/artifact cleanup need their own evidence.
