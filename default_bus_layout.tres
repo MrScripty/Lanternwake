@@ -1,5 +1,10 @@
 [gd_resource type="AudioBusLayout" format=3 uid="uid://blrwfruehdnu5"]
 
+[sub_resource type="AudioEffectCompressor" id="reduced_range"]
+resource_name = "Master / reduced range"
+threshold = -24.0
+attack_us = 2000.0
+
 [sub_resource type="AudioEffectEQ10" id="music_eq"]
 resource_name = "Music / leave room for speech"
 band_db/31_hz = -12.0
@@ -31,6 +36,8 @@ band_db/4000_hz = 1.0
 
 [resource]
 bus/0/volume_db = -3.0
+bus/0/effect/0/effect = SubResource("reduced_range")
+bus/0/effect/0/enabled = false
 bus/1/name = &"Music"
 bus/1/solo = false
 bus/1/mute = false

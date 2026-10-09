@@ -63,6 +63,8 @@ public partial class AudioDirector : Node
     public float GetStemLevel(int index) => _stemLevels[index];
     public float GetTargetStemLevel(int index) => _stemTargets[index];
     public bool Muted => AudioServer.IsBusMute(Bus("Master"));
+    private int _reducedRangeEffect = -1;
+    public bool ReducedDynamicRange => AudioServer.IsBusEffectEnabled(Bus("Master"), _reducedRangeEffect);
     public string CurrentLocation => _location;
 
     public override void _Ready()
@@ -71,6 +73,11 @@ public partial class AudioDirector : Node
         if (AmbienceA is null || AmbienceB is null || Music is null || Effects is null || Dialogue is null)
             throw new InvalidOperationException("Assign AudioDirector's five authored players in the Inspector.");
         foreach (var name in new[] { "Master", "Music", "Ambience", "Effects", "Dialogue" }) _ = Bus(name);
+        var master = Bus("Master");
+        for (int i = 0; i < AudioServer.GetBusEffectCount(master); i++)
+            if (AudioServer.GetBusEffect(master, i) is AudioEffectCompressor { ResourceName: "Master / reduced range" })
+                _reducedRangeEffect = i;
+        if (_reducedRangeEffect < 0) throw new InvalidOperationException("Assign the optional reduced-range compressor to the Master bus.");
         Score.Validate();
         _catalog = MusicCatalog.Load(MusicCatalogPath);
         _stemLevels = new float[_catalog.Stems.Length]; _stemStarts = new float[_stemLevels.Length]; _stemTargets = new float[_stemLevels.Length];
@@ -96,6 +103,11 @@ public partial class AudioDirector : Node
         _musicSynth = new BufferedMusicSynth(renderer, _stemLevels);
         PlayAndTrack(Music);
         _musicPlayback = (AudioStreamGeneratorPlayback)Music.GetStreamPlayback();
+        // Godot's generator playback keeps a raw stream pointer through its final
+        // native mix. A native metadata reference survives player/tree removal
+        // and C# wrapper disposal, and retires with the playback itself.
+        using var streamOwner = Variant.From(Music.Stream);
+        _musicPlayback.SetMeta("lanternwake_generator_owner", streamOwner);
         PumpMusic();
     }
     private static byte[] ReadMusicFile(string path)
@@ -258,6 +270,7 @@ public partial class AudioDirector : Node
         }
     }
     public void SetMuted(bool value) => AudioServer.SetBusMute(Bus("Master"), value);
+    public void SetReducedDynamicRange(bool value) => AudioServer.SetBusEffectEnabled(Bus("Master"), _reducedRangeEffect, value);
     public float GetLevel(string name) => AudioServer.GetBusVolumeLinear(Bus(name));
     public void SetLevel(string name, float level)
     {
@@ -310,13 +323,16 @@ public partial class AudioDirector : Node
     public async Task<bool> StopAndRetireAsync()
     {
         StopPlayback();
+        var tree = GetTree();
         var deadline = Time.GetTicksMsec() + 2000;
         while (true)
         {
             RetireReleasedPlaybacks();
             if (_playbacks.Count == 0) return true;
             if (Time.GetTicksMsec() >= deadline) return false;
-            await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+            // The director may leave the tree while retirement is pending.
+            // Bind the awaiter to the surviving tree so teardown can settle it.
+            await tree.ToSignal(tree, SceneTree.SignalName.ProcessFrame);
         }
     }
     public override void _ExitTree()

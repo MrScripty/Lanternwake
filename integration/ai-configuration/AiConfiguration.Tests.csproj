@@ -9,4 +9,4 @@
     <Compile Include="../../Scripts/Conversation/AiConnection.cs" Link="AiConnection.cs" />
     <Compile Include="../../Scripts/Conversation/PumasClient*.cs" />
   </ItemGroup>
-</Project>
+<ItemGroup><Compile Include="../../Scripts/Core/PumasLibrarySelection.cs" Link="PumasLibrarySelection.cs" /></ItemGroup></Project>
