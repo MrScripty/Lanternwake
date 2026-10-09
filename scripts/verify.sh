@@ -11,6 +11,7 @@ fi
 python3 -m unittest discover -s integration/audio -v
 python3 -m unittest discover -s integration/launch -v
 python3 -m unittest discover -s integration/qa -p 'test_evidence_runs.py' -v
+python3 -m unittest discover -s integration/qa -p 'test_speaker_attribution_runner.py' -v
 python3 -m unittest discover -s integration/qa -p 'test_missing_margin_runner.py' -v
 python3 -m unittest discover -s integration/qa -p 'test_history_resume_runner.py' -v
 dotnet run --project tests/Lanternwake.Tests.csproj -- Content/story.json
