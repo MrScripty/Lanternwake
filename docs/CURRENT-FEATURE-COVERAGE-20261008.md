@@ -13,7 +13,7 @@ and measurement boundaries.
 | Optional agency | Editable suggestions/free input with authored fallbacks; Missing Margin and Six Working Lives retain one chosen authored pair. Declining preserves the fixed continuation. | Authored choices and synthetic fixtures establish no real-model characterization. |
 | Saves and resume | Manual/autosave, previous-slot recovery, displayed-snapshot selection, restored knowledge/activity/stage state. History opens at its current/recent paragraph and keeps the full record readable. | Older saves beyond the optional inserted beat load without inventing a choice; forward compatibility with older game readers is not promised. |
 | Reading and keyboard | 100/125/150% text, instant/typewriter text, visible scrollbar focus, Page Up/Down and Home/End, content note. | Physical input, assistive tools and localization need device acceptance. |
-| Authored scene interactions | Route comparison, cup inspection/persistent states, guided bell lowering and character poses. Speaker names remain in History; live captions depend on the configured optional HUD labels. | Broader art/performance direction and speaker presentation require author/UI decisions. |
+| Authored scene interactions | Route comparison, cup inspection/persistent states, guided bell lowering and character poses. Speaker names remain in History; live dialogue uses the authored speaker label or a runtime fallback when it is absent. | Broader art/performance direction and speaker styling require author/UI decisions. |
 | Sound | Independent levels/mute, optional reduced loud/quiet differences, authored textual equivalents for essential sounds. | Native PCM/control tests do not establish hearing or listening preference. |
 | AI configuration | Startup/resume menu, independent dialogue/transcription/voice preferences, provider/model selection, secure-key handling and unavailable-state notices. Selected-owner setup and bounded generic audio consumer/capture are implemented. | Installed producer/model interoperability remains unqualified; shipping microphone admission and character voices remain unavailable. |
 
@@ -43,7 +43,7 @@ builds are not standalone executable exports or physical-device qualification.
 - Representative readers: chapter comprehension, five-hour target/median, opening
   hook placement, evidence-gate difficulty and repeated Chapter 4 explanations.
   Expand only a specific missing experience supported by reader evidence.
-- Author/UI direction: live speaker attribution, composed inserts, materials and
+- Author/UI direction: speaker styling, composed inserts, materials and
   recorded performances, while retaining textual equivalents and fixed chronology.
 - Approved installed producer and model: owner custody, descriptor-bound admission,
   cancellation/reconciliation, spoiler prompts and voice review-before-send.

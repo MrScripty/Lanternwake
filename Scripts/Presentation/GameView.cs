@@ -27,6 +27,7 @@ public partial class GameView : Node
     private StageDirector _stage = null!;
     private Label _chapter = null!;
     private Label? _place, _speaker, _status;
+    private bool _fallbackSpeaker;
     private string _placeText = "", _speakerText = "", _statusText = "";
     private RichTextLabel _dialogue = null!;
     private VBoxContainer _suggestions = null!;
@@ -88,6 +89,21 @@ public partial class GameView : Node
         _place = InterfaceRoot.GetNodeOrNull<Label>("%PlaceLabel");
         _speaker = InterfaceRoot.GetNodeOrNull<Label>("%SpeakerLabel");
         _dialogue = InterfaceRoot.GetNode<RichTextLabel>("%DialogueText");
+        if (_speaker is null)
+        {
+            // Keep the owner's scene and theme; attribution belongs beside its prose.
+            _speaker = new Label
+            {
+                Name = "RuntimeSpeakerLabel", Visible = false,
+                AutowrapMode = TextServer.AutowrapMode.WordSmart,
+                SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
+                MouseFilter = Control.MouseFilterEnum.Ignore,
+            };
+            var stack = _dialogue.GetParent();
+            stack.AddChild(_speaker);
+            stack.MoveChild(_speaker, _dialogue.GetIndex());
+            _fallbackSpeaker = true;
+        }
         _status = InterfaceRoot.GetNodeOrNull<Label>("%StatusLabel");
         _talk = InterfaceRoot.GetNode<Button>("%TalkButton");
         _advance = InterfaceRoot.GetNode<Button>("%AdvanceButton");
@@ -99,6 +115,7 @@ public partial class GameView : Node
         _titleContentNote = InterfaceRoot.GetNode<Button>("%ContentNoteButton");
         _titleContentNote.Pressed += ShowTitleContentNote;
         _readingText.Register(_dialogue); _readingText.Register(_entry);
+        _readingText.Register(_speaker);
         EnableKeyboardReading(_dialogue);
         InterfaceRoot.GetNode<Button>("%EvidenceButton").Pressed += ShowEvidence;
         InterfaceRoot.GetNode<Button>("%HistoryButton").Pressed += ShowHistory;
@@ -114,7 +131,7 @@ public partial class GameView : Node
         _send.Pressed += SendReply;
         InterfaceRoot.GetNode<Button>("%ReturnButton").Pressed += ReturnToStory;
     }
-    // These informational labels may be removed from an authored interface.
+    // Place and status labels may be removed from an authored interface.
     private void SetPlaceText(string text)
     {
         _placeText = text;
@@ -124,6 +141,7 @@ public partial class GameView : Node
     {
         _speakerText = text;
         if (_speaker is not null) _speaker.Text = text;
+        if (_fallbackSpeaker) _speaker!.Visible = text.Length > 0;
     }
     private void SetStatusText(string text)
     {

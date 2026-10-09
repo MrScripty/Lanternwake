@@ -61,6 +61,7 @@ fi
 rm -f "$log"
 trap - EXIT
 python3 integration/qa/runtime_lifecycle.py
+python3 integration/qa/speaker_attribution.py
 python3 integration/qa/reduced_range.py
 python3 integration/qa/generator_lifetime.py
 python3 integration/qa/speech_capture.py
