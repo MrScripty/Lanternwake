@@ -69,7 +69,8 @@ public sealed class PumasOwnerClient : IDisposable
         info.ArgumentList.Add("--describe-local-http"); info.ArgumentList.Add("--launcher-root"); info.ArgumentList.Add(selection.Root);
         using var child = Process.Start(info) ?? throw new IOException("The Pumas observer could not start.");
         var output = ReadBoundedAsync(child.StandardOutput.BaseStream, Limit, token);
-        var errors = ReadBoundedAsync(child.StandardError.BaseStream, 8192, token);
+        // Diagnostics do not authorize discovery; discard them with bounded storage while keeping the pipe drained.
+        var errors = child.StandardError.BaseStream.CopyToAsync(Stream.Null, 4096, token);
         try
         {
             await child.WaitForExitAsync(token).ConfigureAwait(false);

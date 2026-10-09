@@ -143,6 +143,59 @@ try
         File.WriteAllText(script,$"#!/bin/sh\nprintf '%s\\n' \"$@\" > '{argsFile}'\ncat '{jsonFile}'\n");File.SetUnixFileMode(script,UnixFileMode.UserRead|UnixFileMode.UserWrite|UnixFileMode.UserExecute);
         var bytes=await PumasOwnerClient.ObserveAsync(new(owned,script),default);
         Check(JsonNode.Parse(bytes) is not null && File.ReadAllLines(argsFile).SequenceEqual(new[]{"--describe-local-http","--launcher-root",owned}),"real owned CLI process preserves spaced arguments and supported read-only command");
+        // Exceed both the old diagnostic limit and a pipe's capacity, before and after stdout.
+        foreach (var diagnosticsFirst in new[] { true, false })
+        {
+            var diagnostics="dd if=/dev/zero bs=4096 count=256 >&2 2>/dev/null\n";
+            var stdout=$"cat '{jsonFile}'\n";
+            File.WriteAllText(script,"#!/bin/sh\n"+(diagnosticsFirst ? diagnostics+stdout : stdout+diagnostics));
+            using var diagnosticDeadline=new CancellationTokenSource(TimeSpan.FromSeconds(5));
+            using var owner=new PumasOwnerClient(new DescribeHandler(()=>description),PumasOwnerClient.ObserveAsync);
+            var receipt=await owner.AuthenticateAsync(new(owned,script),endpoint,diagnosticDeadline.Token);
+            Check(receipt.Descriptor==PumasOwnerClient.Parse(Encoding.UTF8.GetBytes(description.ToJsonString()),selection,endpoint).Descriptor,
+                "actual owner authentication accepts 1 MiB diagnostic stderr "+(diagnosticsFirst ? "before" : "after")+" valid stdout");
+        }
+        File.WriteAllText(script,$"#!/bin/sh\ncat '{jsonFile}'\ndd if=/dev/zero bs=4096 count=256 >&2 2>/dev/null\nexit 3\n");
+        using (var exitDeadline=new CancellationTokenSource(TimeSpan.FromSeconds(5)))
+        {
+            try { await PumasOwnerClient.ObserveAsync(new(owned,script),exitDeadline.Token); throw new Exception("Unexpected failed-observer admission"); }
+            catch (InvalidDataException error) { Check(error.Message=="Pumas refused authenticated owner discovery. No startup or download fallback is permitted.",
+                "large diagnostic stderr preserves meaningful nonzero-exit refusal"); }
+        }
+        // Discard sustained diagnostics with a fixed buffer, rather than retaining their total size.
+        File.WriteAllText(script,$"#!/bin/sh\ndd if=/dev/zero bs=4096 count=4096 >&2 2>/dev/null\ncat '{jsonFile}'\n");
+        var allocatedBefore=GC.GetTotalAllocatedBytes(true);
+        using (var drainDeadline=new CancellationTokenSource(TimeSpan.FromSeconds(5)))
+            bytes=await PumasOwnerClient.ObserveAsync(new(owned,script),drainDeadline.Token);
+        Check(bytes.SequenceEqual(File.ReadAllBytes(jsonFile)) && GC.GetTotalAllocatedBytes(true)-allocatedBefore<4*1024*1024,
+            "16 MiB stderr drains without retaining diagnostics or stalling the owned process");
+        foreach (var stdoutSize in new[] { 65536, 65537 })
+        {
+            File.WriteAllText(script,"#!/bin/sh\ndd if=/dev/zero bs=65536 count=1 2>/dev/null\n"+(stdoutSize>65536 ? "printf x\n" : "")+
+                "dd if=/dev/zero bs=4096 count=256 >&2 2>/dev/null\n");
+            using var boundDeadline=new CancellationTokenSource(TimeSpan.FromSeconds(5));
+            if (stdoutSize==65536)
+                Check((await PumasOwnerClient.ObserveAsync(new(owned,script),boundDeadline.Token)).Length==65536,"stdout byte limit remains exactly 65536 despite large stderr");
+            else
+            {
+                try { await PumasOwnerClient.ObserveAsync(new(owned,script),boundDeadline.Token); throw new Exception("Unexpected oversized-stdout admission"); }
+                catch (InvalidDataException error) { Check(error.Message=="Pumas observation exceeded its bounded response limit.","stdout overflow still drains both pipes and refuses discovery"); }
+            }
+        }
+        var pidFile=Path.Combine(owned,"diagnostic-observer.pid");
+        File.WriteAllText(script,$"#!/bin/sh\necho $$ > '{pidFile}'\nwhile :; do printf '%04096d' 0 >&2; done\n");
+        using (var drainCancellation=new CancellationTokenSource(TimeSpan.FromSeconds(5)))
+        {
+            var draining=PumasOwnerClient.ObserveAsync(new(owned,script),drainCancellation.Token);
+            var pid=0;
+            while (!File.Exists(pidFile) || !int.TryParse(File.ReadAllText(pidFile),out pid))
+                await Task.Delay(10,drainCancellation.Token);
+            await Task.Delay(80,drainCancellation.Token); drainCancellation.Cancel();
+            try { await draining; throw new Exception("Unexpected cancelled-observer admission"); }
+            catch (OperationCanceledException) { Check(true,"cancellation settles continuous stderr draining"); }
+            try { using var child=System.Diagnostics.Process.GetProcessById(pid); Check(child.HasExited,"cancelled diagnostic observer is reaped"); }
+            catch (ArgumentException) { Check(true,"cancelled diagnostic observer is reaped"); }
+        }
         File.WriteAllText(script,"#!/bin/sh\nexec sleep 30\n");using var deadline=new CancellationTokenSource(80);
         await Reject(()=>PumasOwnerClient.ObserveAsync(new(owned,script),deadline.Token),"cancel actual owned observer process; no daemon PID involved");
         File.WriteAllText(script,"#!/bin/sh\ni=0; while [ \"$i\" -lt 700 ]; do printf '%0100d' 0; i=$((i+1)); done\n");
