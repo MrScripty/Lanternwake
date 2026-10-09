@@ -2,6 +2,7 @@ using System.Buffers.Binary;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -40,6 +41,8 @@ internal static class AudioModalityTests
     public static async Task RunAsync()
     {
         await WireAndSnapshot();
+        EncodingAllocationBound();
+        EncodingBufferCustody();
         await DiscoveryRefusals();
         await InvalidInputAndConfig();
         await TerminalRefusals();
@@ -131,6 +134,61 @@ internal static class AudioModalityTests
         Check(transcriber.Capability.Status == SpeechAvailability.Unsupported, "Installed microphone remains gated despite configured model.");
         try { await transcriber.TranscribeAsync(Samples, 48000, default); throw new Exception("Gate bypassed"); }
         catch (NotSupportedException) { Check(true, "No fake qualification of installed audio."); }
+    }
+
+    private static void EncodingAllocationBound()
+    {
+        var escaped = Settings with { Model = new string('"', 256), Profile = new string('a', 128), Language = "zh" };
+        using var client = new PumasAudioTextClient(escaped, new FakeHandler((_, _) => throw new Exception("Encoding must not use transport")), TimeSpan.FromSeconds(5));
+        var encode = typeof(PumasAudioTextClient).GetMethod("Encode", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        // Warm reflection/JIT before measuring only the synchronous production encoder.
+        var warm = (byte[])encode.Invoke(client, [new byte[8], 48000, 1, "owned-encoding", Settings.Profile])!;
+        System.Security.Cryptography.CryptographicOperations.ZeroMemory(warm);
+        foreach (var length in new[] { 1, 2, 3, 8, 1024 * 1024, 24 * 1024 * 1024 - 16384 })
+        {
+            var pcm = new byte[length]; Array.Fill(pcm, (byte)0x4b);
+            var before = GC.GetAllocatedBytesForCurrentThread();
+            var body = (byte[])encode.Invoke(client, [pcm, 192000, pcm.Length / 8, "owned-encoding", escaped.Profile])!;
+            var allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+            try
+            {
+                Console.WriteLine($"Synthetic encoding allocation: body={body.Length} allocated={allocated}");
+                Check(allocated <= body.Length * 3L + 16384, "Encoding allocates only owned base64 token, JSON staging and transport body, without discarded growth or hidden audio buffers.");
+                using var json = JsonDocument.Parse(body);
+                Check(json.RootElement.GetProperty("input").GetProperty("data_base64").GetBytesFromBase64().SequenceEqual(pcm), "Synthetic PCM wire bytes survive bounded encoding at base64 and near-limit sizes.");
+                Check(json.RootElement.GetProperty("model").GetString() == escaped.Model && json.RootElement.GetProperty("profile").GetString() == escaped.Profile, "Worst-case escaped metadata retains exact selected identity.");
+            }
+            finally { System.Security.Cryptography.CryptographicOperations.ZeroMemory(pcm); System.Security.Cryptography.CryptographicOperations.ZeroMemory(body); }
+        }
+    }
+
+    private static void EncodingBufferCustody()
+    {
+        foreach (var failure in new[] { false, true })
+        {
+            var buffer = new PumasAudioTextClient.AudioEncodingBuffer(8192);
+            Check(MemoryMarshal.TryGetArray<byte>(buffer.GetMemory(1), out var first), "Encoding buffer owns an inspectable managed array.");
+            try
+            {
+                using var writer = new Utf8JsonWriter(buffer);
+                writer.WriteStartObject(); writer.WriteBase64String("data", new byte[] { 0x4b, 0x4b, 0x4b }); writer.Flush();
+                Check(MemoryMarshal.TryGetArray<byte>(buffer.GetMemory(4096), out var next) && ReferenceEquals(first.Array, next.Array), "Writer reservations keep the same owned array after encoded audio.");
+                Check(first.Array!.Any(b => b != 0), "Synthetic base64 is present before owned buffer cleanup.");
+                if (failure) writer.WriteEndArray(); // Invalid JSON state after audio was staged.
+                else writer.WriteEndObject();
+            }
+            catch (InvalidOperationException) when (failure) { Check(true, "Writer failure after audio staging propagates."); }
+            finally { buffer.Dispose(); }
+            Check(first.Array!.All(b => b == 0), "Every byte, including uncommitted writer reservations, clears on success or exception.");
+            try { buffer.GetMemory(); throw new Exception("Disposed encoding storage reused"); }
+            catch (ObjectDisposedException) { Check(true, "Disposed encoding buffer cannot accept new bytes."); }
+        }
+        using var bounded = new PumasAudioTextClient.AudioEncodingBuffer(16);
+        Check(MemoryMarshal.TryGetArray<byte>(bounded.GetMemory(), out var owned), "Bounded buffer owns its sole array.");
+        bounded.GetSpan().Fill(0x4b); bounded.Advance(16);
+        try { bounded.GetMemory(1); throw new Exception("Encoding buffer grew beyond fixed capacity"); }
+        catch (Exception error) when (error.GetType().Name == "ProtocolException") { Check(true, "Exhausted capacity fails closed instead of allocating another audio array."); }
+        bounded.Dispose(); Check(owned.Array!.All(b => b == 0), "Capacity failure leaves no retained encoded bytes after cleanup.");
     }
 
     private static async Task InvalidInputAndConfig()

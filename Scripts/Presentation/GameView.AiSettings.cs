@@ -8,6 +8,8 @@ public partial class GameView
 {
     [Export] public PackedScene AiSettingsControlsScene { get; set; } = null!;
     private AiSettings _aiSettings = AiSettings.FromEnvironment();
+    private PumasLibrarySelection _savedLocalLibrary = new();
+    private PumasLibrarySelection? _launchLibraryOverride;
     private string _aiSettingsPath = "", _aiSettingsLoadError = "";
     private string _openRouterKey = "", _credentialNotice = "";
     private ICredentialStore _credentialStore = new DisabledCredentialStore();
@@ -21,16 +23,33 @@ public partial class GameView
     {
         _aiSettingsPath = Path.Combine(mode == SessionMode.AutomatedTest ? _storage!.OwnedTestDirectory! :
             ProjectSettings.GlobalizePath("user://"), "ai-settings.json");
+        var hasLaunchOverride = System.Environment.GetEnvironmentVariable("LANTERNWAKE_PUMAS_SELECTION_OVERRIDE") == "1";
+        var defaults = AiSettings.FromEnvironment();
+        // An absent settings file must not turn a process-only choice into a saved default.
+        if (hasLaunchOverride) defaults = defaults with { LocalLibrary = new() };
         try
         {
-            _aiSettings = AiSettings.Load(_aiSettingsPath, AiSettings.FromEnvironment());
-            if (System.Environment.GetEnvironmentVariable("LANTERNWAKE_PUMAS_SELECTION_OVERRIDE") == "1")
-                _aiSettings = _aiSettings with { LocalLibrary = PumasLibrarySelection.FromEnvironment().Validate() };
+            _aiSettings = AiSettings.Load(_aiSettingsPath, defaults);
         }
         catch (Exception error) when (error is IOException or UnauthorizedAccessException or InvalidDataException)
         {
             _aiSettings = new(DialogueProvider.Pumas, false, AiSettings.DefaultEndpoint(DialogueProvider.Pumas), "");
             _aiSettingsLoadError = "AI settings could not be loaded. Open AI setup to configure them again.";
+        }
+        _savedLocalLibrary = _aiSettings.LocalLibrary;
+        _launchLibraryOverride = null;
+        if (hasLaunchOverride)
+        {
+            try
+            {
+                _launchLibraryOverride = PumasLibrarySelection.FromEnvironment().Validate();
+                _aiSettings = _aiSettings with { LocalLibrary = _launchLibraryOverride };
+            }
+            catch (InvalidDataException)
+            {
+                _aiSettingsLoadError += (_aiSettingsLoadError.Length > 0 ? "\n" : "") +
+                    "The launcher Pumas library selection is invalid. Saved settings were kept.";
+            }
         }
         _speech.Configure(_aiSettings.Transcription);
         if (mode == SessionMode.Normal)
@@ -141,7 +160,10 @@ public partial class GameView
         AiSettings Draft(bool requireModel) => new AiSettings((DialogueProvider)provider.GetSelectedId(),
             requireModel && enabled.ButtonPressed, endpoint.Text.Trim(), requireModel ? SelectedModel() : "")
         {
-            LocalLibrary = new(libraryRoot.Text.Trim(), observer.Text.Trim()),
+            // Unchanged launcher fields preserve exact filesystem spelling and process-only custody.
+            LocalLibrary = _launchLibraryOverride is { } launch &&
+                libraryRoot.Text == launch.Root && observer.Text == launch.ObserverExecutable
+                ? launch : new(libraryRoot.Text.Trim(), observer.Text.Trim()),
             Transcription = ReadSpeechPreferences(transcription, _aiSettings.Transcription),
             CharacterSpeech = ReadSpeechPreferences(voices, _aiSettings.CharacterSpeech),
             CharacterVoices = ReadSpeechPreferences(voices, _aiSettings.CharacterSpeech).Provider == _aiSettings.CharacterSpeech.Provider
@@ -271,7 +293,11 @@ public partial class GameView
                     _credentialNotice = enteredKey.Length > 0 ? "Key saved in your desktop keyring." : "No key saved.";
                 }
                 token.ThrowIfCancellationRequested();
-                draft.Save(_aiSettingsPath); _aiSettings = draft;
+                var persisted = _launchLibraryOverride is { } launch && draft.LocalLibrary == launch
+                    ? draft with { LocalLibrary = _savedLocalLibrary } : draft;
+                persisted.Save(_aiSettingsPath); _savedLocalLibrary = persisted.LocalLibrary; _aiSettings = draft;
+                // A deliberate library edit replaces the launch choice, including on later saves.
+                if (_launchLibraryOverride is { } previous && draft.LocalLibrary != previous) _launchLibraryOverride = null;
                 // Retarget only after an existing setup request settles; its original client remains owned.
                 _setupSelectionChanged = true; _speech.Configure(draft.Transcription); _aiSettingsLoadError = "";
                 if (Active())

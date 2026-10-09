@@ -1,7 +1,10 @@
+using System.Buffers;
 using System.Buffers.Binary;
+using System.Buffers.Text;
 using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 using Lanternwake.Core;
 
@@ -183,23 +186,62 @@ public sealed class PumasAudioTextClient : IDisposable
 
     private byte[] Encode(byte[] pcm, int rate, int count, string id, string profile)
     {
-        using var buffer = new MemoryStream();
-        try
+        // Base64 plus worst-case JSON escaping and writer slack. One fixed owned
+        // array avoids abandoned growth arrays and Utf8JsonWriter's stream staging.
+        var capacity = checked(((pcm.Length + 2) / 3) * 4 + 4096 + 6 *
+            (Encoding.UTF8.GetByteCount(_settings.Model) + Encoding.UTF8.GetByteCount(profile) +
+             Encoding.UTF8.GetByteCount(_settings.Language) + Encoding.UTF8.GetByteCount(id)));
+        using var buffer = new AudioEncodingBuffer(capacity);
+        using (var writer = new Utf8JsonWriter(buffer))
         {
-            using (var writer = new Utf8JsonWriter(buffer))
-            {
-                writer.WriteStartObject(); writer.WriteNumber("contract_version", 1); writer.WriteString("request_id", id);
-                writer.WriteString("model", _settings.Model); writer.WriteString("profile", profile);
-                writer.WriteStartObject("input"); writer.WriteString("kind", "audio"); writer.WriteString("encoding", "pcm_f32le");
-                writer.WriteNumber("sample_rate_hz", rate); writer.WriteNumber("channels", 2); writer.WriteNumber("sample_count", count);
-                writer.WriteBase64String("data_base64", pcm); writer.WriteEndObject(); writer.WriteString("output", "text");
-                writer.WriteString("semantic_task", "speech_to_text");
-                writer.WriteStartObject("options"); writer.WriteString("kind", "audio"); writer.WriteString("language", _settings.Language);
-                writer.WriteNumber("max_output_tokens", 512); writer.WriteEndObject(); writer.WriteBoolean("stream", false); writer.WriteEndObject();
-            }
-            return buffer.ToArray();
+            writer.WriteStartObject(); writer.WriteNumber("contract_version", 1); writer.WriteString("request_id", id);
+            writer.WriteString("model", _settings.Model); writer.WriteString("profile", profile);
+            writer.WriteStartObject("input"); writer.WriteString("kind", "audio"); writer.WriteString("encoding", "pcm_f32le");
+            writer.WriteNumber("sample_rate_hz", rate); writer.WriteNumber("channels", 2); writer.WriteNumber("sample_count", count);
+            WriteBase64Audio(writer, pcm); writer.WriteEndObject(); writer.WriteString("output", "text");
+            writer.WriteString("semantic_task", "speech_to_text");
+            writer.WriteStartObject("options"); writer.WriteString("kind", "audio"); writer.WriteString("language", _settings.Language);
+            writer.WriteNumber("max_output_tokens", 512); writer.WriteEndObject(); writer.WriteBoolean("stream", false); writer.WriteEndObject();
         }
-        finally { CryptographicOperations.ZeroMemory(buffer.GetBuffer()); }
+        return buffer.WrittenSpan.ToArray();
+    }
+
+    private static void WriteBase64Audio(Utf8JsonWriter writer, ReadOnlySpan<byte> pcm)
+    {
+        // .NET 8 WriteBase64String rents scratch without clearing it on return.
+        // Only our internally generated quoted base64 bypasses input validation;
+        // model/profile and every other string keep the writer's normal escaping.
+        var length = Base64.GetMaxEncodedToUtf8Length(pcm.Length);
+        using var encoded = new AudioEncodingBuffer(checked(length + 2));
+        var quoted = encoded.GetSpan(length + 2)[..(length + 2)];
+        quoted[0] = quoted[^1] = (byte)'"';
+        if (Base64.EncodeToUtf8(pcm, quoted.Slice(1, length), out var consumed, out var written) != OperationStatus.Done ||
+            consumed != pcm.Length || written != length) throw new ProtocolException("invalid_audio");
+        encoded.Advance(length + 2);
+        writer.WritePropertyName("data_base64"); writer.WriteRawValue(encoded.WrittenSpan, skipInputValidation: true);
+    }
+
+    internal sealed class AudioEncodingBuffer(int capacity) : IBufferWriter<byte>, IDisposable
+    {
+        private readonly byte[] _bytes = new byte[capacity];
+        private int _written;
+        private bool _disposed;
+        public ReadOnlySpan<byte> WrittenSpan => _bytes.AsSpan(0, _written);
+        public void Advance(int count)
+        {
+            ObjectDisposedException.ThrowIf(_disposed, this);
+            if (count < 0 || count > _bytes.Length - _written) throw new ArgumentOutOfRangeException(nameof(count));
+            _written += count;
+        }
+        private void RequireCapacity(int sizeHint)
+        {
+            ObjectDisposedException.ThrowIf(_disposed, this);
+            if (sizeHint < 0) throw new ArgumentOutOfRangeException(nameof(sizeHint));
+            if (Math.Max(1, sizeHint) > _bytes.Length - _written) throw new ProtocolException("request_limit");
+        }
+        public Memory<byte> GetMemory(int sizeHint = 0) { RequireCapacity(sizeHint); return _bytes.AsMemory(_written); }
+        public Span<byte> GetSpan(int sizeHint = 0) { RequireCapacity(sizeHint); return _bytes.AsSpan(_written); }
+        public void Dispose() { CryptographicOperations.ZeroMemory(_bytes); _disposed = true; }
     }
 
     private static async Task<JsonDocument> ReadAsync(HttpResponseMessage response, CancellationToken token)

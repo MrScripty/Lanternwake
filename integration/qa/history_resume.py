@@ -9,7 +9,10 @@ import tempfile
 
 def main():
     project = Path(__file__).resolve().parents[2]
-    names = subprocess.check_output(['git', 'ls-files', '-z'], cwd=project).decode().split('\0')
+    try:
+        names = subprocess.check_output(['git', 'ls-files', '-z'], cwd=project, timeout=30).decode().split('\0')
+    except subprocess.TimeoutExpired as error:
+        raise RuntimeError('History source inventory timed out.') from error
     before = {name: hashlib.sha256((project / name).read_bytes()).hexdigest() for name in names if name}
     with tempfile.TemporaryDirectory(prefix='lanternwake-history-resume-') as temporary:
         root = Path(temporary)

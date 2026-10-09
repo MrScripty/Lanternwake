@@ -12,6 +12,7 @@ python3 -m unittest discover -s integration/audio -v
 python3 -m unittest discover -s integration/launch -v
 python3 -m unittest discover -s integration/qa -p 'test_evidence_runs.py' -v
 python3 -m unittest discover -s integration/qa -p 'test_missing_margin_runner.py' -v
+python3 -m unittest discover -s integration/qa -p 'test_history_resume_runner.py' -v
 dotnet run --project tests/Lanternwake.Tests.csproj -- Content/story.json
 dotnet run --project integration/story-validation/StoryValidation.csproj -- Content/story.json
 dotnet run --project integration/pumas/ClientTests/ClientTests.csproj

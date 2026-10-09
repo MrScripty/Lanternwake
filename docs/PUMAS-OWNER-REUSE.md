@@ -4,7 +4,11 @@ Lanternwake model setup now uses an explicitly selected existing Pumas library a
 installed `pumas-rpc` observer. Set both paths in AI setup and save, or pass
 `--pumas-library ABSOLUTE_FOLDER --pumas-observer ABSOLUTE_EXECUTABLE` to
 `scripts/run.py`. Explicit launcher choices override only this process's library
-selection; they do not rewrite saved preferences. The equivalent initial-default
+selection; an unrelated AI settings save keeps the saved library selection.
+Editing the library fields and saving explicitly replaces that selection for this
+process and future launches. Invalid launcher paths leave valid loaded preferences
+intact; file-load and launcher-selection errors are reported separately. The
+equivalent initial-default
 environment names are `LANTERNWAKE_PUMAS_LIBRARY_ROOT` and
 `LANTERNWAKE_PUMAS_OBSERVER`. Existing dialogue/provider, keyring, transcription,
 character voice and story settings remain separate. Library setup uses the

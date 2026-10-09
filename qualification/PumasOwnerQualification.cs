@@ -55,6 +55,7 @@ public partial class PumasOwnerQualification : Node
             var settings = new AiSettings(DialogueProvider.OpenRouter, false, AiSettings.DefaultEndpoint(DialogueProvider.OpenRouter), "saved-hosted-model")
             { LocalLibrary = new(library, observer), Transcription = new(false, Model: "saved-speech") { Profile = "saved-profile" }, CharacterVoices = new() { ["ada"] = "saved-voice" } };
             var settingsPath = Path.Combine(ProjectSettings.GlobalizePath("user://"), "ai-settings.json"); settings.Save(settingsPath);
+            await QualifyLauncherPreferences(settingsPath, settings, root);
             _game = GD.Load<PackedScene>("res://Scenes/Main.tscn").Instantiate<GameView>();
             Read<PumasOwnerClient>(_game, "_pumasOwner").Dispose(); typeof(GameView).GetField("_pumasOwner", Private)!.SetValue(_game, owner);
             AddChild(_game); await Frames();
@@ -137,6 +138,97 @@ public partial class PumasOwnerQualification : Node
         finally { owner?.Dispose(); if (service is not null) await service.DisposeAsync(); }
     }
     public override void _ExitTree() { if (GodotObject.IsInstanceValid(_game)) _game!.Free(); }
+
+    private async Task QualifyLauncherPreferences(string path, AiSettings saved, string root)
+    {
+        var names = new[] { "LANTERNWAKE_PUMAS_SELECTION_OVERRIDE", "LANTERNWAKE_PUMAS_LIBRARY_ROOT", "LANTERNWAKE_PUMAS_OBSERVER" };
+        var original = names.Select(System.Environment.GetEnvironmentVariable).ToArray();
+        var launch = new PumasLibrarySelection(Path.Combine(root, "launcher-library"), Path.Combine(root, "launcher-observer"));
+        void Override(PumasLibrarySelection selection)
+        {
+            System.Environment.SetEnvironmentVariable(names[0], "1");
+            System.Environment.SetEnvironmentVariable(names[1], selection.Root);
+            System.Environment.SetEnvironmentVariable(names[2], selection.ObserverExecutable);
+        }
+        async Task Start()
+        {
+            _game = GD.Load<PackedScene>("res://Scenes/Main.tscn").Instantiate<GameView>();
+            AddChild(_game); await Frames();
+        }
+        async Task Stop()
+        {
+            Check(await _game!.Audio.StopAndRetireAsync(), "launcher fixture audio retires");
+            var operations = Read<OwnedOperations>(_game, "_operations");
+            _game.Free(); _game = null; await operations.DrainAsync(); await Frames();
+        }
+        async Task SaveForm()
+        {
+            var button = (Button)Modal.FindChild("SaveConfiguration", true, false);
+            button.EmitSignal(Button.SignalName.Pressed); await Until(() => !button.Disabled);
+            Check(Modal.FindChild("ConnectionStatus", true, false) is Label status && status.Text.StartsWith("AI settings saved."), "native unrelated settings save succeeds");
+        }
+        VBoxContainer Dialogue() => Modal.GetNode<VBoxContainer>("%ModalActions").GetChildren().OfType<VBoxContainer>().Single().GetNode<VBoxContainer>("Capabilities/Dialogue");
+        try
+        {
+            Override(launch); saved.Save(path); var savedBytes = File.ReadAllBytes(path); await Start();
+            Check(Read<AiSettings>(_game!, "_aiSettings").LocalLibrary == launch, "valid launcher selection is effective only in this process");
+            Check(File.ReadAllBytes(path).SequenceEqual(savedBytes), "launch does not rewrite preferences");
+            Call(_game!, "ShowAiSetup"); await Frames();
+            var dialogue = Dialogue();
+            Check(dialogue.GetNode<LineEdit>("LibraryRoot").Text == launch.Root && dialogue.GetNode<LineEdit>("PumasObserver").Text == launch.ObserverExecutable, "native form shows effective launcher selection");
+            dialogue.GetNode<CheckButton>("DialogueEnabled").SetPressedNoSignal(true);
+            await SaveForm();
+            var persisted = AiSettings.Load(path, saved);
+            Check(persisted.LocalLibrary == saved.LocalLibrary && persisted.DialogueEnabled && persisted.Provider == saved.Provider && persisted.Transcription == saved.Transcription && persisted.CharacterVoices["ada"] == "saved-voice", "unrelated save preserves saved library and owner provider/speech/voice preferences");
+            Check(Read<AiSettings>(_game!, "_aiSettings").LocalLibrary == launch, "unrelated save retains effective launcher selection");
+            await SaveForm();
+            Check(AiSettings.Load(path, saved).LocalLibrary == saved.LocalLibrary, "repeated unrelated save cannot persist launcher selection");
+            var chosen = new PumasLibrarySelection(Path.Combine(root, "player-library"), Path.Combine(root, "player-observer"));
+            dialogue.GetNode<LineEdit>("LibraryRoot").Text = chosen.Root; dialogue.GetNode<LineEdit>("PumasObserver").Text = chosen.ObserverExecutable;
+            await SaveForm();
+            Check(AiSettings.Load(path, saved).LocalLibrary == chosen && Read<AiSettings>(_game!, "_aiSettings").LocalLibrary == chosen, "explicit library edit becomes saved and effective selection");
+            dialogue.GetNode<LineEdit>("LibraryRoot").Text = launch.Root; dialogue.GetNode<LineEdit>("PumasObserver").Text = launch.ObserverExecutable;
+            await SaveForm();
+            Check(AiSettings.Load(path, saved).LocalLibrary == launch, "after explicit reselection the original launcher paths can be explicitly saved");
+            await Stop();
+
+            var spacedLaunch = new PumasLibrarySelection(Path.Combine(root, "launcher library "), Path.Combine(root, "launcher observer "));
+            Override(spacedLaunch); saved.Save(path); await Start();
+            Call(_game!, "ShowAiSetup"); await Frames(); dialogue = Dialogue();
+            Check(dialogue.GetNode<LineEdit>("LibraryRoot").Text == spacedLaunch.Root && dialogue.GetNode<LineEdit>("PumasObserver").Text == spacedLaunch.ObserverExecutable, "launcher path spelling, including legal trailing spaces, is displayed exactly");
+            await SaveForm();
+            Check(AiSettings.Load(path, saved).LocalLibrary == saved.LocalLibrary && Read<AiSettings>(_game!, "_aiSettings").LocalLibrary == spacedLaunch, "unchanged launcher path spelling is not mistaken for an explicit edit");
+            await SaveForm();
+            Check(AiSettings.Load(path, saved).LocalLibrary == saved.LocalLibrary && Read<AiSettings>(_game!, "_aiSettings").LocalLibrary == spacedLaunch, "repeated unrelated saves preserve exact process-only path spelling"); await Stop();
+
+            saved.Save(path); var bytes = File.ReadAllBytes(path);
+            Override(new("relative", launch.ObserverExecutable)); await Start();
+            Check(Read<AiSettings>(_game!, "_aiSettings").LocalLibrary == saved.LocalLibrary && Read<AiSettings>(_game!, "_aiSettings").Model == saved.Model && Read<AiSettings>(_game!, "_aiSettings").Transcription == saved.Transcription, "invalid override preserves valid loaded preferences");
+            Check(Read<string>(_game!, "_aiSettingsLoadError").Contains("launcher") && !Read<string>(_game!, "_aiSettingsLoadError").Contains("could not be loaded"), "override failure is distinct from file load failure");
+            Check(File.ReadAllBytes(path).SequenceEqual(bytes), "invalid override never rewrites saved file"); await Stop();
+
+            File.WriteAllText(path, "{unreadable json"); Override(launch); await Start();
+            Check(Read<AiSettings>(_game!, "_aiSettings").LocalLibrary == launch && Read<string>(_game!, "_aiSettingsLoadError").Contains("could not be loaded"), "valid launcher selection still applies after settings load failure");
+            Check(File.ReadAllText(path) == "{unreadable json", "failed load does not rewrite damaged preferences"); await Stop();
+
+            Override(new("relative", launch.ObserverExecutable)); await Start();
+            Check(Read<string>(_game!, "_aiSettingsLoadError").Contains("could not be loaded") && Read<string>(_game!, "_aiSettingsLoadError").Contains("launcher"), "simultaneous load and override failures retain distinct notices");
+            Check(File.ReadAllText(path) == "{unreadable json", "combined failures leave saved bytes untouched"); await Stop();
+
+            File.Delete(path); Override(launch); await Start();
+            Check(Read<AiSettings>(_game!, "_aiSettings").LocalLibrary == launch && Read<string>(_game!, "_aiSettingsLoadError").Length == 0, "first launch uses process override without pretending it is saved");
+            Call(_game!, "ShowAiSetup"); await Frames(); await SaveForm();
+            Check(!AiSettings.Load(path, saved).LocalLibrary.Selected && Read<AiSettings>(_game!, "_aiSettings").LocalLibrary == launch, "first unrelated save writes empty persisted selection and retains process override"); await Stop();
+
+            File.Delete(path); Override(new("relative", launch.ObserverExecutable)); await Start();
+            Check(!Read<AiSettings>(_game!, "_aiSettings").LocalLibrary.Selected && !Read<string>(_game!, "_aiSettingsLoadError").Contains("could not be loaded"), "invalid first-launch override does not cause a settings load failure"); await Stop();
+        }
+        finally
+        {
+            for (var i = 0; i < names.Length; i++) System.Environment.SetEnvironmentVariable(names[i], original[i]);
+            saved.Save(path);
+        }
+    }
 }
 internal sealed class HeldRpcHandler : HttpMessageHandler
 {

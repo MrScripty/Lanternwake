@@ -59,9 +59,10 @@ semantic hint from the declaration, explicit language and 512-token bound. It
 sends no named `capability` and invents no transcription-specific endpoint.
 The 30-second capture/envelope limit and 32 MiB transport bound are retained.
 Invalid sample rate, nonfinite/out-of-range floats, excess bytes or duration
-fail before submission. Encoding uses owned mutable buffers, avoids an immutable
-base64 string, writes no audio file and clears PCM/base64 request bytes after the
-original consumer transport settles. Source sample custody remains with the
+fail before submission. Encoding uses fixed, owned mutable JSON/base64 buffers,
+clears both on success or failure, and avoids the writer's pooled base64 scratch
+and an immutable base64 string. It writes no audio file and clears PCM/request
+bytes after the original consumer transport settles. Source sample custody remains with the
 recorder, which clears its transferred buffer in `finally`.
 
 Results require bounded JSON, unique properties, contract/request correlation,
