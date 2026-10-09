@@ -86,6 +86,21 @@ public partial class AudioLifecycleQualification : Node
             while (Tracked(director) > 2 && Time.GetTicksMsec() < deadline)
                 await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
             Check(!director.Effects.Playing && Tracked(director) == 2, "naturally finished effect retires while loops remain owned");
+            director.PlayDialogue(_effects[0]);
+            Check(director.Dialogue.HasStreamPlayback() && Tracked(director) == 3, "dialogue acquires its own native playback");
+            deadline = Time.GetTicksMsec() + 2000;
+            while (Tracked(director) > 2 && Time.GetTicksMsec() < deadline)
+                await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+            Check(!director.Dialogue.Playing && Tracked(director) == 2, "naturally finished dialogue retires without releasing active loops");
+            director.PlayDialogue(_loop);
+            director.StopDialogue();
+            Check(director.Dialogue.Stream is null && !director.Dialogue.HasStreamPlayback(), "stopped dialogue clears its stream and native player ownership");
+            director._Process(0);
+            director.ApplyBeatCue("effect-before-stream-removal", "bell_lowered", true);
+            director.Effects.Stream = null;
+            director.ApplyBeatCue("effect-after-stream-removal", "bell_lowered", true);
+            Check(!director.Effects.HasStreamPlayback(), "an effect whose stream was removed stays inactive on replay");
+            director._Process(0);
             foreach (var location in new[] { "archive", "tide_cave", "harbor" }) director.ShowLocation(location);
             director.ApplyBeatCue("stopped-effect", "bell_lowered", true);
             director.ApplyBeatCue("loaded-effect", null, false);
@@ -100,6 +115,7 @@ public partial class AudioLifecycleQualification : Node
             director = Create();
             director.ShowLocation("harbor");
             director.ApplyBeatCue("active-at-exit", "bell_lowered", true);
+            director.PlayDialogue(_loop);
             director.Free();
             Check(!GodotObject.IsInstanceValid(director), "tree exit stops and disposes active playback ownership");
             director = null;
