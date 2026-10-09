@@ -1,5 +1,7 @@
 using Godot;
 using Lanternwake.Conversation;
+using Lanternwake.Core;
+using System.Net.Http;
 
 namespace Lanternwake.Presentation;
 
@@ -7,12 +9,17 @@ public partial class GameView
 {
     [Export] public PackedScene PumasSearchControlsScene { get; set; } = null!;
     private PumasClient? _setupPumas;
+    private readonly PumasOwnerClient _pumasOwner = new();
+    private PumasOwnerObservation? _setupOwner;
+    private PumasLibrarySelection? _setupSelection;
+    private bool _setupSelectionChanged;
+    private readonly PumasAcquisitionGate _acquisitionGate = new();
     private CancellationTokenSource? _setupRequest;
 
     private void ShowPumasSetup()
     {
         if (_busy || _closing) return;
-        ShowWindow("Local conversation setup", "The story is fully playable without a model.\n\nSearch asks your local Pumas service for Hugging Face metadata. Pumas owns the external requests. You can inspect an option before explicitly asking Pumas to download it.\n\nPumas also manages verification and runtimes. After acquisition, configure and load a llama.cpp profile in Pumas, then start Lanternwake with its served alias in LANTERNWAKE_PUMAS_MODEL. A download request does not enable conversation.",
+        ShowWindow("Local conversation setup", "The story is fully playable without a model.\n\nSelect an existing library and installed pumas-rpc executable in AI setup first. Model setup authenticates and borrows that library's running owner. No failed lookup starts another service.\n\nSearch asks your selected Pumas owner for Hugging Face metadata. Pumas owns the external requests. You can inspect an option before explicitly asking Pumas to download it.\n\nPumas also manages verification and runtimes. After acquisition, configure and load a llama.cpp profile in Pumas, then start Lanternwake with its served alias in LANTERNWAKE_PUMAS_MODEL. A download request does not enable conversation.",
             [("View Pumas download activity", ShowPumasDownloads)]);
         var window = _modal!;
         var controls = PumasSearchControlsScene.Instantiate<VBoxContainer>();
@@ -68,12 +75,12 @@ public partial class GameView
             model.Kind, model.License, model.ReleaseDate);
         ShowWindow("Review Pumas download request", $"Repository: {model.RepoId}\nOption: {OptionName(option)}\nPreview size: {SizeText(option.SizeBytes)}\nLicense: {model.License ?? "unknown — check terms in Pumas"}\nPreview reference: main (mutable)\nImmutable revision: unknown in this preview\n" +
             (option.FileGroup is { } group ? "Files:\n" + string.Join("\n", group.Filenames) + "\n" : "") +
-            "\nRequesting this option asks Pumas to acquire model files. Check the license and available storage first. Pumas owns the transfer, verification, revision resolution and runtime acquisition. No files are downloaded by Lanternwake.",
+            "\nThis action first checks the selected library for local matches. Existing or ambiguous matches block another download. If none are indexed, it asks Pumas to acquire model files. Check the license and available storage first. Pumas owns the transfer, verification, revision resolution and runtime acquisition. No files are downloaded by Lanternwake.",
             [("Request download through Pumas", () =>
             {
                 var owner = _modal!;
                 StartPumasSetup(owner, "Requesting acquisition through Pumas…",
-                    token => _setupPumas!.StartModelDownloadFromHfAsync(request, token),
+                    token => RequestSelectedAcquisitionAsync(request, token),
                     result =>
                     {
                         if (!result.Success) { ShowPumasFailure(result.ErrorCode, result.Message, true); return; }
@@ -83,6 +90,9 @@ public partial class GameView
                     }, true);
             }), ("Back to setup", ShowPumasSetup)]);
     }
+
+    private Task<PumasResult<HfDownloadStarted>> RequestSelectedAcquisitionAsync(HfDownloadRequest request, CancellationToken token) =>
+        _acquisitionGate.RequestAsync(_setupPumas!, _pumasOwner, _setupSelection!, _setupOwner!, request, token);
 
     private void StartPumasSetup<T>(Window window, string pending, Func<CancellationToken, Task<PumasResult<T>>> request,
         Action<PumasResult<T>> render, bool acquisition, string? pendingAdvice = null)
@@ -106,20 +116,29 @@ public partial class GameView
         window.GetNode<Button>("%ModalCloseButton").GrabFocus();
         try
         {
-            _setupPumas ??= new PumasClient();
+            var selection = _aiSettings.LocalLibrary;
+            if (_setupSelectionChanged || _setupSelection != selection)
+            {
+                _setupPumas?.Dispose(); _setupPumas = null; _setupOwner = null;
+                _setupSelection = selection; _setupSelectionChanged = false;
+            }
+            var authenticated = await _pumasOwner.AuthenticateAsync(selection, null, cancellation.Token, _setupOwner);
+            if (_closing || !IsInsideTree() || _modal != window || cancellation.IsCancellationRequested) return;
+            _setupOwner = authenticated;
+            _setupPumas ??= new PumasClient(new Uri(authenticated.Endpoint), "");
             var result = await request(cancellation.Token);
             if (!_closing && IsInsideTree() && _modal == window && !cancellation.IsCancellationRequested) render(result);
         }
-        catch (Exception error) when (error is ArgumentException or UriFormatException)
+        catch (Exception error) when (error is ArgumentException or UriFormatException or InvalidDataException or System.Text.Json.JsonException or IOException or System.ComponentModel.Win32Exception or HttpRequestException or OperationCanceledException or ObjectDisposedException)
         {
-            if (!_closing && _modal == window) ShowPumasFailure("invalid_request", "Check LANTERNWAKE_PUMAS_URL; use http://127.0.0.1:PORT/.", acquisition);
+            if (!_closing && _modal == window) ShowPumasFailure("library_owner_unavailable", "Selected library authentication failed. Check the canonical folder and installed Pumas observer in AI setup. No service was started or acquisition requested.", false);
         }
-        finally { if (_setupRequest == cancellation) _setupRequest = null; }
+        finally { if (_setupRequest == cancellation) _setupRequest = null; if (_closing) { _setupPumas?.Dispose(); _setupPumas = null; } }
     }
 
     private void ShowPumasFailure(string code, string? message, bool acquisition) =>
         ShowWindow("Pumas setup unavailable", $"Pumas result: {code}\n{message ?? "No supported result was returned."}\n\n" +
-            (acquisition && code != "pumas_rejected" && code != "invalid_request" ?
+            (acquisition && code != "pumas_rejected" && code != "invalid_request" && code != "local_model_exists" && code != "acquisition_already_requested" && !code.StartsWith("local_query_", StringComparison.Ordinal) ?
                 "Acceptance is unknown. Check Pumas before sending another acquisition request. Lanternwake does not replay it." :
                 "No successful acquisition receipt was returned. You can continue the authored story."),
             [("Back to setup", ShowPumasSetup)]);

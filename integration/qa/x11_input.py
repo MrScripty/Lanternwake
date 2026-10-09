@@ -41,7 +41,7 @@ try:
         time.sleep(0.04)
         assert xtest.XTestFakeButtonEvent(display, 1, 0, 0)
     elif len(sys.argv) == 3 and sys.argv[1] == 'key':
-        if sys.argv[2] not in ['Tab', 'Return', 'Escape', 'space', 'Down', 'Up', 'Right', 'Left', 'h', 'e']:
+        if sys.argv[2] not in ['Tab', 'Return', 'Escape', 'space', 'Down', 'Up', 'Right', 'Left', 'Prior', 'Next', 'Home', 'End', 'h', 'e']:
             raise SystemExit('Key is outside the verification set.')
         code = x11.XKeysymToKeycode(display, x11.XStringToKeysym(sys.argv[2].encode()))
         assert code and xtest.XTestFakeKeyEvent(display, code, 1, 0)

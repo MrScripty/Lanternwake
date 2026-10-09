@@ -8,9 +8,16 @@ public enum DialogueProvider { Pumas, OpenRouter }
 public sealed record SpeechServiceSettings(bool Enabled = false, string Endpoint = "http://127.0.0.1:8080/", string Model = "")
 {
     public DialogueProvider Provider { get; init; } = DialogueProvider.Pumas;
+    public string Profile { get; init; } = "";
+    public string Language { get; init; } = "en";
+
+    public static bool ValidProfile(string? profile) => profile is not null && profile.Length <= 128 &&
+        profile.All(c => char.IsAsciiLetterOrDigit(c) || c is '_' or '-' or '.');
 
     public SpeechServiceSettings Validate()
     {
+        if (!ValidProfile(Profile) || Language is not ("en" or "de" or "fr" or "it" or "es" or "pt" or "el" or "nl" or "pl" or "vi" or "zh" or "ar" or "ja" or "ko"))
+            throw new InvalidDataException("Choose a valid speech profile and supported language.");
         var connection = new AiSettings(Provider, false, Endpoint, Model).ValidateConnection();
         return this with { Endpoint = connection.Endpoint, Model = connection.Model };
     }
@@ -20,6 +27,7 @@ public sealed record SpeechServiceSettings(bool Enabled = false, string Endpoint
 public sealed record AiSettings(DialogueProvider Provider, bool DialogueEnabled, string Endpoint, string Model)
 {
     public int Version { get; init; } = 1;
+    public PumasLibrarySelection LocalLibrary { get; init; } = new();
     public SpeechServiceSettings Transcription { get; init; } = new();
     public SpeechServiceSettings CharacterSpeech { get; init; } = new();
     public Dictionary<string, string> CharacterVoices { get; init; } = new();
@@ -30,7 +38,7 @@ public sealed record AiSettings(DialogueProvider Provider, bool DialogueEnabled,
         var model = Environment.GetEnvironmentVariable("LANTERNWAKE_PUMAS_MODEL") ?? "";
         var endpoint = string.IsNullOrWhiteSpace(url) ? DefaultEndpoint(DialogueProvider.Pumas) : url;
         return new(DialogueProvider.Pumas, !string.IsNullOrWhiteSpace(model), endpoint, model)
-        { Transcription = new(Endpoint: endpoint), CharacterSpeech = new(Endpoint: endpoint) };
+        { Transcription = new(Endpoint: endpoint), CharacterSpeech = new(Endpoint: endpoint), LocalLibrary = PumasLibrarySelection.FromEnvironment() };
     }
 
     public static string DefaultEndpoint(DialogueProvider provider) => provider == DialogueProvider.Pumas
@@ -39,6 +47,8 @@ public sealed record AiSettings(DialogueProvider Provider, bool DialogueEnabled,
     public AiSettings Validate()
     {
         var connection = ValidateConnection();
+        if (LocalLibrary is null) throw new InvalidDataException("Invalid local library selection.");
+        LocalLibrary.Validate();
         if (Transcription is null || CharacterSpeech is null || CharacterVoices is null || CharacterVoices.Count > 64)
             throw new InvalidDataException("Invalid speech settings.");
         foreach (var (character, voice) in CharacterVoices)

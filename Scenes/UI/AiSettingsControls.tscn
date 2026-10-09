@@ -33,6 +33,31 @@ layout_mode = 2
 placeholder_text = "http://127.0.0.1:8080/"
 max_length = 2048
 
+[node name="LibraryRootLabel" type="Label" parent="Capabilities/Dialogue"]
+layout_mode = 2
+autowrap_mode = 3
+text = "Existing local Pumas library folder (for model setup)"
+
+[node name="LibraryRoot" type="LineEdit" parent="Capabilities/Dialogue"]
+layout_mode = 2
+placeholder_text = "Absolute canonical folder path"
+max_length = 4096
+
+[node name="PumasObserverLabel" type="Label" parent="Capabilities/Dialogue"]
+layout_mode = 2
+autowrap_mode = 3
+text = "Installed pumas-rpc executable (authenticated discovery)"
+
+[node name="PumasObserver" type="LineEdit" parent="Capabilities/Dialogue"]
+layout_mode = 2
+placeholder_text = "Absolute path to installed pumas-rpc"
+max_length = 4096
+
+[node name="LibraryNote" type="Label" parent="Capabilities/Dialogue"]
+layout_mode = 2
+autowrap_mode = 3
+text = "Model setup authenticates this library's existing owner before any request. The game borrows it and leaves it running on close. No automatic Pumas startup."
+
 [node name="ApiKeyLabel" type="Label" parent="Capabilities/Dialogue"]
 layout_mode = 2
 text = "OpenRouter API key (shared across features)"
