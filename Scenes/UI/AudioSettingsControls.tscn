@@ -8,6 +8,11 @@ theme_override_constants/separation = 10
 layout_mode = 2
 text = "Mute all sound"
 
+[node name="ReducedRange" type="CheckButton" parent="."]
+layout_mode = 2
+text = "Reduce loud/quiet differences"
+tooltip_text = "Softens loud sounds so they sit closer to quiet ones. Adjust volume as needed."
+
 [node name="MusicLabel" type="Label" parent="."]
 layout_mode = 2
 text = "Music"

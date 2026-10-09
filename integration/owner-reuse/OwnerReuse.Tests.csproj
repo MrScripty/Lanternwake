@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net8.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable></PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../Scripts/Core/AiSettings.cs" />
+    <Compile Include="../../qualification/PumasOwnerFixtures.cs" />
+    <Compile Include="../../Scripts/Core/PumasLibrarySelection.cs" />
+    <Compile Include="../../Scripts/Conversation/PumasOwnerClient.cs" />
+    <Compile Include="../../Scripts/Conversation/PumasAcquisitionGate.cs" />
+    <Compile Include="../../Scripts/Conversation/PumasClient*.cs" />
+  </ItemGroup>
+</Project>

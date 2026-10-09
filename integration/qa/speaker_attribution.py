@@ -23,8 +23,16 @@ def run_native(command, *, cwd, env):
 
 def main():
     project = Path(__file__).resolve().parents[2]
-    names = subprocess.check_output(['git', 'ls-files', '-z'], cwd=project).decode().split('\0')
-    before = {name: hashlib.sha256((project / name).read_bytes()).hexdigest() for name in names if name}
+    try:
+        names = os.fsdecode(subprocess.check_output(['git', 'ls-files', '-z'], cwd=project, timeout=30)).split('\0')
+    except subprocess.TimeoutExpired as error:
+        raise RuntimeError('Speaker attribution source inventory timed out.') from error
+    except (subprocess.CalledProcessError, OSError) as error:
+        raise RuntimeError('Speaker attribution source inventory failed.') from error
+    try:
+        before = {name: hashlib.sha256((project / name).read_bytes()).hexdigest() for name in names if name}
+    except OSError as error:
+        raise RuntimeError(f'Speaker attribution tracked source unavailable: {error.filename}') from error
     with tempfile.TemporaryDirectory(prefix='lanternwake-speaker-attribution-') as temporary:
         root = Path(temporary)
         (root / 'owned-fixture').touch()
@@ -37,7 +45,11 @@ def main():
         print(result.stdout, end='', flush=True)
         if result.returncode or any(marker in result.stdout for marker in ['ERROR:', 'SCRIPT ERROR:', 'WARNING:']) or 'LANTERNWAKE_SPEAKER_ATTRIBUTION_OK' not in result.stdout:
             raise RuntimeError('Native speaker attribution failed; inspect output above.')
-    if any(hashlib.sha256((project / name).read_bytes()).hexdigest() != digest for name, digest in before.items()):
+    try:
+        changed = any(hashlib.sha256((project / name).read_bytes()).hexdigest() != digest for name, digest in before.items())
+    except OSError as error:
+        raise RuntimeError(f'Speaker attribution changed tracked source: {error.filename} is unavailable.') from error
+    if changed:
         raise RuntimeError('Speaker attribution changed tracked source.')
     print('PASS visible live/recorded speaker names, narration, relative reading size, authored-label reuse, Load/Return and native teardown. Headless controls/layout; no human hearing, provider or accessibility-tool qualification.')
 

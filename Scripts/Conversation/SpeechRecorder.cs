@@ -1,51 +1,89 @@
 using Godot;
+using Lanternwake.Core;
 namespace Lanternwake.Conversation;
 
-/// <summary>Consent-triggered Godot capture; transcription receives an operation-local buffer.</summary>
+/// <summary>Explicitly consented capture and a bounded, zeroed, operation-owned stereo clip.</summary>
 public sealed class SpeechRecorder : IDisposable
 {
-    private AudioStreamPlayer? _player;
-    private AudioEffectCapture? _capture;
-    private int _bus = -1, _sampleRate;
-    private List<StereoSample> _samples = [];
-    public bool Recording => _player is not null;
-    private readonly PumasSpeechTranscriber _transcriber = new();
+    private ISpeechCaptureSource? _source;
+    private SpeechSampleBuffer? _samples;
+    private CancellationTokenSource? _operation;
+    private readonly PumasSpeechTranscriber _transcriber;
+    private readonly SpeechRuntimeAdmission _admission;
+    private readonly SpeechCaptureKind _kind;
+    private readonly Func<Node, ISpeechCaptureSource> _factory;
+    private SpeechServiceSettings _nextSettings = new();
+    private bool _disposed;
+    private double _silentSeconds;
+    public bool Recording => _source is not null;
+    public bool HasRecording => _samples is { Count: > 0 };
+    public bool Pending => _operation is not null || _transcriber.Pending;
+    public string FinishReason => _transcriber.FinishReason;
     public SpeechCapability Capability => _transcriber.Capability;
     public bool Available => Capability.Status != SpeechAvailability.Unsupported;
+    public SpeechRecorder() : this(SpeechRuntimeAdmission.Installed, SpeechCaptureKind.Microphone) { }
+    internal SpeechRecorder(SpeechRuntimeAdmission admission, SpeechCaptureKind kind, Func<Node, ISpeechCaptureSource>? factory = null,
+        PumasSpeechTranscriber? transcriber = null)
+    {
+        _admission = admission; _kind = kind; _transcriber = transcriber ?? new(admission, kind);
+        _factory = factory ?? (owner => new GodotSpeechCaptureSource(owner, admission, kind));
+    }
+    public void Configure(SpeechServiceSettings settings)
+    {
+        _nextSettings = settings.Validate();
+        if (!Recording && !HasRecording && !Pending) _transcriber.Configure(_nextSettings);
+    }
+    public async Task<SpeechCapability> PrepareAsync(CancellationToken cancellation)
+    {
+        ObjectDisposedException.ThrowIf(_disposed, this);
+        if (Recording || HasRecording || Pending) return new(SpeechAvailability.Unsupported, "Finish or discard the previous recording first.");
+        _transcriber.Configure(_nextSettings);
+        return await _transcriber.PrepareAsync(cancellation);
+    }
+    public Task<SpeechCapability> RecheckAsync(CancellationToken cancellation)
+    {
+        ObjectDisposedException.ThrowIf(_disposed, this);
+        return _transcriber.PrepareAsync(cancellation, preserveSelection: true);
+    }
     public void Start(Node owner)
     {
-        if (!Available) throw new NotSupportedException(Capability.Message);
-        if (Recording) return;
-        _samples.Clear(); _sampleRate = (int)AudioServer.GetMixRate();
-        _bus = AudioServer.BusCount;
-        AudioServer.AddBus(); AudioServer.SetBusName(_bus, "LanternwakeCapture");
-        _capture = new AudioEffectCapture { BufferLength = 2f };
-        AudioServer.AddBusEffect(_bus, _capture); AudioServer.SetBusMute(_bus, true);
-        _player = new AudioStreamPlayer { Stream = new AudioStreamMicrophone(), Bus = "LanternwakeCapture" };
-        owner.AddChild(_player); _player.Play();
+        ObjectDisposedException.ThrowIf(_disposed, this);
+        if (Recording || HasRecording || Pending || !_admission.Allows(_kind) || !_transcriber.Prepared)
+            throw new InvalidOperationException("Capture requires fresh consent and an available selected runtime.");
+        try { _source = _factory(owner); _samples = new(_source.SampleRate); _silentSeconds = 0; }
+        catch { Discard(); throw; }
     }
-    public void Poll()
+    public void Poll(double delta = 0)
     {
-        if (_capture is null) return;
-        var remaining = Math.Max(0, _sampleRate * 30 - _samples.Count);
-        foreach (var frame in _capture.GetBuffer(Math.Min(_capture.GetFramesAvailable(), remaining))) _samples.Add(new(frame.X, frame.Y));
-    }
-    public async Task<string> StopAndTranscribe(CancellationToken cancellation)
-    {
-        Poll(); Stop();
-        var samples = _samples; _samples = [];
-        var sampleRate = _sampleRate;
+        if (_source is null || _samples is null) return;
+        StereoSample[] frames = [];
         try
         {
-            return await _transcriber.TranscribeAsync(samples, sampleRate, cancellation);
+            frames = _source.Read(_samples.CapacityLimit - _samples.Count);
+            _samples.Append(frames);
+            _silentSeconds = frames.Length == 0 ? _silentSeconds + delta : 0;
+            if (_silentSeconds >= 3) throw new InvalidOperationException("The audio device returned no frames. Recording was discarded.");
+            if (_samples.Full) StopCapture(); // Buffer bound never submits a request.
         }
-        finally { samples.Clear(); }
+        catch { Discard(); throw; }
+        finally { Array.Clear(frames); }
     }
-    private void Stop()
+    public void StopCapture() { _source?.Dispose(); _source = null; }
+    public async Task<string> StopAndTranscribe(CancellationToken cancellation)
     {
-        if (_player is not null) { _player.Stop(); _player.QueueFree(); _player = null; }
-        if (_bus >= 0) { AudioServer.RemoveBus(_bus); _bus = -1; }
-        _capture = null;
+        ObjectDisposedException.ThrowIf(_disposed, this);
+        Poll(); StopCapture();
+        var samples = _samples ?? throw new InvalidOperationException("No recording is available.");
+        _samples = null;
+        using var operation = CancellationTokenSource.CreateLinkedTokenSource(cancellation);
+        _operation = operation;
+        try { return await _transcriber.TranscribeAsync(samples, samples.SampleRate, operation.Token); }
+        finally
+        {
+            // Close requests cancellation, but never zeroes a buffer still owned by its original transport.
+            samples.Dispose(); if (ReferenceEquals(_operation, operation)) _operation = null;
+        }
     }
-    public void Dispose() { Stop(); _samples.Clear(); }
+    public void Discard() { _operation?.Cancel(); StopCapture(); _samples?.Dispose(); _samples = null; }
+    public void Dispose() { if (_disposed) return; _disposed = true; Discard(); _transcriber.Dispose(); }
 }
