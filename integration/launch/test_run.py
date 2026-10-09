@@ -1,4 +1,6 @@
 """Launcher admission and failure custody; no tools, network or assets downloaded."""
+import os
+import re
 import contextlib
 import errno
 import io
@@ -149,13 +151,18 @@ class SourceLauncherTests(unittest.TestCase):
 
     def assert_process_stopped(self, pid):
         status = Path(f'/proc/{pid}/stat')
-        try:
-            observed = status.read_text()
-        except (FileNotFoundError, ProcessLookupError):
-            # Reaping can remove the entry before open (ENOENT) or during read (ESRCH).
-            pass
-        else:
-            self.assertRegex(observed, r'^\d+ \(.+\) Z ')
+        deadline = time.monotonic() + 2
+        while True:
+            try:
+                observed = status.read_text()
+            except (FileNotFoundError, ProcessLookupError):
+                return
+            if re.match(r'^\d+ \(.+\) Z ', observed):
+                return
+            if time.monotonic() >= deadline:
+                self.assertRegex(observed, r'^\d+ \(.+\) Z ')
+            # Signal delivery to a descendant may settle after its parent exits.
+            time.sleep(.005)
 
     def test_stopped_process_can_disappear_during_stat_read(self):
         for error in [FileNotFoundError(errno.ENOENT, 'No such file'),
@@ -251,6 +258,66 @@ class SourceLauncherTests(unittest.TestCase):
         with self.assertRaisesRegex(launch.LaunchError, 'incomplete'):
             launch.cache_bundled_sdk(self.feed, cache)
         self.assertFalse(list(cache.rglob('.nupkg.metadata')))
+
+
+class PumasSelectionTests(unittest.TestCase):
+    def test_home_paths_expand_for_cli_and_mixed_environment_selection(self):
+        with tempfile.TemporaryDirectory(prefix='owned-pumas-home-') as temporary:
+            root = Path(temporary); observer = root / 'owned observer'; observer.touch()
+            # Real expansion to owned storage without changing HOME or accessing a user's library.
+            home_root = '~/' + os.path.relpath(root, Path.home())
+            home_observer = home_root + '/owned observer'
+            cases = [(['--pumas-library=' + home_root, '--pumas-observer', home_observer], {}),
+                     (['--pumas-library=' + home_root], {'LANTERNWAKE_PUMAS_OBSERVER': home_observer}),
+                     (['--pumas-observer', home_observer], {'LANTERNWAKE_PUMAS_LIBRARY_ROOT': home_root})]
+            for arguments, inherited in cases:
+                with self.subTest(arguments=arguments), patch.dict(os.environ, inherited), \
+                        patch.object(launch, 'prerequisites', return_value=(root/'godot', root/'dotnet', root)), \
+                        patch.object(launch, 'prepare', return_value={}), \
+                        patch.object(launch.subprocess, 'call', return_value=0) as game, \
+                        contextlib.redirect_stdout(io.StringIO()):
+                    self.assertEqual(launch.main(arguments), 0)
+                    self.assertEqual(game.call_count, 1)
+                    env = game.call_args.kwargs['env']
+                    self.assertEqual(env['LANTERNWAKE_PUMAS_LIBRARY_ROOT'], str(root.resolve()))
+                    self.assertEqual(env['LANTERNWAKE_PUMAS_OBSERVER'], str(observer.resolve()))
+                    self.assertEqual(env['LANTERNWAKE_PUMAS_SELECTION_OVERRIDE'], '1')
+
+    def test_unresolved_home_and_relative_paths_refuse_before_preparation(self):
+        with tempfile.TemporaryDirectory(prefix='owned-pumas-invalid-') as temporary:
+            root = Path(temporary)
+            for value in ['relative/library', '~lanternwake-no-such-home-6417839/library']:
+                with self.subTest(value=value), \
+                        patch.object(launch, 'prerequisites', return_value=(root/'godot', root/'dotnet', root)), \
+                        patch.object(launch, 'prepare') as prepare, patch.object(launch.subprocess, 'call') as game, \
+                        contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+                    self.assertEqual(launch.main(['--pumas-library', value]), 1)
+                    prepare.assert_not_called(); game.assert_not_called()
+
+    def test_explicit_paths_are_process_local_and_never_start_pumas(self):
+        with tempfile.TemporaryDirectory(prefix='owned-pumas-launch-') as temporary:
+            root = Path(temporary); observer = root / 'owned observer'; observer.touch()
+            with patch.object(launch, 'prerequisites', return_value=(Path('/owned/godot'), Path('/owned/dotnet'), root)), patch.object(launch, 'prepare', return_value={}), patch.object(launch.subprocess, 'call', return_value=0) as game, contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(launch.main(['--pumas-library', str(root), '--pumas-observer', str(observer)]), 0)
+                self.assertEqual(game.call_count, 1)
+                self.assertEqual(game.call_args.args[0][0], '/owned/godot')
+                env = game.call_args.kwargs['env']
+                self.assertEqual(env['LANTERNWAKE_PUMAS_LIBRARY_ROOT'], str(root.resolve()))
+                self.assertEqual(env['LANTERNWAKE_PUMAS_OBSERVER'], str(observer.resolve()))
+                self.assertEqual(env['LANTERNWAKE_PUMAS_SELECTION_OVERRIDE'], '1')
+
+    def test_partial_selection_refuses_before_preparation(self):
+        with tempfile.TemporaryDirectory(prefix='owned-pumas-launch-') as temporary, patch.dict(os.environ, {}, clear=True):
+            with patch.object(launch, 'prerequisites', return_value=(Path('/owned/godot'), Path('/owned/dotnet'), Path(temporary))), patch.object(launch, 'prepare') as prepare, patch.object(launch.subprocess, 'call') as game, contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+                self.assertEqual(launch.main(['--pumas-library', temporary]), 1)
+                prepare.assert_not_called(); game.assert_not_called()
+
+    def test_missing_library_is_not_created_and_never_prepares_or_starts(self):
+        with tempfile.TemporaryDirectory(prefix='owned-pumas-launch-') as temporary:
+            root = Path(temporary); missing = root / 'missing'
+            with patch.object(launch, 'prerequisites', return_value=(root/'godot', root/'dotnet', root)), patch.object(launch, 'prepare') as prepare, patch.object(launch.subprocess, 'call') as game, contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+                self.assertEqual(launch.main(['--pumas-library', str(missing)]), 1)
+                self.assertFalse(missing.exists()); prepare.assert_not_called(); game.assert_not_called()
 
 
 if __name__ == '__main__':

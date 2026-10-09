@@ -212,6 +212,7 @@ Entry-known facts: f_bell_warning, f_future_note, f_inventory, f_tomas_loss, f_w
 Required new facts: f_west_omission at ch2_s4_b008.
 Forbidden future confirmations after this scene: f_authorship, f_cup_prediction, f_evidence_preserved, f_full_testimony, f_interval, f_ivo_signature, f_loop_completed, f_ordinary_tape, f_pressure_engine, f_release_safe, f_script_match.
 
+- Optional authored exchange `ch2_s4_b019a` with Tomas Rook: approach Ivo's omission note through exact preservation, bounded inference, or anger without editorial distortion. Each intention has a distinct retained reply. All choices and declining the exchange rejoin `ch2_s4_b020`; no additional clue, forgiveness, release permission or relationship score is awarded.
 - Conversation `ch2_s4_b020` with Tomas Rook: Choose how to handle evidence involving Ada's uncle.
   - Exact allowed facts: f_inventory, f_future_note, f_bell_warning, f_tomas_loss, f_wrong_channel, f_west_omission.
   - Authored offline fallback: Then we preserve the whole page, both sides, with its source and date. The omission matters. So do the limits of what we can infer from it.
