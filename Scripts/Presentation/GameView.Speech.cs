@@ -62,7 +62,10 @@ public partial class GameView
                 consent.Confirmed += () =>
                 {
                     if (_microphoneConsent != consent || !CurrentSpeech(generation) || _busy) return;
-                    CloseMicrophoneConsent(); _operations.Track(StartConsentedCapture(generation, token));
+                    CloseMicrophoneConsent();
+                    // Time spent choosing consent must not consume the recheck deadline.
+                    CancelSpeechRequest(); _speechRequest = new CancellationTokenSource(TimeSpan.FromSeconds(90));
+                    _operations.Track(StartConsentedCapture(generation, _speechRequest.Token));
                 };
                 consent.PopupCentered();
             }

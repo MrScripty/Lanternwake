@@ -99,6 +99,19 @@ public partial class SpeechCaptureQualification : Node
             GetWindow().Size = new(1280, 800); await Frames(2);
             Check(!_recorder.Recording && AudioServer.BusCount == buses && _contract.Posts == 0 && entry.Text == "Keep this typed draft", "consent cancellation captures/sends nothing and keeps draft");
             PressMic(); await Until(() => Read<ConfirmationDialog?>(_game, "_microphoneConsent") is not null);
+            var delayedConsent = Read<ConfirmationDialog>(_game, "_microphoneConsent");
+            var preparation = Read<CancellationTokenSource>(_game, "_speechRequest");
+            var preparationToken = preparation.Token; preparation.Cancel(); // Inject expiry without a 90-second fixture delay.
+            Check(preparationToken.IsCancellationRequested && !_recorder.Recording && AudioServer.BusCount == buses && _contract.Posts == 0,
+                "expired preparation deadline while consent is open captures and sends nothing");
+            delayedConsent.EmitSignal(ConfirmationDialog.SignalName.Confirmed);
+            await Until(() => !Read<Button>(_game, "_mic").Disabled);
+            Check(_recorder.Recording && !Read<CancellationTokenSource>(_game, "_speechRequest").Token.IsCancellationRequested && entry.Text == "Keep this typed draft",
+                "confirmation after an expired preparation deadline starts a fresh recheck and consented capture without changing typed draft");
+            Return(); await Frames(2); Open();
+            Check(!_recorder.Recording && AudioServer.BusCount == buses && _contract.Posts == 0,
+                "delayed consent capture still discards on Return without submitting audio");
+            PressMic(); await Until(() => Read<ConfirmationDialog?>(_game, "_microphoneConsent") is not null);
             var stale = Read<ConfirmationDialog>(_game, "_microphoneConsent");
             Call(_game, "Load", false); stale.EmitSignal(ConfirmationDialog.SignalName.Confirmed); await Frames(3);
             Check(!_recorder.Recording && AudioServer.BusCount == buses && _contract.Posts == 0, "Load invalidates queued stale confirmation before resource acquisition");

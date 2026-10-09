@@ -31,7 +31,7 @@ internal sealed class RpcFixture:IAsyncDisposable
 {
     readonly TcpListener listener=new(IPAddress.Loopback,0);readonly CancellationTokenSource stop=new();readonly Task loop;
     public Uri Uri {get;}public ConcurrentQueue<JsonObject> Bodies {get;}=new();public JsonObject Result {get;set;}=new(){["outcome"]="matches",["candidates"]=new JsonArray()};public bool Unknown { get; set; } public bool Rejected { get; set; }public int Acquisitions;
-    public Func<string, JsonObject>? Response;
+    public Func<string, JsonObject>? Response { get; set; }
     public RpcFixture(){listener.Start();Uri=new($"http://127.0.0.1:{((IPEndPoint)listener.LocalEndpoint).Port}/");loop=Serve();}
     async Task Serve()
     {

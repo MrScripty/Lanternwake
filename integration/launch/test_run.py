@@ -261,6 +261,39 @@ class SourceLauncherTests(unittest.TestCase):
 
 
 class PumasSelectionTests(unittest.TestCase):
+    def test_home_paths_expand_for_cli_and_mixed_environment_selection(self):
+        with tempfile.TemporaryDirectory(prefix='owned-pumas-home-') as temporary:
+            root = Path(temporary); observer = root / 'owned observer'; observer.touch()
+            # Real expansion to owned storage without changing HOME or accessing a user's library.
+            home_root = '~/' + os.path.relpath(root, Path.home())
+            home_observer = home_root + '/owned observer'
+            cases = [(['--pumas-library=' + home_root, '--pumas-observer', home_observer], {}),
+                     (['--pumas-library=' + home_root], {'LANTERNWAKE_PUMAS_OBSERVER': home_observer}),
+                     (['--pumas-observer', home_observer], {'LANTERNWAKE_PUMAS_LIBRARY_ROOT': home_root})]
+            for arguments, inherited in cases:
+                with self.subTest(arguments=arguments), patch.dict(os.environ, inherited), \
+                        patch.object(launch, 'prerequisites', return_value=(root/'godot', root/'dotnet', root)), \
+                        patch.object(launch, 'prepare', return_value={}), \
+                        patch.object(launch.subprocess, 'call', return_value=0) as game, \
+                        contextlib.redirect_stdout(io.StringIO()):
+                    self.assertEqual(launch.main(arguments), 0)
+                    self.assertEqual(game.call_count, 1)
+                    env = game.call_args.kwargs['env']
+                    self.assertEqual(env['LANTERNWAKE_PUMAS_LIBRARY_ROOT'], str(root.resolve()))
+                    self.assertEqual(env['LANTERNWAKE_PUMAS_OBSERVER'], str(observer.resolve()))
+                    self.assertEqual(env['LANTERNWAKE_PUMAS_SELECTION_OVERRIDE'], '1')
+
+    def test_unresolved_home_and_relative_paths_refuse_before_preparation(self):
+        with tempfile.TemporaryDirectory(prefix='owned-pumas-invalid-') as temporary:
+            root = Path(temporary)
+            for value in ['relative/library', '~lanternwake-no-such-home-6417839/library']:
+                with self.subTest(value=value), \
+                        patch.object(launch, 'prerequisites', return_value=(root/'godot', root/'dotnet', root)), \
+                        patch.object(launch, 'prepare') as prepare, patch.object(launch.subprocess, 'call') as game, \
+                        contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+                    self.assertEqual(launch.main(['--pumas-library', value]), 1)
+                    prepare.assert_not_called(); game.assert_not_called()
+
     def test_explicit_paths_are_process_local_and_never_start_pumas(self):
         with tempfile.TemporaryDirectory(prefix='owned-pumas-launch-') as temporary:
             root = Path(temporary); observer = root / 'owned observer'; observer.touch()

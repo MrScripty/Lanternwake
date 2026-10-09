@@ -230,7 +230,7 @@ def main(arguments=None):
         selection = {}
         for value, variable, directory in [(options.pumas_library, 'LANTERNWAKE_PUMAS_LIBRARY_ROOT', True), (options.pumas_observer, 'LANTERNWAKE_PUMAS_OBSERVER', False)]:
             if value is not None:
-                path = Path(value)
+                path = Path(os.path.expanduser(value))
                 if not path.is_absolute() or not (path.is_dir() if directory else path.is_file()):
                     raise LaunchError('Select existing absolute Pumas library and observer paths. No Pumas service was started.')
                 selection[variable] = str(path.resolve())
@@ -240,7 +240,7 @@ def main(arguments=None):
             if not root_value or not observer_value:
                 raise LaunchError('Select both --pumas-library and --pumas-observer, or provide the other path in the environment. No Pumas service was started.')
             for value, variable, directory in [(root_value, 'LANTERNWAKE_PUMAS_LIBRARY_ROOT', True), (observer_value, 'LANTERNWAKE_PUMAS_OBSERVER', False)]:
-                path = Path(value)
+                path = Path(os.path.expanduser(value))
                 if not path.is_absolute() or not (path.is_dir() if directory else path.is_file()):
                     raise LaunchError('Select existing absolute Pumas library and observer paths. No Pumas service was started.')
                 selection[variable] = str(path.resolve())

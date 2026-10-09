@@ -127,7 +127,7 @@ does not reroute audio to one; saved hosted preferences cannot authorize capture
 ## Evidence
 
 `dotnet run --project integration/speech/SpeechSmoke.csproj` checks the production
-unavailable boundary, legacy rejection, 106 generic synthetic contract assertions
+unavailable boundary, legacy rejection, generic synthetic contract assertions
 and 19 sample-buffer assertions. `python3 integration/qa/speech_capture.py` runs a
 marked disposable profile and real Godot generator through the capture bus and
 generic adapter, using a controlled HTTP handler. It covers consent cancellation,
