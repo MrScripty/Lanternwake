@@ -22,7 +22,7 @@ public partial class SpeechCaptureQualification : Node
     private FixtureContract _contract = new();
     private string _root = "";
     private int _checks;
-    private bool _rendered, _deviceFailure;
+    private bool _rendered, _deviceFailure, _emptySource;
     private ulong _lastTelemetry;
     private readonly List<(SpeechSampleBuffer Buffer, StereoSample[] Storage)> _buffers = new();
     private void Check(bool condition, string claim)
@@ -67,7 +67,7 @@ public partial class SpeechCaptureQualification : Node
             _recorder = new(admission, SpeechCaptureKind.OwnedSynthetic, owner =>
             {
                 if (_deviceFailure) throw new InvalidOperationException("Owned test device unavailable. No microphone was accessed.");
-                return new GodotSpeechCaptureSource(owner, admission, SpeechCaptureKind.OwnedSynthetic);
+                return _emptySource ? new OwnedTestSource(false) : new GodotSpeechCaptureSource(owner, admission, SpeechCaptureKind.OwnedSynthetic);
             }, transcriber);
             var story = Story.Parse(Godot.FileAccess.GetFileAsString("res://Content/story.json"));
             var session = new StorySession(story);
@@ -220,6 +220,17 @@ public partial class SpeechCaptureQualification : Node
         cancelledConsent.EmitSignal(ConfirmationDialog.SignalName.Canceled);
         GetWindow().Size = new(1280, 800); await Frames(2);
         Check(!_recorder.Recording && _contract.Posts == 0 && AudioServer.BusCount == buses, "settings consent cancellation captures/sends nothing");
+        _emptySource = true;
+        form.GetNode<Button>("TestRecord").EmitSignal(BaseButton.SignalName.Pressed);
+        await Until(() => Read<ConfirmationDialog?>(Read<SpeechTestArea>(_game!, "_speechTest"), "_consent") is not null);
+        Read<ConfirmationDialog>(Read<SpeechTestArea>(_game!, "_speechTest"), "_consent").EmitSignal(ConfirmationDialog.SignalName.Confirmed);
+        await Until(() => _recorder.Recording);
+        var emptyClip = Read<SpeechSampleBuffer>(_recorder, "_samples");
+        form.GetNode<Button>("TestStop").EmitSignal(BaseButton.SignalName.Pressed);
+        Check(emptyClip.Disposed && !_recorder.Recording && !_recorder.HasRecording && _contract.Posts == 0 &&
+            !form.GetNode<Button>("TestRecord").Disabled && form.GetNode<Button>("TestTranscribe").Disabled &&
+            form.GetNode<Label>("TestStatus").Text.Contains("No audio frames"), "an immediate empty Stop discards resources, reports a useful error and can record again");
+        _emptySource = false;
         for (var repeat = 0; repeat < 2; repeat++)
         {
             await TestConsent(form);

@@ -24,11 +24,11 @@ Focused verification on the final implementation:
   set and capability/PCM grammar. Correlated success/length/error, malformed and
   oversized replies, cancellation/timeout/disposal, held transport custody,
   zeroed byte buffers and unknown-outcome quarantine are exercised.
-- `python3 integration/qa/speech_capture.py`: 103 native checks using the actual
+- `python3 integration/qa/speech_capture.py`: 106 native checks using the actual
   settings/game controls, a marked owned generator and controlled HTTP replies.
   Includes startup access, 640px consent wrapping, consent cancellation, repeated
   recording/stop/transcribe without overlapping POSTs, editable result isolation,
-  tab/close discard, stale consent, held-probe reopen, device failure, held-POST
+  tab/close discard, empty-stop error/retry, stale consent, held-probe reopen, device failure, held-POST
   cancellation/reopen, late result rejection, sample zeroing, shared quarantine
   into game use, and game capture ending when another modal opens.
 - Native `--ui-smoke`: AI settings, startup menu, reading sizes/chat,
@@ -36,6 +36,9 @@ Focused verification on the final implementation:
 - Debug, ExportDebug, ExportRelease solution builds with `--no-restore
   --warnaserror`: zero warnings/errors. Official Editor `--build-solutions
   --quit`: passed.
+- Full `scripts/verify.sh`: passed locally, including core/story, protocol,
+  native UI/runtime, save isolation and Editor authoring checks. The final
+  empty-stop refinement also passed the focused native speech fixture.
 - Python Pumas adapter suite: 19 passed. Repository credential check and
   `git diff --check`: passed.
 

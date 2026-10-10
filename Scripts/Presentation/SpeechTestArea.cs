@@ -37,7 +37,16 @@ internal sealed class SpeechTestArea : IDisposable
         _stop.Pressed += () =>
         {
             if (!Current() || _running || !_recorder.Recording) return;
-            try { _recorder.Poll(); _recorder.StopCapture(); _status.Text = "Stopped. Choose Transcribe to send this clip to local Pumas, or Cancel to discard it."; }
+            try
+            {
+                _recorder.Poll(); _recorder.StopCapture();
+                if (!_recorder.HasRecording)
+                {
+                    _recorder.Discard();
+                    _status.Text = "No audio frames were captured. Record a slightly longer clip and check the microphone device.";
+                }
+                else _status.Text = "Stopped. Choose Transcribe to send this clip to local Pumas, or Cancel to discard it.";
+            }
             catch (Exception error) { _recorder.Discard(); _status.Text = error.Message; }
             Refresh();
         };
