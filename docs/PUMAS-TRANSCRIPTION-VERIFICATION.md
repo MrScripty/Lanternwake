@@ -24,7 +24,7 @@ Focused verification on the final implementation:
   set and capability/PCM grammar. Correlated success/length/error, malformed and
   oversized replies, cancellation/timeout/disposal, held transport custody,
   zeroed byte buffers and unknown-outcome quarantine are exercised.
-- `python3 integration/qa/speech_capture.py`: 106 native checks using the actual
+- `python3 integration/qa/speech_capture.py`: 129 native checks using the actual
   settings/game controls, a marked owned generator and controlled HTTP replies.
   Includes startup access, 640px consent wrapping, consent cancellation, repeated
   recording/stop/transcribe without overlapping POSTs, editable result isolation,
@@ -58,3 +58,30 @@ resource measurements. The concise workflow and interrupted-flow checks are in
 [SPEECH.md](SPEECH.md). Unknown producer outcomes stay quarantined: a cancelled
 HTTP transport never serves as a child-drain receipt, and recreating the game
 alone does not establish recovery.
+
+## Queued capture continuation review repair
+
+The P2 finding on `92b60b91bb3db3ed6fe7e369641fd714f00b9844` was confirmed
+with a deterministic native reproduction. The fixture allowed the post-consent
+recheck to finish successfully and mark the transcriber prepared, while a custom
+synchronization context held only its awaited UI continuation. Opening and
+closing a reading modal cancelled the original request. Releasing the queued
+continuation on the old code still invoked the capture factory; the regression
+failed at that assertion. This was an owned synthetic source, not a physical
+microphone experiment.
+
+The repair makes the original request token part of `CurrentSpeech` identity,
+including success, error and cleanup callbacks. Modal cancellation clears that
+identity permanently even if the modal closes before a callback runs. Critical
+post-await side effects also check token cancellation before creating consent,
+starting capture or applying a transcript. The settings test checks cancellation
+at those same boundaries. The story/conversation generation remains unchanged
+by reading-modal navigation.
+
+The final fixture covers successful-recheck/held-UI continuation followed by
+modal open-close, a newly consented successor recording before the stale
+continuation runs, and cancellation of the still-current token after recheck
+completion. It asserts capture-factory calls, recording/control preservation,
+no audio submission and resource cleanup. The complete native speech fixture
+passed 129 checks; the native UI smoke and 172 focused protocol/buffer/admission
+checks also passed. Delayed-network cancellation remains a separate regression.

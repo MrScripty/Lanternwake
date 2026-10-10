@@ -83,6 +83,7 @@ internal sealed class SpeechTestArea : IDisposable
             _recorder.Configure(_selection());
             var ready = await _recorder.PrepareAsync(token);
             if (!Current(generation)) return;
+            token.ThrowIfCancellationRequested();
             if (ready.Status == SpeechAvailability.Unsupported) { _status.Text = ready.Message; return; }
             var consent = _consentScene.Instantiate<ConfirmationDialog>(); _consent = consent; _record.GetWindow().AddChild(consent);
             consent.DialogText = "Record up to 30 seconds for this settings test. Stop releases the microphone. Transcribe sends the clip only to the selected local Pumas model. Cancel, changing tabs or closing settings discards it. The editable test result stays out of the game.";
@@ -105,6 +106,7 @@ internal sealed class SpeechTestArea : IDisposable
         {
             var ready = await _recorder.RecheckAsync(token);
             if (!Current(generation)) return;
+            token.ThrowIfCancellationRequested();
             if (ready.Status == SpeechAvailability.Unsupported) { _status.Text = ready.Message; return; }
             _recorder.Start(_owner); _seconds = 0;
             _status.Text = "Recording (0s). Stop releases the microphone; Transcribe sends only after you choose it.";
@@ -121,6 +123,7 @@ internal sealed class SpeechTestArea : IDisposable
         {
             var text = await _recorder.StopAndTranscribe(token);
             if (!Current(generation)) return;
+            token.ThrowIfCancellationRequested();
             _result.Text = text;
             _status.Text = _recorder.FinishReason == "length" ? "The transcript reached its text limit. Review and edit the test result." :
                 text.Length == 0 ? "Pumas returned an empty transcript. Try a short, clearly spoken clip." : "Transcribed. You can edit this test result; it is kept out of the game.";

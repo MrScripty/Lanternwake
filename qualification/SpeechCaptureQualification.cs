@@ -6,6 +6,7 @@ using Lanternwake.Presentation;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
+using System.Collections.Concurrent;
 using System.Text;
 using System.Text.Json;
 
@@ -21,7 +22,7 @@ public partial class SpeechCaptureQualification : Node
     private SpeechRecorder _recorder = null!;
     private FixtureContract _contract = new();
     private string _root = "";
-    private int _checks;
+    private int _checks, _captureStarts;
     private bool _rendered, _deviceFailure, _emptySource;
     private ulong _lastTelemetry;
     private readonly List<(SpeechSampleBuffer Buffer, StereoSample[] Storage)> _buffers = new();
@@ -66,6 +67,7 @@ public partial class SpeechCaptureQualification : Node
                 settings => new(settings, new FixtureHandler(_contract), TimeSpan.FromSeconds(2)));
             _recorder = new(admission, SpeechCaptureKind.OwnedSynthetic, owner =>
             {
+                _captureStarts++;
                 if (_deviceFailure) throw new InvalidOperationException("Owned test device unavailable. No microphone was accessed.");
                 return _emptySource ? new OwnedTestSource(false) : new GodotSpeechCaptureSource(owner, admission, SpeechCaptureKind.OwnedSynthetic);
             }, transcriber);
@@ -125,6 +127,7 @@ public partial class SpeechCaptureQualification : Node
             Call(_game, "Load", false); _contract.ReleaseGet();
             await Until(() => Read<OwnedOperations>(_game, "_operations").Count == 0);
             Check(!_recorder.Recording && AudioServer.BusCount == buses && _contract.Posts == 0, "Load during awaited post-consent recheck cannot start stale capture");
+            await QualifyQueuedNavigation(buses);
             Open(); await Consent(true); await Until(() => Read<SpeechSampleBuffer?>(_recorder, "_samples") is { Count: > 0 }); ObserveBuffer();
             Call(_game, "ShowSettings"); await Frames(2);
             Check(!_recorder.Recording && !_recorder.HasRecording && AudioServer.BusCount == buses && _contract.Posts == 0,
@@ -184,6 +187,58 @@ public partial class SpeechCaptureQualification : Node
             GetTree().Quit();
         }
         catch (Exception error) { GD.PushError(error.ToString()); GetTree().Quit(1); }
+    }
+    private async Task QualifyQueuedNavigation(int buses)
+    {
+        foreach (var scenario in new[] { "navigation", "successor", "expired_token" })
+        {
+            var startSuccessor = scenario == "successor";
+            Open(); PressMic();
+            await Until(() => Read<ConfirmationDialog?>(_game!, "_microphoneConsent") is not null);
+            var consent = Read<ConfirmationDialog>(_game!, "_microphoneConsent");
+            var heldUi = new HeldUiContext();
+            var originalContext = SynchronizationContext.Current;
+            _contract.HoldGet = true; _contract.HeldGet = null;
+            try
+            {
+                // Hold the actual UI await continuation, not merely the HTTP response.
+                SynchronizationContext.SetSynchronizationContext(heldUi);
+                consent.EmitSignal(ConfirmationDialog.SignalName.Confirmed);
+            }
+            finally { SynchronizationContext.SetSynchronizationContext(originalContext); }
+            await Until(() => _contract.HeldGet is not null);
+            var requestToken = Read<CancellationTokenSource>(_game!, "_speechRequest").Token;
+            var starts = _captureStarts;
+            _contract.ReleaseGet();
+            await Until(() => heldUi.Queued && Read<PumasSpeechTranscriber>(_recorder, "_transcriber").Prepared);
+            Check(!requestToken.IsCancellationRequested && !_recorder.Pending && !_recorder.Recording,
+                "successful recheck is fully settled while its UI continuation remains queued");
+            if (scenario == "expired_token") Read<CancellationTokenSource>(_game!, "_speechRequest").Cancel();
+            else { Call(_game!, "ShowSettings"); Call(_game!, "CloseModal"); }
+            Check(requestToken.IsCancellationRequested && Read<Window?>(_game!, "_modal") is null,
+                "navigation or an expired deadline cancels the original token before its queued continuation runs");
+            if (startSuccessor) await Consent(true);
+            heldUi.Drain(); await Frames(2);
+            var correctStarts = _captureStarts == starts + (startSuccessor ? 1 : 0);
+            var recording = _recorder.Recording;
+            var controlsPreserved = Read<LineEdit>(_game!, "_entry").Editable == !startSuccessor &&
+                Read<Button>(_game!, "_send").Disabled == startSuccessor;
+            _recorder.Discard(); // Preserve cleanup even when reproducing a pre-fix failure.
+            Check(correctStarts && recording == startSuccessor && AudioServer.BusCount == buses && _contract.Posts == 0,
+                "a queued successful recheck cannot start capture after cancellation/modal open-close or discard its successor");
+            Check(controlsPreserved, "the cancelled continuation cannot reset a fresh recording's controls");
+            Return();
+        }
+    }
+    private sealed class HeldUiContext : SynchronizationContext
+    {
+        private readonly ConcurrentQueue<(SendOrPostCallback Callback, object? State)> _queued = new();
+        public bool Queued => !_queued.IsEmpty;
+        public override void Post(SendOrPostCallback callback, object? state) => _queued.Enqueue((callback, state));
+        public void Drain()
+        {
+            while (_queued.TryDequeue(out var continuation)) continuation.Callback(continuation.State);
+        }
     }
     private VBoxContainer TestForm()
     {
@@ -367,7 +422,7 @@ public partial class SpeechCaptureQualification : Node
             string body;
             if (request.Method == HttpMethod.Get)
             {
-                if (HoldGet) { HeldGet = new(TaskCreationOptions.RunContinuationsAsynchronously); await HeldGet.Task; token.ThrowIfCancellationRequested(); }
+                if (HoldGet) { HeldGet = new(TaskCreationOptions.RunContinuationsAsynchronously); await HeldGet.Task.ConfigureAwait(false); token.ThrowIfCancellationRequested(); }
                 var availability = Available ? "{\"state\":\"available\"}" : "{\"state\":\"unavailable\",\"reason\":\"unqualified_audio_runtime\"}";
                 body = "{\"supported_contract_versions\":[1],\"model\":\"owned-synthetic-audio\",\"profile\":\"fixture-audio\",\"max_request_bytes\":33554432,\"capabilities\":[{\"capability\":\"audio_transcription\",\"semantic_task\":\"speech_to_text\",\"input_formats\":[\"pcm_f32le\"],\"output_formats\":[\"text\"],\"streaming\":false,\"availability\":" + availability + ",\"option_bounds\":[{\"option\":\"max_output_tokens\",\"minimum\":512,\"maximum\":512}]}]}";
                 body = body.Replace("fixture-audio", Profile, StringComparison.Ordinal);
