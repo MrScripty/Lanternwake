@@ -4,7 +4,17 @@ namespace Lanternwake.Presentation;
 
 public partial class GameView
 {
-    private bool CurrentSpeech(int generation) => generation == _generation && IsInsideTree() && !_closing && _chatPanel.Visible;
+    private SpeechTestArea? _speechTest;
+    private void CloseSpeechTest()
+    {
+        if (_speechTest is null) return;
+        _speechTest.Dispose(); _speechTest = null;
+        _speech.Configure(_aiSettings.Transcription);
+    }
+    // A request token is also its durable session identity. Opening then closing
+    // a modal cannot make a cancelled/replaced request current again.
+    private bool CurrentSpeech(int generation, CancellationToken token) => generation == _generation && IsInsideTree() &&
+        !_closing && _chatPanel.Visible && _modal is null && _speechRequest is { } request && request.Token == token;
     private void CancelSpeechRequest()
     {
         var request = _speechRequest; _speechRequest = null;
@@ -22,6 +32,7 @@ public partial class GameView
     }
     private void PollMicrophone(double delta)
     {
+        if (_speechTest is not null) { _speechTest.Poll(delta); return; }
         if (!_speech.Recording) return;
         try
         {
@@ -48,20 +59,21 @@ public partial class GameView
             try
             {
                 var capability = await _speech.PrepareAsync(token);
-                if (!CurrentSpeech(generation) || _busy) return;
+                if (!CurrentSpeech(generation, token) || _busy) return;
+                token.ThrowIfCancellationRequested();
                 if (capability.Status == SpeechAvailability.Unsupported) { ShowWindow("Cohere Transcribe via Pumas", capability.Message); return; }
                 var consent = MicrophoneConsentScene.Instantiate<ConfirmationDialog>();
                 _microphoneConsent = consent; AddChild(consent);
                 void Cancel()
                 {
-                    if (_microphoneConsent != consent || !CurrentSpeech(generation)) return;
-                    CloseMicrophoneConsent(); ResetSpeechControls(); _entry.GrabFocus();
+                    if (_microphoneConsent != consent || !CurrentSpeech(generation, token)) return;
+                    CloseMicrophoneConsent(); CancelSpeechRequest(); ResetSpeechControls(); _entry.GrabFocus();
                     SetStatusText("Recording cancelled. No audio was captured or sent.");
                 }
                 consent.Canceled += Cancel; consent.CloseRequested += Cancel;
                 consent.Confirmed += () =>
                 {
-                    if (_microphoneConsent != consent || !CurrentSpeech(generation) || _busy) return;
+                    if (_microphoneConsent != consent || !CurrentSpeech(generation, token) || _busy) return;
                     CloseMicrophoneConsent();
                     // Time spent choosing consent must not consume the recheck deadline.
                     CancelSpeechRequest(); _speechRequest = new CancellationTokenSource(TimeSpan.FromSeconds(90));
@@ -69,20 +81,21 @@ public partial class GameView
                 };
                 consent.PopupCentered();
             }
-            catch (Exception error) { if (CurrentSpeech(generation)) SetStatusText(error is OperationCanceledException ? "Voice input cancelled." : error.Message); }
-            finally { if (CurrentSpeech(generation) && _microphoneConsent is null) _mic.Disabled = false; }
+            catch (Exception error) { if (CurrentSpeech(generation, token)) SetStatusText(error is OperationCanceledException ? "Voice input cancelled." : error.Message); }
+            finally { if (CurrentSpeech(generation, token) && _microphoneConsent is null) _mic.Disabled = false; }
             return;
         }
         _busy = true; _mic.Disabled = true; SetStatusText("Transcribing with local Pumas…");
         try
         {
             var text = await _speech.StopAndTranscribe(token);
-            if (!CurrentSpeech(generation)) return;
+            if (!CurrentSpeech(generation, token)) return;
+            token.ThrowIfCancellationRequested();
             _entry.Text = text; _entry.GrabFocus();
             SetStatusText(_speech.FinishReason == "length" ? "Transcript reached its text limit. Review and edit it, then choose Say this." : "Review and edit your transcript, then choose Say this.");
         }
-        catch (Exception error) { if (CurrentSpeech(generation)) SetStatusText(error is OperationCanceledException ? "Voice input cancelled." : error.Message); }
-        finally { if (CurrentSpeech(generation)) { _busy = false; ResetSpeechControls(); } }
+        catch (Exception error) { if (CurrentSpeech(generation, token)) SetStatusText(error is OperationCanceledException ? "Voice input cancelled." : error.Message); }
+        finally { if (CurrentSpeech(generation, token)) { _busy = false; ResetSpeechControls(); } }
     }
     private async Task StartConsentedCapture(int generation, CancellationToken token)
     {
@@ -90,12 +103,13 @@ public partial class GameView
         {
             // Recheck the consent-bound selection; a changed profile requires fresh consent.
             var capability = await _speech.RecheckAsync(token);
-            if (!CurrentSpeech(generation) || _busy) return;
+            if (!CurrentSpeech(generation, token) || _busy) return;
+            token.ThrowIfCancellationRequested();
             if (capability.Status == SpeechAvailability.Unsupported) { SetStatusText(capability.Message); return; }
             _speech.Start(this); _recordSeconds = 0; _send.Disabled = true; _entry.Editable = false;
             _mic.Text = "Stop and transcribe (0s)"; SetStatusText("Recording. Return to story discards it; Stop and transcribe sends it to local Pumas.");
         }
-        catch (Exception error) { if (CurrentSpeech(generation)) { _speech.Discard(); ResetSpeechControls(); SetStatusText(error is OperationCanceledException ? "Voice input cancelled." : error.Message); } }
-        finally { if (CurrentSpeech(generation)) _mic.Disabled = false; }
+        catch (Exception error) { if (CurrentSpeech(generation, token)) { _speech.Discard(); ResetSpeechControls(); SetStatusText(error is OperationCanceledException ? "Voice input cancelled." : error.Message); } }
+        finally { if (CurrentSpeech(generation, token)) _mic.Disabled = false; }
     }
 }

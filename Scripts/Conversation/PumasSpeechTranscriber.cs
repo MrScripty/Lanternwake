@@ -28,20 +28,24 @@ public sealed class PumasSpeechTranscriber : IDisposable
     internal PumasSpeechTranscriber(SpeechRuntimeAdmission admission, SpeechCaptureKind source,
         Func<SpeechServiceSettings, PumasAudioTextClient>? factory = null)
     { _admission = admission; _source = source; _factory = factory ?? (settings => new(settings)); }
-    public bool Pending { get { lock (_sync) return _pending; } }
+    public bool Pending { get { lock (_sync) return _pending || _preparing; } }
     public bool Prepared { get { lock (_sync) return _prepared && !_disposed && !_unknown && !_pending && !_preparing; } }
     public void Configure(SpeechServiceSettings settings)
     {
         settings = settings.Validate();
         lock (_sync) { if (_settings != settings) _prepared = false; _settings = settings; }
     }
+    private bool RuntimeSelected => _source == SpeechCaptureKind.OwnedSynthetic ||
+        (_settings.Runtime == SpeechRuntimeMode.ExperimentalLocalCohere && _settings.Provider == DialogueProvider.Pumas &&
+         _settings.Profile.Length > 0);
     public SpeechCapability Capability
     {
         get
         {
-            lock (_sync) return new(!_disposed && _admission.Allows(_source) && !_unknown ? SpeechAvailability.Ready : SpeechAvailability.Unsupported,
+            lock (_sync) return new(!_disposed && _admission.Allows(_source) && RuntimeSelected && !_unknown ? SpeechAvailability.Ready : SpeechAvailability.Unsupported,
                 _unknown ? "Pumas may still be working on the previous audio request. Voice input is paused until its owner confirms settlement. Typed replies remain available."
-                : !_admission.Allows(_source) ? "Cohere Transcribe through Pumas Library is not available in this build yet. Typed replies and editable suggestions remain available. No audio has been recorded."
+                : !RuntimeSelected ? "Select Experimental local Cohere through Pumas, an indexed model ID and an explicit profile in AI setup → Transcription. No audio has been recorded."
+                : !_admission.Allows(_source) ? _admission.Refusal
                 : "Voice capture requires an available selected local runtime and explicit consent.");
         }
     }
@@ -107,7 +111,12 @@ public sealed class PumasSpeechTranscriber : IDisposable
         : code switch
         {
             "speech_disabled" => "Voice input is off. Typed replies remain available.",
-            "model_not_selected" => "Choose a supported speech model when one is available. No audio has been recorded.",
+            "model_not_selected" => "Enter the indexed model ID returned by Pumas import_local_cohere. No audio has been recorded.",
+            "model_not_found" => "Pumas has no loaded model with this ID/profile. Load it with serve_experimental_local_cohere, then try again.",
+            "unsupported_provider" => "Transcription currently supports local Pumas only. Hosted preferences cannot receive microphone audio.",
+            "unqualified_audio_runtime" or "capability_unavailable" => "Pumas refused this runtime. Check the experimental Cohere load result and platform support. No audio has been recorded.",
+            "pumas_unavailable" => "Could not reach local Pumas. Check the transcription URL and start its owner.",
+            "unsupported_contract" or "invalid_response" => "Pumas returned an incompatible audio contract. Use the documented Pumas version.",
             "cancelled" => "Voice input cancelled. No transcript was sent as dialogue.",
             "timeout" => "Pumas did not respond in time. Typed replies remain available.",
             "invalid_audio" => "No valid audio frames were captured. Typed replies remain available.",

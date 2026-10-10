@@ -64,7 +64,7 @@ Actual in-engine screenshots were written under ignored `artifacts/captures/`. D
 ## Still unqualified / remaining work
 
 - **Production dialogue quality:** real Pumas/llama.cpp plumbing and native Godot display passed; the small smoke model confused speaker/player identity in one observed reply. Explicit identity context is regression-tested, but production characterization, spoiler resistance and model selection remain open. See `LIVE-QUALIFICATION.md`.
-- **Speech:** Cohere Transcribe through Pumas is blocked on the producer transcription API. Direct Whisper was removed; its historical tests do not qualify Cohere. Physical capture, permissions and device behavior also remain unqualified.
+- **Speech:** Explicit experimental local Cohere transcription and a settings test are implemented against Pumas `ad31e391dcd94c204b3fcd748cc98d27b3281e65`. Controlled protocol and Godot capture/UI checks qualify consumer behavior only. Real-model ASR, physical capture, permissions and device behavior remain local verification inputs; see [SPEECH.md](SPEECH.md).
 - **Human duration assessment:** five hours is a design target. Human playtesters exclusively own duration qualification; no assistant-run timed playthrough is required. Authored-word counts and reading-speed estimates remain in `docs/bible/content_metrics.json`; optional chat is not counted as padding.
 - **Relationship mechanics:** no hidden trust score rewards suggestion use; explicit authored relationship/disclosure progression remains a production design task.
 - **Release quality:** no exported distribution package, platform matrix, localization, full screen-reader coverage, low-end performance benchmark or complete editorial/playtest pass is claimed.
@@ -75,7 +75,7 @@ Use the official .NET Godot build and SDK, set `GODOT_MONO` to the engine execut
 
 ## Hosted milestone evidence
 
-The editor-first conversion passed 3,253 core assertions, 11 direct Pumas contract scenarios, a warning-free native build, native story/UI/resource roundtrip smokes and 19 optional adapter tests. Actual Editor save/reopen/play checks are recorded in [EDITOR-VERIFICATION.md](EDITOR-VERIFICATION.md). That editor-first milestone preserved the then-current inference boundaries. The subsequent speech cutover removes Whisper; see SPEECH.md for the current blocked Cohere/Pumas dependency.
+The editor-first conversion passed 3,253 core assertions, 11 direct Pumas contract scenarios, a warning-free native build, native story/UI/resource roundtrip smokes and 19 optional adapter tests. Actual Editor save/reopen/play checks are recorded in [EDITOR-VERIFICATION.md](EDITOR-VERIFICATION.md). That editor-first milestone preserved the then-current inference boundaries. The subsequent speech cutover removes Whisper; see SPEECH.md for the explicit Cohere/Pumas experiment and remaining local qualification.
 
 Authored-game commit `13d3722b7f854b2760b7d603e45a0eade1896e06` passed every hosted check in [run37074218895](https://github.com/MrScripty/Lanternwake/actions/runs/37074218895). Subsequent qualification changes need their own exact-head run; a prior green check does not qualify a later commit.
 

@@ -2,7 +2,7 @@ using Lanternwake.Conversation;
 
 var transcriber = new PumasSpeechTranscriber();
 if (transcriber.Capability.Status != SpeechAvailability.Unsupported)
-    throw new Exception("Speech must remain unsupported until installed audio is independently qualified.");
+    throw new Exception("Speech must default to disabled until deliberate local experiment selection.");
 // Old settings cannot silently select a direct recognizer after the cutover.
 Environment.SetEnvironmentVariable("LANTERNWAKE_WHISPER_CLI", "/bin/echo");
 Environment.SetEnvironmentVariable("LANTERNWAKE_WHISPER_MODEL", "unused");
@@ -23,7 +23,9 @@ try
     throw new Exception("Cancelled speech was accepted.");
 }
 catch (OperationCanceledException) when (cancel.IsCancellationRequested) { }
-Console.WriteLine("PASS Pumas/Cohere unsupported capability, repeated rejection, no legacy fallback and pre-cancellation. No inference claim.");
+Console.WriteLine("PASS default-disabled Pumas/Cohere capability, repeated rejection, no legacy fallback and pre-cancellation. No inference claim.");
 await AudioModalityTests.RunAsync();
 
 CaptureBufferTests.Run();
+
+await InstalledRuntimeTests.RunAsync();
