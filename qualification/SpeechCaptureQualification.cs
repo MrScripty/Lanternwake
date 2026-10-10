@@ -88,6 +88,9 @@ public partial class SpeechCaptureQualification : Node
                 _game.AddChild(new Label { Text = "OWNED SYNTHETIC AUDIO · NO MICROPHONE · NO INFERENCE", Position = new(24, 4), ZIndex = 100 });
                 GD.Print("LANTERNWAKE_OWNED_SPEECH_RENDERED_READY"); return;
             }
+            await QualifySettings();
+            _contract.Posts = 0;
+            _recorder.Configure(new(true, Model: "owned-synthetic-audio") { Profile = "fixture-audio", Language = "en" });
             Call(_game, "Load", false); Open(); await Frames(2);
             var buses = AudioServer.BusCount; var entry = Read<LineEdit>(_game, "_entry");
             entry.Text = "Keep this typed draft";
@@ -122,6 +125,11 @@ public partial class SpeechCaptureQualification : Node
             Call(_game, "Load", false); _contract.ReleaseGet();
             await Until(() => Read<OwnedOperations>(_game, "_operations").Count == 0);
             Check(!_recorder.Recording && AudioServer.BusCount == buses && _contract.Posts == 0, "Load during awaited post-consent recheck cannot start stale capture");
+            Open(); await Consent(true); await Until(() => Read<SpeechSampleBuffer?>(_recorder, "_samples") is { Count: > 0 }); ObserveBuffer();
+            Call(_game, "ShowSettings"); await Frames(2);
+            Check(!_recorder.Recording && !_recorder.HasRecording && AudioServer.BusCount == buses && _contract.Posts == 0,
+                "reading-settings navigation ends game capture without background recording or submission");
+            Call(_game, "CloseModal"); Return();
             Open(); await Consent(true); await Until(() => Read<SpeechSampleBuffer?>(_recorder, "_samples") is { Count: > 4096 }); ObserveBuffer();
             Check(AudioServer.BusCount == buses + 1 && _contract.Posts == 0, "consented generator uses real muted capture bus without audio submission");
             AudioServer.AddBus(1); AudioServer.SetBusName(1, "OwnedUnrelatedBus");
@@ -146,16 +154,28 @@ public partial class SpeechCaptureQualification : Node
             _contract.Available = false; PressMic(); await Until(() => !Read<Button>(_game, "_mic").Disabled);
             Check(!_recorder.Recording && Read<ConfirmationDialog?>(_game, "_microphoneConsent") is null, "unavailable selected capability blocks before consent/source acquisition");
             Call(_game, "CloseModal"); _contract.Available = true;
-            await Consent(true); await Until(() => Read<SpeechSampleBuffer?>(_recorder, "_samples") is { Count: > 0 }); ObserveBuffer();
+            Return(); var cancelledTest = TestForm(); await TestConsent(cancelledTest);
             var retained = Read<SpeechSampleBuffer>(_recorder, "_samples");
-            _contract.HoldPost = true; PressMic(); await Until(() => _contract.HeldPost is not null);
-            Return(); Open(); entry.Text = "New draft after close";
-            Check(_recorder.Pending && !retained.Disposed, "close retains in-flight source buffer until original transport settles");
-            PressMic(); await Frames(3); Check(_contract.Posts == 2 && !_recorder.Recording, "pending operation cannot be replaced after reopen");
-            _contract.ReleasePost(); await Until(() => !_recorder.Pending);
-            Check(retained.Disposed && entry.Text == "New draft after close", "late cancelled reply is discarded and original buffer is zeroed");
-            Check(_recorder.Capability.Status == SpeechAvailability.Unsupported, "post-submission cancellation quarantines unknown producer outcome across reopen");
-            PressMic(); await Frames(3); Check(_contract.Posts == 2 && !_recorder.Recording, "unknown outcome cannot restart capture or replay");
+            cancelledTest.GetNode<Button>("TestStop").EmitSignal(BaseButton.SignalName.Pressed);
+            _contract.HoldPost = true; cancelledTest.GetNode<Button>("TestTranscribe").EmitSignal(BaseButton.SignalName.Pressed);
+            await Until(() => _contract.HeldPost is not null);
+            cancelledTest.GetNode<Button>("TestCancel").EmitSignal(BaseButton.SignalName.Pressed);
+            Check(_contract.PostToken.IsCancellationRequested && _recorder.Pending && !retained.Disposed,
+                "settings cancel requests transport cancellation and retains original audio through settlement");
+            Call(_game, "CloseModal"); cancelledTest = TestForm(); cancelledTest.GetNode<TextEdit>("TestResult").Text = "New result after close";
+            cancelledTest.GetNode<Button>("TestRecord").EmitSignal(BaseButton.SignalName.Pressed); await Frames(3);
+            Check(_contract.Posts == 2 && !_recorder.Recording && cancelledTest.GetNode<Button>("TestRecord").Disabled,
+                "reopened settings cannot overlap an unsettled submitted request");
+            _contract.ReleasePost(); await Until(() => !_recorder.Pending); await Frames(2);
+            Check(retained.Disposed && cancelledTest.GetNode<TextEdit>("TestResult").Text == "New result after close", "late cancelled settings reply is discarded and original buffer zeroed");
+            Check(_recorder.Capability.Status == SpeechAvailability.Unsupported, "unknown settings outcome stays quarantined across settings reopen");
+            cancelledTest.GetNode<Button>("TestRecord").EmitSignal(BaseButton.SignalName.Pressed); await Frames(3);
+            Check(_contract.Posts == 2 && !_recorder.Recording && cancelledTest.GetNode<Label>("TestStatus").Text.Contains("previous audio request"),
+                "unknown settlement is visible and refuses another settings recording");
+            Call(_game, "CloseModal"); Open();
+            _recorder.Configure(new(true, Model: "owned-synthetic-audio") { Profile = "fixture-audio" });
+            PressMic(); await Frames(3); Check(_contract.Posts == 2 && !_recorder.Recording, "settings quarantine persists into game and cannot replay audio");
+            Call(_game, "CloseModal");
             await QualifyRecorderFailures(admission);
             Check(await _game.Audio.StopAndRetireAsync(), "graceful native fixture teardown drains original audio handles");
             _game.Free(); _game = null; await Frames(3);
@@ -164,6 +184,87 @@ public partial class SpeechCaptureQualification : Node
             GetTree().Quit();
         }
         catch (Exception error) { GD.PushError(error.ToString()); GetTree().Quit(1); }
+    }
+    private VBoxContainer TestForm()
+    {
+        Call(_game!, "ShowAiSetup");
+        var form = Read<Window>(_game!, "_modal").GetNode<VBoxContainer>("%ModalActions").GetNode<VBoxContainer>("AiSettingsControls").GetNode<VBoxContainer>("Capabilities/Transcription");
+        form.GetNode<LineEdit>("Model").Text = "owned-synthetic-audio";
+        form.GetNode<LineEdit>("Profile").Text = "fixture-audio";
+        form.GetNode<CheckButton>("Enabled").SetPressedNoSignal(true);
+        form.GetNode<OptionButton>("Runtime").Select(1);
+        ((TabContainer)form.GetParent()).CurrentTab = 1;
+        return form;
+    }
+    private async Task TestConsent(VBoxContainer form)
+    {
+        form.GetNode<Button>("TestRecord").EmitSignal(BaseButton.SignalName.Pressed);
+        await Until(() => Read<ConfirmationDialog?>(Read<SpeechTestArea>(_game!, "_speechTest"), "_consent") is not null);
+        var consent = Read<ConfirmationDialog>(Read<SpeechTestArea>(_game!, "_speechTest"), "_consent");
+        consent.EmitSignal(ConfirmationDialog.SignalName.Confirmed);
+        await Until(() => _recorder.Recording);
+        await Until(() => Read<SpeechSampleBuffer?>(_recorder, "_samples") is { Count: > 0 }); ObserveBuffer();
+    }
+    private async Task QualifySettings()
+    {
+        var history = JsonSerializer.Serialize(Read<StorySession>(_game!, "_session").Snapshot());
+        var entry = Read<LineEdit>(_game!, "_entry"); entry.Text = "GAME DRAFT STAYS SEPARATE";
+        var buses = AudioServer.BusCount;
+        GetWindow().Size = new(640, 480); await Frames(2);
+        var form = TestForm();
+        Check(!Read<bool>(_game!, "_started") && Read<Control>(_game!, "_mainMenu").Visible, "settings test is usable at startup without entering the story");
+        form.GetNode<Button>("TestRecord").EmitSignal(BaseButton.SignalName.Pressed);
+        await Until(() => Read<ConfirmationDialog?>(Read<SpeechTestArea>(_game!, "_speechTest"), "_consent") is not null);
+        var cancelledConsent = Read<ConfirmationDialog>(Read<SpeechTestArea>(_game!, "_speechTest"), "_consent");
+        Check(cancelledConsent.Size.X <= 640 && cancelledConsent.GetLabel().GetLineCount() > 1, "settings consent fits and wraps in a 640px viewport");
+        cancelledConsent.EmitSignal(ConfirmationDialog.SignalName.Canceled);
+        GetWindow().Size = new(1280, 800); await Frames(2);
+        Check(!_recorder.Recording && _contract.Posts == 0 && AudioServer.BusCount == buses, "settings consent cancellation captures/sends nothing");
+        for (var repeat = 0; repeat < 2; repeat++)
+        {
+            await TestConsent(form);
+            Check(!form.GetNode<LineEdit>("Model").Editable && form.GetNode<Button>("TestRecord").Disabled, "recording locks selection and repeated record clicks");
+            form.GetNode<Button>("TestRecord").EmitSignal(BaseButton.SignalName.Pressed);
+            form.GetNode<Button>("TestStop").EmitSignal(BaseButton.SignalName.Pressed);
+            Check(!_recorder.Recording && _recorder.HasRecording && AudioServer.BusCount == buses && _contract.Posts == repeat, "Stop releases native bus without posting and retains the clip");
+            form.GetNode<Button>("TestTranscribe").EmitSignal(BaseButton.SignalName.Pressed);
+            form.GetNode<Button>("TestTranscribe").EmitSignal(BaseButton.SignalName.Pressed);
+            await Until(() => !_recorder.Pending && form.GetNode<TextEdit>("TestResult").Text == "OWNED SYNTHETIC TRANSCRIPT");
+            Check(_contract.Posts == repeat + 1 && form.GetNode<TextEdit>("TestResult").Editable && !form.GetNode<Button>("TestRecord").Disabled,
+                "repeated transcription click admits one operation, and successful test can record again");
+            form.GetNode<TextEdit>("TestResult").Text = "Edited settings-only result";
+            Check(entry.Text == "GAME DRAFT STAYS SEPARATE" && JsonSerializer.Serialize(Read<StorySession>(_game!, "_session").Snapshot()) == history,
+                "settings result and edits never enter game input, progress or history");
+        }
+        await TestConsent(form);
+        ((TabContainer)form.GetParent()).CurrentTab = 0; await Frames(2);
+        Check(!_recorder.Recording && !_recorder.HasRecording && AudioServer.BusCount == buses && _contract.Posts == 2, "tab navigation discards recording without submission and releases its bus");
+        ((TabContainer)form.GetParent()).CurrentTab = 1;
+        await TestConsent(form); Call(_game!, "CloseModal"); await Frames(2);
+        Check(!_recorder.Recording && !_recorder.HasRecording && AudioServer.BusCount == buses, "closing settings releases microphone source and retained clip");
+        form = TestForm();
+        Check(form.GetNode<TextEdit>("TestResult").Text.Length == 0, "reopened test starts with no leaked transcript");
+        form.GetNode<Button>("TestRecord").EmitSignal(BaseButton.SignalName.Pressed);
+        await Until(() => Read<ConfirmationDialog?>(Read<SpeechTestArea>(_game!, "_speechTest"), "_consent") is not null);
+        var stale = Read<ConfirmationDialog>(Read<SpeechTestArea>(_game!, "_speechTest"), "_consent");
+        Call(_game!, "CloseModal"); stale.EmitSignal(ConfirmationDialog.SignalName.Confirmed); await Frames(2);
+        Check(!_recorder.Recording && AudioServer.BusCount == buses, "closed settings ignores queued consent confirmation");
+        form = TestForm(); _contract.HoldGet = true; _contract.HeldGet = null;
+        form.GetNode<Button>("TestRecord").EmitSignal(BaseButton.SignalName.Pressed);
+        await Until(() => _contract.HeldGet is not null);
+        Call(_game!, "CloseModal"); form = TestForm();
+        form.GetNode<Button>("TestRecord").EmitSignal(BaseButton.SignalName.Pressed); await Frames(2);
+        Check(_recorder.Pending && form.GetNode<Button>("TestRecord").Disabled && !_recorder.Recording, "reopen cannot overlap an unsettled capability probe");
+        _contract.ReleaseGet(); await Until(() => !_recorder.Pending);
+        Read<SpeechTestArea>(_game!, "_speechTest").Refresh();
+        Check(!_recorder.Recording && form.GetNode<TextEdit>("TestResult").Text.Length == 0, "late settings probe cannot acquire capture or update the replacement result");
+        _deviceFailure = true; form.GetNode<Button>("TestRecord").EmitSignal(BaseButton.SignalName.Pressed);
+        await Until(() => Read<ConfirmationDialog?>(Read<SpeechTestArea>(_game!, "_speechTest"), "_consent") is not null);
+        Read<ConfirmationDialog>(Read<SpeechTestArea>(_game!, "_speechTest"), "_consent").EmitSignal(ConfirmationDialog.SignalName.Confirmed);
+        await Until(() => !form.GetNode<Button>("TestRecord").Disabled);
+        Check(form.GetNode<Label>("TestStatus").Text.Contains("unavailable") && !_recorder.Recording && AudioServer.BusCount == buses, "settings reports device failure and restores controls");
+        _deviceFailure = false; Call(_game!, "CloseModal");
+        Check(_buffers.All(pair => pair.Buffer.Disposed && pair.Storage.All(f => f == default)), "settings success/cancel/navigation zero every owned sample array");
     }
     public override void _Process(double delta)
     {
@@ -257,7 +358,7 @@ public partial class SpeechCaptureQualification : Node
             {
                 if (HoldGet) { HeldGet = new(TaskCreationOptions.RunContinuationsAsynchronously); await HeldGet.Task; token.ThrowIfCancellationRequested(); }
                 var availability = Available ? "{\"state\":\"available\"}" : "{\"state\":\"unavailable\",\"reason\":\"unqualified_audio_runtime\"}";
-                body = "{\"supported_contract_versions\":[1],\"model\":\"owned-synthetic-audio\",\"profile\":\"fixture-audio\",\"max_request_bytes\":33554432,\"capabilities\":[{\"semantic_task\":\"speech_to_text\",\"input_formats\":[\"pcm_f32le\"],\"output_formats\":[\"text\"],\"streaming\":false,\"availability\":" + availability + ",\"option_bounds\":[{\"option\":\"max_output_tokens\",\"minimum\":512,\"maximum\":512}]}]}";
+                body = "{\"supported_contract_versions\":[1],\"model\":\"owned-synthetic-audio\",\"profile\":\"fixture-audio\",\"max_request_bytes\":33554432,\"capabilities\":[{\"capability\":\"audio_transcription\",\"semantic_task\":\"speech_to_text\",\"input_formats\":[\"pcm_f32le\"],\"output_formats\":[\"text\"],\"streaming\":false,\"availability\":" + availability + ",\"option_bounds\":[{\"option\":\"max_output_tokens\",\"minimum\":512,\"maximum\":512}]}]}";
                 body = body.Replace("fixture-audio", Profile, StringComparison.Ordinal);
             }
             else
@@ -268,7 +369,7 @@ public partial class SpeechCaptureQualification : Node
                 var pcm = Convert.FromBase64String(input.GetProperty("data_base64").GetString()!);
                 ValidStereo = count > 0 && pcm.Length == count * 8 && input.GetProperty("channels").GetInt32() == 2 &&
                     input.GetProperty("sample_rate_hz").GetInt32() == (int)AudioServer.GetMixRate() && pcm.Any(value => value != 0) &&
-                    request.RequestUri!.AbsolutePath == "/v1/model-operations" && !json.RootElement.TryGetProperty("capability", out _);
+                    request.RequestUri!.AbsolutePath == "/v1/model-operations" && json.RootElement.GetProperty("capability").GetString() == "audio_transcription";
                 Array.Clear(pcm);
                 var id = json.RootElement.GetProperty("request_id").GetString();
                 PostToken = token;

@@ -15,7 +15,7 @@ public sealed record AudioTextReply(bool Success, string Text, string Code, Audi
 public sealed record AudioTextCapability(bool Advertised, string Code, string Model = "", string Profile = "", int MaxRequestBytes = 0);
 
 /// <summary>
-/// Pumas PR61's generic selected-model audio-input/text-output consumer.
+/// Pumas's generic selected-model audio-input/text-output consumer.
 /// Advertised capability is not qualification of installed audio. HTTP cancellation
 /// settles only this transport: there is no public producer status/cancel receipt.
 /// </summary>
@@ -71,7 +71,7 @@ public sealed class PumasAudioTextClient : IDisposable
         try
         {
             deadline.Token.ThrowIfCancellationRequested();
-            // PR61 owns PCM conversion/normalization. Preserve actual mix rate and
+            // Pumas owns PCM conversion/normalization. Preserve actual mix rate and
             // both channels rather than labelling unconverted samples mono/16kHz.
             var frameCount = samples.Count;
             if (sampleRate is < 8000 or > 192000 || frameCount == 0 || frameCount > sampleRate * 30 ||
@@ -167,7 +167,7 @@ public sealed class PumasAudioTextClient : IDisposable
             !root.TryGetProperty("max_request_bytes", out var limit) || limit.ValueKind != JsonValueKind.Number || !limit.TryGetInt32(out var maxBytes) || maxBytes <= 0 ||
             !root.TryGetProperty("capabilities", out var descriptors) || descriptors.ValueKind != JsonValueKind.Array || descriptors.GetArrayLength() > 32)
             throw new ProtocolException("invalid_response");
-        var matches = descriptors.EnumerateArray().Where(d => Field(d, "semantic_task") == "speech_to_text" &&
+        var matches = descriptors.EnumerateArray().Where(d => Field(d, "capability") == "audio_transcription" && Field(d, "semantic_task") == "speech_to_text" &&
             Contains(d, "input_formats", "pcm_f32le") && Contains(d, "output_formats", "text")).ToArray();
         if (matches.Length == 0) return new(false, "unsupported_modality");
         if (matches.Length > 1) return new(false, "ambiguous_operation");
@@ -199,7 +199,7 @@ public sealed class PumasAudioTextClient : IDisposable
             writer.WriteStartObject("input"); writer.WriteString("kind", "audio"); writer.WriteString("encoding", "pcm_f32le");
             writer.WriteNumber("sample_rate_hz", rate); writer.WriteNumber("channels", 2); writer.WriteNumber("sample_count", count);
             WriteBase64Audio(writer, pcm); writer.WriteEndObject(); writer.WriteString("output", "text");
-            writer.WriteString("semantic_task", "speech_to_text");
+            writer.WriteString("capability", "audio_transcription");
             writer.WriteStartObject("options"); writer.WriteString("kind", "audio"); writer.WriteString("language", _settings.Language);
             writer.WriteNumber("max_output_tokens", 512); writer.WriteEndObject(); writer.WriteBoolean("stream", false); writer.WriteEndObject();
         }

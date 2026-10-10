@@ -48,7 +48,7 @@ internal static class AudioModalityTests
         await TerminalRefusals();
         await CancelAndDisposal();
         await RealLoopbackTransport();
-        Console.WriteLine($"PASS Pumas PR61 generic audio/text synthetic contract: {_checks} assertions; selected discovery, strict wire/results, PCM bounds, cancellation/timeout/disposal and unknown-outcome quarantine. No model inference qualification.");
+        Console.WriteLine($"PASS Current Pumas selected-model audio/text controlled contract: {_checks} assertions; selected discovery, strict wire/results, PCM bounds, cancellation/timeout/disposal and unknown-outcome quarantine. No model inference qualification.");
     }
 
     private static async Task WireAndSnapshot()
@@ -67,8 +67,8 @@ internal static class AudioModalityTests
             Check(request.Method == HttpMethod.Post && request.RequestUri!.AbsolutePath == "/v1/model-operations", "Only generic operation endpoint is allowed.");
             held = Body(client!); Check(held is not null, "Own request bytes through transport settlement.");
             using var json = JsonDocument.Parse(await request.Content!.ReadAsByteArrayAsync(token)); var root = json.RootElement;
-            Check(!root.TryGetProperty("capability", out _) && root.GetProperty("contract_version").GetInt32() == 1 &&
-                root.GetProperty("output").GetString() == "text" && root.GetProperty("semantic_task").GetString() == "speech_to_text" && !root.GetProperty("stream").GetBoolean(), "Modality-first grammar, no named transcription API.");
+            Check(root.GetProperty("capability").GetString() == "audio_transcription" && root.GetProperty("contract_version").GetInt32() == 1 &&
+                root.GetProperty("output").GetString() == "text" && !root.TryGetProperty("semantic_task", out _) && !root.GetProperty("stream").GetBoolean(), "Current closed selected-model audio grammar.");
             Check(root.GetProperty("model").GetString() == Settings.Model && root.GetProperty("profile").GetString() == Settings.Profile, "Pin selected model and discovered profile.");
             var input = root.GetProperty("input"); var pcm = Convert.FromBase64String(input.GetProperty("data_base64").GetString()!);
             Check(input.GetProperty("kind").GetString() == "audio" && input.GetProperty("encoding").GetString() == "pcm_f32le" &&
@@ -102,6 +102,7 @@ internal static class AudioModalityTests
             root => root["profile"] = "wrong-profile",
             root => root["max_request_bytes"] = "bad",
             root => root["capabilities"]![0]!["availability"] = new JsonObject { ["state"] = "unavailable", ["reason"] = "unqualified_audio_runtime" },
+            root => root["capabilities"]![0]!["capability"] = "audio_classification",
             root => root["capabilities"]![0]!["semantic_task"] = "audio_classification",
             root => root["capabilities"]![0]!["input_formats"] = new JsonArray("text"),
             root => root["capabilities"]![0]!["output_formats"] = new JsonArray("labels"),
@@ -342,7 +343,16 @@ internal static class AudioModalityTests
                 var body = new byte[length]; await stream.ReadExactlyAsync(body);
                 string response;
                 if (path == "/v1/capabilities") response = capabilities.ToJsonString();
-                else { using var request = JsonDocument.Parse(body); response = Terminal(request.RootElement.GetProperty("request_id").GetString()!, "Synthetic TCP transcript"); }
+                else
+                {
+                    using var request = JsonDocument.Parse(body); var root = request.RootElement;
+                    Check(root.EnumerateObject().Select(p => p.Name).Order().SequenceEqual(new[] {
+                        "contract_version", "request_id", "model", "profile", "capability", "input", "output", "options", "stream" }.Order()),
+                        "TCP interoperability: exact current Pumas OperationRequest fields, no unknown producer fields.");
+                    Check(root.GetProperty("capability").GetString() == "audio_transcription" && root.GetProperty("input").GetProperty("encoding").GetString() == "pcm_f32le",
+                        "TCP interoperability: producer's declared capability and supported PCM encoding.");
+                    response = Terminal(root.GetProperty("request_id").GetString()!, "Synthetic TCP transcript");
+                }
                 var bytes = Encoding.UTF8.GetBytes(response);
                 await stream.WriteAsync(Encoding.ASCII.GetBytes($"HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: {bytes.Length}\r\nConnection: close\r\n\r\n"));
                 await stream.WriteAsync(bytes);

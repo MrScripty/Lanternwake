@@ -379,6 +379,8 @@ public partial class GameView : Node
     private void ShowWindow(string title, string text, (string Text, Action Action)[]? actions = null, Action? dismiss = null)
     {
         if (_busy) return;
+        // Navigation ends voice capture/probes before presenting another surface.
+        CancelSpeechRequest(); CloseMicrophoneConsent(); _speech.Discard(); ResetSpeechControls();
         CloseModal();
         _modal = ModalScene.Instantiate<Window>();
         _modal.Title = title;
@@ -413,7 +415,7 @@ public partial class GameView : Node
     }
     private void CloseModal()
     {
-        CancelAiSetup(); _setupRequest?.Cancel(); _exchangeReading = null;
+        CloseSpeechTest(); CancelAiSetup(); _setupRequest?.Cancel(); _exchangeReading = null;
         if (_modal is not { } modal) return;
         _modal = null;
         modal.Hide(); modal.Exclusive = false; modal.QueueFree();
@@ -468,10 +470,10 @@ public partial class GameView : Node
             aiTranscription.GetNode<CheckButton>("Enabled").SetPressedNoSignal(true);
             aiVoices.GetNode<LineEdit>("Endpoint").Text = "http://127.0.0.1:8082/";
             aiVoices.GetNode<CheckButton>("Enabled").ButtonPressed = true;
-            Check(aiTranscription.GetNode<OptionButton>("Model").Disabled && aiVoices.GetNode<OptionButton>("Model").Disabled &&
+            Check(aiTranscription.GetNode<LineEdit>("Model").Editable && aiVoices.GetNode<OptionButton>("Model").Disabled &&
                 aiVoices.GetNode<VBoxContainer>("Assignments").Visible &&
                 aiVoices.GetNode<VBoxContainer>("Assignments").GetChildCount() == _story.Characters.Length * 2,
-                "speech models stay unavailable and enabling voice preferences exposes character assignments");
+                "transcription selection is editable and enabling voice preferences exposes character assignments");
             var transcriptionProvider = aiTranscription.GetNode<OptionButton>("Provider");
             transcriptionProvider.Select((int)DialogueProvider.OpenRouter);
             transcriptionProvider.EmitSignal(OptionButton.SignalName.ItemSelected, (long)DialogueProvider.OpenRouter);
@@ -642,10 +644,10 @@ public partial class GameView : Node
     {
         if (Engine.IsEditorHint()) return;
         if (what != NotificationWMCloseRequest || _closing) return;
-        _closing = true; _generation++; _request?.Cancel(); CancelSpeechRequest(); _setupRequest?.Cancel(); CancelAiSetup(); CloseMicrophoneConsent(); _speech.Discard();
+        _closing = true; _generation++; _request?.Cancel(); CancelSpeechRequest(); _setupRequest?.Cancel(); CancelAiSetup(); CloseSpeechTest(); CloseMicrophoneConsent(); _speech.Discard();
         try { await _operations.DrainAsync(); }
         catch (Exception error) { GD.PushWarning("Shutdown operation: " + error.Message); }
         finally { _setupPumas?.Dispose(); _setupPumas = null; QuitAfterAudio(); }
     }
-    public override void _ExitTree() { if (Engine.IsEditorHint()) return; _closing = true; _generation++; _request?.Cancel(); _request?.Dispose(); CancelSpeechRequest(); _setupRequest?.Cancel(); CancelAiSetup(); _pumasOwner.Dispose(); if (_setupRequest is null) { _setupPumas?.Dispose(); _setupPumas = null; } _credentialLifetime.Cancel(); _aiSetupRequest?.Dispose(); CloseMicrophoneConsent(); _speech.Dispose(); _storage?.Dispose(); }
+    public override void _ExitTree() { if (Engine.IsEditorHint()) return; _closing = true; _generation++; _request?.Cancel(); _request?.Dispose(); CancelSpeechRequest(); _setupRequest?.Cancel(); CancelAiSetup(); CloseSpeechTest(); _pumasOwner.Dispose(); if (_setupRequest is null) { _setupPumas?.Dispose(); _setupPumas = null; } _credentialLifetime.Cancel(); _aiSetupRequest?.Dispose(); CloseMicrophoneConsent(); _speech.Dispose(); _storage?.Dispose(); }
 }

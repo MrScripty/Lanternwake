@@ -30,7 +30,7 @@ internal static class CaptureBufferTests
         var held = Storage(bounded); bounded.Dispose(); Check(held.All(f => f == default), "Full clip is zeroed on cancellation.");
         using var highRate = new SpeechSampleBuffer(192000);
         Check(highRate.CapacityLimit * 8L * 4 / 3 + 4096 < 32 * 1024 * 1024L, "Maximum-rate PCM leaves bounded JSON envelope headroom.");
-        Check(!SpeechRuntimeAdmission.Installed.Allows(SpeechCaptureKind.Microphone), "Installed-runtime admission stays independently closed.");
+        Check(!SpeechRuntimeAdmission.Installed.Allows(SpeechCaptureKind.OwnedSynthetic), "Installed host admission never admits the synthetic source.");
         Console.WriteLine($"PASS capture buffer assertions={checks}; synthetic PCM only, no microphone or inference claim.");
     }
 }

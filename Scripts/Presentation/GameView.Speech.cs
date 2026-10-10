@@ -4,7 +4,14 @@ namespace Lanternwake.Presentation;
 
 public partial class GameView
 {
-    private bool CurrentSpeech(int generation) => generation == _generation && IsInsideTree() && !_closing && _chatPanel.Visible;
+    private SpeechTestArea? _speechTest;
+    private void CloseSpeechTest()
+    {
+        if (_speechTest is null) return;
+        _speechTest.Dispose(); _speechTest = null;
+        _speech.Configure(_aiSettings.Transcription);
+    }
+    private bool CurrentSpeech(int generation) => generation == _generation && IsInsideTree() && !_closing && _chatPanel.Visible && _modal is null;
     private void CancelSpeechRequest()
     {
         var request = _speechRequest; _speechRequest = null;
@@ -22,6 +29,7 @@ public partial class GameView
     }
     private void PollMicrophone(double delta)
     {
+        if (_speechTest is not null) { _speechTest.Poll(delta); return; }
         if (!_speech.Recording) return;
         try
         {
