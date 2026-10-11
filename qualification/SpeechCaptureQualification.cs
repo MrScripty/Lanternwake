@@ -100,6 +100,15 @@ public partial class SpeechCaptureQualification : Node
             PressMic(); await Until(() => Read<ConfirmationDialog?>(_game, "_microphoneConsent") is not null);
             var narrowConsent = Read<ConfirmationDialog>(_game, "_microphoneConsent");
             Check(narrowConsent.Size.X <= 640 && narrowConsent.GetLabel().GetLineCount() > 1, "consent wraps and fits the actual 640px viewport");
+            var consentState = JsonSerializer.Serialize(Read<StorySession>(_game, "_session").Snapshot());
+            Read<VBoxContainer>(_game, "_suggestions").GetChild<Button>(0).EmitSignal(BaseButton.SignalName.Pressed);
+            Read<Button>(_game, "_send").EmitSignal(BaseButton.SignalName.Pressed);
+            entry.EmitSignal(LineEdit.SignalName.TextSubmitted, "Queued input under microphone consent");
+            await Frames(2);
+            Check(entry.Text == "Keep this typed draft" &&
+                JsonSerializer.Serialize(Read<StorySession>(_game, "_session").Snapshot()) == consentState &&
+                Read<ConfirmationDialog?>(_game, "_microphoneConsent") == narrowConsent,
+                "covered conversation edit/send callbacks preserve draft, story and microphone consent");
             narrowConsent.EmitSignal(ConfirmationDialog.SignalName.Canceled);
             GetWindow().Size = new(1280, 800); await Frames(2);
             Check(!_recorder.Recording && AudioServer.BusCount == buses && _contract.Posts == 0 && entry.Text == "Keep this typed draft", "consent cancellation captures/sends nothing and keeps draft");
@@ -113,6 +122,10 @@ public partial class SpeechCaptureQualification : Node
             await Until(() => !Read<Button>(_game, "_mic").Disabled);
             Check(_recorder.Recording && !Read<CancellationTokenSource>(_game, "_speechRequest").Token.IsCancellationRequested && entry.Text == "Keep this typed draft",
                 "confirmation after an expired preparation deadline starts a fresh recheck and consented capture without changing typed draft");
+            Read<VBoxContainer>(_game, "_suggestions").GetChild<Button>(0).EmitSignal(BaseButton.SignalName.Pressed);
+            Check(entry.Text == "Keep this typed draft" && _recorder.Recording && !entry.Editable &&
+                Read<VBoxContainer>(_game, "_suggestions").GetChildren().OfType<Button>().All(button => button.Disabled),
+                "suggestions cannot replace the locked draft while consented capture is recording");
             Return(); await Frames(2); Open();
             Check(!_recorder.Recording && AudioServer.BusCount == buses && _contract.Posts == 0,
                 "delayed consent capture still discards on Return without submitting audio");
@@ -132,6 +145,11 @@ public partial class SpeechCaptureQualification : Node
             Call(_game, "ShowSettings"); await Frames(2);
             Check(!_recorder.Recording && !_recorder.HasRecording && AudioServer.BusCount == buses && _contract.Posts == 0,
                 "reading-settings navigation ends game capture without background recording or submission");
+            var probes = _contract.Gets;
+            PressMic(); await Frames(3);
+            Check(_contract.Gets == probes && !Read<Button>(_game, "_mic").Disabled &&
+                Read<OwnedOperations>(_game, "_operations").Count == 0,
+                "covered voice callback cannot probe or strand the game controls under reading settings");
             Call(_game, "CloseModal"); Return();
             Open(); await Consent(true); await Until(() => Read<SpeechSampleBuffer?>(_recorder, "_samples") is { Count: > 4096 }); ObserveBuffer();
             Check(AudioServer.BusCount == buses + 1 && _contract.Posts == 0, "consented generator uses real muted capture bus without audio submission");
@@ -275,6 +293,18 @@ public partial class SpeechCaptureQualification : Node
         cancelledConsent.EmitSignal(ConfirmationDialog.SignalName.Canceled);
         GetWindow().Size = new(1280, 800); await Frames(2);
         Check(!_recorder.Recording && _contract.Posts == 0 && AudioServer.BusCount == buses, "settings consent cancellation captures/sends nothing");
+        form.GetNode<Button>("TestRecord").EmitSignal(BaseButton.SignalName.Pressed);
+        await Until(() => Read<ConfirmationDialog?>(Read<SpeechTestArea>(_game!, "_speechTest"), "_consent") is not null);
+        var delayedTestConsent = Read<ConfirmationDialog>(Read<SpeechTestArea>(_game!, "_speechTest"), "_consent");
+        var preparedTestRequest = Read<CancellationTokenSource>(Read<SpeechTestArea>(_game!, "_speechTest"), "_request");
+        preparedTestRequest.Cancel();
+        delayedTestConsent.EmitSignal(ConfirmationDialog.SignalName.Confirmed);
+        await Until(() => _recorder.Recording && _recorder.HasRecording); ObserveBuffer();
+        Check(!Read<CancellationTokenSource>(Read<SpeechTestArea>(_game!, "_speechTest"), "_request").IsCancellationRequested && _contract.Posts == 0,
+            "settings confirmation after preparation expiry starts a fresh consent-bound capture deadline without posting");
+        form.GetNode<Button>("TestCancel").EmitSignal(BaseButton.SignalName.Pressed);
+        Check(!_recorder.Recording && !_recorder.HasRecording && AudioServer.BusCount == buses,
+            "cancelling the freshly consented settings capture releases and discards it");
         _emptySource = true;
         form.GetNode<Button>("TestRecord").EmitSignal(BaseButton.SignalName.Pressed);
         await Until(() => Read<ConfirmationDialog?>(Read<SpeechTestArea>(_game!, "_speechTest"), "_consent") is not null);
@@ -414,7 +444,7 @@ public partial class SpeechCaptureQualification : Node
         public CancellationToken PostToken;
         public TaskCompletionSource? HeldGet;
         public void ReleaseGet() { HoldGet = false; HeldGet?.TrySetResult(); }
-        public int Posts;
+        public int Posts, Gets;
         public TaskCompletionSource? HeldPost;
         public void ReleasePost() { HoldPost = false; HeldPost?.TrySetResult(); }
         public async Task<HttpResponseMessage> Send(HttpRequestMessage request, CancellationToken token)
@@ -422,6 +452,7 @@ public partial class SpeechCaptureQualification : Node
             string body;
             if (request.Method == HttpMethod.Get)
             {
+                Gets++;
                 if (HoldGet) { HeldGet = new(TaskCreationOptions.RunContinuationsAsynchronously); await HeldGet.Task.ConfigureAwait(false); token.ThrowIfCancellationRequested(); }
                 var availability = Available ? "{\"state\":\"available\"}" : "{\"state\":\"unavailable\",\"reason\":\"unqualified_audio_runtime\"}";
                 body = "{\"supported_contract_versions\":[1],\"model\":\"owned-synthetic-audio\",\"profile\":\"fixture-audio\",\"max_request_bytes\":33554432,\"capabilities\":[{\"capability\":\"audio_transcription\",\"semantic_task\":\"speech_to_text\",\"input_formats\":[\"pcm_f32le\"],\"output_formats\":[\"text\"],\"streaming\":false,\"availability\":" + availability + ",\"option_bounds\":[{\"option\":\"max_output_tokens\",\"minimum\":512,\"maximum\":512}]}]}";

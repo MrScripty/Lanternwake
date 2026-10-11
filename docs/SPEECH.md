@@ -97,6 +97,8 @@ no retry/fallback recognizer and a 32 MiB envelope limit.
 
 Source identities, checks and limits are recorded in
 [PUMAS-TRANSCRIPTION-VERIFICATION.md](PUMAS-TRANSCRIPTION-VERIFICATION.md).
+Broader story/settings acceptance and modal-ownership repairs are recorded in
+[APPLICATION-ACCEPTANCE-20261011.md](APPLICATION-ACCEPTANCE-20261011.md).
 
 `dotnet run --project integration/speech/SpeechSmoke.csproj` exercises the real
 consumer using controlled HTTP responses and a local TCP server: current closed

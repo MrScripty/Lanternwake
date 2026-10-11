@@ -267,7 +267,7 @@ public partial class GameView : Node
             var captured = suggestion;
             var choice = ChoiceButton(captured, () =>
             {
-                if (generation != _generation || !_chatPanel.Visible || _closing) return;
+                if (generation != _generation || !CanEditConversation()) return;
                 _entry.Text = captured; _entry.GrabFocus(); _entry.CaretColumn = _entry.Text.Length;
             });
             _suggestions.AddChild(choice); _readingText.Register(choice);
@@ -290,12 +290,19 @@ public partial class GameView : Node
             SetStatusText(reading.Status);
         }
     }
-    private void SendReply() { if (_chatPanel.Visible && !_busy && !_closing && !_speech.Recording && !_speech.HasRecording) _operations.Track(SendReplyAsync()); }
+    private bool CanEditConversation() => _chatPanel.Visible && !_busy && !_closing && _modal is null &&
+        _microphoneConsent is null && _entry.Editable;
+    private void SetConversationDraftEditable(bool editable)
+    {
+        _entry.Editable = editable;
+        foreach (var choice in _suggestions.GetChildren().OfType<Button>()) choice.Disabled = !editable;
+    }
+    private void SendReply() { if (CanEditConversation() && !_speech.Recording && !_speech.HasRecording) _operations.Track(SendReplyAsync()); }
     private async Task SendReplyAsync()
     {
-        if (!_chatPanel.Visible || _closing || _busy || _speech.Recording || _speech.HasRecording || string.IsNullOrWhiteSpace(_entry.Text) || _session.Beat.Conversation is not { } chat) return;
+        if (!CanEditConversation() || _speech.Recording || _speech.HasRecording || string.IsNullOrWhiteSpace(_entry.Text) || _session.Beat.Conversation is not { } chat) return;
         var input = _entry.Text.Trim(); var generation = _generation;
-        _busy = true; _entry.Editable = false; _send.Disabled = true; _advance.Disabled = true; SetStatusText("Waiting for a reply from " + _aiSettings.Provider + "…");
+        _busy = true; SetConversationDraftEditable(false); _send.Disabled = true; _advance.Disabled = true; SetStatusText("Waiting for a reply from " + _aiSettings.Provider + "…");
         _request?.Dispose(); _request = new CancellationTokenSource(TimeSpan.FromSeconds(45));
         try
         {
@@ -322,7 +329,7 @@ public partial class GameView : Node
                 GD.PushWarning("Conversation configuration: " + error.GetType().Name); Save(true);
             }
         }
-        finally { if (generation == _generation) { _busy = false; _entry.Editable = true; _send.Disabled = false; _advance.Disabled = false; } }
+        finally { if (generation == _generation) { _busy = false; SetConversationDraftEditable(true); _send.Disabled = false; _advance.Disabled = false; } }
     }
     private bool Save(bool auto)
     {

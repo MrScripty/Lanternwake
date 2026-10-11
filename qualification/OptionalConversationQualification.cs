@@ -44,7 +44,7 @@ public partial class OptionalConversationQualification : Node
     private async Task Frame() => await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
     private void Press(string name)
     {
-        var button = _game.InterfaceRoot.GetNode<Button>("%" + name);
+        var button = NativeGameControls.Button(_game, name);
         Check(!button.Disabled, name + " is enabled");
         button.EmitSignal(BaseButton.SignalName.Pressed);
     }
@@ -137,8 +137,8 @@ public partial class OptionalConversationQualification : Node
         Check(Session.History.SequenceEqual(before.History.Concat(pair)), "one explicit Send appends exactly one authored scoped pair");
         Check(Canonical() == canonical, "suggested, edited and freely typed replies have identical canonical effect");
         Check(Dialogue.Text == chat.Fallback && !Dialogue.BbcodeEnabled, "native UI displays exact fallback as plain text");
-        Check(_game.CurrentStatusText == "Authored reply · The selected model is not ready. Refresh models and choose an available model.", "presentation provenance reports unavailable model and authored reply");
-        Check(Observe<AiSettings>(_game, "_aiSettings").Model == "", "configured model guard rejects before any transport");
+        Check(_game.CurrentStatusText == "Authored reply · AI conversations are turned off. Enable them in AI setup to use a model.", "presentation provenance identifies authored reply with AI off");
+        Check(!Observe<AiSettings>(_game, "_aiSettings").DialogueEnabled && Observe<AiSettings>(_game, "_aiSettings").Model == "", "AI-off empty-model guard rejects before any transport");
         Check(Entry.Text == "" && Entry.Editable && !Observe<bool>(_game, "_busy"), "completed fallback clears submitted draft and releases input");
         Check(Snapshot(Storage.Read(true)) == Snapshot(Session.Snapshot()), "fallback outcome autosaves full exact provenance");
         Check(manualBefore.SequenceEqual(Files().Where(p => p.Key.StartsWith("save", StringComparison.Ordinal))), "chat autosave does not change explicit manual checkpoints");

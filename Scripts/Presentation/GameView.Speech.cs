@@ -28,7 +28,7 @@ public partial class GameView
     }
     private void ResetSpeechControls()
     {
-        _mic.Disabled = false; _mic.Text = "Use voice"; _send.Disabled = false; _entry.Editable = true;
+        _mic.Disabled = false; _mic.Text = "Use voice"; _send.Disabled = false; SetConversationDraftEditable(true);
     }
     private void PollMicrophone(double delta)
     {
@@ -45,7 +45,8 @@ public partial class GameView
     }
     private void ToggleMicrophone()
     {
-        if (!_busy && !_closing && !_mic.Disabled && _chatPanel.Visible && _microphoneConsent is null && !_speech.Pending)
+        if (!_busy && !_closing && !_mic.Disabled && _chatPanel.Visible && _modal is null &&
+            _microphoneConsent is null && !_speech.Pending)
             _operations.Track(ToggleMicrophoneAsync());
     }
     private async Task ToggleMicrophoneAsync()
@@ -106,7 +107,7 @@ public partial class GameView
             if (!CurrentSpeech(generation, token) || _busy) return;
             token.ThrowIfCancellationRequested();
             if (capability.Status == SpeechAvailability.Unsupported) { SetStatusText(capability.Message); return; }
-            _speech.Start(this); _recordSeconds = 0; _send.Disabled = true; _entry.Editable = false;
+            _speech.Start(this); _recordSeconds = 0; _send.Disabled = true; SetConversationDraftEditable(false);
             _mic.Text = "Stop and transcribe (0s)"; SetStatusText("Recording. Return to story discards it; Stop and transcribe sends it to local Pumas.");
         }
         catch (Exception error) { if (CurrentSpeech(generation, token)) { _speech.Discard(); ResetSpeechControls(); SetStatusText(error is OperationCanceledException ? "Voice input cancelled." : error.Message); } }

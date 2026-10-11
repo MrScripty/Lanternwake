@@ -19,7 +19,7 @@ public partial class GameView
 
     private void ReturnToStory()
     {
-        if (!_chatPanel.Visible || _closing) return;
+        if (!_chatPanel.Visible || _closing || _modal is not null || _microphoneConsent is not null) return;
         CloseConversation();
     }
 }

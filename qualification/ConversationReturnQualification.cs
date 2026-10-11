@@ -40,6 +40,28 @@ public partial class ConversationReturnQualification : Node
         await Observe<OwnedOperations>("_operations").DrainAsync(); await Frame();
         Check(!Observe<bool>("_busy"), "owned optional work has settled");
     }
+    private async Task CoveredControls()
+    {
+        Press("TalkButton");
+        const string draft = "Preserve this draft while reading settings 語";
+        Entry.Text = draft;
+        var state = Snapshot(); var files = Files();
+        Press("SettingsButton");
+        var settings = Modal;
+        Check(settings is not null && Chat.Visible, "reading modal covers an open conversation");
+        Suggestion.EmitSignal(BaseButton.SignalName.Pressed);
+        Check(Entry.Text == draft, "covered suggestion cannot replace the draft");
+        Press("SendButton"); Entry.EmitSignal(LineEdit.SignalName.TextSubmitted, draft);
+        await Drain(); Preserved(state, files);
+        Press("ReturnButton");
+        Check(Chat.Visible && Modal == settings && Entry.Text == draft,
+            "covered Return cannot close the paused conversation under its modal");
+        settings!.GetNode<Button>("%ModalCloseButton").EmitSignal(BaseButton.SignalName.Pressed);
+        Check(Chat.Visible && Entry.Text == draft && Entry.Editable, "closing the modal restores the original editable draft");
+        Suggestion.EmitSignal(BaseButton.SignalName.Pressed);
+        Check(Entry.Text == Session.Beat.Conversation!.Suggestions[0], "uncovered suggestion is usable again");
+        Press("ReturnButton"); Authored(); Preserved(state, files);
+    }
     private void Authored()
     {
         var story = Observe<Story>("_story"); var id = Session.Beat.Speaker;
@@ -176,6 +198,7 @@ public partial class ConversationReturnQualification : Node
                 if (Session.Beat.Conversation is not null)
                 {
                     GD.Print("Conversation-return probe: " + Session.Beat.Id);
+                    if (_conversations == 0) await CoveredControls();
                     if (closedOnly) { await ClosedControls(); break; }
                     await Conversation(preview);
                     if (preview) break;

@@ -14,6 +14,8 @@ internal static class NativeGameControls
         {
             if (name == "AdvanceButton" && menu.GetNode<Button>("%MenuContinue").Text == "Load game")
                 return menu.GetNode<Button>("%MenuNewGame");
+            if (name == "LoadButton" && menu.GetNode<Button>("%MenuContinue").Text == "Load game")
+                return menu.GetNode<Button>("%MenuContinue");
             if (name == "ContentNoteButton") return menu.GetNode<Button>("%MenuContentNote");
             if (name == "SettingsButton") return menu.GetNode<Button>("%MenuReading");
         }
