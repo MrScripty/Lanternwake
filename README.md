@@ -2,6 +2,22 @@
 
 An original stormbound-island mystery built in **Godot 4.6.3 .NET / C#**. A fixed authored five-chapter story unfolds through editable native 3D scenes and a visual-novel interface. Optional local character conversations run through **Pumas Library's real inference-enabled headless gateway**, restricted to llama.cpp provider capability, with a visibly authored fallback.
 
+## Screenshots
+
+Actual authored-story captures from main `76b8428`, running in Godot .NET 4.6.3 at 1280 × 800 with software OpenGL compatibility rendering. Volumetric fog and depth-of-field are absent in this renderer. AI conversations were off; these images show authored content and do not demonstrate model inference or transcription.
+
+![The running Lanternwake harbor scene with a lighthouse, rain, two characters and the full opening passage.](docs/images/harbor-story.png)
+
+The opening harbor scene and authored passage.
+
+![The optional conversation panel with three authored suggestions and the first suggestion copied into editable input.](docs/images/editable-conversation.png)
+
+Selecting a suggestion fills editable input before submission.
+
+![Nessa Ward's authored reply beneath the conversation panel, with the reply source explicitly identified and AI conversations marked as off.](docs/images/authored-reply.png)
+
+Nessa's authored response after submitting the suggestion, with its source shown.
+
 ## Development status
 
 This is an in-development game, not a shipped five-hour product. Five hours is the main-story target, excluding unlimited optional chat. See `docs/bible` for actual authored content, pacing estimates, visual language and remaining playtest requirements. Build success, smoke success, real Pumas inference and real microphone qualification are separate checks; consult the [playable coverage inventory](docs/PLAYABLE-COVERAGE-INVENTORY.md) for accepted non-audio evidence and remaining gates, and [verification record](docs/VERIFICATION.md) for earlier qualification details.
