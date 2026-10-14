@@ -89,6 +89,7 @@ public partial class GameView
     private void ShowAiSetup()
     {
         if (_busy || _closing) return;
+        CloseConversation();
         ShowWindow("AI setup", "Configure dialogue, transcription and character voices separately. The story works without AI.");
         if (_modal is null) return;
         var window = _modal;
@@ -200,11 +201,11 @@ public partial class GameView
                     speech.GetNode<OptionButton>("Provider").GetSelectedId() == (int)DialogueProvider.Pumas;
                 speech.GetNode<CheckButton>("Enabled").Disabled = value;
             }
-            ProviderAppearance(); UpdateModelChoices();
+            ProviderAppearance(); UpdateModelChoices(); _speechTest?.Refresh();
         }
         async Task RefreshAsync()
         {
-            if (!Active()) return;
+            if (!Active() || requesting || _speechTest?.InUse == true) return;
             AiSettings draft;
             try { draft = Draft(false); }
             catch (InvalidDataException error) { status.Text = error.Message; return; }
@@ -232,6 +233,7 @@ public partial class GameView
         }
         async Task TestAsync()
         {
+            if (!Active() || requesting || _speechTest?.InUse == true) return;
             AiSettings draft;
             try { draft = (Draft(true) with { DialogueEnabled = true }).Validate(); }
             catch (InvalidDataException error) { status.Text = error.Message; return; }
@@ -270,6 +272,7 @@ public partial class GameView
         save.Disabled = _previewMode;
         async Task SaveAsync()
         {
+            if (!Active() || requesting || _speechTest?.InUse == true) return;
             AiSettings draft;
             try { draft = Draft(true); }
             catch (InvalidDataException error) { status.Text = error.Message; return; }
@@ -303,9 +306,9 @@ public partial class GameView
                 if (Active())
                 {
                     credentialStatus.Text = _credentialNotice;
-                    status.Text = "AI settings saved. Dialogue changes apply to the next conversation. Speech preferences are saved for when support becomes available.";
+                    status.Text = "AI settings saved. Dialogue changes apply to the next conversation. Transcription uses your selected local experiment after explicit microphone consent.";
                 }
-                if (_mainMenu is not null) _mainMenu.GetNode<Label>("%MenuAiSummary").Text = AiSummary + "\nVoice input and character speech are currently unavailable.";
+                if (_mainMenu is not null) _mainMenu.GetNode<Label>("%MenuAiSummary").Text = AiSummary + "\nTranscription can use an explicitly selected local Cohere experiment. Character speech is unavailable.";
             }
             catch (OperationCanceledException) { }
             catch (Exception)
@@ -317,6 +320,7 @@ public partial class GameView
         }
         async Task ForgetAsync()
         {
+            if (!Active() || requesting || _speechTest?.InUse == true) return;
             _aiSetupRequest?.Cancel(); _aiSetupRequest?.Dispose(); _aiSetupRequest = new();
             var token = _aiSetupRequest.Token;
             SetRequesting(true); status.Text = "Removing the saved key… Unlock your desktop keyring if prompted.";
@@ -360,6 +364,23 @@ public partial class GameView
         foreach (var label in new[] { form, dialogue, transcription, voices }.SelectMany(row => row.GetChildren()).OfType<Label>()) _readingText.Register(label);
         foreach (var button in new[] { form, dialogue, transcription, voices }.SelectMany(row => row.GetChildren()).OfType<Button>()) _readingText.Register(button);
         ProviderAppearance(); UpdateModelChoices();
+        var speechTest = new SpeechTestArea(this, transcription, _speech, MicrophoneConsentScene,
+            () => ReadSpeechPreferences(transcription, _aiSettings.Transcription).Validate(), Active, () => requesting,
+            task => _operations.Track(task), locked =>
+            {
+                save.Disabled = locked || requesting || _previewMode;
+                refresh.Disabled = locked || requesting;
+                test.Disabled = locked || requesting || model.Selected < 0 || model.IsItemDisabled(model.Selected);
+                transcription.GetNode<OptionButton>("Provider").Disabled = locked || requesting;
+                transcription.GetNode<OptionButton>("Runtime").Disabled = locked || requesting;
+                transcription.GetNode<CheckButton>("Enabled").Disabled = locked || requesting;
+                foreach (var name in new[] { "Model", "Profile", "Endpoint" })
+                    transcription.GetNode<LineEdit>(name).Editable = !locked && !requesting &&
+                        transcription.GetNode<OptionButton>("Provider").GetSelectedId() == (int)DialogueProvider.Pumas;
+            });
+        _speechTest = speechTest;
+        _readingText.Register(transcription.GetNode<TextEdit>("TestResult"));
+        tabs.TabChanged += _ => speechTest.Cancel();
         status.Text = _aiSettingsLoadError.Length > 0 ? _aiSettingsLoadError : "Refresh models to check what the provider currently offers.";
         enabled.GrabFocus();
     }
@@ -382,36 +403,46 @@ public partial class GameView
     {
         var provider = form.GetNode<OptionButton>("Provider");
         var endpoint = form.GetNode<LineEdit>("Endpoint");
-        var model = form.GetNode<OptionButton>("Model");
+        var transcription = form.Name == "Transcription";
         provider.AddItem("Pumas (local)", (int)DialogueProvider.Pumas);
-        provider.AddItem("OpenRouter (hosted)", (int)DialogueProvider.OpenRouter);
-        provider.Select((int)preferences.Provider);
-        endpoint.Text = preferences.Endpoint;
+        provider.AddItem(transcription ? "OpenRouter (hosted; transcription unavailable)" : "OpenRouter (hosted)", (int)DialogueProvider.OpenRouter);
+        provider.Select((int)preferences.Provider); endpoint.Text = preferences.Endpoint;
         form.GetNode<CheckButton>("Enabled").SetPressedNoSignal(preferences.Enabled);
+        if (transcription)
+        {
+            form.GetNode<LineEdit>("Model").Text = preferences.Model;
+            form.GetNode<LineEdit>("Profile").Text = preferences.Profile;
+            var runtime = form.GetNode<OptionButton>("Runtime");
+            runtime.AddItem("Off · no microphone admission", (int)SpeechRuntimeMode.Disabled);
+            runtime.AddItem("Experimental local Cohere CPU (Pumas)", (int)SpeechRuntimeMode.ExperimentalLocalCohere);
+            runtime.Select((int)preferences.Runtime);
+        }
         var selected = preferences.Provider;
+        string Model() => transcription ? form.GetNode<LineEdit>("Model").Text : form.GetNode<OptionButton>("Model").GetItemMetadata(0).AsString();
         var drafts = new Dictionary<DialogueProvider, (string Endpoint, string Model)>
             { [selected] = (preferences.Endpoint, preferences.Model) };
         void ShowProvider(string modelId)
         {
-            model.Clear();
-            model.AddItem(modelId.Length > 0 ? modelId + " (saved; currently unavailable)" : "No compatible models available yet");
-            model.SetItemMetadata(0, modelId);
+            if (transcription) form.GetNode<LineEdit>("Model").Text = modelId;
+            else
+            {
+                var model = form.GetNode<OptionButton>("Model"); model.Clear();
+                model.AddItem(modelId.Length > 0 ? modelId + " (saved; currently unavailable)" : "No compatible models available yet");
+                model.SetItemMetadata(0, modelId);
+            }
             var hosted = selected == DialogueProvider.OpenRouter;
-            endpoint.Editable = !hosted;
-            form.GetNode<Button>("ManageKey").Visible = hosted;
-            var capability = form.Name == "Transcription" ? "Transcription" : "Character speech";
-            form.GetNode<Label>("Availability").Text = capability + " through " + selected +
-                " is not available in this build yet. Provider, URL and enable preferences can be saved for future support." +
-                (form.Name == "Transcription" ? " Microphone recording remains off." : " Voice choices will appear when supported.");
+            endpoint.Editable = !hosted; form.GetNode<Button>("ManageKey").Visible = hosted;
+            form.GetNode<Label>("Availability").Text = transcription
+                ? hosted ? "Hosted transcription is unavailable. Microphone audio is sent only to explicitly selected local Pumas."
+                    : "Experimental local Cohere is CPU-only: Linux x86_64, Landlock ABI 6+. Import and load your real local model in Pumas first, then enter its indexed model ID and profile. The game borrows that runtime and leaves it running. Accuracy and physical microphones require local testing."
+                : "Character speech is not available in this build yet. Voice choices will appear when supported.";
         }
         ShowProvider(preferences.Model);
         provider.ItemSelected += _ =>
         {
-            drafts[selected] = (endpoint.Text, model.GetItemMetadata(0).AsString());
-            selected = (DialogueProvider)provider.GetSelectedId();
+            drafts[selected] = (endpoint.Text, Model()); selected = (DialogueProvider)provider.GetSelectedId();
             var draft = drafts.GetValueOrDefault(selected, (AiSettings.DefaultEndpoint(selected), ""));
-            endpoint.Text = draft.Item1;
-            ShowProvider(draft.Item2);
+            endpoint.Text = draft.Item1; ShowProvider(draft.Item2);
         };
         var assignments = form.GetNodeOrNull<VBoxContainer>("Assignments");
         if (assignments is not null)
@@ -425,7 +456,9 @@ public partial class GameView
         previous with { Enabled = form.GetNode<CheckButton>("Enabled").ButtonPressed,
             Provider = (DialogueProvider)form.GetNode<OptionButton>("Provider").GetSelectedId(),
             Endpoint = form.GetNode<LineEdit>("Endpoint").Text.Trim(),
-            Model = form.GetNode<OptionButton>("Model").GetItemMetadata(0).AsString() };
+            Model = form.Name == "Transcription" ? form.GetNode<LineEdit>("Model").Text.Trim() : form.GetNode<OptionButton>("Model").GetItemMetadata(0).AsString(),
+            Runtime = form.Name == "Transcription" ? (SpeechRuntimeMode)form.GetNode<OptionButton>("Runtime").GetSelectedId() : previous.Runtime,
+            Profile = form.Name == "Transcription" ? form.GetNode<LineEdit>("Profile").Text.Trim() : previous.Profile };
 
     private static string AiError(string code) => code switch
     {

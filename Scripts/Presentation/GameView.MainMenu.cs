@@ -40,7 +40,7 @@ public partial class GameView
                 .Any(candidate => candidate.Availability == SaveAvailability.Available));
         _mainMenu.GetNode<Label>("%MenuAiSummary").Text =
             AiSummary +
-            "\nVoice input and character speech are currently unavailable.";
+            "\nTranscription can use an explicitly selected local Cohere experiment. Character speech is unavailable.";
         FocusMainMenu();
     }
 

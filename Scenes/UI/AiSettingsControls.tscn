@@ -104,7 +104,7 @@ theme_override_constants/separation = 10
 
 [node name="Enabled" type="CheckButton" parent="Capabilities/Transcription"]
 layout_mode = 2
-text = "Enable microphone transcription when available"
+text = "Enable microphone transcription"
 
 [node name="ProviderLabel" type="Label" parent="Capabilities/Transcription"]
 layout_mode = 2
@@ -130,15 +130,63 @@ max_length = 2048
 layout_mode = 2
 text = "Transcription model"
 
-[node name="Model" type="OptionButton" parent="Capabilities/Transcription"]
+[node name="Model" type="LineEdit" parent="Capabilities/Transcription"]
 layout_mode = 2
-disabled = true
+placeholder_text = "Indexed model ID from Pumas import_local_cohere"
+max_length = 256
+
+[node name="RuntimeLabel" type="Label" parent="Capabilities/Transcription"]
+layout_mode = 2
+text = "Local runtime admission"
+
+[node name="Runtime" type="OptionButton" parent="Capabilities/Transcription"]
+layout_mode = 2
 fit_to_longest_item = false
+
+[node name="ProfileLabel" type="Label" parent="Capabilities/Transcription"]
+layout_mode = 2
+text = "Loaded Pumas runtime profile"
+
+[node name="Profile" type="LineEdit" parent="Capabilities/Transcription"]
+layout_mode = 2
+placeholder_text = "cohere-local"
+max_length = 128
 
 [node name="Availability" type="Label" parent="Capabilities/Transcription"]
 layout_mode = 2
 autowrap_mode = 3
-text = "Transcription is not available in this build yet. You can save its Pumas URL and enable preference separately from dialogue. Microphone recording remains off."
+text = "Experimental local Cohere is CPU-only and requires Linux x86_64 with Landlock ABI 6+. Import and load your local model in Pumas first. Choose its returned indexed ID and explicit profile here. No model is downloaded or started by the game."
+
+[node name="TestLabel" type="Label" parent="Capabilities/Transcription"]
+layout_mode = 2
+text = "Test transcription here"
+
+[node name="TestRecord" type="Button" parent="Capabilities/Transcription"]
+layout_mode = 2
+text = "Record test clip…"
+
+[node name="TestStop" type="Button" parent="Capabilities/Transcription"]
+layout_mode = 2
+text = "Stop recording"
+
+[node name="TestTranscribe" type="Button" parent="Capabilities/Transcription"]
+layout_mode = 2
+text = "Transcribe recording"
+
+[node name="TestCancel" type="Button" parent="Capabilities/Transcription"]
+layout_mode = 2
+text = "Cancel / discard recording"
+
+[node name="TestStatus" type="Label" parent="Capabilities/Transcription"]
+layout_mode = 2
+autowrap_mode = 3
+text = "Test the current selection without saving or entering the game. Recording always asks for consent. Results remain separate from game progress."
+
+[node name="TestResult" type="TextEdit" parent="Capabilities/Transcription"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+placeholder_text = "Your editable test transcript appears here"
+wrap_mode = 1
 
 [node name="Voices" type="VBoxContainer" parent="Capabilities"]
 layout_mode = 2

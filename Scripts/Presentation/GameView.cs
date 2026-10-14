@@ -267,7 +267,7 @@ public partial class GameView : Node
             var captured = suggestion;
             var choice = ChoiceButton(captured, () =>
             {
-                if (generation != _generation || !_chatPanel.Visible || _closing) return;
+                if (generation != _generation || !CanEditConversation()) return;
                 _entry.Text = captured; _entry.GrabFocus(); _entry.CaretColumn = _entry.Text.Length;
             });
             _suggestions.AddChild(choice); _readingText.Register(choice);
@@ -290,12 +290,19 @@ public partial class GameView : Node
             SetStatusText(reading.Status);
         }
     }
-    private void SendReply() { if (_chatPanel.Visible && !_busy && !_closing && !_speech.Recording && !_speech.HasRecording) _operations.Track(SendReplyAsync()); }
+    private bool CanEditConversation() => _chatPanel.Visible && !_busy && !_closing && _modal is null &&
+        _microphoneConsent is null && _entry.Editable;
+    private void SetConversationDraftEditable(bool editable)
+    {
+        _entry.Editable = editable;
+        foreach (var choice in _suggestions.GetChildren().OfType<Button>()) choice.Disabled = !editable;
+    }
+    private void SendReply() { if (CanEditConversation() && !_speech.Recording && !_speech.HasRecording) _operations.Track(SendReplyAsync()); }
     private async Task SendReplyAsync()
     {
-        if (!_chatPanel.Visible || _closing || _busy || _speech.Recording || _speech.HasRecording || string.IsNullOrWhiteSpace(_entry.Text) || _session.Beat.Conversation is not { } chat) return;
+        if (!CanEditConversation() || _speech.Recording || _speech.HasRecording || string.IsNullOrWhiteSpace(_entry.Text) || _session.Beat.Conversation is not { } chat) return;
         var input = _entry.Text.Trim(); var generation = _generation;
-        _busy = true; _entry.Editable = false; _send.Disabled = true; _advance.Disabled = true; SetStatusText("Waiting for a reply from " + _aiSettings.Provider + "…");
+        _busy = true; SetConversationDraftEditable(false); _send.Disabled = true; _advance.Disabled = true; SetStatusText("Waiting for a reply from " + _aiSettings.Provider + "…");
         _request?.Dispose(); _request = new CancellationTokenSource(TimeSpan.FromSeconds(45));
         try
         {
@@ -322,7 +329,7 @@ public partial class GameView : Node
                 GD.PushWarning("Conversation configuration: " + error.GetType().Name); Save(true);
             }
         }
-        finally { if (generation == _generation) { _busy = false; _entry.Editable = true; _send.Disabled = false; _advance.Disabled = false; } }
+        finally { if (generation == _generation) { _busy = false; SetConversationDraftEditable(true); _send.Disabled = false; _advance.Disabled = false; } }
     }
     private bool Save(bool auto)
     {
@@ -379,6 +386,8 @@ public partial class GameView : Node
     private void ShowWindow(string title, string text, (string Text, Action Action)[]? actions = null, Action? dismiss = null)
     {
         if (_busy) return;
+        // Navigation ends voice capture/probes before presenting another surface.
+        CancelSpeechRequest(); CloseMicrophoneConsent(); _speech.Discard(); ResetSpeechControls();
         CloseModal();
         _modal = ModalScene.Instantiate<Window>();
         _modal.Title = title;
@@ -413,7 +422,7 @@ public partial class GameView : Node
     }
     private void CloseModal()
     {
-        CancelAiSetup(); _setupRequest?.Cancel(); _exchangeReading = null;
+        CloseSpeechTest(); CancelAiSetup(); _setupRequest?.Cancel(); _exchangeReading = null;
         if (_modal is not { } modal) return;
         _modal = null;
         modal.Hide(); modal.Exclusive = false; modal.QueueFree();
@@ -468,10 +477,10 @@ public partial class GameView : Node
             aiTranscription.GetNode<CheckButton>("Enabled").SetPressedNoSignal(true);
             aiVoices.GetNode<LineEdit>("Endpoint").Text = "http://127.0.0.1:8082/";
             aiVoices.GetNode<CheckButton>("Enabled").ButtonPressed = true;
-            Check(aiTranscription.GetNode<OptionButton>("Model").Disabled && aiVoices.GetNode<OptionButton>("Model").Disabled &&
+            Check(aiTranscription.GetNode<LineEdit>("Model").Editable && aiVoices.GetNode<OptionButton>("Model").Disabled &&
                 aiVoices.GetNode<VBoxContainer>("Assignments").Visible &&
                 aiVoices.GetNode<VBoxContainer>("Assignments").GetChildCount() == _story.Characters.Length * 2,
-                "speech models stay unavailable and enabling voice preferences exposes character assignments");
+                "transcription selection is editable and enabling voice preferences exposes character assignments");
             var transcriptionProvider = aiTranscription.GetNode<OptionButton>("Provider");
             transcriptionProvider.Select((int)DialogueProvider.OpenRouter);
             transcriptionProvider.EmitSignal(OptionButton.SignalName.ItemSelected, (long)DialogueProvider.OpenRouter);
@@ -642,10 +651,10 @@ public partial class GameView : Node
     {
         if (Engine.IsEditorHint()) return;
         if (what != NotificationWMCloseRequest || _closing) return;
-        _closing = true; _generation++; _request?.Cancel(); CancelSpeechRequest(); _setupRequest?.Cancel(); CancelAiSetup(); CloseMicrophoneConsent(); _speech.Discard();
+        _closing = true; _generation++; _request?.Cancel(); CancelSpeechRequest(); _setupRequest?.Cancel(); CancelAiSetup(); CloseSpeechTest(); CloseMicrophoneConsent(); _speech.Discard();
         try { await _operations.DrainAsync(); }
         catch (Exception error) { GD.PushWarning("Shutdown operation: " + error.Message); }
         finally { _setupPumas?.Dispose(); _setupPumas = null; QuitAfterAudio(); }
     }
-    public override void _ExitTree() { if (Engine.IsEditorHint()) return; _closing = true; _generation++; _request?.Cancel(); _request?.Dispose(); CancelSpeechRequest(); _setupRequest?.Cancel(); CancelAiSetup(); _pumasOwner.Dispose(); if (_setupRequest is null) { _setupPumas?.Dispose(); _setupPumas = null; } _credentialLifetime.Cancel(); _aiSetupRequest?.Dispose(); CloseMicrophoneConsent(); _speech.Dispose(); _storage?.Dispose(); }
+    public override void _ExitTree() { if (Engine.IsEditorHint()) return; _closing = true; _generation++; _request?.Cancel(); _request?.Dispose(); CancelSpeechRequest(); _setupRequest?.Cancel(); CancelAiSetup(); CloseSpeechTest(); _pumasOwner.Dispose(); if (_setupRequest is null) { _setupPumas?.Dispose(); _setupPumas = null; } _credentialLifetime.Cancel(); _aiSetupRequest?.Dispose(); CloseMicrophoneConsent(); _speech.Dispose(); _storage?.Dispose(); }
 }
