@@ -28,7 +28,7 @@ public partial class LongSessionQualification : Node
         if (!condition) throw new InvalidOperationException("Long-session qualification: " + claim);
         _checks++;
     }
-    private Button Button(string name) => _game.InterfaceRoot.GetNode<Button>("%" + name);
+    private Button Button(string name) => NativeGameControls.Button(_game, name);
     private void Press(string name)
     {
         var button = Button(name);
@@ -85,14 +85,18 @@ public partial class LongSessionQualification : Node
         Check(_game.CurrentPlaceText == Session.Scene.Title + "  ·  " + Session.Scene.TimeOfDay.Replace('_', ' '), "scene label matches source");
         Check(Observe<string>(_game.Stage, "_location") == Session.Scene.Location, "actual stage location matches source");
         var visible = Session.Scene.CharacterIds.Where(id => id is not ("ivo" or "operator" or "clerk")).ToArray();
-        var actors = Observe<List<Node3D>>(_game.Stage, "_actors");
-        Check(actors.Select(a => Path.GetFileNameWithoutExtension(a.SceneFilePath).ToLowerInvariant()).SequenceEqual(visible), "actual cast is living authored participants in order");
+        var actors = Observe<List<(StageCharacter Actor, bool Placed)>>(_game.Stage, "_actors");
+        Check(actors.Select(entry => entry.Actor.CharacterId).Order().SequenceEqual(visible.Order()),
+            "actual staged cast contains each living authored participant exactly once");
         var stage = Observe<StageScene>(_game.Stage, "_stage");
         if (stage.BellBody is { } bell)
         {
             var origin = Observe<Vector3>(stage, "_bellOrigin");
-            var expected = origin + (Session.ActiveStageCues.Contains("bell_lowered") ? stage.BellLoweredOffset : Vector3.Zero);
-            Check(bell.Position.IsEqualApprox(expected), "actual bell position follows restored cue");
+            var fraction = Session.ActiveStageCues.Contains("bell_lowered") ? 1f
+                : Session.Beat.Id == "ch5_s3_b005" ? .9f
+                : Session.Beat.Id == "ch5_s3_b004" ? .5f : 0f;
+            var expected = origin + stage.BellLoweredOffset * fraction;
+            Check(bell.Position.IsEqualApprox(expected), "actual bell position follows authored descent phase and restored cue");
         }
         _scenes.Add(Session.Scene.Id);
         _sceneChecks++;
@@ -122,13 +126,25 @@ public partial class LongSessionQualification : Node
         var before = Files();
         Press("AdvanceButton");
         Check(Session.Beat.Id == unsolved.BeatId && !Session.CanAdvance, "evidence blocks progression");
-        Action(activity.Options[(activity.CorrectIndex + 1) % activity.Options.Length]);
+        var wrong = (activity.CorrectIndex + 1) % activity.Options.Length;
+        Action(activity.Options[wrong]);
         await Frame();
         Check(Snapshot(Session.Snapshot()) == Snapshot(unsolved), "wrong answer has no progress, transcript or evidence penalty");
-        Check(_game.CurrentStatusText.Contains("try again"), "wrong answer gives retry feedback");
+        if (activity.OptionFeedback is { } feedback)
+        {
+            Check(Modal.Title == "Check the source" && Modal.GetNode<RichTextLabel>("%ModalText").Text == feedback[wrong],
+                "wrong answer shows its exact authored source explanation");
+            Action("Back to question");
+            Check(Modal.Title == "Compare the evidence" && Snapshot(Session.Snapshot()) == Snapshot(unsolved),
+                "source review returns to the same unanswered question");
+        }
+        else
+        {
+            Check(_game.CurrentStatusText.Contains("try again"), "wrong answer gives ordinary retry feedback");
+            Press("AdvanceButton");
+        }
         FilesUnchanged(before);
         _wrongAnswers++;
-        Press("AdvanceButton");
         Action(activity.Options[activity.CorrectIndex]);
         await Frame();
         Check(Session.CanAdvance && Session.SolvedActivities.Contains(unsolved.BeatId), "correct answer unlocks current activity");
@@ -199,6 +215,9 @@ public partial class LongSessionQualification : Node
             Action("Larger reading text");
             Check(Observe<ReadingTextStyle>(_game, "_readingText").Percent == 125, "session preference is exercised without save migration");
             Action("Toggle instant text");
+            Press("SettingsButton");
+            Action("Toggle reduced motion");
+            Check(!_game.Stage.MotionEnabled, "accelerated story traversal settles authored object movement");
             if (chapter == _story.Chapters.Length) { CheckBeat(); Finish(); }
             else
             {
