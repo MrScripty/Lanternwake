@@ -15,18 +15,25 @@ internal static class AudioModalityTests
     private static readonly SpeechServiceSettings Settings = new(true, Model: "fixture/audio+=") { Profile = "controlled-audio-private", Language = "en" };
     private static readonly StereoSample[] Samples = [new(.25f, -.5f), new(0, .75f)];
     private static void Check(bool condition, string message) { _checks++; if (!condition) throw new Exception(message); }
+    /// <summary>GET /v1/served-models with exactly one served (model, profile) entry.</summary>
     private static JsonObject Capabilities(SpeechServiceSettings? settings = null)
     {
         settings ??= Settings;
         return JsonNode.Parse(JsonSerializer.Serialize(new
         {
-            supported_contract_versions = new[] { 1 }, model = settings.Model, profile = settings.Profile,
+            supported_contract_versions = new[] { 1 },
             max_request_bytes = 32 * 1024 * 1024, max_response_bytes = 32 * 1024 * 1024, max_stream_event_bytes = 262144,
-            capabilities = new[] { new { capability = "audio_transcription", semantic_task = "speech_to_text",
-                input_formats = new[] { "pcm_f32le", "pcm_s16le" }, output_formats = new[] { "text" }, streaming = false,
-                availability = new { state = "available" }, option_bounds = new[] { new { option = "max_output_tokens", minimum = 512, maximum = 512 } } } }
+            models = new[] { new { model = settings.Model, profile = settings.Profile, model_id = "library/" + settings.Profile,
+                provider = "fixture", load_state = "loaded", profile_required = false,
+                capabilities = new[] { new { capability = "audio_transcription", semantic_task = "speech_to_text",
+                    input_formats = new[] { "pcm_f32le", "pcm_s16le" }, output_formats = new[] { "text" }, streaming = false,
+                    availability = new { state = "available" }, option_bounds = new[] { new { option = "max_output_tokens", minimum = 512, maximum = 512 } } } } } }
         }))!.AsObject();
     }
+    private static JsonObject Entry(JsonObject root) => root["models"]![0]!.AsObject();
+    private static JsonObject Descriptor(JsonObject root) => Entry(root)["capabilities"]![0]!.AsObject();
+    private static string ErrorBody(string? id, string code, string outcome, string message = "") =>
+        JsonSerializer.Serialize(new { contract_version = 1, request_id = id, error = new { code, outcome, message } });
     private static HttpResponseMessage Response(string body, HttpStatusCode status = HttpStatusCode.OK, string type = "application/json") =>
         new(status) { Content = new StringContent(body, Encoding.UTF8, type) };
     private static string Terminal(string id, string text = "Synthetic transcript", string finish = "stop") =>
@@ -46,9 +53,12 @@ internal static class AudioModalityTests
         await DiscoveryRefusals();
         await InvalidInputAndConfig();
         await TerminalRefusals();
+        await NonAdmissionDoesNotLatch();
+        await AdditiveGrowthIgnored();
+        await ServedModelSelection();
         await CancelAndDisposal();
         await RealLoopbackTransport();
-        Console.WriteLine($"PASS Current Pumas selected-model audio/text controlled contract: {_checks} assertions; selected discovery, strict wire/results, PCM bounds, cancellation/timeout/disposal and unknown-outcome quarantine. No model inference qualification.");
+        Console.WriteLine($"PASS Current Pumas selected-model audio/text controlled contract: {_checks} assertions; served-model discovery, additive-tolerant decoding, outcome-authoritative errors, PCM bounds, cancellation/timeout/disposal and unknown-outcome quarantine. No model inference qualification.");
     }
 
     private static async Task WireAndSnapshot()
@@ -59,8 +69,7 @@ internal static class AudioModalityTests
         {
             if (request.Method == HttpMethod.Get)
             {
-                Check(request.RequestUri!.AbsolutePath == "/v1/capabilities" && request.RequestUri.Query.Contains("model=fixture%2Faudio%2B%3D") &&
-                    request.RequestUri.Query.Contains("profile=controlled-audio-private"), "Selected query must be escaped and scoped.");
+                Check(request.RequestUri!.AbsolutePath == "/v1/served-models" && request.RequestUri.Query.Length == 0, "Discovery reads the served-model list; selection never travels in a query.");
                 original.Clear(); // Original caller collection may change while discovery awaits.
                 return Response(Capabilities().ToJsonString());
             }
@@ -98,17 +107,21 @@ internal static class AudioModalityTests
     {
         Action<JsonObject>[] mutate = [
             root => root["supported_contract_versions"] = new JsonArray(2),
-            root => root["model"] = "another-model",
-            root => root["profile"] = "wrong-profile",
+            root => Entry(root)["model"] = "another-model",
+            root => Entry(root)["profile"] = "wrong-profile",
+            root => root["models"] = new JsonArray(),
+            root => root["models"]!.AsArray().Add(Entry(root).DeepClone()),
             root => root["max_request_bytes"] = "bad",
-            root => root["capabilities"]![0]!["availability"] = new JsonObject { ["state"] = "unavailable", ["reason"] = "unqualified_audio_runtime" },
-            root => root["capabilities"]![0]!["capability"] = "audio_classification",
-            root => root["capabilities"]![0]!["semantic_task"] = "audio_classification",
-            root => root["capabilities"]![0]!["input_formats"] = new JsonArray("text"),
-            root => root["capabilities"]![0]!["output_formats"] = new JsonArray("labels"),
-            root => root["capabilities"]!.AsArray().Add(root["capabilities"]![0]!.DeepClone()),
-            root => root["capabilities"]![0]!["option_bounds"]![0]!["maximum"] = 256,
-            root => root["capabilities"]![0]!["streaming"] = true,
+            root => Descriptor(root)["availability"] = new JsonObject { ["state"] = "unavailable", ["reason"] = "unqualified_audio_runtime" },
+            root => Descriptor(root)["availability"] = new JsonObject { ["state"] = "unavailable", ["reason"] = "a_future_reason" },
+            root => Descriptor(root)["availability"] = new JsonObject { ["state"] = "a_future_state" },
+            root => Descriptor(root)["capability"] = "audio_classification",
+            root => Descriptor(root)["semantic_task"] = "audio_classification",
+            root => Descriptor(root)["input_formats"] = new JsonArray("text"),
+            root => Descriptor(root)["output_formats"] = new JsonArray("labels"),
+            root => Entry(root)["capabilities"]!.AsArray().Add(Descriptor(root).DeepClone()),
+            root => Descriptor(root)["option_bounds"]![0]!["maximum"] = 256,
+            root => Descriptor(root)["streaming"] = true,
             root => root["max_request_bytes"] = 1
         ];
         foreach (var change in mutate)
@@ -123,10 +136,10 @@ internal static class AudioModalityTests
         foreach (var code in new[] { "model_not_found", "ambiguous_model", "capability_unavailable", "unsupported_contract" })
         {
             var handler = new FakeHandler((request, _) => Task.FromResult(Response(JsonSerializer.Serialize(new
-                { contract_version = 1, request_id = (string?)null, error = new { code, outcome = "not_admitted" } }), HttpStatusCode.ServiceUnavailable)));
+                { contract_version = 1, request_id = (string?)null, error = new { code, outcome = "not_admitted", message = "fixture reason for " + code } }), HttpStatusCode.ServiceUnavailable)));
             using var client = new PumasAudioTextClient(Settings, handler, TimeSpan.FromSeconds(5));
             var discovery = await client.DiscoverAsync();
-            Check(!discovery.Advertised && discovery.Code == code && handler.Requests == 1, "Typed discovery error preserved without dispatch.");
+            Check(!discovery.Advertised && discovery.Code == code && discovery.Detail == "fixture reason for " + code && handler.Requests == 1, "Typed discovery error and Pumas message preserved without dispatch.");
         }
         var denied = new FakeHandler((_, _) => throw new Exception("Must not send"));
         using var unavailable = new PumasAudioTextClient(Settings with { Model = "" }, denied, TimeSpan.FromSeconds(5));
@@ -143,13 +156,13 @@ internal static class AudioModalityTests
         using var client = new PumasAudioTextClient(escaped, new FakeHandler((_, _) => throw new Exception("Encoding must not use transport")), TimeSpan.FromSeconds(5));
         var encode = typeof(PumasAudioTextClient).GetMethod("Encode", BindingFlags.Instance | BindingFlags.NonPublic)!;
         // Warm reflection/JIT before measuring only the synchronous production encoder.
-        var warm = (byte[])encode.Invoke(client, [new byte[8], 48000, 1, "owned-encoding", Settings.Profile])!;
+        var warm = (byte[])encode.Invoke(client, [new byte[8], 48000, 1, "owned-encoding", Settings.Model, Settings.Profile])!;
         System.Security.Cryptography.CryptographicOperations.ZeroMemory(warm);
         foreach (var length in new[] { 1, 2, 3, 8, 1024 * 1024, 24 * 1024 * 1024 - 16384 })
         {
             var pcm = new byte[length]; Array.Fill(pcm, (byte)0x4b);
             var before = GC.GetAllocatedBytesForCurrentThread();
-            var body = (byte[])encode.Invoke(client, [pcm, 192000, pcm.Length / 8, "owned-encoding", escaped.Profile])!;
+            var body = (byte[])encode.Invoke(client, [pcm, 192000, pcm.Length / 8, "owned-encoding", escaped.Model, escaped.Profile])!;
             var allocated = GC.GetAllocatedBytesForCurrentThread() - before;
             try
             {
@@ -228,7 +241,8 @@ internal static class AudioModalityTests
         Func<string, HttpResponseMessage>[] failures = [
             id => Response(Terminal("wrong-id")),
             id => Response(Terminal(id).Replace("\"contract_version\":1", "\"contract_version\":2")),
-            id => Response(Terminal(id, finish: "invented")),
+            id => Response(Terminal(id, finish: "")),
+            id => Response(Terminal(id).Replace(",\"finish_reason\":\"stop\"", "")),
             id => Response(Terminal(id).Replace("\"kind\":\"text\"", "\"kind\":\"embeddings\"")),
             id => Response(Terminal(id, "\0")),
             id => Response(Terminal(id, new string('x', 16001))),
@@ -236,8 +250,13 @@ internal static class AudioModalityTests
             id => Response("[]"), id => Response("not json"),
             id => Response(Terminal(id), type: "text/html"),
             id => Response(new string('x', 131073)),
-            id => Response(JsonSerializer.Serialize(new { contract_version = 1, request_id = id, error = new { code = "provider_failure", outcome = "unknown" } }), HttpStatusCode.BadGateway),
-            id => Response(JsonSerializer.Serialize(new { contract_version = 1, request_id = id, error = new { code = "transport_lost", outcome = "invented" } }), HttpStatusCode.BadGateway)
+            id => Response(ErrorBody(id, "provider_failure", "unknown", "provider dropped the request"), HttpStatusCode.BadGateway),
+            id => Response(ErrorBody(null, "transport_lost", "unknown"), HttpStatusCode.BadGateway),
+            id => Response(ErrorBody(id, "transport_lost", "invented"), HttpStatusCode.BadGateway),
+            id => Response(JsonSerializer.Serialize(new { contract_version = 1, request_id = id, error = new { code = "provider_failure" } }), HttpStatusCode.BadGateway),
+            id => Response(ErrorBody("another-request", "invalid_request", "not_admitted"), HttpStatusCode.BadRequest),
+            id => Response(JsonSerializer.Serialize(new { contract_version = 1, request_id = id }), HttpStatusCode.BadGateway),
+            id => Response("<html>bad gateway</html>", HttpStatusCode.BadGateway, "text/html")
         ];
         foreach (var response in failures)
         {
@@ -262,6 +281,124 @@ internal static class AudioModalityTests
         });
         using var retry = new PumasAudioTextClient(Settings, refusalHandler, TimeSpan.FromSeconds(5));
         Check((await retry.GenerateAsync(Samples, 48000)).Outcome == AudioOperationOutcome.NotAdmitted && (await retry.GenerateAsync(Samples, 48000)).Outcome == AudioOperationOutcome.NotAdmitted && calls == 2, "Only explicit correlated non-admission allows a later explicit request.");
+    }
+
+    private static async Task NonAdmissionDoesNotLatch()
+    {
+        // Pumas returns request_id null when it could not read the body; outcome is still
+        // authoritative. New error codes pass through. Neither may quarantine the client.
+        foreach (var (echo, code) in new[] { (false, "invalid_request"), (true, "request_limit"), (true, "a_future_refusal") })
+        {
+            var posts = 0;
+            var handler = new FakeHandler(async (request, _) =>
+            {
+                if (request.Method == HttpMethod.Get) return Response(Capabilities().ToJsonString());
+                posts++;
+                return Response(ErrorBody(echo ? await RequestId(request) : null, code, "not_admitted", $"rejected: {code}\u0007 by fixture"), HttpStatusCode.BadRequest);
+            });
+            using var client = new PumasAudioTextClient(Settings, handler, TimeSpan.FromSeconds(5));
+            var reply = await client.GenerateAsync(Samples, 48000);
+            Check(!reply.Success && reply.Code == code && reply.Outcome == AudioOperationOutcome.NotAdmitted, "Not-admitted error decodes by outcome, including a null request_id or new code.");
+            Check(reply.Detail == $"rejected: {code}  by fixture", "Pumas error.message surfaces with control characters removed.");
+            var again = await client.GenerateAsync(Samples, 48000);
+            Check(again.Code == code && again.Outcome == AudioOperationOutcome.NotAdmitted && posts == 2, "Plain non-admission never latches producer uncertainty.");
+        }
+        var host = SpeechRuntimeAdmission.EvaluateHost(true, System.Runtime.InteropServices.Architecture.X64, 6);
+        var transcriber = new PumasSpeechTranscriber(host, SpeechCaptureKind.Microphone, settings => new(settings, new FakeHandler((request, _) =>
+            Task.FromResult(request.Method == HttpMethod.Get ? Response(Capabilities().ToJsonString())
+                : Response(ErrorBody(null, "invalid_request", "not_admitted", "request body is not valid JSON"), HttpStatusCode.BadRequest))), TimeSpan.FromSeconds(5)));
+        transcriber.Configure(Settings with { Runtime = SpeechRuntimeMode.ExperimentalLocalCohere });
+        Check((await transcriber.PrepareAsync(default)).Status == SpeechAvailability.Ready, "Explicit selection prepares against served-model discovery.");
+        try { await transcriber.TranscribeAsync(Samples, 48000, default); throw new Exception("Rejected request produced a transcript"); }
+        catch (SpeechTranscriptionException error)
+        {
+            Check(error.Outcome == AudioOperationOutcome.NotAdmitted && error.Message.Contains("Pumas: request body is not valid JSON") &&
+                error.Detail == "request body is not valid JSON", "Transcriber surfaces Pumas's message to the UI.");
+        }
+        Check(transcriber.Capability.Status == SpeechAvailability.Ready && (await transcriber.PrepareAsync(default)).Status == SpeechAvailability.Ready,
+            "Voice input stays available after a not_admitted rejection.");
+        transcriber.Dispose();
+    }
+
+    private static async Task AdditiveGrowthIgnored()
+    {
+        // Contract v1 grows additively: new fields, capabilities, formats, option names,
+        // availability reasons, list entries and finish reasons must not break selection.
+        var root = Capabilities();
+        root["build"] = new JsonObject { ["future"] = true };
+        root["supported_contract_versions"] = new JsonArray(1, 2);
+        var entry = Entry(root);
+        entry["context_tokens"] = 8192; entry["future_field"] = new JsonArray("x");
+        var descriptor = Descriptor(root); // audio_transcription, about to sit between new descriptors
+        var descriptors = entry["capabilities"]!.AsArray();
+        descriptors.Insert(0, JsonNode.Parse("""{"capability":"multimodal_embedding","semantic_task":"multimodal_embedding","input_formats":["png_base64","content_batch"],"output_formats":["embeddings_float32"],"streaming":false,"availability":{"state":"unavailable","reason":"a_future_reason"},"option_bounds":[{"option":"dimensions","minimum":1,"maximum":768}]}"""));
+        descriptors.Add(JsonNode.Parse("""{"capability":"decision","semantic_task":"decision","input_formats":["decision"],"output_formats":["decisions"],"streaming":false,"availability":{"state":"available"},"option_bounds":[],"future":{}}"""));
+        descriptors.Add(JsonNode.Parse("""{"capability":"a_future_capability","semantic_task":"a_future_task","input_formats":["a_future_format"],"output_formats":["a_future_output"],"streaming":true,"availability":{"state":"a_future_state"},"option_bounds":[{"option":"a_future_option","minimum":0,"maximum":1}]}"""));
+        Check(ReferenceEquals(descriptor, descriptors[1]), "Fixture keeps audio_transcription between new descriptors.");
+        descriptor["input_formats"]!.AsArray().Add("a_future_pcm"); descriptor["output_formats"]!.AsArray().Add("labels");
+        descriptor["availability"]!["observed_at"] = "now"; descriptor["future_hint"] = 1;
+        descriptor["option_bounds"]!.AsArray().Insert(0, JsonNode.Parse("""{"option":"a_future_option","minimum":0,"maximum":1}"""));
+        root["models"]!.AsArray().Insert(0, JsonNode.Parse("""{"model":"chat-alias","profile":"chat","model_id":"library/chat","provider":"llama_cpp","load_state":"loaded","profile_required":false,"capabilities":[{"capability":"chat_generation"}]}"""));
+        root["models"]!.AsArray().Add("a future non-object entry");
+        foreach (var finish in new[] { "stop", "content_filter", "a_future_finish" })
+        {
+            var handler = new FakeHandler(async (request, _) =>
+            {
+                if (request.Method == HttpMethod.Get) return Response(root.ToJsonString());
+                var id = await RequestId(request);
+                return Response(JsonSerializer.Serialize(new { contract_version = 1, request_id = id, usage = new { input_tokens = 3 },
+                    result = new { kind = "text", text = "Tolerant transcript", finish_reason = finish, language = "en" } }));
+            });
+            using var client = new PumasAudioTextClient(Settings, handler, TimeSpan.FromSeconds(5));
+            var discovery = await client.DiscoverAsync();
+            Check(discovery.Advertised && discovery.Model == Settings.Model && discovery.Profile == Settings.Profile, "Unknown fields, descriptors, values and entries are ignored during selection.");
+            var reply = await client.GenerateAsync(Samples, 48000);
+            Check(reply.Success && reply.Text == "Tolerant transcript" && reply.FinishReason == finish && handler.Requests == 3,
+                "Unknown result fields and new finish reasons do not reject a completed transcript.");
+        }
+    }
+
+    private static async Task ServedModelSelection()
+    {
+        // The configured identity may be the indexed library model ID; the served alias is sent.
+        var root = Capabilities(Settings with { Model = "served-alias" });
+        Entry(root)["model_id"] = Settings.Model;
+        string? sent = null;
+        var handler = new FakeHandler(async (request, token) =>
+        {
+            if (request.Method == HttpMethod.Get) return Response(root.ToJsonString());
+            using var json = JsonDocument.Parse(await request.Content!.ReadAsByteArrayAsync(token));
+            sent = json.RootElement.GetProperty("model").GetString();
+            return Response(Terminal(json.RootElement.GetProperty("request_id").GetString()!));
+        });
+        using (var client = new PumasAudioTextClient(Settings, handler, TimeSpan.FromSeconds(5)))
+            Check((await client.GenerateAsync(Samples, 48000)).Success && sent == "served-alias", "Library model ID resolves to its served alias.");
+
+        // Several profiles serve one alias: an empty profile is ambiguous; an exact one selects.
+        var multi = Capabilities();
+        var second = Entry(multi).DeepClone().AsObject(); second["profile"] = "second-profile";
+        multi["models"]!.AsArray().Add(second);
+        foreach (var model in multi["models"]!.AsArray()) model!["profile_required"] = true;
+        var none = new FakeHandler((_, _) => Task.FromResult(Response(multi.ToJsonString())));
+        using (var client = new PumasAudioTextClient(Settings with { Profile = "" }, none, TimeSpan.FromSeconds(5)))
+        {
+            var refused = await client.DiscoverAsync();
+            Check(!refused.Advertised && refused.Code == "ambiguous_model" && refused.Detail.Contains("second-profile"), "Ambiguous served alias names its profiles instead of guessing.");
+        }
+        using (var client = new PumasAudioTextClient(Settings with { Profile = "second-profile" }, none, TimeSpan.FromSeconds(5)))
+            Check((await client.DiscoverAsync()) is { Advertised: true, Profile: "second-profile" }, "Exact profile selects one served entry.");
+        using (var client = new PumasAudioTextClient(Settings with { Profile = "absent-profile" }, none, TimeSpan.FromSeconds(5)))
+        {
+            var missing = await client.DiscoverAsync();
+            Check(!missing.Advertised && missing.Code == "model_not_found" && missing.Detail.Contains("controlled-audio-private"), "Missing profile lists the served profiles.");
+        }
+        var unavailable = Capabilities();
+        Descriptor(unavailable)["availability"] = new JsonObject { ["state"] = "unavailable", ["reason"] = "a_future_reason" };
+        using (var client = new PumasAudioTextClient(Settings, new FakeHandler((_, _) => Task.FromResult(Response(unavailable.ToJsonString()))), TimeSpan.FromSeconds(5)))
+        {
+            var refused = await client.DiscoverAsync();
+            Check(refused is { Advertised: false, Code: "capability_unavailable", Detail: "a_future_reason" }, "Unknown availability reason is unavailable and reported verbatim.");
+        }
     }
 
     private static async Task CancelAndDisposal()
@@ -306,7 +443,7 @@ internal static class AudioModalityTests
         using var client = new PumasAudioTextClient(Settings with { Endpoint = fixture.Endpoint });
         var reply = await client.GenerateAsync(Samples, 48000);
         await fixture.Completion.WaitAsync(TimeSpan.FromSeconds(5));
-        Check(reply.Success && reply.Text == "Synthetic TCP transcript" && fixture.Paths.SequenceEqual(new[] { "/v1/capabilities", "/v1/model-operations" }), "Actual loopback HTTP generic consumer succeeds against synthetic transport only.");
+        Check(reply.Success && reply.Text == "Synthetic TCP transcript" && fixture.Paths.SequenceEqual(new[] { "/v1/served-models", "/v1/model-operations" }), "Actual loopback HTTP generic consumer succeeds against synthetic transport only.");
     }
 
     private sealed class FakeHandler(Func<HttpRequestMessage, CancellationToken, Task<HttpResponseMessage>> send) : HttpMessageHandler
@@ -342,7 +479,7 @@ internal static class AudioModalityTests
                 var length = lines.Where(l => l.StartsWith("Content-Length:", StringComparison.OrdinalIgnoreCase)).Select(l => int.Parse(l.Split(':')[1])).SingleOrDefault();
                 var body = new byte[length]; await stream.ReadExactlyAsync(body);
                 string response;
-                if (path == "/v1/capabilities") response = capabilities.ToJsonString();
+                if (path == "/v1/served-models") response = capabilities.ToJsonString();
                 else
                 {
                     using var request = JsonDocument.Parse(body); var root = request.RootElement;

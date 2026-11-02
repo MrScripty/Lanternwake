@@ -5,10 +5,12 @@ namespace Lanternwake.Conversation;
 public readonly record struct StereoSample(float Left, float Right);
 public enum SpeechAvailability { Unsupported, Ready }
 public sealed record SpeechCapability(SpeechAvailability Status, string Message);
-public sealed class SpeechTranscriptionException(string code, AudioOperationOutcome outcome, string message) : Exception(message)
+public sealed class SpeechTranscriptionException(string code, AudioOperationOutcome outcome, string message, string detail = "") : Exception(message)
 {
     public string Code { get; } = code;
     public AudioOperationOutcome Outcome { get; } = outcome;
+    /// <summary>Pumas's own error message, also appended to <see cref="Exception.Message"/>.</summary>
+    public string Detail { get; } = detail;
 }
 
 /// <summary>Independent runtime admission plus selected generic Pumas contract; unknown outcomes stay quarantined.</summary>
@@ -77,7 +79,7 @@ public sealed class PumasSpeechTranscriber : IDisposable
             lock (_sync)
             {
                 if (_settings != candidate || _disposed) return new(SpeechAvailability.Unsupported, "Speech settings changed. Choose Use voice again.");
-                if (!selected.Advertised) return new(SpeechAvailability.Unsupported, Message(selected.Code));
+                if (!selected.Advertised) return new(SpeechAvailability.Unsupported, Message(selected.Code, detail: selected.Detail));
                 var pinned = candidate with { Profile = selected.Profile };
                 if (expected is not null && expected != pinned) return new(SpeechAvailability.Unsupported, "The selected speech profile changed. Choose Use voice again for fresh consent.");
                 if (_clientSettings != pinned) { _client?.Dispose(); _client = _factory(pinned); _clientSettings = pinned; }
@@ -101,18 +103,23 @@ public sealed class PumasSpeechTranscriber : IDisposable
         {
             var reply = await client.GenerateAsync(samples, sampleRate, cancellation).ConfigureAwait(false);
             lock (_sync) { if (reply.Outcome == AudioOperationOutcome.Unknown) _unknown = true; FinishReason = reply.FinishReason; }
-            if (!reply.Success) throw new SpeechTranscriptionException(reply.Code, reply.Outcome, Message(reply.Code, reply.Outcome));
+            if (!reply.Success) throw new SpeechTranscriptionException(reply.Code, reply.Outcome, Message(reply.Code, reply.Outcome, reply.Detail), reply.Detail);
             return reply.Text;
         }
         finally { lock (_sync) _pending = false; }
     }
-    private static string Message(string code, AudioOperationOutcome outcome = AudioOperationOutcome.NotAdmitted) =>
+    private static string Message(string code, AudioOperationOutcome outcome = AudioOperationOutcome.NotAdmitted, string detail = "") =>
+        detail.Length == 0 ? Summary(code, outcome) : Summary(code, outcome) + " Pumas: " + PumasAudioTextClient.Sanitize(detail);
+    private static string Summary(string code, AudioOperationOutcome outcome) =>
         outcome == AudioOperationOutcome.Unknown ? "The audio request ended without confirmed Pumas settlement. Voice input is paused; typed replies remain available."
         : code switch
         {
             "speech_disabled" => "Voice input is off. Typed replies remain available.",
             "model_not_selected" => "Enter the indexed model ID returned by Pumas import_local_cohere. No audio has been recorded.",
             "model_not_found" => "Pumas has no loaded model with this ID/profile. Load it with serve_experimental_local_cohere, then try again.",
+            "ambiguous_model" => "Pumas serves this model under more than one profile. Enter the exact profile in AI setup → Transcription.",
+            "unsupported_modality" or "ambiguous_operation" => "The selected Pumas model does not offer a single audio transcription operation. No audio has been recorded.",
+            "request_limit" => "The recording is larger than Pumas accepts. Record a shorter clip.",
             "unsupported_provider" => "Transcription currently supports local Pumas only. Hosted preferences cannot receive microphone audio.",
             "unqualified_audio_runtime" or "capability_unavailable" => "Pumas refused this runtime. Check the experimental Cohere load result and platform support. No audio has been recorded.",
             "pumas_unavailable" => "Could not reach local Pumas. Check the transcription URL and start its owner.",
