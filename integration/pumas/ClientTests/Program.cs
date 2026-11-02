@@ -206,6 +206,24 @@ await Check("HTTP error is unavailable", async () =>
     using var client = new PumasClient(server.Uri, "game-dialogue");
     Require((await client.GenerateAsync("Mara", "Harbor.", "Hello")).ErrorCode == "pumas_unavailable", "503");
 });
+await Check("HTTP error surfaces Pumas error.message", async () =>
+{
+    // Typed error shape; request_id null when Pumas could not read the body. Unknown fields ignored.
+    await using var server = new FakePumas { HttpStatus = 400,
+        Status = """{"contract_version":1,"request_id":null,"error":{"code":"a_future_code","outcome":"not_admitted","message":"model 'game-dialogue' is not served\u0007","hint":"x"}}""" };
+    using var client = new PumasClient(server.Uri, "game-dialogue");
+    var reply = await client.GenerateAsync("Mara", "Harbor.", "Hello");
+    Require(reply.ErrorCode == "pumas_unavailable" && reply.Message == "model 'game-dialogue' is not served", "message surfaced, sanitized");
+    Require(server.Paths.Count == 1, "no generation after refused preflight");
+    await using var setup = new FakePumas { HttpStatus = 503, Status = """{"error":{"message":"library is busy"}}""" };
+    using var setupClient = new PumasClient(setup.Uri, "game-dialogue");
+    var search = await setupClient.SearchHfModelsAsync("qwen");
+    Require(!search.Success && search.ErrorCode == "pumas_unavailable" && search.Message == "library is busy", "setup RPC message surfaced");
+    await using var opaque = new FakePumas { HttpStatus = 502, Status = "not json" };
+    using var opaqueClient = new PumasClient(opaque.Uri, "game-dialogue");
+    var lost = await opaqueClient.GenerateAsync("Mara", "Harbor.", "Hello");
+    Require(lost.ErrorCode == "pumas_unavailable" && lost.Message is null, "unreadable body keeps the plain failure");
+});
 await Check("oversized dialogue rejected locally", async () =>
 {
     await using var server = new FakePumas();

@@ -121,7 +121,7 @@ public sealed partial class PumasClient
                 return PumasResult<T>.Unavailable("pumas_rejected", RequiredString(result, "error", 2048));
             return new PumasResult<T>(true, parse(result), "");
         }
-        catch (PumasProtocolException error) { return PumasResult<T>.Unavailable(error.Code); }
+        catch (PumasProtocolException error) { return PumasResult<T>.Unavailable(error.Code, error.Detail); }
         catch (OperationCanceledException) { return PumasResult<T>.Unavailable(cancellationToken.IsCancellationRequested ? "cancelled" : "timeout"); }
         catch (HttpRequestException) { return PumasResult<T>.Unavailable("pumas_unavailable"); }
         catch (IOException) { return PumasResult<T>.Unavailable("pumas_unavailable"); }

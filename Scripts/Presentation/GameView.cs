@@ -315,7 +315,7 @@ public partial class GameView : Node
             var text = reply.Success ? reply.Text : chat.Fallback;
             _session.RecordConversation(input, text, reply.Success);
             SetSpeakerText(DisplayName(chat.CharacterId)); _dialogue.Text = text; _dialogue.VisibleCharacters = -1;
-            SetStatusText(reply.Success ? _aiSettings.Provider + " conversation · optional interpretation, not canonical evidence" : "Authored reply · " + AiError(reply.ErrorCode));
+            SetStatusText(reply.Success ? _aiSettings.Provider + " conversation · optional interpretation, not canonical evidence" : "Authored reply · " + AiError(reply));
             _entry.Text = ""; Save(true);
         }
         catch (OperationCanceledException) { if (generation == _generation) SetStatusText("Conversation cancelled. You can retry or continue."); }
