@@ -250,7 +250,7 @@ public partial class GameView
                     "Can the ferry leave during the storm?", token);
                 if (!Active() || token.IsCancellationRequested) return;
                 _lastTestedSettings = draft; _lastTestSucceeded = reply.Success;
-                status.Text = reply.Success ? "Response received from " + draft.Provider + ":\n" + reply.Text : AiError(reply.ErrorCode);
+                status.Text = reply.Success ? "Response received from " + draft.Provider + ":\n" + reply.Text : AiError(reply);
             }
             catch (Exception) { if (Active() && !token.IsCancellationRequested) status.Text = "Could not test the selected model. Check provider setup and try again."; }
             finally { if (Active()) SetRequesting(false); }
@@ -459,6 +459,10 @@ public partial class GameView
             Model = form.Name == "Transcription" ? form.GetNode<LineEdit>("Model").Text.Trim() : form.GetNode<OptionButton>("Model").GetItemMetadata(0).AsString(),
             Runtime = form.Name == "Transcription" ? (SpeechRuntimeMode)form.GetNode<OptionButton>("Runtime").GetSelectedId() : previous.Runtime,
             Profile = form.Name == "Transcription" ? form.GetNode<LineEdit>("Profile").Text.Trim() : previous.Profile };
+
+    /// <summary>Lanternwake's explanation, followed by Pumas's own reason when it sent one.</summary>
+    private static string AiError(PumasReply reply) =>
+        AiError(reply.ErrorCode) + (string.IsNullOrWhiteSpace(reply.Message) ? "" : " Pumas: " + reply.Message);
 
     private static string AiError(string code) => code switch
     {

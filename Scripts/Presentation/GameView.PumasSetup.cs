@@ -131,7 +131,8 @@ public partial class GameView
         }
         catch (Exception error) when (error is ArgumentException or UriFormatException or InvalidDataException or System.Text.Json.JsonException or IOException or System.ComponentModel.Win32Exception or HttpRequestException or OperationCanceledException or ObjectDisposedException)
         {
-            if (!_closing && _modal == window) ShowPumasFailure("library_owner_unavailable", "Selected library authentication failed. Check the canonical folder and installed Pumas observer in AI setup. No service was started or acquisition requested.", false);
+            if (!_closing && _modal == window) ShowPumasFailure("library_owner_unavailable", "Selected library authentication failed. Check the canonical folder and installed Pumas observer in AI setup. No service was started or acquisition requested." +
+                (error is InvalidDataException ? "\nReason: " + error.Message : ""), false);
         }
         finally { if (_setupRequest == cancellation) _setupRequest = null; if (_closing) { _setupPumas?.Dispose(); _setupPumas = null; } }
     }

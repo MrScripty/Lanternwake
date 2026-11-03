@@ -22,10 +22,12 @@ internal static class InstalledRuntimeTests
             settings => new(settings, new Handler(request =>
             {
                 requests++;
-                var available = new { supported_contract_versions = new[] { 1 }, model = settings.Model, profile = settings.Profile, max_request_bytes = 33554432,
+                Check(request.RequestUri!.AbsolutePath == "/v1/served-models", "Discovery uses the served-model list.");
+                var available = new { supported_contract_versions = new[] { 1 }, max_request_bytes = 33554432, models = new[] { new {
+                    model = settings.Model, profile = settings.Profile, model_id = "library/cohere", provider = "onnx_runtime", load_state = "loaded", profile_required = false,
                     capabilities = new[] { new { capability = "audio_transcription", semantic_task = "speech_to_text", input_formats = new[] { "pcm_f32le", "pcm_s16le" },
                         output_formats = new[] { "text" }, streaming = false, availability = new { state = "available" },
-                        option_bounds = new[] { new { option = "max_output_tokens", minimum = 1, maximum = 2048 } } } } };
+                        option_bounds = new[] { new { option = "max_output_tokens", minimum = 1, maximum = 2048 } } } } } } };
                 return new(HttpStatusCode.OK) { Content = new StringContent(JsonSerializer.Serialize(available), Encoding.UTF8, "application/json") };
             }), TimeSpan.FromSeconds(2)));
         var selection = new SpeechServiceSettings(true, Model: "local-cohere-model") { Profile = "cohere-local" };

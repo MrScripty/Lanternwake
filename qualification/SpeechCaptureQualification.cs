@@ -455,7 +455,7 @@ public partial class SpeechCaptureQualification : Node
                 Gets++;
                 if (HoldGet) { HeldGet = new(TaskCreationOptions.RunContinuationsAsynchronously); await HeldGet.Task.ConfigureAwait(false); token.ThrowIfCancellationRequested(); }
                 var availability = Available ? "{\"state\":\"available\"}" : "{\"state\":\"unavailable\",\"reason\":\"unqualified_audio_runtime\"}";
-                body = "{\"supported_contract_versions\":[1],\"model\":\"owned-synthetic-audio\",\"profile\":\"fixture-audio\",\"max_request_bytes\":33554432,\"capabilities\":[{\"capability\":\"audio_transcription\",\"semantic_task\":\"speech_to_text\",\"input_formats\":[\"pcm_f32le\"],\"output_formats\":[\"text\"],\"streaming\":false,\"availability\":" + availability + ",\"option_bounds\":[{\"option\":\"max_output_tokens\",\"minimum\":512,\"maximum\":512}]}]}";
+                body = "{\"supported_contract_versions\":[1],\"max_request_bytes\":33554432,\"models\":[{\"model\":\"owned-synthetic-audio\",\"profile\":\"fixture-audio\",\"model_id\":\"owned/synthetic-audio\",\"provider\":\"fixture\",\"load_state\":\"loaded\",\"profile_required\":false,\"capabilities\":[{\"capability\":\"audio_transcription\",\"semantic_task\":\"speech_to_text\",\"input_formats\":[\"pcm_f32le\"],\"output_formats\":[\"text\"],\"streaming\":false,\"availability\":" + availability + ",\"option_bounds\":[{\"option\":\"max_output_tokens\",\"minimum\":512,\"maximum\":512}]}]}]}";
                 body = body.Replace("fixture-audio", Profile, StringComparison.Ordinal);
             }
             else

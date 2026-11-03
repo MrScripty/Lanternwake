@@ -25,11 +25,44 @@ try
         var reordered = JsonNode.Parse(description.ToJsonString())!.AsObject(); var moved = reordered["endpoint"]!.DeepClone(); reordered.Remove("endpoint"); reordered["endpoint"] = moved;
         Check(PumasOwnerClient.Parse(Encoding.UTF8.GetBytes(reordered.ToJsonString()), selection, endpoint).Descriptor == receipt.Descriptor, "property ordering does not invent changed ownership");
     }
+    // Pumas grows the advertisement additively: unknown fields and new open-list entries are ignored.
+    foreach (var addition in new Action<JsonObject>[] {
+        d=>d["token"]="ignored unknown field",
+        d=>d["future_field"]=new JsonObject{["nested"]=new JsonArray(1,2)},
+        d=>d["instance"]!["future_field"]="ignored",
+        d=>d["build_info"]!["future_field"]=true,
+        d=>d["build_info"]!["protocols"]![0]!["future_field"]="ignored",
+        d=>d["build_info"]!["schemas"]![0]!["future_field"]="ignored",
+        d=>d["build_info"]!["schemas"]!.AsArray().Add(new JsonObject{["name"]="pumas.discovery",["version"]=2}),
+        d=>d["build_info"]!["schemas"]!.AsArray().Add(new JsonObject{["name"]="pumas.future-schema",["version"]=1}),
+        d=>d["build_info"]!["protocols"]!.AsArray().Add(new JsonObject{["name"]="pumas.future-protocol",["versions"]=new JsonArray(3)}),
+        d=>d["build_info"]!["protocols"]![0]!["versions"]=new JsonArray(1,2),
+        d=>{ var capabilities=d["instance"]!["capabilities"]!.AsArray(); for (var i=0;i<100;i++) capabilities.Add("future.capability"+i+"@1"); } })
+    {
+        var changed = description.DeepClone().AsObject(); addition(changed);
+        using var observer = Observer(()=>changed);
+        var additive = await observer.AuthenticateAsync(selection, endpoint, default);
+        Check(additive.Endpoint == endpoint && additive.LibraryRoot == owned, "additive advertisement accepted");
+    }
+    var extra = description.DeepClone().AsObject(); extra["future_field"]="ignored"; extra["instance"]!["future_field"]="ignored";
+    Check(PumasOwnerClient.Parse(Encoding.UTF8.GetBytes(extra.ToJsonString()), selection, endpoint).Descriptor ==
+        PumasOwnerClient.Parse(Encoding.UTF8.GetBytes(description.ToJsonString()), selection, endpoint).Descriptor, "unknown fields are not part of the owner descriptor");
+    // Missing required fields and unsupported versions are refused with a reason naming the field.
+    foreach (var (mutation, reason) in new (Action<JsonObject>, string)[] {
+        (d=>d.Remove("service_generation"), "Pumas advertisement is missing required field(s): service_generation."),
+        (d=>d["instance"]!.AsObject().Remove("generation"), "Pumas instance is missing required field(s): generation."),
+        (d=>d["build_info"]!.AsObject().Remove("schemas"), "Pumas pumas-rpc build_info is missing required field(s): schemas."),
+        (d=>d["advertisement_schema_version"]=2, "Unsupported Pumas advertisement_schema_version 2; Lanternwake supports version 1."),
+        (d=>d["build_info"]!["schemas"]![0]!["version"]=2, "Pumas pumas-rpc does not advertise required schemas: pumas.build-info@1.") })
+    {
+        var changed = description.DeepClone().AsObject(); mutation(changed);
+        try { PumasOwnerClient.Parse(Encoding.UTF8.GetBytes(changed.ToJsonString()), selection, endpoint); throw new Exception("Unexpected admission: " + reason); }
+        catch (InvalidDataException error) { Check(error.Message == reason, "rejection carries its reason: " + reason); }
+    }
     foreach (var mutation in new Action<JsonObject>[] {
         d=>d["advertisement_schema_version"]=true,
         d=>d["advertisement_schema_version"]=2,
         d=>d["service_generation"]="",
-        d=>d["token"]="never export credentials",
         d=>d["endpoint"]="http://localhost:45678/",
         d=>d["endpoint"]="http://127.0.0.1:0/",
         d=>d["endpoint"]="http://127.0.0.1:45679/",

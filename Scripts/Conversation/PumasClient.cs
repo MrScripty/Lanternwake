@@ -10,9 +10,10 @@ using System.Threading.Tasks;
 namespace Lanternwake.Conversation;
 
 /// <summary>A text-only outcome. Dialogue never carries executable game commands.</summary>
-public sealed record PumasReply(bool Success, string Text, string ErrorCode)
+/// <param name="Message">Pumas's own human-readable error reason when it sent one; display only.</param>
+public sealed record PumasReply(bool Success, string Text, string ErrorCode, string? Message = null)
 {
-    public static PumasReply Unavailable(string code) => new(false, string.Empty, code);
+    public static PumasReply Unavailable(string code, string? message = null) => new(false, string.Empty, code, message);
 }
 
 /// <summary>
@@ -88,7 +89,7 @@ public sealed partial class PumasClient : IDisposable
             return ValidText(text, 4_000) ? new PumasReply(true, text.Trim(), string.Empty)
                 : PumasReply.Unavailable("invalid_response");
         }
-        catch (PumasProtocolException error) { return PumasReply.Unavailable(error.Code); }
+        catch (PumasProtocolException error) { return PumasReply.Unavailable(error.Code, error.Detail); }
         catch (OperationCanceledException)
         {
             return PumasReply.Unavailable(cancellationToken.IsCancellationRequested ? "cancelled" : "timeout");
@@ -164,7 +165,7 @@ public sealed partial class PumasClient : IDisposable
         using var response = await _http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, token)
             .ConfigureAwait(false);
         if (response.StatusCode != System.Net.HttpStatusCode.OK)
-            throw new PumasProtocolException("pumas_unavailable");
+            throw new PumasProtocolException("pumas_unavailable", await ErrorMessageAsync(response, token).ConfigureAwait(false));
         if (response.Content.Headers.ContentType?.MediaType != "application/json" ||
             response.Content.Headers.ContentLength > MaxResponseBytes)
             throw new PumasProtocolException("invalid_response");
@@ -188,6 +189,32 @@ public sealed partial class PumasClient : IDisposable
         catch { document.Dispose(); throw; }
     }
 
+    /// <summary>
+    /// Best-effort, bounded read of Pumas's <c>error.message</c> (typed and OpenAI-compatible
+    /// error bodies share it). Never changes the failure code; unreadable bodies yield null.
+    /// </summary>
+    private static async Task<string?> ErrorMessageAsync(HttpResponseMessage response, CancellationToken token)
+    {
+        if (response.Content.Headers.ContentType?.MediaType != "application/json" ||
+            response.Content.Headers.ContentLength > 16_384) return null;
+        try
+        {
+            var bytes = await response.Content.ReadAsByteArrayAsync(token).ConfigureAwait(false);
+            if (bytes.Length > 16_384) return null;
+            using var document = JsonDocument.Parse(bytes);
+            var root = document.RootElement;
+            var text = root.ValueKind != JsonValueKind.Object || !root.TryGetProperty("error", out var error) ? null
+                : error.ValueKind == JsonValueKind.Object ? StringField(error, "message")
+                : error.ValueKind == JsonValueKind.String ? error.GetString() : null;
+            if (string.IsNullOrWhiteSpace(text)) return null;
+            text = new string(text.Select(c => char.IsControl(c) ? ' ' : c).ToArray()).Trim();
+            return text.Length <= 300 ? text : text[..299] + "…";
+        }
+        catch (JsonException) { return null; }
+        catch (HttpRequestException) { return null; }
+        catch (IOException) { return null; }
+    }
+
     private static bool HasDuplicateProperties(JsonElement value) => value.ValueKind switch
     {
         JsonValueKind.Object => value.EnumerateObject().GroupBy(p => p.Name).Any(g => g.Count() != 1) ||
@@ -203,9 +230,10 @@ public sealed partial class PumasClient : IDisposable
         !string.IsNullOrWhiteSpace(value) && value.EnumerateRunes().Count() <= limit &&
         !value.Any(c => char.IsControl(c) && c is not '\n' and not '\r' and not '\t');
 
-    private sealed class PumasProtocolException(string code) : Exception
+    private sealed class PumasProtocolException(string code, string? detail = null) : Exception
     {
         public string Code { get; } = code;
+        public string? Detail { get; } = detail;
     }
 
     /// <summary>Caller must cancel and await active invocations before disposing.</summary>

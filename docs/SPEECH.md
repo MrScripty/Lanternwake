@@ -76,21 +76,32 @@ restarting the game alone does not prove producer cleanup.
 
 The source-pinned producer defines the closed request/response grammar in
 `rust/crates/pumas-rpc/src/handlers/model_operations/types.rs` and the generic
-facade in `modality.rs`. The consumer reads
-`GET /v1/capabilities?model=...&profile=...`, requires version 1, matching selection,
-unambiguous `audio_transcription` / `speech_to_text`, available state, `pcm_f32le`
-input, text output, non-streaming behavior and a 512-token option bound.
-Unloaded, ambiguous, unavailable and incompatible selections are rejected
-before consent or submission.
+facade in `modality.rs`. The consumer reads `GET /v1/served-models`, requires
+version 1 and selects the one served entry whose alias (or, failing that, library
+`model_id`) matches the configured model and whose profile matches the configured
+profile. It sends that entry's served alias. Within the entry it selects
+`audio_transcription` by name and requires `speech_to_text`, available state,
+`pcm_f32le` input, text output, non-streaming behavior and a 512-token option
+bound. Unloaded, ambiguous, unavailable and incompatible selections are rejected
+before consent or submission, with Pumas's served profiles or availability
+reason shown to the player.
+
+Contract v1 responses grow additively. Unknown fields, capabilities, formats,
+option names, availability reasons, finish reasons, error codes and list entries
+are ignored or passed through; they never reject a response.
 
 `POST /v1/model-operations` uses the **closed named capability** form:
 `capability: audio_transcription`, version 1, unique request ID, selected
 model/profile, actual capture mix rate, two channels, frozen sample count,
 `input.kind: audio`, float little-endian PCM, `output: text`, explicit language
 (`en`) and 512 output tokens. Pumas owns native input conversion and inference.
-Responses require bounded unique JSON, request correlation, text kind and
-`stop` or `length`; a truncated result remains visible. Errors preserve
-`not_admitted` versus `unknown`. Requests have a 90-second consumer deadline,
+Responses require bounded unique JSON, request correlation, text kind and a
+finish reason (`length` stays visible as truncation). Errors are decoded by
+`error.outcome`, which is authoritative: `not_admitted` (including a null
+`request_id`, sent when Pumas could not read the body) is a plain refusal that
+leaves voice input usable. Only `unknown`, a missing or unrecognized outcome, a
+different echoed request ID, or transport loss after submission quarantines
+voice input. Pumas's `error.message` is appended to the shown reason. Requests have a 90-second consumer deadline,
 no retry/fallback recognizer and a 32 MiB envelope limit.
 
 ## Cloud evidence and local acceptance

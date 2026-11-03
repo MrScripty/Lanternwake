@@ -44,7 +44,7 @@ public sealed partial class PumasClient
                 throw Contract(); // Keep ambiguous observations blocked rather than selecting a winner.
             return new(true, candidates, "");
         }
-        catch (PumasProtocolException error) { return PumasResult<IReadOnlyList<LocalModelCandidate>>.Unavailable(error.Code); }
+        catch (PumasProtocolException error) { return PumasResult<IReadOnlyList<LocalModelCandidate>>.Unavailable(error.Code, error.Detail); }
         catch (OperationCanceledException) { return PumasResult<IReadOnlyList<LocalModelCandidate>>.Unavailable(cancellation.IsCancellationRequested ? "cancelled" : "timeout"); }
         catch (HttpRequestException) { return PumasResult<IReadOnlyList<LocalModelCandidate>>.Unavailable("pumas_unavailable"); }
         catch (IOException) { return PumasResult<IReadOnlyList<LocalModelCandidate>>.Unavailable("pumas_unavailable"); }

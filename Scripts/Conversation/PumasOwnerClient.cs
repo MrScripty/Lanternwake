@@ -13,9 +13,29 @@ public sealed record PumasOwnerObservation(string Endpoint, string LibraryRoot, 
 }
 
 /// <summary>Uses Pumas's authenticated CLI projection; never reads its private registry or starts a service.</summary>
+/// <remarks>
+/// The advertisement (Pumas <c>HttpServiceDescription</c>) grows additively: unknown fields and
+/// new entries in open lists are ignored, so they neither fail validation nor take part in the
+/// owner descriptor. Missing required fields, wrong types and unsupported schema versions are
+/// refused with a reason naming the field.
+/// </remarks>
 public sealed class PumasOwnerClient : IDisposable
 {
     private const int Limit = 65536;
+    // Known advertisement shape: field name to the shape of its object (or array items), if any.
+    private static readonly Dictionary<string, Dictionary<string, string?>> Known = new()
+    {
+        ["description"] = new() { ["advertisement_schema_version"] = null, ["service_generation"] = null,
+            ["instance"] = "instance", ["endpoint"] = null, ["build_info"] = "build" },
+        ["instance"] = new() { ["discovery_schema_version"] = null, ["build_info"] = "build", ["registry_library_id"] = null,
+            ["library_root"] = null, ["generation"] = null, ["pumas_version"] = null, ["protocols"] = "protocol",
+            ["capabilities"] = null, ["model_ref_schema_version"] = null, ["selector_schema_version"] = null },
+        ["build"] = new() { ["build_info_schema_version"] = null, ["component"] = null, ["package_version"] = null,
+            ["build_id"] = null, ["source_revision"] = null, ["target"] = null, ["compiled_features"] = null,
+            ["protocols"] = "protocol", ["schemas"] = "schema" },
+        ["protocol"] = new() { ["name"] = null, ["versions"] = null },
+        ["schema"] = new() { ["name"] = null, ["version"] = null },
+    };
     private readonly HttpClient _http;
     private readonly Func<PumasLibrarySelection, CancellationToken, Task<byte[]>> _observe;
     private readonly CancellationTokenSource _lifetime = new();
@@ -47,7 +67,8 @@ public sealed class PumasOwnerClient : IDisposable
         using var response = await _http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, deadline.Token).ConfigureAwait(false);
         if ((int)response.StatusCode != 200 || response.Content.Headers.ContentType?.MediaType != "application/json" ||
             response.Headers.CacheControl?.NoStore != true || response.Content.Headers.ContentLength > Limit)
-            throw new InvalidDataException("The selected Pumas HTTP advertisement is unavailable or incompatible.");
+            throw new InvalidDataException($"The selected Pumas HTTP advertisement is unavailable or incompatible (HTTP {(int)response.StatusCode}, " +
+                $"{response.Content.Headers.ContentType?.MediaType ?? "no content type"}, no-store {response.Headers.CacheControl?.NoStore == true}).");
         var live = Parse(await ReadBoundedAsync(await response.Content.ReadAsStreamAsync(deadline.Token), Limit, deadline.Token), selection, endpoint);
         var after = Parse(await ObserveCheckedAsync(selection, deadline.Token).ConfigureAwait(false), selection, endpoint);
         if (before.Descriptor != live.Descriptor || before.Descriptor != after.Descriptor)
@@ -101,20 +122,20 @@ public sealed class PumasOwnerClient : IDisposable
     {
         try { return ParseDescription(bytes, selection, expectedEndpoint); }
         catch (Exception error) when (error is JsonException or InvalidOperationException or KeyNotFoundException or ArgumentException)
-        { throw new InvalidDataException("Malformed Pumas owner advertisement.", error); }
+        { throw new InvalidDataException("Malformed Pumas owner advertisement: " + error.Message, error); }
     }
     private static PumasOwnerObservation ParseDescription(byte[] bytes, PumasLibrarySelection selection, string? expectedEndpoint)
     {
         if (bytes.Length > Limit) throw new InvalidDataException("Pumas description is too large.");
         using var document = JsonDocument.Parse(bytes, new JsonDocumentOptions { MaxDepth = 16 });
         var root = document.RootElement; ValidateUnique(root);
-        Fields(root, "advertisement_schema_version", "service_generation", "instance", "endpoint", "build_info");
+        Fields(root, "advertisement", "advertisement_schema_version", "service_generation", "instance", "endpoint", "build_info");
         Version(root, "advertisement_schema_version");
         var endpoint = new AiSettings(DialogueProvider.Pumas, false, Text(root, "endpoint", 128), "").Validate().Endpoint;
         if (new Uri(endpoint).Port == 0) throw new InvalidDataException("Pumas HTTP listener port is invalid.");
         if (expectedEndpoint is not null && endpoint != expectedEndpoint) throw new InvalidDataException("Pumas advertised a different endpoint than your saved selection.");
         var instance = root.GetProperty("instance");
-        Fields(instance, "discovery_schema_version", "build_info", "registry_library_id", "library_root", "generation", "pumas_version", "protocols", "capabilities", "model_ref_schema_version", "selector_schema_version");
+        Fields(instance, "instance", "discovery_schema_version", "build_info", "registry_library_id", "library_root", "generation", "pumas_version", "protocols", "capabilities", "model_ref_schema_version", "selector_schema_version");
         foreach (var name in new[] { "discovery_schema_version", "model_ref_schema_version", "selector_schema_version" }) Version(instance, name);
         var observedRoot = Text(instance, "library_root", 4096);
         // Conservative canonical-path subset. Producer CLI owns native selected-root authentication;
@@ -122,72 +143,89 @@ public sealed class PumasOwnerClient : IDisposable
         if (!Path.IsPathFullyQualified(observedRoot) || !Directory.Exists(observedRoot) ||
             Path.GetFullPath(observedRoot) != Path.GetFullPath(selection.Root)) throw new InvalidDataException("Pumas described a different library root. Use its canonical absolute folder path.");
         Protocol(instance.GetProperty("protocols"), "pumas.local-ipc");
-        var capabilities = Labels(instance.GetProperty("capabilities"));
+        var capabilities = Labels(instance, "capabilities");
         if (!new[] { "model.query@1", "model.get.local@1", "model.selector@1", "artifact.resolve@1" }.All(capabilities.Contains))
             throw new InvalidDataException("Pumas lacks the required local-first owner capabilities.");
         Build(instance.GetProperty("build_info"), "pumas-library"); Build(root.GetProperty("build_info"), "pumas-rpc");
         if (Text(instance, "pumas_version", 128) != Text(instance.GetProperty("build_info"), "package_version", 128))
             throw new InvalidDataException("Pumas core build context differs.");
         return new(endpoint, observedRoot, Text(instance, "registry_library_id", 128), Text(instance, "generation", 128),
-            Text(root, "service_generation", 128), Canonical(root));
+            Text(root, "service_generation", 128), Canonical(root, "description"));
     }
     private static void Build(JsonElement value, string component)
     {
-        var mandatory = new[] { "build_info_schema_version", "component", "package_version", "compiled_features", "protocols", "schemas" };
-        var allowed = mandatory.Concat(new[] { "build_id", "source_revision", "target" }).ToHashSet();
-        if (value.ValueKind != JsonValueKind.Object || mandatory.Any(name => !value.TryGetProperty(name, out _)) || value.EnumerateObject().Any(p => !allowed.Contains(p.Name)))
-            throw new InvalidDataException("Unsupported Pumas build fields.");
+        Fields(value, component + " build_info", "build_info_schema_version", "component", "package_version", "compiled_features", "protocols", "schemas");
         Version(value, "build_info_schema_version");
-        if (Text(value, "component", 128) != component) throw new InvalidDataException("Wrong Pumas build component.");
-        Text(value, "package_version", 128); Labels(value.GetProperty("compiled_features"));
+        if (Text(value, "component", 128) != component) throw new InvalidDataException($"Wrong Pumas build component; expected {component}.");
+        Text(value, "package_version", 128); Labels(value, "compiled_features");
         foreach (var field in new[] { "build_id", "source_revision", "target" })
             if (value.TryGetProperty(field, out var provenance) && provenance.ValueKind != JsonValueKind.Null) Text(value, field, 128);
         Protocol(value.GetProperty("protocols"), "pumas.local-ipc");
         var required = new Dictionary<string, int> { ["pumas.build-info"] = 1, ["pumas.discovery"] = 1,
             ["pumas.model-ref"] = 1, ["pumas.model-selector"] = 1 };
         if (component == "pumas-rpc") { Protocol(value.GetProperty("protocols"), "pumas.local-http"); required["pumas.http-advertisement"] = 1; }
-        var schemas = new Dictionary<string, int>();
-        foreach (var item in Array(value.GetProperty("schemas")))
-        { Fields(item, "name", "version"); if (!item.GetProperty("version").TryGetInt32(out var version) || version < 1 || !schemas.TryAdd(Text(item, "name", 128), version)) throw new InvalidDataException("Invalid Pumas schema advertisement."); }
-        if (required.Any(item => !schemas.TryGetValue(item.Key, out var version) || version != item.Value)) throw new InvalidDataException("Unsupported Pumas schemas.");
+        // Open list: a schema may be advertised at several versions; only the required pairs must be present.
+        var schemas = new HashSet<(string, int)>();
+        foreach (var item in Array(value.GetProperty("schemas"), "schemas"))
+        {
+            Fields(item, "schema advertisement", "name", "version");
+            if (!item.GetProperty("version").TryGetInt32(out var version) || version < 1) throw new InvalidDataException("Invalid Pumas schema advertisement version.");
+            schemas.Add((Text(item, "name", 128), version));
+        }
+        var missing = required.Where(item => !schemas.Contains((item.Key, item.Value))).Select(item => $"{item.Key}@{item.Value}").ToArray();
+        if (missing.Length > 0) throw new InvalidDataException($"Pumas {component} does not advertise required schemas: {string.Join(", ", missing)}.");
     }
     private static void Protocol(JsonElement value, string required)
     {
         var found = false; var names = new HashSet<string>();
-        foreach (var item in Array(value))
+        foreach (var item in Array(value, "protocols"))
         {
-            Fields(item, "name", "versions"); var name = Text(item, "name", 128);
-            var versions = Array(item.GetProperty("versions")).Select(v => v.TryGetInt32(out var n) && n > 0 ? n : throw new InvalidDataException("Invalid protocol version.")).ToArray();
-            if (!names.Add(name) || versions.Length == 0 || versions.Distinct().Count() != versions.Length) throw new InvalidDataException("Ambiguous protocol advertisement.");
+            Fields(item, "protocol advertisement", "name", "versions"); var name = Text(item, "name", 128);
+            var versions = Array(item.GetProperty("versions"), "versions").Select(v => v.TryGetInt32(out var n) && n > 0 ? n : throw new InvalidDataException("Invalid protocol version.")).ToArray();
+            if (!names.Add(name) || versions.Length == 0 || versions.Distinct().Count() != versions.Length) throw new InvalidDataException($"Ambiguous protocol advertisement for {name}.");
             if (name == required && versions.Contains(1)) found = true;
         }
-        if (!found) throw new InvalidDataException("Unsupported Pumas discovery protocol.");
+        if (!found) throw new InvalidDataException($"Pumas does not advertise protocol {required} version 1.");
     }
-    private static JsonElement.ArrayEnumerator Array(JsonElement value) => value.ValueKind == JsonValueKind.Array && value.GetArrayLength() <= 64
-        ? value.EnumerateArray() : throw new InvalidDataException("Invalid bounded advertisement list.");
-    private static HashSet<string> Labels(JsonElement value)
+    // Open lists are bounded by the response byte limit, not an entry count.
+    private static JsonElement.ArrayEnumerator Array(JsonElement value, string field) => value.ValueKind == JsonValueKind.Array
+        ? value.EnumerateArray() : throw new InvalidDataException($"Pumas advertisement field '{field}' must be a list.");
+    private static HashSet<string> Labels(JsonElement value, string field)
     {
         var labels = new HashSet<string>();
-        foreach (var item in Array(value)) if (item.ValueKind != JsonValueKind.String || !Valid(item.GetString(), 128) || !labels.Add(item.GetString()!)) throw new InvalidDataException("Ambiguous Pumas labels.");
+        foreach (var item in Array(value.GetProperty(field), field)) if (item.ValueKind != JsonValueKind.String || !Valid(item.GetString(), 128) || !labels.Add(item.GetString()!)) throw new InvalidDataException($"Pumas advertisement field '{field}' has an invalid or duplicate entry.");
         return labels;
     }
     private static bool Valid(string? value, int limit) => !string.IsNullOrWhiteSpace(value) && value.Length <= limit && !value.Any(char.IsControl);
     private static string Text(JsonElement value, string field, int limit) => value.GetProperty(field) is var item && item.ValueKind == JsonValueKind.String && Valid(item.GetString(), limit)
-        ? item.GetString()! : throw new InvalidDataException("Invalid Pumas identity field.");
+        ? item.GetString()! : throw new InvalidDataException($"Pumas advertisement field '{field}' must be a non-empty string of at most {limit} characters.");
     private static void Version(JsonElement value, string field)
-    { if (!value.GetProperty(field).TryGetInt32(out var version) || version != 1) throw new InvalidDataException("Unsupported Pumas description version."); }
-    private static void Fields(JsonElement value, params string[] names)
-    { if (value.ValueKind != JsonValueKind.Object || !value.EnumerateObject().Select(p => p.Name).ToHashSet().SetEquals(names)) throw new InvalidDataException("Unsupported Pumas description fields."); }
+    {
+        if (!value.GetProperty(field).TryGetInt32(out var version))
+            throw new InvalidDataException($"Pumas advertisement field '{field}' must be an integer version.");
+        if (version != 1)
+            throw new InvalidDataException($"Unsupported Pumas {field} {version}; Lanternwake supports version 1.");
+    }
+    /// <summary>Requires an object carrying every named field. Unknown fields are additive and ignored.</summary>
+    private static void Fields(JsonElement value, string owner, params string[] required)
+    {
+        if (value.ValueKind != JsonValueKind.Object) throw new InvalidDataException($"Pumas {owner} must be an object.");
+        var missing = required.Where(name => !value.TryGetProperty(name, out _)).ToArray();
+        if (missing.Length > 0) throw new InvalidDataException($"Pumas {owner} is missing required field(s): {string.Join(", ", missing)}.");
+    }
     private static void ValidateUnique(JsonElement value)
     {
         if (value.ValueKind == JsonValueKind.Object)
         { var names = new HashSet<string>(); foreach (var item in value.EnumerateObject()) { if (!names.Add(item.Name)) throw new InvalidDataException("Duplicate Pumas description field."); ValidateUnique(item.Value); } }
         else if (value.ValueKind == JsonValueKind.Array) foreach (var item in value.EnumerateArray()) ValidateUnique(item);
     }
-    private static string Canonical(JsonElement value) => value.ValueKind switch
+    /// <summary>Canonical form of the known fields only; an additive field never invents a changed owner.</summary>
+    private static string Canonical(JsonElement value, string? shape) => value.ValueKind switch
     {
-        JsonValueKind.Object => "{" + string.Join(",", value.EnumerateObject().OrderBy(p => p.Name, StringComparer.Ordinal).Select(p => JsonSerializer.Serialize(p.Name) + ":" + Canonical(p.Value))) + "}",
-        JsonValueKind.Array => "[" + string.Join(",", value.EnumerateArray().Select(Canonical)) + "]",
+        JsonValueKind.Object => "{" + string.Join(",", value.EnumerateObject().Where(p => shape is null || Known[shape].ContainsKey(p.Name))
+            .OrderBy(p => p.Name, StringComparer.Ordinal)
+            .Select(p => JsonSerializer.Serialize(p.Name) + ":" + Canonical(p.Value, shape is null ? null : Known[shape][p.Name]))) + "}",
+        JsonValueKind.Array => "[" + string.Join(",", value.EnumerateArray().Select(item => Canonical(item, shape))) + "]",
         JsonValueKind.String => JsonSerializer.Serialize(value.GetString()),
         _ => value.GetRawText()
     };

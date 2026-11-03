@@ -11,17 +11,23 @@ using Lanternwake.Core;
 namespace Lanternwake.Conversation;
 
 public enum AudioOperationOutcome { NotAdmitted, Completed, Unknown }
-public sealed record AudioTextReply(bool Success, string Text, string Code, AudioOperationOutcome Outcome, string FinishReason = "");
-public sealed record AudioTextCapability(bool Advertised, string Code, string Model = "", string Profile = "", int MaxRequestBytes = 0);
+/// <param name="Detail">Pumas's human-readable reason, sanitized and bounded. Display only; never parsed.</param>
+public sealed record AudioTextReply(bool Success, string Text, string Code, AudioOperationOutcome Outcome, string FinishReason = "", string Detail = "");
+/// <param name="Model">Served alias to send, resolved from /v1/served-models; may differ from a configured library ID.</param>
+public sealed record AudioTextCapability(bool Advertised, string Code, string Model = "", string Profile = "", int MaxRequestBytes = 0, string Detail = "");
 
 /// <summary>
 /// Pumas's generic selected-model audio-input/text-output consumer.
 /// Advertised capability is not qualification of installed audio. HTTP cancellation
 /// settles only this transport: there is no public producer status/cancel receipt.
+/// Model-operations v1 responses grow additively, so unknown fields, descriptors, enum
+/// values and list entries are ignored. Error <c>outcome</c> is authoritative: only an
+/// <c>unknown</c> outcome, or loss/incoherence after submission, latches uncertainty.
 /// </summary>
 public sealed class PumasAudioTextClient : IDisposable
 {
-    private const int MaxResponseBytes = 131072, MaxRequestBytes = 32 * 1024 * 1024;
+    private const int MaxResponseBytes = 131072, MaxDiscoveryBytes = 1024 * 1024, MaxRequestBytes = 32 * 1024 * 1024;
+    private const string Capability = "audio_transcription";
     private readonly SpeechServiceSettings _settings;
     private readonly HttpClient _http;
     private readonly TimeSpan _timeout;
@@ -54,7 +60,7 @@ public sealed class PumasAudioTextClient : IDisposable
         deadline.CancelAfter(_timeout);
         try { return await DiscoverCoreAsync(deadline.Token).ConfigureAwait(false); }
         catch (OperationCanceledException) { return new(false, cancellation.IsCancellationRequested || _disposed ? "cancelled" : "timeout"); }
-        catch (ProtocolException error) { return new(false, error.Code); }
+        catch (ProtocolException error) { return new(false, error.Code, Detail: error.Detail); }
         catch (Exception error) when (error is HttpRequestException or IOException) { return new(false, "pumas_unavailable"); }
         catch (JsonException) { return new(false, "invalid_response"); }
         finally { Exit(); }
@@ -93,9 +99,9 @@ public sealed class PumasAudioTextClient : IDisposable
                 // Snapshot encoded audio before awaiting: subsequent caller mutation
                 // cannot change admitted bytes. Discovery never submits audio.
                 var capability = await DiscoverCoreAsync(deadline.Token).ConfigureAwait(false);
-                if (!capability.Advertised) return Failure(capability.Code, AudioOperationOutcome.NotAdmitted);
+                if (!capability.Advertised) return Failure(capability.Code, AudioOperationOutcome.NotAdmitted, capability.Detail);
                 var requestId = "lanternwake-audio-" + Guid.NewGuid().ToString("N");
-                _audioBody = Encode(pcm, sampleRate, frameCount, requestId, capability.Profile);
+                _audioBody = Encode(pcm, sampleRate, frameCount, requestId, capability.Model, capability.Profile);
                 if (_audioBody.Length > Math.Min(MaxRequestBytes, capability.MaxRequestBytes))
                     return Failure("request_limit", AudioOperationOutcome.NotAdmitted);
                 using var request = new HttpRequestMessage(HttpMethod.Post, "v1/model-operations")
@@ -104,18 +110,24 @@ public sealed class PumasAudioTextClient : IDisposable
                 deadline.Token.ThrowIfCancellationRequested();
                 submitted = true; // Conservative: after this point a lost response cannot prove non-admission.
                 using var response = await _http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, deadline.Token).ConfigureAwait(false);
-                using var json = await ReadAsync(response, deadline.Token).ConfigureAwait(false);
+                using var json = await ReadAsync(response, MaxResponseBytes, deadline.Token).ConfigureAwait(false);
                 var root = json.RootElement;
-                RequireVersion(root);
-                if (Field(root, "request_id") != requestId) throw new ProtocolException("invalid_response");
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    var (code, outcome) = Error(root);
-                    return Failure(code, outcome);
+                    // Outcome is authoritative. A null request_id means Pumas could not read the
+                    // body, which is still non-admission; only a different echoed ID is incoherent.
+                    var error = Error(root);
+                    if (root.TryGetProperty("request_id", out var echoed) && echoed.ValueKind != JsonValueKind.Null &&
+                        (echoed.ValueKind != JsonValueKind.String || echoed.GetString() != requestId))
+                        throw new ProtocolException("invalid_response", error.Message);
+                    return Failure(error.Code, error.Outcome, error.Message);
                 }
+                RequireVersion(root);
+                if (Field(root, "request_id") != requestId) throw new ProtocolException("invalid_response");
+                // Finish reasons may grow (stop, length, content_filter, ...): pass a new one through.
                 if (root.TryGetProperty("error", out _) || !root.TryGetProperty("result", out var result) ||
                     Field(result, "kind") != "text" || !result.TryGetProperty("text", out var text) || text.ValueKind != JsonValueKind.String ||
-                    Field(result, "finish_reason") is not ("stop" or "length"))
+                    !Token(Field(result, "finish_reason")))
                     throw new ProtocolException("invalid_response");
                 var transcript = text.GetString()!;
                 if (transcript.Length > 16000 || transcript.Any(c => char.IsControl(c) && c is not '\n' and not '\r' and not '\t'))
@@ -125,7 +137,7 @@ public sealed class PumasAudioTextClient : IDisposable
             finally { CryptographicOperations.ZeroMemory(pcm); }
         }
         catch (OperationCanceledException) { return Failure(cancellation.IsCancellationRequested || _disposed ? "cancelled" : "timeout", submitted ? AudioOperationOutcome.Unknown : AudioOperationOutcome.NotAdmitted); }
-        catch (ProtocolException error) { return Failure(error.Code, submitted ? AudioOperationOutcome.Unknown : AudioOperationOutcome.NotAdmitted); }
+        catch (ProtocolException error) { return Failure(error.Code, submitted ? AudioOperationOutcome.Unknown : AudioOperationOutcome.NotAdmitted, error.Detail); }
         catch (Exception error) when (error is HttpRequestException or IOException) { return Failure("pumas_unavailable", submitted ? AudioOperationOutcome.Unknown : AudioOperationOutcome.NotAdmitted); }
         catch (JsonException) { return Failure("invalid_response", submitted ? AudioOperationOutcome.Unknown : AudioOperationOutcome.NotAdmitted); }
         finally
@@ -143,63 +155,91 @@ public sealed class PumasAudioTextClient : IDisposable
         if (_settings.Provider != DialogueProvider.Pumas) return new(false, "unsupported_provider");
         if (_settings.Model.Length == 0) return new(false, "model_not_selected");
         if (System.Text.Encoding.UTF8.GetByteCount(_settings.Model) > 256) return new(false, "invalid_model");
-        var path = "v1/capabilities?model=" + Uri.EscapeDataString(_settings.Model);
-        if (_settings.Profile.Length > 0) path += "&profile=" + Uri.EscapeDataString(_settings.Profile);
-        using var request = new HttpRequestMessage(HttpMethod.Get, path);
+        // Discovery entry point: one entry per served (model, profile) with its descriptors.
+        using var request = new HttpRequestMessage(HttpMethod.Get, "v1/served-models");
         using var response = await _http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, token).ConfigureAwait(false);
-        using var json = await ReadAsync(response, token).ConfigureAwait(false);
+        using var json = await ReadAsync(response, MaxDiscoveryBytes, token).ConfigureAwait(false);
         var root = json.RootElement;
         if (root.ValueKind != JsonValueKind.Object) throw new ProtocolException("invalid_response");
         if (response.StatusCode != HttpStatusCode.OK)
         {
-            RequireVersion(root);
-            var (code, outcome) = Error(root);
-            if (outcome != AudioOperationOutcome.NotAdmitted || (!root.TryGetProperty("request_id", out var errorId) || errorId.ValueKind != JsonValueKind.Null))
-                throw new ProtocolException("invalid_response");
-            return new(false, code);
+            // A discovery GET submits no audio; any typed error is a plain refusal.
+            var error = Error(root);
+            return new(false, error.Code, Detail: error.Message);
         }
         if (!root.TryGetProperty("supported_contract_versions", out var versions) || versions.ValueKind != JsonValueKind.Array ||
             !versions.EnumerateArray().Any(v => v.ValueKind == JsonValueKind.Number && v.TryGetInt32(out var version) && version == 1))
             return new(false, "unsupported_contract");
-        var profile = Field(root, "profile");
-        if (Field(root, "model") != _settings.Model || !SpeechServiceSettings.ValidProfile(profile) || profile.Length == 0 ||
-            (_settings.Profile.Length > 0 && profile != _settings.Profile) ||
-            !root.TryGetProperty("max_request_bytes", out var limit) || limit.ValueKind != JsonValueKind.Number || !limit.TryGetInt32(out var maxBytes) || maxBytes <= 0 ||
-            !root.TryGetProperty("capabilities", out var descriptors) || descriptors.ValueKind != JsonValueKind.Array || descriptors.GetArrayLength() > 32)
+        if (!root.TryGetProperty("max_request_bytes", out var limit) || limit.ValueKind != JsonValueKind.Number ||
+            !limit.TryGetInt64(out var maxBytes) || maxBytes <= 0 ||
+            !root.TryGetProperty("models", out var models) || models.ValueKind != JsonValueKind.Array)
             throw new ProtocolException("invalid_response");
-        var matches = descriptors.EnumerateArray().Where(d => Field(d, "capability") == "audio_transcription" && Field(d, "semantic_task") == "speech_to_text" &&
-            Contains(d, "input_formats", "pcm_f32le") && Contains(d, "output_formats", "text")).ToArray();
-        if (matches.Length == 0) return new(false, "unsupported_modality");
+        // Select by name: a served alias wins over a library model ID, as in Pumas routing.
+        // Entries that are not objects, or that name other models, are ignored.
+        var served = models.EnumerateArray().Where(m => m.ValueKind == JsonValueKind.Object).ToArray();
+        var named = served.Where(m => Field(m, "model") == _settings.Model).ToArray();
+        if (named.Length == 0) named = served.Where(m => Field(m, "model_id") == _settings.Model).ToArray();
+        var selected = _settings.Profile.Length == 0 ? named : named.Where(m => Field(m, "profile") == _settings.Profile).ToArray();
+        if (selected.Length == 0)
+            return new(false, "model_not_found", Detail: Sanitize(named.Length > 0
+                ? $"'{_settings.Model}' is served with profile(s) {Listing(named.Select(m => Field(m, "profile")))}, not '{_settings.Profile}'."
+                : served.Length == 0 ? "Pumas is not serving any model."
+                : $"'{_settings.Model}' is not served. Served: {Listing(served.Select(m => Field(m, "model") + " (" + Field(m, "profile") + ")"))}."));
+        if (selected.Length > 1)
+            return new(false, "ambiguous_model", Detail: Sanitize($"'{_settings.Model}' is served by profiles {Listing(selected.Select(m => Field(m, "profile")))}; enter one."));
+        var entry = selected[0];
+        var alias = Field(entry, "model"); var profile = Field(entry, "profile");
+        if (alias.Length == 0 || Encoding.UTF8.GetByteCount(alias) > 256 || alias.Any(char.IsControl) ||
+            profile.Length == 0 || !SpeechServiceSettings.ValidProfile(profile) ||
+            !entry.TryGetProperty("capabilities", out var descriptors) || descriptors.ValueKind != JsonValueKind.Array)
+            throw new ProtocolException("invalid_response");
+        var matches = descriptors.EnumerateArray().Where(d => Field(d, "capability") == Capability).ToArray();
+        if (matches.Length == 0) return new(false, "unsupported_modality", Detail: $"'{alias}' ({profile}) does not offer {Capability}.");
         if (matches.Length > 1) return new(false, "ambiguous_operation");
         var descriptor = matches[0];
-        if (!descriptor.TryGetProperty("availability", out var available)) throw new ProtocolException("invalid_response");
-        if (Field(available, "state") == "unavailable")
-            return new(false, Field(available, "reason") == "unqualified_audio_runtime" ? "unqualified_audio_runtime" : "capability_unavailable");
-        if (Field(available, "state") != "available" || !descriptor.TryGetProperty("streaming", out var streaming) || streaming.ValueKind != JsonValueKind.False ||
+        if (Field(descriptor, "semantic_task") != "speech_to_text" ||
+            !Contains(descriptor, "input_formats", "pcm_f32le") || !Contains(descriptor, "output_formats", "text"))
+            return new(false, "unsupported_modality", Detail: $"'{alias}' ({profile}) does not accept float PCM speech-to-text.");
+        descriptor.TryGetProperty("availability", out var available);
+        var state = Field(available, "state");
+        if (state != "available")
+        {
+            // Unknown states and reasons are not availability; report Pumas's reason verbatim.
+            var reason = Field(available, "reason");
+            return new(false, reason == "unqualified_audio_runtime" ? reason : "capability_unavailable",
+                Detail: Sanitize(reason.Length > 0 ? reason : state.Length > 0 ? state : "availability not reported"));
+        }
+        if (!descriptor.TryGetProperty("streaming", out var streaming) || streaming.ValueKind != JsonValueKind.False ||
             !descriptor.TryGetProperty("option_bounds", out var bounds) || bounds.ValueKind != JsonValueKind.Array ||
             !bounds.EnumerateArray().Any(b => Field(b, "option") == "max_output_tokens" &&
                 b.TryGetProperty("minimum", out var minimum) && minimum.ValueKind == JsonValueKind.Number && minimum.TryGetDouble(out var min) && min <= 512 &&
                 b.TryGetProperty("maximum", out var maximum) && maximum.ValueKind == JsonValueKind.Number && maximum.TryGetDouble(out var max) && max >= 512))
             throw new ProtocolException("invalid_response");
-        return new(true, "", _settings.Model, profile, maxBytes);
+        return new(true, "", alias, profile, (int)Math.Min(maxBytes, int.MaxValue));
     }
 
-    private byte[] Encode(byte[] pcm, int rate, int count, string id, string profile)
+    private static string Listing(IEnumerable<string> names)
+    {
+        var all = names.Where(n => n.Length > 0).Distinct().ToArray();
+        return Sanitize(string.Join(", ", all.Take(6)) + (all.Length > 6 ? $", and {all.Length - 6} more" : ""));
+    }
+
+    private byte[] Encode(byte[] pcm, int rate, int count, string id, string model, string profile)
     {
         // Base64 plus worst-case JSON escaping and writer slack. One fixed owned
         // array avoids abandoned growth arrays and Utf8JsonWriter's stream staging.
         var capacity = checked(((pcm.Length + 2) / 3) * 4 + 4096 + 6 *
-            (Encoding.UTF8.GetByteCount(_settings.Model) + Encoding.UTF8.GetByteCount(profile) +
+            (Encoding.UTF8.GetByteCount(model) + Encoding.UTF8.GetByteCount(profile) +
              Encoding.UTF8.GetByteCount(_settings.Language) + Encoding.UTF8.GetByteCount(id)));
         using var buffer = new AudioEncodingBuffer(capacity);
         using (var writer = new Utf8JsonWriter(buffer))
         {
             writer.WriteStartObject(); writer.WriteNumber("contract_version", 1); writer.WriteString("request_id", id);
-            writer.WriteString("model", _settings.Model); writer.WriteString("profile", profile);
+            writer.WriteString("model", model); writer.WriteString("profile", profile);
             writer.WriteStartObject("input"); writer.WriteString("kind", "audio"); writer.WriteString("encoding", "pcm_f32le");
             writer.WriteNumber("sample_rate_hz", rate); writer.WriteNumber("channels", 2); writer.WriteNumber("sample_count", count);
             WriteBase64Audio(writer, pcm); writer.WriteEndObject(); writer.WriteString("output", "text");
-            writer.WriteString("capability", "audio_transcription");
+            writer.WriteString("capability", Capability);
             writer.WriteStartObject("options"); writer.WriteString("kind", "audio"); writer.WriteString("language", _settings.Language);
             writer.WriteNumber("max_output_tokens", 512); writer.WriteEndObject(); writer.WriteBoolean("stream", false); writer.WriteEndObject();
         }
@@ -244,9 +284,9 @@ public sealed class PumasAudioTextClient : IDisposable
         public void Dispose() { CryptographicOperations.ZeroMemory(_bytes); _disposed = true; }
     }
 
-    private static async Task<JsonDocument> ReadAsync(HttpResponseMessage response, CancellationToken token)
+    private static async Task<JsonDocument> ReadAsync(HttpResponseMessage response, int maxBytes, CancellationToken token)
     {
-        if (response.Content.Headers.ContentType?.MediaType != "application/json" || response.Content.Headers.ContentLength > MaxResponseBytes)
+        if (response.Content.Headers.ContentType?.MediaType != "application/json" || response.Content.Headers.ContentLength > maxBytes)
             throw new ProtocolException("invalid_response");
         await using var stream = await response.Content.ReadAsStreamAsync(token).ConfigureAwait(false);
         using var buffer = new MemoryStream();
@@ -257,11 +297,11 @@ public sealed class PumasAudioTextClient : IDisposable
             {
                 var read = await stream.ReadAsync(block, token).ConfigureAwait(false);
                 if (read == 0) break;
-                if (buffer.Length + read > MaxResponseBytes) throw new ProtocolException("response_limit");
+                if (buffer.Length + read > maxBytes) throw new ProtocolException("response_limit");
                 buffer.Write(block, 0, read);
             }
             buffer.Position = 0;
-            var document = JsonDocument.Parse(buffer, new JsonDocumentOptions { MaxDepth = 16 });
+            var document = JsonDocument.Parse(buffer, new JsonDocumentOptions { MaxDepth = 32 });
             try { Unique(document.RootElement); return document; }
             catch { document.Dispose(); throw; }
         }
@@ -285,19 +325,24 @@ public sealed class PumasAudioTextClient : IDisposable
         if (root.ValueKind != JsonValueKind.Object || !root.TryGetProperty("contract_version", out var version) || version.ValueKind != JsonValueKind.Number || !version.TryGetInt32(out var number) || number != 1)
             throw new ProtocolException("unsupported_contract");
     }
-    private static (string Code, AudioOperationOutcome Outcome) Error(JsonElement root)
+    /// <summary>
+    /// Decodes <c>{contract_version, request_id, error:{code, outcome, message}}</c>. New codes pass
+    /// through; a missing or unrecognized outcome is conservatively unknown.
+    /// </summary>
+    private static (string Code, AudioOperationOutcome Outcome, string Message) Error(JsonElement root)
     {
-        if (root.TryGetProperty("result", out _) || !root.TryGetProperty("error", out var error)) throw new ProtocolException("invalid_response");
-        var code = Field(error, "code");
-        if (code is not ("invalid_request" or "unsupported_contract" or "model_not_found" or "ambiguous_model" or "ambiguous_operation" or
-            "unsupported_modality" or "capability_unavailable" or "provider_failure" or "invalid_provider_result" or "request_limit" or "response_limit" or "transport_lost"))
+        if (root.ValueKind != JsonValueKind.Object || !root.TryGetProperty("error", out var error) || error.ValueKind != JsonValueKind.Object)
             throw new ProtocolException("invalid_response");
-        var outcome = Field(error, "outcome") switch
-        {
-            "not_admitted" => AudioOperationOutcome.NotAdmitted, "unknown" => AudioOperationOutcome.Unknown,
-            _ => throw new ProtocolException("invalid_response")
-        };
-        return (code, outcome);
+        var code = Field(error, "code");
+        var outcome = Field(error, "outcome") == "not_admitted" ? AudioOperationOutcome.NotAdmitted : AudioOperationOutcome.Unknown;
+        return (Token(code) ? code : "invalid_response", outcome, Sanitize(Field(error, "message")));
+    }
+    private static bool Token(string value) => value.Length is > 0 and <= 64 && value.All(c => char.IsAsciiLetterOrDigit(c) || c is '_' or '-' or '.');
+    /// <summary>Pumas messages are display text: strip controls and bound length.</summary>
+    internal static string Sanitize(string text)
+    {
+        var clean = new string(text.Select(c => char.IsControl(c) ? ' ' : c).ToArray()).Trim();
+        return clean.Length <= 300 ? clean : clean[..299] + "…";
     }
     private string? Enter()
     {
@@ -309,10 +354,10 @@ public sealed class PumasAudioTextClient : IDisposable
             _active = true; return null;
         }
     }
-    private AudioTextReply Failure(string code, AudioOperationOutcome outcome)
+    private AudioTextReply Failure(string code, AudioOperationOutcome outcome, string detail = "")
     {
         if (outcome == AudioOperationOutcome.Unknown) lock (_sync) _uncertain = true;
-        return new(false, "", code, outcome);
+        return new(false, "", code, outcome, Detail: detail);
     }
     private void Exit()
     {
@@ -327,5 +372,9 @@ public sealed class PumasAudioTextClient : IDisposable
             if (!_active) { _http.Dispose(); _lifetime.Dispose(); }
         }
     }
-    private sealed class ProtocolException(string code) : Exception { public string Code { get; } = code; }
+    private sealed class ProtocolException(string code, string detail = "") : Exception
+    {
+        public string Code { get; } = code;
+        public string Detail { get; } = detail;
+    }
 }
