@@ -19,11 +19,14 @@ The launcher starts Godot, never Pumas. Before setup search, inspection, activit
 or acquisition, `PumasOwnerClient` executes the supported read-only command
 `pumas-rpc --describe-local-http --launcher-root PATH`. The producer authenticates
 its private core IPC owner and registered HTTP generation, then reauthenticates
-core context. The game additionally compares the full bounded CLI description,
-`GET /.well-known/pumas`, and a second CLI description. Redirects/proxies are
-refused. The live route must return JSON and `Cache-Control: no-store`; duplicate
-keys, incompatible schemas/protocols, wrong roots, changed generations and
-malformed types fail closed. Optional build provenance may be omitted; release
+core context. The game additionally compares the known fields of the bounded CLI
+description, `GET /.well-known/pumas`, and a second CLI description. Redirects/proxies
+are refused. The live route must return JSON and `Cache-Control: no-store`. The
+advertisement grows additively: unknown fields, extra schema/protocol versions and
+new capability labels are ignored and take no part in the comparison. Missing
+required fields, duplicate keys, unsupported schema versions, missing required
+schemas/protocols, wrong roots, changed generations and malformed types fail closed,
+and setup shows the reason naming the field. Optional build provenance may be omitted; release
 strings or compile features do not prove a ready model. The existing client
 supports numeric IPv4 `127.0.0.1` only. Canonical absolute root spelling must match;
 this managed consumer refuses aliases it cannot compare rather than adding
